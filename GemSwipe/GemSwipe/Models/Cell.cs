@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
-
-namespace GemSwipe.Models
+﻿namespace GemSwipe.Models
 {
     public class Cell
     {
@@ -26,9 +21,10 @@ namespace GemSwipe.Models
         public void AttachGem(Gem gem)
         {
             _attachedGem = gem;
+            gem.Move(X,Y);
         }
 
-        public void DetachGem(Gem gem)
+        public void DetachGem()
         {
             _attachedGem = null;
         }

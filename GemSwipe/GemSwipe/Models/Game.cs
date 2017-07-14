@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
 
 namespace GemSwipe.Models
 {
     public class Game
     {
-        public event Action Blocked;
-        public event Action<int> Fusion;
 
         private Board _board;
+        public event Action<Gem> NewCell;
 
         public Game(int height, int width)
         {
@@ -22,17 +19,32 @@ namespace GemSwipe.Models
 
         public void InitGame()
         {
-            _board.Pop();
-            _board.Pop();
+            PopGem();
+            PopGem();
+        }
+
+        public void Swipe(Direction direction)
+        {
+            _board.Swipe(direction);
+            if (_board.IsFull())
+            {
+                // END GAME
+            }
+            else
+            {
+                PopGem();
+            }
+        }
+
+        private void PopGem()
+        {
+            var gem = _board.Pop();
+            NewCell?.Invoke(gem);
         }
 
         public int Height { get; }
         public int Width { get; }
 
         public IList<Gem> Gems { get; }
-
-      
-
-   
     }
 }

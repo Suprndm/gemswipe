@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>GemSwipe</string>
+	<string>GemSwipe.iOS</string>
 	<key>CFBundleName</key>
-	<string>GemSwipe</string>
+	<string>GemSwipe.iOS</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.companyname.GemSwipe</string>
 	<key>CFBundleShortVersionString</key>
@@ -40,7 +40,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>XSAppIconAssets</key>
-	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>

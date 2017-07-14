@@ -1,6 +1,4 @@
 ﻿
-using Xamarin.Forms;
-
 namespace GemSwipe.Models
 {
     public class Gem
@@ -9,7 +7,12 @@ namespace GemSwipe.Models
         public int Y { get; private set; }
         public int Size { get; private set; }
 
+        public int TargetX { get; private set; }
+        public int TargetY { get; private set; }
+
         private bool _willLevelUp;
+        private bool _willDie;
+
         public Gem(int x, int y)
         {
             X = x;
@@ -23,6 +26,16 @@ namespace GemSwipe.Models
             _willLevelUp = true;
         }
 
+        public void Die()
+        {
+            _willDie = true;
+        }
+
+        public bool CanMerge()
+        {
+            return !_willLevelUp && !_willDie;
+        }
+
         public void Resolve()
         {
             if (_willLevelUp)
@@ -30,6 +43,12 @@ namespace GemSwipe.Models
                 Size++;
                 _willLevelUp = false;
             }
+        }
+
+        public void Move(int x, int y)
+        {
+            TargetX = x;
+            TargetY = y;
         }
 
     }

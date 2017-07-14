@@ -1,27 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Xamarin.Forms;
 
 namespace GemSwipe.Models
 {
     public class Board
     {
         private readonly Cell[,] _cells;
+        private readonly IList<Cell> _cellsList;
         private readonly IList<Gem> _gems;
         private Random _randomizer;
 
+        public Board(IList<Cell> cellsList)
+        {
+            _cellsList = cellsList;
+        }
+
         public Board(int width, int height)
         {
+            _randomizer =new Random();
+
             Height = height;
             Width = width;
+            _cellsList = new List<Cell>();
             _cells = new Cell[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    _cells[i, j] = new Cell(i, j);
+                    var newCell = new Cell(i, j);
+                    _cells[i, j] = newCell;
+                    _cellsList.Add(newCell);
                 }
             }
 
@@ -46,59 +55,53 @@ namespace GemSwipe.Models
             return gem;
         }
 
+        public Cell[,] GetCells()
+        {
+            return _cells;
+        }
+
+        public IList<Cell> GetCellsList()
+        {
+            return _cellsList;
+        }
+
+        public IList<Gem> GetGems()
+        {
+            return _gems;
+        }
+
         public void Swipe(Direction direction)
         {
-            var lanes = GetLanes(direction);
+            var cellsLanes = GetCellsLanes(direction);
 
-            foreach (var lane in lanes)
+            foreach (var cellsLane in cellsLanes)
             {
-
-                if (lane.All(cell => cell.IsEmpty()))
+                var gems = cellsLane.Select(cell => cell.GetAttachedGem()).Where(gem => gem != null).ToList();
+                foreach (var cell in cellsLane)
                 {
-                    // do nothing
+                    cell.DetachGem();
                 }
-                else
+
+                foreach (Gem gem in gems)
                 {
-                    // First move all gems to the side 
-                    for (int i = 0; i < lane.Count; i++)
+                    foreach (Cell cell in cellsLane)
                     {
-                        var currentCell = lane[i];
-                        // While we can still move cells
-                        var count = i;
-                        while (currentCell.IsEmpty() && count < lane.Count - 1)
+                        if (cell.IsEmpty())
                         {
-                            count++;
-                            // Move all the other gems
-                            for (int k = i + 1; k < lane.Count; k++)
+                            cell.AttachGem(gem);
+                        }
+                        else
+                        {
+                            var alreadyAttachedGem = cell.GetAttachedGem();
+                            if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
                             {
-                                if (!lane[k].IsEmpty())
-                                    Move(lane[k].GetAttachedGem(), lane[k - 1]);
+                                Merge(alreadyAttachedGem, gem);
+                                break;
                             }
                         }
                     }
-
-                    // Detect fusions
-                    var u = 0;
-                    while (!lane[u].IsEmpty() && u < lane.Count - 1)
-                    {
-                        var currentGem = lane[u].GetAttachedGem();
-                        var nextGem = lane[u + 1].GetAttachedGem();
-                        if (currentGem.Size == nextGem.Size)
-                        {
-                            
-                        }
-                        u++;
-                    }
                 }
-
             }
-        }
-
-        private void Merge(Gem currentGem, Gem nextGem)
-        {
-            currentGem.LevelUp();
-
-
         }
 
         public IList<Cell> GetEmptyCells()
@@ -117,17 +120,21 @@ namespace GemSwipe.Models
             return emptyCells;
         }
 
-        private void Move(Gem gem, Direction direction)
+        public bool IsFull()
         {
-
+            return _cellsList.All(cell => !cell.IsEmpty());
         }
-
 
         private void Move(Gem gem, Cell newCell)
         {
-            var oldCell = GetCellByGem(gem);
-            oldCell.DetachGem(gem);
             newCell.AttachGem(gem);
+        }
+
+        private void Merge(Gem upgradedGem, Gem deadGem)
+        {
+            upgradedGem.LevelUp();
+            deadGem.Die();
+            deadGem.Move(upgradedGem.TargetX, upgradedGem.TargetY);
         }
 
         private Cell GetCellByGem(Gem gem)
@@ -135,54 +142,54 @@ namespace GemSwipe.Models
             return _cells[gem.X, gem.Y];
         }
 
-        private IList<IList<Cell>> GetLanes(Direction direction)
+        private IList<IList<Cell>> GetCellsLanes(Direction direction)
         {
-            var lanes = new List<IList<Cell>>();
+            var cellsLanes = new List<IList<Cell>>();
             switch (direction)
             {
                 case Direction.Left:
                     for (int j = 0; j < Height; j++)
                     {
-                        var lane = new List<Cell>();
+                        var cellsLane = new List<Cell>();
                         for (int i = 0; i < Width; i++)
-                            lane.Add(_cells[i, j]);
+                            cellsLane.Add(_cells[i, j]);
 
-                        lanes.Add(lane);
+                        cellsLanes.Add(cellsLane);
                     }
                     break;
                 case Direction.Bottom:
                     for (int i = 0; i < Width; i++)
                     {
-                        var lane = new List<Cell>();
+                        var cellsLane = new List<Cell>();
                         for (int j = 0; j < Height; j++)
-                            lane.Add(_cells[i, Height - j - 1]);
+                            cellsLane.Add(_cells[i, Height - j - 1]);
 
-                        lanes.Add(lane);
+                        cellsLanes.Add(cellsLane);
                     }
                     break;
                 case Direction.Right:
                     for (int j = 0; j < Height; j++)
                     {
-                        var lane = new List<Cell>();
+                        var cellsLane = new List<Cell>();
                         for (int i = 0; i < Width; i++)
-                            lane.Add(_cells[Width - i - 1, j]);
+                            cellsLane.Add(_cells[Width - i - 1, j]);
 
-                        lanes.Add(lane);
+                        cellsLanes.Add(cellsLane);
                     }
                     break;
                 case Direction.Top:
                     for (int i = 0; i < Width; i++)
                     {
-                        var lane = new List<Cell>();
+                        var cellsLane = new List<Cell>();
                         for (int j = 0; j < Height; j++)
-                            lane.Add(_cells[i, j]);
+                            cellsLane.Add(_cells[i, j]);
 
-                        lanes.Add(lane);
+                        cellsLanes.Add(cellsLane);
                     }
                     break;
             }
 
-            return lanes;
+            return cellsLanes;
         }
     }
 }
