@@ -13,12 +13,38 @@ namespace GemSwipe.Models
 
         public Board(IList<Cell> cellsList)
         {
+            _randomizer = new Random();
+
             _cellsList = cellsList;
+            _gems = new List<Gem>();
+            var maxHeight = 0;
+            var maxWidth = 0;
+            foreach (var cell in _cellsList)
+            {
+                var gem = cell.GetAttachedGem();
+                if (gem != null)
+                    _gems.Add(gem);
+
+                maxHeight = Math.Max(maxHeight, cell.Y + 1);
+                maxWidth = Math.Max(maxWidth, cell.X + 1);
+            }
+
+            Height = maxHeight;
+            Width = maxWidth;
+            _cells = new Cell[Width, Height];
+
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    _cells[i, j] = cellsList.Single(cell => cell.X == i && cell.Y == j);
+                }
+            }
         }
 
         public Board(int width, int height)
         {
-            _randomizer =new Random();
+            _randomizer = new Random();
 
             Height = height;
             Width = width;

@@ -51,5 +51,10 @@ namespace GemSwipe.Models
             TargetY = y;
         }
 
+
+        public void SetSize(int size)
+        {
+            Size = size;
+        }
     }
 }
