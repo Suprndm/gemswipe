@@ -122,7 +122,6 @@ namespace GemSwipe.Models
 
         }
 
-        private void Move(IList<Cell> lane,)
 
         private void Move(Gem gem, Cell newCell)
         {
@@ -184,11 +183,6 @@ namespace GemSwipe.Models
             }
 
             return lanes;
-        }
-
-        private Cell NextCell(Cell cell, Direction direction)
-        {
-
         }
     }
 }
