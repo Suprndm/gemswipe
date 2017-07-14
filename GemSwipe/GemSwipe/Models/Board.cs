@@ -114,21 +114,32 @@ namespace GemSwipe.Models
                     {
                         if (cell.IsEmpty())
                         {
-                            cell.AttachGem(gem);
+                            Move(gem, cell);
+                            break;
                         }
-                        else
+
+                        var alreadyAttachedGem = cell.GetAttachedGem();
+                        if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
                         {
-                            var alreadyAttachedGem = cell.GetAttachedGem();
-                            if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
-                            {
-                                Merge(alreadyAttachedGem, gem);
-                                break;
-                            }
+                            Merge(alreadyAttachedGem, gem);
+                            break;
                         }
                     }
                 }
             }
+
+            foreach (var gem in _gems)
+            {
+                gem.Resolve();
+            }
+            var deadGems = _gems.Where(gem => gem.IsDead()).ToList();
+
+            foreach (var deadGem in deadGems)
+            {
+                _gems.Remove(deadGem);
+            }
         }
+
 
         public IList<Cell> GetEmptyCells()
         {
@@ -154,6 +165,7 @@ namespace GemSwipe.Models
         private void Move(Gem gem, Cell newCell)
         {
             newCell.AttachGem(gem);
+            gem.Move(newCell.X, newCell.Y);
         }
 
         private void Merge(Gem upgradedGem, Gem deadGem)

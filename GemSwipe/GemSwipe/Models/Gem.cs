@@ -43,12 +43,22 @@ namespace GemSwipe.Models
                 Size++;
                 _willLevelUp = false;
             }
+
+            X = TargetX;
+            Y = TargetY;
+        }
+
+        public bool IsDead()
+        {
+            return _willDie;
         }
 
         public void Move(int x, int y)
         {
             TargetX = x;
             TargetY = y;
+
+ 
         }
 
 
