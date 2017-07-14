@@ -1,23 +1,32 @@
-﻿
+﻿using System;
+
 namespace GemSwipe.Models
 {
     public class Gem
     {
         public int X { get; private set; }
         public int Y { get; private set; }
+
+        public float FluidX { get; set; }
+        public float FluidY { get; set; }
+
         public int Size { get; private set; }
+        public int FluidSize { get; set; }
 
         public int TargetX { get; private set; }
         public int TargetY { get; private set; }
 
         private bool _willLevelUp;
         private bool _willDie;
+        private bool _isDead;
 
         public Gem(int x, int y)
         {
             X = x;
-            Y = y;
+            FluidX = X;
 
+            Y = y;
+            FluidY = Y;
             Size = 1;
         }
 
@@ -48,7 +57,33 @@ namespace GemSwipe.Models
             Y = TargetY;
         }
 
+        public void UpdatePosition()
+        {
+            FluidX += (float)((X - FluidX) * 0.8);
+            if (Math.Abs(X - FluidX) < 0.01)
+            {
+                FluidX = X;
+            }
+
+            FluidY += (float)((Y - FluidY) * 0.8);
+            if (Math.Abs(Y - FluidY) < 0.01)
+            {
+                FluidY = Y;
+            }
+
+            if (X == FluidX && Y == FluidY)
+            {
+                FluidSize = Size;
+                _isDead = _willDie;
+            }
+        }
+
         public bool IsDead()
+        {
+            return _isDead;
+        }
+
+        public bool WillDie()
         {
             return _willDie;
         }
@@ -57,8 +92,6 @@ namespace GemSwipe.Models
         {
             TargetX = x;
             TargetY = y;
-
- 
         }
 
 

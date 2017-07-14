@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Models;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,84 +15,143 @@ namespace GemSwipe.Views
     public partial class GamePage : ContentPage
     {
         private Game _game;
+        private Stopwatch _stopwatch;
+        private SKCanvas _canvas;
+        bool pageIsActive;
         public GamePage()
         {
             InitializeComponent();
 
             _game = new Game(5, 5);
             _game.InitGame();
-            DrawBoard();
+            _stopwatch = new Stopwatch();
         }
 
         private void Left(object sender, EventArgs e)
         {
             _game.Swipe(Direction.Left);
-            DrawBoard();
         }
 
         private void Right(object sender, EventArgs e)
         {
             _game.Swipe(Direction.Right);
-            DrawBoard();
         }
 
         private void Top(object sender, EventArgs e)
         {
             _game.Swipe(Direction.Top);
-            DrawBoard();
         }
 
         private void Bottom(object sender, EventArgs e)
         {
             _game.Swipe(Direction.Bottom);
-            DrawBoard();
         }
 
-
-
-        public void DrawBoard()
+        private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
-            var board = _game.GetBoard();
+            var surface = e.Surface;
+            _canvas = surface.Canvas;
+            AnimationLoop();
+        }
 
-            var cellsGrid = board.GetCells();
-            string draw = "";
-            for (int j = 0; j < board.Height; j++)
+        private void DrawBoard(SKCanvas canvas, Board board)
+        {
+            canvas.Clear(SKColors.White);
+            var cellHeight = 180;
+            var cellWidth = 180;
+
+
+            // create the paint for the filled circle
+            var cellColor = new SKPaint
             {
-                for (int i = 0; i < board.Width; i++)
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.FromHsl(0, 0, 93)
+            };
+
+            for (int i = 0; i < board.Width; i++)
+            {
+                for (int j = 0; j < board.Height; j++)
                 {
-                    draw += " ";
-                    var cell = cellsGrid[i, j];
-                    var gem = cell.GetAttachedGem();
-                    if (gem == null)
-                        draw += "0";
-                    else draw += gem.Size;
-                    draw += " ";
+                    canvas.DrawRect(SKRect.Create(i * (cellWidth + 10) + 50, (cellHeight + 10) * j + 50, cellWidth, cellHeight), cellColor);
                 }
-                draw += "\n";
             }
 
-            BoardDisplay.Text = draw;
+            Title = board.GetGems().Count.ToString();
+
+            foreach (var gem in board.GetGems().Where(gem => gem.WillDie()))
+            {
+                DrawGem(gem);
+            }
+
+            foreach (var gem in board.GetGems().Where(gem => !gem.WillDie()))
+            {
+                DrawGem(gem);
+            }
+
+            foreach (var gem in board.GetGems())
+            {
+                gem.UpdatePosition();
+            }
         }
 
-        //private void OnPainting(object sender, SKPaintSurfaceEventArgs e)
-        //{
-        //    //// we get the current surface from the event args
-        //    //var surface = e.Surface;
-        //    //// then we get the canvas that we can draw on
-        //    //var canvas = surface.Canvas;
-        //    //// clear the canvas / view
-        //    //canvas.Clear(SKColors.White);
+        private void DrawGem(Gem gem)
+        {
+            var cellHeight = 180;
+            var cellWidth = 180;
+            var gemColor = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.FromHsl(330-gem.Size*10, 100, 50)
+            };
 
-        //    //// create the paint for the filled circle
-        //    //var circleFill = new SKPaint
-        //    //{
-        //    //    IsAntialias = true,
-        //    //    Style = SKPaintStyle.Fill,
-        //    //    Color = SKColors.Blue
-        //    //};
 
-        //    //// draw the circle fill
-        //    //canvas.DrawCircle(100, 100, 40, circleFill);
-        //}
+            var textColor = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.FromHsl(0, 0, 100),
+                TextSize = (int)(35 * (1 + (double)gem.Size / 5))
+            };
+
+            var gemWidth = (int)(35 * (1 + (double)gem.Size / 5));
+
+            _canvas.DrawCircle(gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2, gemWidth, gemColor);
+            _canvas.DrawText(gem.Size.ToString(), gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2 + gemWidth / 2, textColor);
+
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            pageIsActive = true;
+            AnimationLoop();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            pageIsActive = false;
+        }
+
+        async Task AnimationLoop()
+        {
+            DrawBoard(_canvas, _game.GetBoard());
+            while (pageIsActive)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
+                canvasView.InvalidateSurface();
+            }
+
+            //while (true)
+            //{
+
+            //}
+        }
+
+        private void OnCanvasViewTapped(object sender, EventArgs e)
+        {
+        }
     }
 }

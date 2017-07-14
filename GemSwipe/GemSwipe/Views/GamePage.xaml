@@ -1,17 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              x:Class="GemSwipe.Views.GamePage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="GemSwipe"  HorizontalOptions="Center"/>
-            <Label x:Name="BoardDisplay" FontSize="60"></Label>
-            <Button Text="Top" Clicked="Top" ></Button>
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                <Button Text="Left" Clicked="Left"></Button>
-                <Button Text="Right" Clicked="Right"></Button>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="200" />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
+            <!--<Label x:Name="BoardDisplay" FontSize="60"></Label>-->
+            <forms:SKCanvasView x:Name="canvasView" Grid.Row="1"  PaintSurface="OnCanvasViewPaintSurface">
+                <forms:SKCanvasView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCanvasViewTapped" />
+                </forms:SKCanvasView.GestureRecognizers>
+            </forms:SKCanvasView>
+            <StackLayout Grid.Row="2">
+                <Button Text="Top" Clicked="Top" ></Button>
+                <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                    <Button Text="Left" Clicked="Left"></Button>
+                    <Button Text="Right" Clicked="Right"></Button>
+                </StackLayout>
+                <Button Text="Bottom" Clicked="Bottom" ></Button>
             </StackLayout>
-            <Button Text="Bottom" Clicked="Bottom" ></Button>
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
