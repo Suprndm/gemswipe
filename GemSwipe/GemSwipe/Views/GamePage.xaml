@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GemSwipe.Views.GamePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="GemSwipe"  HorizontalOptions="Center"/>
+            <Label x:Name="BoardDisplay" FontSize="60"></Label>
+            <Button Text="Top" Clicked="Top" ></Button>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <Button Text="Left" Clicked="Left"></Button>
+                <Button Text="Right" Clicked="Right"></Button>
+            </StackLayout>
+            <Button Text="Bottom" Clicked="Bottom" ></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

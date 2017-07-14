@@ -108,13 +108,15 @@ namespace GemSwipe.Models
                     cell.DetachGem();
                 }
 
+                int gemPositionned = 0;
                 foreach (Gem gem in gems)
                 {
-                    foreach (Cell cell in cellsLane)
+                    foreach (Cell cell in cellsLane.Skip(gemPositionned-1))
                     {
                         if (cell.IsEmpty())
                         {
                             Move(gem, cell);
+                            gemPositionned++;
                             break;
                         }
 

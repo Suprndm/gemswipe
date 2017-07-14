@@ -8,6 +8,7 @@ namespace GemSwipe.Models
 
         private Board _board;
         public event Action<Gem> NewCell;
+        public event Action Blocked;
 
         public Game(int height, int width)
         {
@@ -28,12 +29,17 @@ namespace GemSwipe.Models
             _board.Swipe(direction);
             if (_board.IsFull())
             {
-                // END GAME
+                Blocked?.Invoke();
             }
             else
             {
                 PopGem();
             }
+        }
+
+        public Board GetBoard()
+        {
+            return _board;
         }
 
         private void PopGem()
@@ -46,5 +52,7 @@ namespace GemSwipe.Models
         public int Width { get; }
 
         public IList<Gem> Gems { get; }
+
+
     }
 }

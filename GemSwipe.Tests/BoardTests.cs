@@ -164,7 +164,7 @@ namespace GemSwipe.Tests
         }
 
         [Test]
-        [TestCase("1 1 1 1-0 0 0 0-0 0 0 0","0 0 2 2-0 0 0 0-0 0 0 0", Direction.Right)]
+        [TestCase("1 1 1 1-0 0 0 0-0 0 0 0", "0 0 2 2-0 0 0 0-0 0 0 0", Direction.Right)]
         public void ShouldCorrectlyMultipleMergeOnSwipe(string intialBoardString, string finalBoardString, Direction direction)
         {
             // Given an initialBoard
@@ -181,7 +181,10 @@ namespace GemSwipe.Tests
         }
 
         [Test]
-        [TestCase("1 0 0 1 2-1 0 1 1 2-0 1 1 2 2-1 2 2 1 0-2 2 1 1 2","0 0 0 2 2-0 0 1 2 2-0 0 0 2 3-0 0 1 3 1-0 0 3 2 2", Direction.Right)]
+        [TestCase("1 0 0 1 2-1 0 1 1 2-0 1 1 2 2-1 2 2 1 0-2 2 1 1 2", "0 0 0 2 2-0 0 1 2 2-0 0 0 2 3-0 0 1 3 1-0 0 3 2 2", Direction.Right)]
+        [TestCase("0 0 0 2 2-0 0 1 2 2-0 0 0 2 3-0 0 1 3 1-0 0 3 2 2", "0 0 2 3 3-0 0 3 2 3-0 0 0 3 1-0 0 0 2 2-0 0 0 0 0", Direction.Top)]
+        [TestCase("1 0 0 1 2-1 0 1 1 2-0 1 1 2 2-1 2 2 1 0-2 2 1 1 2", "0 0 0 0 0-0 0 0 0 0-1 0 2 2 0-2 1 2 2 3-2 3 1 2 3", Direction.Bottom)]
+        [TestCase("0 0 0 0 0-0 0 0 0 0-1 0 2 2 0-2 1 2 2 3-2 3 1 2 3", "0 0 0 0 0-0 0 0 0 0-1 3 0 0 0-2 1 3 3 0-2 3 1 2 3", Direction.Left)]
         public void ShouldCorrectlyMergeOnComplexSwipe(string intialBoardString, string finalBoardString, Direction direction)
         {
             // Given an initialBoard
