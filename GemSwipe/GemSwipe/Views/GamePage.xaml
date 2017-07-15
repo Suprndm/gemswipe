@@ -8,22 +8,16 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="200" />
+                <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
-            <!--<Label x:Name="BoardDisplay" FontSize="60"></Label>-->
+            <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
             <forms:SKGLView x:Name="canvasView" Grid.Row="1"   HasRenderLoop="True" PaintSurface="OnCanvasViewPaintSurface">
-                <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
+                <forms:SKGLView.GestureRecognizers>
+                    <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" NumberOfTapsRequired="1"></TapGestureRecognizer>
+                </forms:SKGLView.GestureRecognizers>
             </forms:SKGLView>
-            <StackLayout Grid.Row="2">
-                <Button Text="Top" Clicked="Top" ></Button>
-                <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                    <Button Text="Left" Clicked="Left"></Button>
-                    <Button Text="Right" Clicked="Right"></Button>
-                </StackLayout>
-                <Button Text="Bottom" Clicked="Bottom" ></Button>
-            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

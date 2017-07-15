@@ -14,6 +14,7 @@ namespace GemSwipe.Views
 {
     public partial class GamePage : ContentPage
     {
+        private bool _panJustBegun;
         private Game _game;
         private Stopwatch _stopwatch;
         private SKCanvas _canvas;
@@ -22,37 +23,11 @@ namespace GemSwipe.Views
         {
             InitializeComponent();
 
-            _game = new Game(5, 5);
+            _game = new Game(5, 8);
             _game.InitGame();
             _stopwatch = new Stopwatch();
+            _panJustBegun = true;
         }
-
-        private void Left(object sender, EventArgs e)
-        {
-            _game.Swipe(Direction.Left);
-        }
-
-        private void Right(object sender, EventArgs e)
-        {
-            _game.Swipe(Direction.Right);
-        }
-
-        private void Top(object sender, EventArgs e)
-        {
-            _game.Swipe(Direction.Top);
-        }
-
-        private void Bottom(object sender, EventArgs e)
-        {
-            _game.Swipe(Direction.Bottom);
-        }
-
-        //private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
-        //{
-        //    var surface = e.Surface;
-        //    _canvas = surface.Canvas;
-        //    DrawBoard(_canvas, _game.GetBoard());
-        //}
 
         private void OnCanvasViewPaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
@@ -66,7 +41,6 @@ namespace GemSwipe.Views
             canvas.Clear(SKColors.White);
             var cellHeight = 180;
             var cellWidth = 180;
-
 
             // create the paint for the filled circle
             var cellColor = new SKPaint
@@ -101,8 +75,6 @@ namespace GemSwipe.Views
             {
                 gem.UpdatePosition();
             }
-
-
         }
 
         private void DrawGem(Gem gem)
@@ -113,7 +85,22 @@ namespace GemSwipe.Views
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330-gem.Size*10, 100, 50)
+                Color = SKColor.FromHsl(330-gem.Size*20, 100, 50)
+            };
+
+            var gemLightColor = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.FromHsl(330 - gem.Size * 20, 90, 60)
+            };
+
+
+            var gemReflectColor = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = SKColor.FromHsl(330 - gem.Size * 20, 90, 65)
             };
 
 
@@ -125,53 +112,44 @@ namespace GemSwipe.Views
                 TextSize = (int)(35 * (1 + (double)gem.Size / 5))
             };
 
-            var gemWidth = (int)(35 * (1 + (double)gem.Size / 5));
+            var gemWidth = (int)(35 * (1 + (double)gem.Size / 7));
 
             _canvas.DrawCircle(gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2, gemWidth, gemColor);
-            _canvas.DrawText(gem.Size.ToString(), gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2 + gemWidth / 2, textColor);
-
+            _canvas.DrawCircle(gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2- (gemWidth-gemWidth * 7 / 10), gemWidth* 7 / 10, gemReflectColor);
+            //_canvas.DrawText(gem.Size.ToString(), gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2 + gemWidth / 2, textColor);
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            pageIsActive = true;
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            pageIsActive = false;
-        }
-
-        async Task AnimationLoop()
-        {
-            while (pageIsActive)
-            {
-             
-
-                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
-                canvasView.InvalidateSurface();
-            }
-
-            //while (true)
-            //{
-
-            //}
-        }
-
-        private void OnCanvasViewTapped(object sender, EventArgs e)
-        {
-        }
-
-
+        // USer controls
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
             var d = Math.Sqrt(e.TotalX * e.TotalX + e.TotalY * e.TotalY);
-            if (d > 100)
+            if (d > 25 && _panJustBegun)
             {
-                _game.Swipe(Direction.Bottom);
+                _panJustBegun = false;
+                if (e.TotalX > 0)
+                {
+                    if (e.TotalY > e.TotalX)
+                        _game.Swipe(Direction.Bottom);
+                    else if (Math.Abs(e.TotalY) > e.TotalX)
+                        _game.Swipe(Direction.Top);
+                    else
+                        _game.Swipe(Direction.Right);
+                }
+                else
+                {
+                    if (e.TotalY > Math.Abs(e.TotalX))
+                        _game.Swipe(Direction.Bottom);
+                    else if (Math.Abs(e.TotalY) > Math.Abs(e.TotalX))
+                        _game.Swipe(Direction.Top);
+                    else
+                        _game.Swipe(Direction.Left);
+                }
             }
+        }
+
+        private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
+        {
+            _panJustBegun = true;
         }
     }
 }
