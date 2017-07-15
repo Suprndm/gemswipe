@@ -47,13 +47,20 @@ namespace GemSwipe.Views
             _game.Swipe(Direction.Bottom);
         }
 
-        private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        //private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        //{
+        //    var surface = e.Surface;
+        //    _canvas = surface.Canvas;
+        //    DrawBoard(_canvas, _game.GetBoard());
+        //}
+
+        private void OnCanvasViewPaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
             var surface = e.Surface;
             _canvas = surface.Canvas;
-            AnimationLoop();
-        }
-
+            DrawBoard(_canvas, _game.GetBoard());
+            
+        }   
         private void DrawBoard(SKCanvas canvas, Board board)
         {
             canvas.Clear(SKColors.White);
@@ -77,22 +84,25 @@ namespace GemSwipe.Views
                 }
             }
 
+            var gems = board.GetGems().Select(g => g).ToList();
             Title = board.GetGems().Count.ToString();
 
-            foreach (var gem in board.GetGems().Where(gem => gem.WillDie()))
+            foreach (var gem in gems.Where(gem => gem.WillDie()))
             {
                 DrawGem(gem);
             }
 
-            foreach (var gem in board.GetGems().Where(gem => !gem.WillDie()))
+            foreach (var gem in gems.Where(gem => !gem.WillDie()))
             {
                 DrawGem(gem);
             }
 
-            foreach (var gem in board.GetGems())
+            foreach (var gem in gems)
             {
                 gem.UpdatePosition();
             }
+
+
         }
 
         private void DrawGem(Gem gem)
@@ -126,7 +136,6 @@ namespace GemSwipe.Views
         {
             base.OnAppearing();
             pageIsActive = true;
-            AnimationLoop();
         }
 
         protected override void OnDisappearing()
@@ -137,9 +146,10 @@ namespace GemSwipe.Views
 
         async Task AnimationLoop()
         {
-            DrawBoard(_canvas, _game.GetBoard());
             while (pageIsActive)
             {
+             
+
                 await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
                 canvasView.InvalidateSurface();
             }
@@ -152,6 +162,16 @@ namespace GemSwipe.Views
 
         private void OnCanvasViewTapped(object sender, EventArgs e)
         {
+        }
+
+
+        private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
+        {
+            var d = Math.Sqrt(e.TotalX * e.TotalX + e.TotalY * e.TotalY);
+            if (d > 100)
+            {
+                _game.Swipe(Direction.Bottom);
+            }
         }
     }
 }

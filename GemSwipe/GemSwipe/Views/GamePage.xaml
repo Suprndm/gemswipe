@@ -13,11 +13,9 @@
 
             <Label Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
             <!--<Label x:Name="BoardDisplay" FontSize="60"></Label>-->
-            <forms:SKCanvasView x:Name="canvasView" Grid.Row="1"  PaintSurface="OnCanvasViewPaintSurface">
-                <forms:SKCanvasView.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnCanvasViewTapped" />
-                </forms:SKCanvasView.GestureRecognizers>
-            </forms:SKCanvasView>
+            <forms:SKGLView x:Name="canvasView" Grid.Row="1"   HasRenderLoop="True" PaintSurface="OnCanvasViewPaintSurface">
+                <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
+            </forms:SKGLView>
             <StackLayout Grid.Row="2">
                 <Button Text="Top" Clicked="Top" ></Button>
                 <StackLayout Orientation="Horizontal" VerticalOptions="Center">

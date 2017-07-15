@@ -59,14 +59,14 @@ namespace GemSwipe.Models
 
         public void UpdatePosition()
         {
-            FluidX += (float)((X - FluidX) * 0.8);
-            if (Math.Abs(X - FluidX) < 0.01)
+            FluidX += (float)((X - FluidX) * 0.4);
+            if (Math.Abs(X - FluidX) < .01)
             {
                 FluidX = X;
             }
 
-            FluidY += (float)((Y - FluidY) * 0.8);
-            if (Math.Abs(Y - FluidY) < 0.01)
+            FluidY += (float)((Y - FluidY) * 0.4);
+            if (Math.Abs(Y - FluidY) < .01)
             {
                 FluidY = Y;
             }
