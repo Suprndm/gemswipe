@@ -36,19 +36,19 @@ namespace GemSwipe.GameEngine
                 _fluidLevel = GemState.Size;
             }
 
-            _fluidX += (float)((X - _fluidX) * 0.4);
+            _fluidX += (float)((X - _fluidX) * 0.2);
             if (Math.Abs(X - _fluidX) < 1)
             {
                 _fluidX = X;
             }
 
-            _fluidY += (float)((Y - _fluidY) * 0.4);
+            _fluidY += (float)((Y - _fluidY) * 0.2);
             if (Math.Abs(Y - _fluidY) < 1)
             {
                 _fluidY = Y;
             }
 
-            var sizeVariation = Math.Sin(levelVariation * 2 * Math.PI);
+            var sizeVariation = Math.Sin(levelVariation * 4 * Math.PI);
             _fluidSize = (float)(Width + sizeVariation * (Width / 3));
 
             if (GemState.IsDead())
