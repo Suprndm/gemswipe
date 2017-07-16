@@ -17,7 +17,7 @@ namespace GemSwipe
 
         public static void SetMainPage()
         {
-            Current.MainPage = new GamePage();
+            Current.MainPage = new NavigationPage(new MenuPage());
         }
     }
 }

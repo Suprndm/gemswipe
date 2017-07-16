@@ -14,6 +14,12 @@
                 <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="BarTextColor" Value="White" />
             </Style>
+
+            <ControlTemplate x:Key="MyButtonTemplate">
+                <Grid BackgroundColor="Crimson">
+                    <Label TextColor="White" Text="Je suis un bouton"></Label>
+                </Grid>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

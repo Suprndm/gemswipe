@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:gameEngine="clr-namespace:GemSwipe.GameEngine;assembly=GemSwipe"
-             x:Class="GemSwipe.Views.GamePage">
+             x:Class="GemSwipe.Views.GamePage"
+             NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
