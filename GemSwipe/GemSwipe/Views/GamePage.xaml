@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:gameEngine="clr-namespace:GemSwipe.GameEngine;assembly=GemSwipe"
              x:Class="GemSwipe.Views.GamePage">
     <ContentPage.Content>
         <Grid>
@@ -12,12 +13,12 @@
             </Grid.RowDefinitions>
 
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
-            <forms:SKGLView x:Name="canvasView" Grid.Row="1"   HasRenderLoop="True" PaintSurface="OnCanvasViewPaintSurface">
+            <gameEngine:GameScreen x:Name="GameScreen" Grid.Row="1"   HasRenderLoop="True">
                 <forms:SKGLView.GestureRecognizers>
                     <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" NumberOfTapsRequired="1"></TapGestureRecognizer>
                 </forms:SKGLView.GestureRecognizers>
-            </forms:SKGLView>
+            </gameEngine:GameScreen>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

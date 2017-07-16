@@ -4,12 +4,15 @@ using System.Linq;
 
 namespace GemSwipe.Models
 {
-    public class Board
+    public class Board:IBoardState
     {
         private readonly Cell[,] _cells;
         private readonly IList<Cell> _cellsList;
         private readonly IList<Gem> _gems;
         private Random _randomizer;
+
+        public int Height { get; }
+        public int Width { get; }
 
         public Board(IList<Cell> cellsList)
         {
@@ -62,10 +65,11 @@ namespace GemSwipe.Models
 
             _gems = new List<Gem>();
         }
-
-        public int Height { get; }
-        public int Width { get; }
-
+ 
+        public IList<IGemState> GetGemStates()
+        {
+            return GetGems().Select(gem => gem as IGemState).ToList();
+        }
 
         public Gem Pop()
         {

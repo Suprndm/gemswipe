@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.GameEngine;
 using GemSwipe.Models;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -19,105 +20,39 @@ namespace GemSwipe.Views
         private Stopwatch _stopwatch;
         private SKCanvas _canvas;
         bool pageIsActive;
+        private int _boardWidth;
+        private int _boardHeight;
+
         public GamePage()
         {
             InitializeComponent();
-
-            _game = new Game(5, 8);
+            _boardWidth = 4;
+            _boardWidth = 4;
+            _game = new Game(4, 4);
             _game.InitGame();
             _stopwatch = new Stopwatch();
             _panJustBegun = true;
+
+            GameScreen.InitDisplay(_game);
         }
 
-        private void OnCanvasViewPaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
-        {
-            var surface = e.Surface;
-            _canvas = surface.Canvas;
-            DrawBoard(_canvas, _game.GetBoard());
-            
-        }   
-        private void DrawBoard(SKCanvas canvas, Board board)
-        {
-            canvas.Clear(SKColors.White);
-            var cellHeight = 180;
-            var cellWidth = 180;
+            //var gems = board.GetGems().Select(g => g).ToList();
+            //Title = board.GetGems().Count.ToString();
 
-            // create the paint for the filled circle
-            var cellColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(0, 0, 93)
-            };
+            //foreach (var gem in gems.Where(gem => gem.WillDie()))
+            //{
+            //    DrawGem(gem);
+            //}
 
-            for (int i = 0; i < board.Width; i++)
-            {
-                for (int j = 0; j < board.Height; j++)
-                {
-                    canvas.DrawRect(SKRect.Create(i * (cellWidth + 10) + 50, (cellHeight + 10) * j + 50, cellWidth, cellHeight), cellColor);
-                }
-            }
+            //foreach (var gem in gems.Where(gem => !gem.WillDie()))
+            //{
+            //    DrawGem(gem);
+            //}
 
-            var gems = board.GetGems().Select(g => g).ToList();
-            Title = board.GetGems().Count.ToString();
-
-            foreach (var gem in gems.Where(gem => gem.WillDie()))
-            {
-                DrawGem(gem);
-            }
-
-            foreach (var gem in gems.Where(gem => !gem.WillDie()))
-            {
-                DrawGem(gem);
-            }
-
-            foreach (var gem in gems)
-            {
-                gem.UpdatePosition();
-            }
-        }
-
-        private void DrawGem(Gem gem)
-        {
-            var cellHeight = 180;
-            var cellWidth = 180;
-            var gemColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330-gem.Size*20, 100, 50)
-            };
-
-            var gemLightColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330 - gem.Size * 20, 90, 60)
-            };
-
-
-            var gemReflectColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330 - gem.Size * 20, 90, 65)
-            };
-
-
-            var textColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(0, 0, 100),
-                TextSize = (int)(35 * (1 + (double)gem.Size / 5))
-            };
-
-            var gemWidth = (int)(35 * (1 + (double)gem.Size / 7));
-
-            _canvas.DrawCircle(gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2, gemWidth, gemColor);
-            _canvas.DrawCircle(gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2- (gemWidth-gemWidth * 7 / 10), gemWidth* 7 / 10, gemReflectColor);
-            //_canvas.DrawText(gem.Size.ToString(), gem.FluidX * (cellWidth + 10) + 50 + cellWidth / 2, (cellHeight + 10) * gem.FluidY + 50 + cellWidth / 2 + gemWidth / 2, textColor);
-        }
+            //foreach (var gem in gems)
+            //{
+            //    gem.UpdatePosition();
+            //}
 
         // USer controls
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)

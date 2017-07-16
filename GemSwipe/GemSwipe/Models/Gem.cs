@@ -2,15 +2,13 @@
 
 namespace GemSwipe.Models
 {
-    public class Gem
+    public class Gem : IGemState
     {
         public int X { get; private set; }
         public int Y { get; private set; }
 
-        public float FluidX { get; set; }
-        public float FluidY { get; set; }
-
         public int Size { get; private set; }
+        public Guid Id { get; }
         public int FluidSize { get; set; }
 
         public int TargetX { get; private set; }
@@ -23,11 +21,10 @@ namespace GemSwipe.Models
         public Gem(int x, int y)
         {
             X = x;
-            FluidX = X;
-
             Y = y;
-            FluidY = Y;
             Size = 1;
+
+            Id = Guid.NewGuid();
         }
 
         public void LevelUp()
@@ -55,28 +52,10 @@ namespace GemSwipe.Models
 
             X = TargetX;
             Y = TargetY;
+
+            _isDead = _willDie;
         }
 
-        public void UpdatePosition()
-        {
-            FluidX += (float)((X - FluidX) * 0.4);
-            if (Math.Abs(X - FluidX) < .01)
-            {
-                FluidX = X;
-            }
-
-            FluidY += (float)((Y - FluidY) * 0.4);
-            if (Math.Abs(Y - FluidY) < .01)
-            {
-                FluidY = Y;
-            }
-
-            if (X == FluidX && Y == FluidY)
-            {
-                FluidSize = Size;
-                _isDead = _willDie;
-            }
-        }
 
         public bool IsDead()
         {
@@ -93,7 +72,6 @@ namespace GemSwipe.Models
             TargetX = x;
             TargetY = y;
         }
-
 
         public void SetSize(int size)
         {
