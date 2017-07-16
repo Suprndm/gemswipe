@@ -27,8 +27,6 @@ namespace GemSwipe.GameEngine
 
         public override void UpdateState()
         {
-      
-
             var levelVariation = (float)((GemState.Size - _fluidLevel) * 0.2);
             _fluidLevel += levelVariation;
             if (Math.Abs(GemState.Size - _fluidLevel) < 0.01)
@@ -87,7 +85,9 @@ namespace GemSwipe.GameEngine
         private async void Die()
         {
             await Task.Delay(300);
+
             Disposed?.Invoke(this);
+
             Dispose();
         }
 

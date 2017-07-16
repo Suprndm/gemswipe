@@ -9,7 +9,6 @@ namespace GemSwipe.GameEngine
 {
     public abstract class GLViewBase : IGLView
     {
-
         public float X { get; protected set; }
         public float Y { get; protected set; }
         public float Height { get; protected set; }

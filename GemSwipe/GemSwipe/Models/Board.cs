@@ -181,11 +181,6 @@ namespace GemSwipe.Models
             deadGem.Move(upgradedGem.TargetX, upgradedGem.TargetY);
         }
 
-        private Cell GetCellByGem(Gem gem)
-        {
-            return _cells[gem.X, gem.Y];
-        }
-
         private IList<IList<Cell>> GetCellsLanes(Direction direction)
         {
             var cellsLanes = new List<IList<Cell>>();

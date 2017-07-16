@@ -9,7 +9,6 @@ namespace GemSwipe.Models
 
         public int Size { get; private set; }
         public Guid Id { get; }
-        public int FluidSize { get; set; }
 
         public int TargetX { get; private set; }
         public int TargetY { get; private set; }

@@ -19,13 +19,9 @@ namespace GemSwipe.GameEngine
         public void InitDisplay(IGameState game)
         {
             _game = game;
-            PaintSurface += GameScreen_PaintSurface;
+            this.PaintSurface += GameScreen_PaintSurface;
         }
 
-        protected override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-        {
-            return base.OnMeasure(widthConstraint, heightConstraint);
-        }
 
         protected override void OnParentSet()
         {

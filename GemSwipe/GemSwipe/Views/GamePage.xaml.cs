@@ -17,8 +17,6 @@ namespace GemSwipe.Views
     {
         private bool _panJustBegun;
         private Game _game;
-        private Stopwatch _stopwatch;
-        private SKCanvas _canvas;
         bool pageIsActive;
         private int _boardWidth;
         private int _boardHeight;
@@ -26,33 +24,13 @@ namespace GemSwipe.Views
         public GamePage()
         {
             InitializeComponent();
-            _boardWidth = 4;
-            _boardWidth = 4;
-            _game = new Game(4, 4);
+            _game = new Game();
             _game.InitGame();
-            _stopwatch = new Stopwatch();
             _panJustBegun = true;
 
             GameScreen.InitDisplay(_game);
         }
 
-            //var gems = board.GetGems().Select(g => g).ToList();
-            //Title = board.GetGems().Count.ToString();
-
-            //foreach (var gem in gems.Where(gem => gem.WillDie()))
-            //{
-            //    DrawGem(gem);
-            //}
-
-            //foreach (var gem in gems.Where(gem => !gem.WillDie()))
-            //{
-            //    DrawGem(gem);
-            //}
-
-            //foreach (var gem in gems)
-            //{
-            //    gem.UpdatePosition();
-            //}
 
         // USer controls
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)

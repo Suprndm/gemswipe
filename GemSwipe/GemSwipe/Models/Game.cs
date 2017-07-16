@@ -7,17 +7,10 @@ namespace GemSwipe.Models
     public class Game: IGameState
     {
         private Board _board;
-        public int Height { get; }
-        public int Width { get; }
 
-        public event Action<Gem> NewCell;
-        public event Action Blocked;
-
-        public Game(int height, int width)
+        public Game()
         {
   
-            Height = height;
-            Width = width;
         }
 
 
@@ -31,7 +24,6 @@ namespace GemSwipe.Models
             _board.Swipe(direction);
             if (_board.IsFull())
             {
-                Blocked?.Invoke();
             }
             else
             {
@@ -47,15 +39,12 @@ namespace GemSwipe.Models
         private void PopGem()
         {
             var gem = _board.Pop();
-            NewCell?.Invoke(gem);
         }
-
 
         public IBoardState GetBoardState()
         {
             return _board;
         }
-
 
         private Board BuildBoardFromString(string boardString)
         {
