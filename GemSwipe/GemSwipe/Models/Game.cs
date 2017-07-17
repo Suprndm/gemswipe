@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GemSwipe.Models
 {
-    public class Game: IGameState
+    public class Game
     {
         private Board _board;
 
@@ -14,21 +14,20 @@ namespace GemSwipe.Models
         }
 
 
-        public void InitGame()
+        public GameSetup Setup()
         {
             _board = BuildBoardFromString("1 0 0 1-0 1 1 0-0 0 1 0-1 0 1 1");
+            return new GameSetup
+            {
+                Columns = _board.Width,
+                Rows = _board.Height,
+                Gems = _board.Gems
+            };
         }
 
-        public void Swipe(Direction direction)
+        public GameUpdate Swipe(Direction direction)
         {
-            _board.Swipe(direction);
-            if (_board.IsFull())
-            {
-            }
-            else
-            {
-              //  PopGem();
-            }
+           return _board.Swipe(direction);
         }
 
         public Board GetBoard()
@@ -39,11 +38,6 @@ namespace GemSwipe.Models
         private void PopGem()
         {
             var gem = _board.Pop();
-        }
-
-        public IBoardState GetBoardState()
-        {
-            return _board;
         }
 
         private Board BuildBoardFromString(string boardString)

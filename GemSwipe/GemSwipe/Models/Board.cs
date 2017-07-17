@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace GemSwipe.Models
 {
-    public class Board:IBoardState
+    public class Board
     {
-        private readonly Cell[,] _cells;
-        private readonly IList<Cell> _cellsList;
-        private readonly IList<Gem> _gems;
+        public Cell[,] Cells { get; }
+        public IList<Cell> CellsList { get; }
+        public IList<Gem> Gems { get; }
         private Random _randomizer;
 
         public int Height { get; }
@@ -18,15 +18,15 @@ namespace GemSwipe.Models
         {
             _randomizer = new Random();
 
-            _cellsList = cellsList;
-            _gems = new List<Gem>();
+            CellsList = cellsList;
+            Gems = new List<Gem>();
             var maxHeight = 0;
             var maxWidth = 0;
-            foreach (var cell in _cellsList)
+            foreach (var cell in CellsList)
             {
                 var gem = cell.GetAttachedGem();
                 if (gem != null)
-                    _gems.Add(gem);
+                    Gems.Add(gem);
 
                 maxHeight = Math.Max(maxHeight, cell.Y + 1);
                 maxWidth = Math.Max(maxWidth, cell.X + 1);
@@ -34,13 +34,13 @@ namespace GemSwipe.Models
 
             Height = maxHeight;
             Width = maxWidth;
-            _cells = new Cell[Width, Height];
+            Cells = new Cell[Width, Height];
 
             for (int i = 0; i < Width; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    _cells[i, j] = cellsList.Single(cell => cell.X == i && cell.Y == j);
+                    Cells[i, j] = cellsList.Single(cell => cell.X == i && cell.Y == j);
                 }
             }
         }
@@ -51,24 +51,19 @@ namespace GemSwipe.Models
 
             Height = height;
             Width = width;
-            _cellsList = new List<Cell>();
-            _cells = new Cell[width, height];
+            CellsList = new List<Cell>();
+            Cells = new Cell[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < Height; j++)
                 {
                     var newCell = new Cell(i, j);
-                    _cells[i, j] = newCell;
-                    _cellsList.Add(newCell);
+                    Cells[i, j] = newCell;
+                    CellsList.Add(newCell);
                 }
             }
 
-            _gems = new List<Gem>();
-        }
- 
-        public IList<IGemState> GetGemStates()
-        {
-            return GetGems().Select(gem => gem as IGemState).ToList();
+            Gems = new List<Gem>();
         }
 
         public Gem Pop()
@@ -80,28 +75,20 @@ namespace GemSwipe.Models
             var randomCell = emptyCells[_randomizer.Next(emptyCells.Count)];
             var gem = new Gem(randomCell.X, randomCell.Y);
             randomCell.AttachGem(gem);
-            _gems.Add(gem);
+            Gems.Add(gem);
 
             return gem;
         }
 
-        public Cell[,] GetCells()
+        public GameUpdate Swipe(Direction direction)
         {
-            return _cells;
-        }
+            GameUpdate gameUpdate = new GameUpdate
+            {
+                MovedGems = new List<Gem>(),
+                DeadGems = new List<Gem>(),
+                FusedGems = new List<Gem>()
+            };
 
-        public IList<Cell> GetCellsList()
-        {
-            return _cellsList;
-        }
-
-        public IList<Gem> GetGems()
-        {
-            return _gems;
-        }
-
-        public void Swipe(Direction direction)
-        {
             var cellsLanes = GetCellsLanes(direction);
 
             foreach (var cellsLane in cellsLanes)
@@ -119,7 +106,10 @@ namespace GemSwipe.Models
                     {
                         if (cell.IsEmpty())
                         {
-                            Move(gem, cell);
+                            cell.AttachGem(gem);
+                            gem.Move(cell.X, cell.Y);
+
+                            gameUpdate.MovedGems.Add(gem);
                             gemPositionned++;
                             break;
                         }
@@ -127,25 +117,32 @@ namespace GemSwipe.Models
                         var alreadyAttachedGem = cell.GetAttachedGem();
                         if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
                         {
-                            Merge(alreadyAttachedGem, gem);
+                            // Its a Fuse
+                            alreadyAttachedGem.LevelUp();
+                            gem.Die();
+                            gem.Move(alreadyAttachedGem.TargetX, alreadyAttachedGem.TargetY);
+
+                            gameUpdate.DeadGems.Add(gem);
+                            gameUpdate.FusedGems.Add(alreadyAttachedGem);
                             break;
                         }
                     }
                 }
             }
 
-            foreach (var gem in _gems)
+            foreach (var gem in Gems)
             {
                 gem.Resolve();
             }
-            var deadGems = _gems.Where(gem => gem.IsDead()).ToList();
+            var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
 
             foreach (var deadGem in deadGems)
             {
-                _gems.Remove(deadGem);
+                Gems.Remove(deadGem);
             }
-        }
 
+            return gameUpdate;
+        }
 
         public IList<Cell> GetEmptyCells()
         {
@@ -155,8 +152,8 @@ namespace GemSwipe.Models
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    if (_cells[i, j].IsEmpty())
-                        emptyCells.Add(_cells[i, j]);
+                    if (Cells[i, j].IsEmpty())
+                        emptyCells.Add(Cells[i, j]);
                 }
             }
 
@@ -165,20 +162,7 @@ namespace GemSwipe.Models
 
         public bool IsFull()
         {
-            return _cellsList.All(cell => !cell.IsEmpty());
-        }
-
-        private void Move(Gem gem, Cell newCell)
-        {
-            newCell.AttachGem(gem);
-            gem.Move(newCell.X, newCell.Y);
-        }
-
-        private void Merge(Gem upgradedGem, Gem deadGem)
-        {
-            upgradedGem.LevelUp();
-            deadGem.Die();
-            deadGem.Move(upgradedGem.TargetX, upgradedGem.TargetY);
+            return CellsList.All(cell => !cell.IsEmpty());
         }
 
         private IList<IList<Cell>> GetCellsLanes(Direction direction)
@@ -191,7 +175,7 @@ namespace GemSwipe.Models
                     {
                         var cellsLane = new List<Cell>();
                         for (int i = 0; i < Width; i++)
-                            cellsLane.Add(_cells[i, j]);
+                            cellsLane.Add(Cells[i, j]);
 
                         cellsLanes.Add(cellsLane);
                     }
@@ -201,7 +185,7 @@ namespace GemSwipe.Models
                     {
                         var cellsLane = new List<Cell>();
                         for (int j = 0; j < Height; j++)
-                            cellsLane.Add(_cells[i, Height - j - 1]);
+                            cellsLane.Add(Cells[i, Height - j - 1]);
 
                         cellsLanes.Add(cellsLane);
                     }
@@ -211,7 +195,7 @@ namespace GemSwipe.Models
                     {
                         var cellsLane = new List<Cell>();
                         for (int i = 0; i < Width; i++)
-                            cellsLane.Add(_cells[Width - i - 1, j]);
+                            cellsLane.Add(Cells[Width - i - 1, j]);
 
                         cellsLanes.Add(cellsLane);
                     }
@@ -221,7 +205,7 @@ namespace GemSwipe.Models
                     {
                         var cellsLane = new List<Cell>();
                         for (int j = 0; j < Height; j++)
-                            cellsLane.Add(_cells[i, j]);
+                            cellsLane.Add(Cells[i, j]);
 
                         cellsLanes.Add(cellsLane);
                     }

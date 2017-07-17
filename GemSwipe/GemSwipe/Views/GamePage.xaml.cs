@@ -18,17 +18,22 @@ namespace GemSwipe.Views
         private bool _panJustBegun;
         private Game _game;
         bool pageIsActive;
-        private int _boardWidth;
-        private int _boardHeight;
 
         public GamePage()
         {
             InitializeComponent();
-            _game = new Game();
-            _game.InitGame();
+          
+        }
+
+        protected override void OnAppearing()
+        {
             _panJustBegun = true;
 
-            GameScreen.InitDisplay(_game);
+            _game = new Game();
+            var gameSetup = _game.Setup();
+            GameView.Setup(gameSetup);
+
+            base.OnAppearing();
         }
 
 
@@ -42,22 +47,29 @@ namespace GemSwipe.Views
                 if (e.TotalX > 0)
                 {
                     if (e.TotalY > e.TotalX)
-                        _game.Swipe(Direction.Bottom);
+                        Swipe(Direction.Bottom);
                     else if (Math.Abs(e.TotalY) > e.TotalX)
-                        _game.Swipe(Direction.Top);
+                        Swipe(Direction.Top);
                     else
-                        _game.Swipe(Direction.Right);
+                        Swipe(Direction.Right);
                 }
                 else
                 {
                     if (e.TotalY > Math.Abs(e.TotalX))
-                        _game.Swipe(Direction.Bottom);
+                        Swipe(Direction.Bottom);
                     else if (Math.Abs(e.TotalY) > Math.Abs(e.TotalX))
-                        _game.Swipe(Direction.Top);
+                        Swipe(Direction.Top);
                     else
-                        _game.Swipe(Direction.Left);
+                        Swipe(Direction.Left);
                 }
             }
+        }
+
+        private void Swipe(Direction direction)
+        {
+           var swipe = _game.Swipe(direction);
+            GameView.Update(swipe);
+
         }
 
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)

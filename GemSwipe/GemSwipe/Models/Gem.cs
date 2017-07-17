@@ -2,7 +2,7 @@
 
 namespace GemSwipe.Models
 {
-    public class Gem : IGemState
+    public class Gem
     {
         public int X { get; private set; }
         public int Y { get; private set; }

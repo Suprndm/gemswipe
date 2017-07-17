@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GemSwipe.Models
 {
-    public interface IBoardState
+    public class GameSetup
     {
-        int Width { get; }
-        int Height { get; }
-        IList<IGemState> GetGemStates();
+        public int Rows { get; set; }
+        public int Columns { get; set; }
+        public IList<Gem> Gems { get; set; }
     }
 }

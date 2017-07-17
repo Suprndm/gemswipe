@@ -30,7 +30,7 @@ namespace GemSwipe.Tests
             _board = new Board(width, height);
 
             // Then all cells are empty
-            var cells = _board.GetCells();
+            var cells = _board.Cells;
 
             for (int i = 0; i < width; i++)
             {
@@ -41,11 +41,11 @@ namespace GemSwipe.Tests
             }
 
             // Then cells number is correct;
-            var cellsList = _board.GetCellsList();
+            var cellsList = _board.CellsList;
             Assert.AreEqual(width * height, cellsList.Count);
 
             // Then there are no gems 
-            var gems = _board.GetGems();
+            var gems = _board.Gems;
             Assert.AreEqual(0, gems.Count);
         }
 
@@ -64,8 +64,8 @@ namespace GemSwipe.Tests
                 _board.Pop();
             }
 
-            var cellsList = _board.GetCellsList();
-            var gems = _board.GetGems();
+            var cellsList = _board.CellsList;
+            var gems = _board.Gems;
 
             // Then the board should be full
             Assert.AreEqual(true, _board.IsFull());
@@ -212,9 +212,9 @@ namespace GemSwipe.Tests
             // when building board from string
             var board = BuildBoardFromString(boardString);
 
-            var cellsList = board.GetCellsList();
-            var cellsGrid = board.GetCells();
-            var gems = board.GetGems();
+            var cellsList = board.CellsList;
+            var cellsGrid = board.Cells;
+            var gems = board.Gems;
 
             // Then the board dimensions should be correct
             Assert.AreEqual(height, board.Height);
@@ -260,11 +260,11 @@ namespace GemSwipe.Tests
             Console.WriteLine("Actual board");
             Console.WriteLine(DrawBoard(actualBoard));
 
-            var expectedCells = expectedBoard.GetCellsList();
-            var actualCells = actualBoard.GetCellsList();
+            var expectedCells = expectedBoard.CellsList;
+            var actualCells = actualBoard.CellsList;
 
-            var expectedGems = expectedBoard.GetGems();
-            var actualGems = actualBoard.GetGems();
+            var expectedGems = expectedBoard.Gems;
+            var actualGems = actualBoard.Gems;
 
             Assert.AreEqual(expectedGems.Count, actualGems.Count);
 
@@ -323,7 +323,7 @@ namespace GemSwipe.Tests
 
         private string DrawBoard(Board board)
         {
-            var cellsGrid = board.GetCells();
+            var cellsGrid = board.Cells;
             string draw = "";
             for (int j = 0; j < board.Height; j++)
             {
