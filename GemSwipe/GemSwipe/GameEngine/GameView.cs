@@ -48,9 +48,10 @@ namespace GemSwipe.GameEngine
             _boardView.Update(gameUpdate);
         }
 
-        public void EndDisplay()
+        public void Dispose()
         {
             PaintSurface -= GameScreen_PaintSurface;
+            _boardView.Dispose();
         }
     }
 }

@@ -27,11 +27,43 @@ namespace GemSwipe.Views
 
         protected override void OnAppearing()
         {
+            Task.Run(() => { Task.Delay(0); Doors.Open();
+            });
+
+            Task.Run(() => {
+                Task.Delay(0);
+                GameView.IsVisible = true;
+            });
+
             _panJustBegun = true;
 
             _game = new Game();
             var gameSetup = _game.Setup();
             GameView.Setup(gameSetup);
+
+            WinPopup.TranslateTo(-500, 0, 0, Easing.CubicOut);
+            GameView.TranslateTo(0, -500, 0, Easing.CubicOut);
+            GameView.TranslateTo(0, 0, 500, Easing.CubicOut);
+            WinPopup.Back += () =>
+            {
+                Navigation.InsertPageBefore(new MenuPage(), this);
+                Navigation.PopAsync();
+                Dispose();
+            };
+
+            WinPopup.Retry += () =>
+            {
+                Navigation.InsertPageBefore(new GamePage(), this);
+                Navigation.PopAsync();
+                Dispose();
+            };
+
+            WinPopup.Next += () =>
+            {
+                Navigation.InsertPageBefore(new GamePage(), this);
+                Navigation.PopAsync();
+                Dispose();
+            };
 
             base.OnAppearing();
         }
@@ -67,14 +99,40 @@ namespace GemSwipe.Views
 
         private void Swipe(Direction direction)
         {
-           var swipe = _game.Swipe(direction);
-            GameView.Update(swipe);
+           var gameUpdate = _game.Swipe(direction);
+            GameView.Update(gameUpdate);
 
+            if (gameUpdate.IsWon)
+            {
+                Doors.Close();
+
+                GameView.TranslateTo(0, -500, 0, Easing.CubicOut);
+                WinPopup.TranslateTo(0, 0, 500, Easing.CubicOut);
+
+                Task.Delay(500);
+                GameView.IsVisible = false;
+            }
         }
 
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
         {
             _panJustBegun = true;
+        }
+
+        protected override void OnDisappearing()
+        {
+            Doors.Close();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            Doors.Close();
+            return false;
+        }
+
+        private void Dispose()
+        {
+            GameView.Dispose();
         }
     }
 }

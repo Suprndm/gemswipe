@@ -10,7 +10,6 @@ namespace GemSwipe.Models
 
         public Game()
         {
-  
         }
 
 
@@ -27,7 +26,15 @@ namespace GemSwipe.Models
 
         public GameUpdate Swipe(Direction direction)
         {
-           return _board.Swipe(direction);
+            var gameUpdate = _board.Swipe(direction);
+            gameUpdate.IsWon = CheckWin();
+
+            return gameUpdate;
+        }
+
+        private bool CheckWin()
+        {
+            return _board.Gems.Count == 1;
         }
 
         public Board GetBoard()
@@ -65,6 +72,5 @@ namespace GemSwipe.Models
 
             return new Board(boardCells);
         }
-
     }
 }

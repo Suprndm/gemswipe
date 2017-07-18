@@ -61,10 +61,12 @@ namespace GemSwipe.GameEngine
         public virtual void Dispose()
         {
             ToDispose = true;
-            foreach (var glView in Children)
+            foreach (var child in Children)
             {
-                RemoveChild(glView);
+                child.Dispose();
             }
+
+            Children.Clear();
         }
 
         public void BatchBegin()

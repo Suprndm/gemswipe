@@ -26,37 +26,6 @@ namespace GemSwipe.GameEngine
             _fluidSize = Width;
         }
 
-        //public void Draw()
-        //{
-        //    var levelVariation = (float)((Gem.Size - _fluidLevel) * 0.2);
-        //    _fluidLevel += levelVariation;
-        //    if (Math.Abs(Gem.Size - _fluidLevel) < 0.01)
-        //    {
-        //        _fluidLevel = Gem.Size;
-        //    }
-
-        //    _fluidX += (float)((X - _fluidX) * 0.2);
-        //    if (Math.Abs(X - _fluidX) < 1)
-        //    {
-        //        _fluidX = X;
-        //    }
-
-        //    _fluidY += (float)((Y - _fluidY) * 0.2);
-        //    if (Math.Abs(Y - _fluidY) < 1)
-        //    {
-        //        _fluidY = Y;
-        //    }
-
-        //    var sizeVariation = Math.Sin(levelVariation * 4 * Math.PI);
-        //    _fluidSize = (float)(Width + sizeVariation * (Width / 3));
-
-        //    if (Gem.IsDead())
-        //    {
-        //        Die();
-        //        _isDying = true;
-        //    }
-        //}
-
         protected override void Draw()
         {
             var gemColor = new SKPaint

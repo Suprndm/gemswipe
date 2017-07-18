@@ -17,8 +17,17 @@ namespace GemSwipe.Views
             InitializeComponent();
         }
 
+  
+
+        protected override void OnAppearing()
+        {
+            Task.Run(() => { Task.Delay(1000); Doors.Open(); });
+        }
+
         private async void StartButton_OnClicked(object sender, EventArgs e)
         {
+           Doors.Close(); 
+            await Task.Delay(1000);
             await Navigation.PushAsync(new GamePage());
         }
     }
