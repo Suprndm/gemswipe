@@ -15,7 +15,7 @@
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
-            <gameEngine:GameView x:Name="GameView" Grid.Row="1"   HasRenderLoop="True" IsVisible="False">
+            <gameEngine:GameView x:Name="GameView" Grid.Row="1"   HasRenderLoop="True">
                 <forms:SKGLView.GestureRecognizers>
                     <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" NumberOfTapsRequired="1"></TapGestureRecognizer>
