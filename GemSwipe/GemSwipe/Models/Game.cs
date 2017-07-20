@@ -1,17 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using Xamarin.Forms;
 
 namespace GemSwipe.Models
 {
     public class Game
     {
         private Board _board;
+        private CountDown _countDown;
+        public event Action<GameLostData> Lost;
 
         public Game()
         {
+            _countDown = new CountDown(15);
+            _countDown.Zero += _countDown_Zero;
         }
 
+        private void _countDown_Zero()
+        {
+            Lost?.Invoke(new GameLostData {MaxLevel = 5, Score = 65494});
+        }
+
+        public void Start()
+        {
+            _countDown.Start();
+        }
 
         public GameSetup Setup()
         {

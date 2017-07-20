@@ -1,46 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GemSwipe.Models;
+﻿using GemSwipe.Models;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
-using Xamarin.Forms;
 
 namespace GemSwipe.GameEngine
 {
-    public class GameView : SKGLView
+    public class GameView : SkiaView
     {
         private BoardView _boardView;
-        private bool _isInitiated;
         private GameSetup _gameSetup;
+
+        public GameView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        {
+        }
 
         public void Setup(GameSetup gameSetup)
         {
-            PaintSurface += GameScreen_PaintSurface;
             _gameSetup = gameSetup;
-        }
 
-        /// <summary>
-        /// GameLoop
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void GameScreen_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
-        {
-            if (_isInitiated)
-            {
-                e.Surface.Canvas.Clear(SKColors.White);
-                _boardView.Render();
-            }
-            else
-            {
-                _isInitiated = true;
-                _boardView = new BoardView(e.Surface.Canvas, 0, 0, (float)e.Surface.Canvas.ClipBounds.Width, (float)e.Surface.Canvas.ClipBounds.Width);
-                _boardView.Setup(_gameSetup.Columns,_gameSetup.Rows);
-                _boardView.Populate(_gameSetup.Gems);
-            }
+            _boardView = new BoardView(Canvas, 0, 0, (float)Canvas.ClipBounds.Width, (float)Canvas.ClipBounds.Width);
+            _boardView.Setup(_gameSetup.Columns, _gameSetup.Rows);
+            _boardView.Populate(_gameSetup.Gems);
+
+            AddChild(_boardView);
         }
 
         public void Update(GameUpdate gameUpdate)
@@ -48,9 +28,12 @@ namespace GemSwipe.GameEngine
             _boardView.Update(gameUpdate);
         }
 
-        public void Dispose()
+        protected override void Draw()
         {
-            PaintSurface -= GameScreen_PaintSurface;
+        }
+
+        public override void Dispose()
+        {
             _boardView.Dispose();
         }
     }

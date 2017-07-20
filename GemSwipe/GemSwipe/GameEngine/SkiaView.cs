@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace GemSwipe.GameEngine
 {
-    public abstract class SkiaView : IAnimatable, ISkiaView
+    public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
         public float X { get; protected set; }
         public float Y { get; protected set; }
@@ -18,19 +18,20 @@ namespace GemSwipe.GameEngine
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
         public SKCanvas Canvas { get; protected set; }
-        public IList<ISkiaView> Children { get; protected set; }
+        private IList<ISkiaView> _children;
         public ISkiaView Parent { get; set; }
 
-        public void AddChild(ISkiaView child)
+        public void AddChild(ISkiaView child, int zindex=0)
         {
-            Children.Add(child);
+            child.ZIndex = 0;
+            _children.Add(child);
             child.Parent = this;
         }
 
         public void RemoveChild(ISkiaView child)
         {
             child.Dispose();
-            Children.Remove(child);
+            _children.Remove(child);
         }
 
         protected abstract void Draw();
@@ -39,7 +40,7 @@ namespace GemSwipe.GameEngine
         {
             Draw();
 
-            foreach (var child in Children.OrderByDescending(child => child.ZIndex))
+            foreach (var child in _children.OrderBy(child => child.ZIndex))
             {
                 if (child.ToDispose)
                     RemoveChild(child);
@@ -55,18 +56,18 @@ namespace GemSwipe.GameEngine
             Height = height;
             Width = width;
             Canvas = canvas;
-            Children = new List<ISkiaView>();
+            _children = new List<ISkiaView>();
         }
 
         public virtual void Dispose()
         {
             ToDispose = true;
-            foreach (var child in Children)
+            foreach (var child in _children)
             {
                 child.Dispose();
             }
 
-            Children.Clear();
+            _children.Clear();
         }
 
         public void BatchBegin()

@@ -71,6 +71,7 @@ namespace GemSwipe.GameEngine
             foreach (var deadGem in gameUpdate.DeadGems)
             {
                 var gemView = GetViewByModel(deadGem);
+                gemView.ZIndex = -1;
                 gemView.DieTo(ToGemViewX(deadGem.X), ToGemViewY(deadGem.Y));
             }
 

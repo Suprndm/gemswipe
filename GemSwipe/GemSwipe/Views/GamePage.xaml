@@ -15,17 +15,15 @@
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
-            <gameEngine:GameView x:Name="GameView" Grid.Row="1"   HasRenderLoop="True">
+            <forms:SKGLView x:Name="SKGLView" Grid.Row="1"   HasRenderLoop="True">
                 <forms:SKGLView.GestureRecognizers>
                     <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_OnTapped" NumberOfTapsRequired="1"></TapGestureRecognizer>
                 </forms:SKGLView.GestureRecognizers>
-            </gameEngine:GameView>
+            </forms:SKGLView>
             <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand"
                             HorizontalOptions="FillAndExpand">
                 
-                <views:Doors x:Name="Doors" AbsoluteLayout.LayoutBounds="1,1,1,1"
-                             AbsoluteLayout.LayoutFlags="All"></views:Doors>
                 <views:WinPopup  x:Name="WinPopup"   AbsoluteLayout.LayoutBounds="0.5, 0.5, 0.80, 0.50"
                                    AbsoluteLayout.LayoutFlags="All" />
 

@@ -39,6 +39,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameEngine\BoardView.cs" />
+    <Compile Include="GameEngine\CountDownView.cs" />
     <Compile Include="GameEngine\GameView.cs" />
     <Compile Include="GameEngine\GemView.cs" />
     <Compile Include="GameEngine\SkiaView.cs" />
@@ -47,9 +48,11 @@
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Direction.cs" />
     <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\GameLostData.cs" />
     <Compile Include="Models\GameSetup.cs" />
     <Compile Include="Models\Gem.cs" />
     <Compile Include="Models\GameUpdate.cs" />
+    <Compile Include="Models\CountDown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Doors.xaml.cs">
       <DependentUpon>Doors.xaml</DependentUpon>

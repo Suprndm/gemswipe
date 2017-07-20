@@ -18,32 +18,41 @@ namespace GemSwipe.Views
         private bool _panJustBegun;
         private Game _game;
         bool pageIsActive;
+        private bool _isInitiated;
+        private GameView _gameView;
+
+
 
         public GamePage()
         {
             InitializeComponent();
-          
+        }
+
+        private void SKGLView_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
+        {
+            if (_isInitiated)
+            {
+                e.Surface.Canvas.Clear(SKColors.White);
+                _gameView.Render();
+            }
+            else
+            {
+                _gameView = new GameView(e.Surface.Canvas, 0, 0, (float)e.Surface.Canvas.ClipBounds.Width, (float)e.Surface.Canvas.ClipBounds.Width);
+                var gameSetup = _game.Setup();
+                _gameView.Setup(gameSetup);
+
+                _isInitiated = true;
+            }
         }
 
         protected override void OnAppearing()
         {
-            Task.Run(() => { Task.Delay(0); Doors.Open();
-            });
-
-            Task.Run(() => {
-                Task.Delay(0);
-                GameView.IsVisible = true;
-            });
-
             _panJustBegun = true;
 
             _game = new Game();
-            var gameSetup = _game.Setup();
-            GameView.Setup(gameSetup);
 
             WinPopup.TranslateTo(-500, 0, 0, Easing.CubicOut);
-            GameView.TranslateTo(0, -500, 0, Easing.CubicOut);
-            GameView.TranslateTo(0, 0, 500, Easing.CubicOut);
+
             WinPopup.Back += () =>
             {
                 Navigation.InsertPageBefore(new MenuPage(), this);
@@ -64,6 +73,7 @@ namespace GemSwipe.Views
                 Navigation.PopAsync();
                 Dispose();
             };
+            SKGLView.PaintSurface += SKGLView_PaintSurface;
 
             base.OnAppearing();
         }
@@ -99,18 +109,12 @@ namespace GemSwipe.Views
 
         private void Swipe(Direction direction)
         {
-           var gameUpdate = _game.Swipe(direction);
-            GameView.Update(gameUpdate);
+            var gameUpdate = _game.Swipe(direction);
+            _gameView.Update(gameUpdate);
 
             if (gameUpdate.IsWon)
             {
-                Doors.Close();
-
-                GameView.TranslateTo(0, -500, 0, Easing.CubicOut);
                 WinPopup.TranslateTo(0, 0, 500, Easing.CubicOut);
-
-                Task.Delay(500);
-                GameView.IsVisible = false;
             }
         }
 
@@ -121,18 +125,17 @@ namespace GemSwipe.Views
 
         protected override void OnDisappearing()
         {
-            Doors.Close();
+            SKGLView.PaintSurface -= SKGLView_PaintSurface;
         }
 
         protected override bool OnBackButtonPressed()
         {
-            Doors.Close();
             return false;
         }
 
         private void Dispose()
         {
-            GameView.Dispose();
+            _gameView.Dispose();
         }
     }
 }

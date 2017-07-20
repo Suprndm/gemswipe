@@ -20,11 +20,6 @@
                 Text="Start"
                 Clicked="StartButton_OnClicked">
             </Button>
-
-            <views:Doors x:Name="Doors" AbsoluteLayout.LayoutBounds="1,1,1,1"
-                         AbsoluteLayout.LayoutFlags="All"></views:Doors>
-
-
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

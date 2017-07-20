@@ -11,10 +11,9 @@ namespace GemSwipe.GameEngine
         int ZIndex { get; set; }
         bool ToDispose { get; }
 
-        IList<ISkiaView> Children { get; }
         ISkiaView Parent { get; set; }
 
-        void AddChild(ISkiaView child);
+        void AddChild(ISkiaView child, int zindex);
         void RemoveChild(ISkiaView child);
         void Render();
         void Dispose();
