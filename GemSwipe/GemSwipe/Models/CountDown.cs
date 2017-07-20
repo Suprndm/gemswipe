@@ -18,13 +18,13 @@ namespace GemSwipe.Models
         {
             Reset(seconds);
 
-            Device.StartTimer(new TimeSpan(MilisecondPerTick), () =>
+            Device.StartTimer(TimeSpan.FromMilliseconds(MilisecondPerTick), () =>
             {
                 if (_isRunning)
                 {
-                    _pastSeconds += MilisecondPerTick / 1000;
+                    _pastSeconds += (double)MilisecondPerTick / 1000;
 
-                    if (_secondsToGo - _pastSeconds == 0)
+                    if (_secondsToGo - _pastSeconds <= 0)
                     {
                         Zero?.Invoke();
                         Stop();

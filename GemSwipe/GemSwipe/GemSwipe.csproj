@@ -49,9 +49,9 @@
     <Compile Include="Models\Direction.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameLostData.cs" />
-    <Compile Include="Models\GameSetup.cs" />
+    <Compile Include="Models\BoardSetup.cs" />
     <Compile Include="Models\Gem.cs" />
-    <Compile Include="Models\GameUpdate.cs" />
+    <Compile Include="Models\SwipeResult.cs" />
     <Compile Include="Models\CountDown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Doors.xaml.cs">

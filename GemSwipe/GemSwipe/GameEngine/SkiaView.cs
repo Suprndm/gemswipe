@@ -11,17 +11,37 @@ namespace GemSwipe.GameEngine
 {
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
-        public float X { get; protected set; }
-        public float Y { get; protected set; }
+        protected float _x;
+        public float X
+        {
+            get
+            {
+                if (Parent != null) return _x + Parent.X;
+                return _x;
+            }
+            protected set => _x = value;
+        }
+
+        protected float _y;
+        public float Y
+        {
+            get
+            {
+                if (Parent != null) return _y + Parent.Y;
+                return _y;
+            }
+            protected set => _y = value;
+        }
+
         public float Height { get; protected set; }
         public float Width { get; protected set; }
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
         public SKCanvas Canvas { get; protected set; }
-        private IList<ISkiaView> _children;
+        private readonly IList<ISkiaView> _children;
         public ISkiaView Parent { get; set; }
 
-        public void AddChild(ISkiaView child, int zindex=0)
+        public void AddChild(ISkiaView child, int zindex = 0)
         {
             child.ZIndex = 0;
             _children.Add(child);
@@ -51,8 +71,8 @@ namespace GemSwipe.GameEngine
 
         protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
             Height = height;
             Width = width;
             Canvas = canvas;

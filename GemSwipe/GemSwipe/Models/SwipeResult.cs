@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GemSwipe.Models
 {
-    public class GameUpdate
+    public class SwipeResult
     {
         public bool IsBlocked { get; set; }
         public bool IsWon { get; set; }

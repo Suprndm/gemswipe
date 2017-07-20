@@ -29,10 +29,10 @@ namespace GemSwipe.Models
             _countDown.Start();
         }
 
-        public GameSetup Setup()
+        public BoardSetup SetupBoard()
         {
             _board = BuildBoardFromString("1 0 0 1-0 1 1 0-0 0 1 0-1 0 1 1");
-            return new GameSetup
+            return new BoardSetup
             {
                 Columns = _board.Width,
                 Rows = _board.Height,
@@ -40,12 +40,17 @@ namespace GemSwipe.Models
             };
         }
 
-        public GameUpdate Swipe(Direction direction)
+        public SwipeResult Swipe(Direction direction)
         {
-            var gameUpdate = _board.Swipe(direction);
-            gameUpdate.IsWon = CheckWin();
+            var swipeResult = _board.Swipe(direction);
+            swipeResult.IsWon = CheckWin();
 
-            return gameUpdate;
+            return swipeResult;
+        }
+
+        public double SecondsTillLose()
+        {
+            return _countDown.RemainingSeconds();
         }
 
         private bool CheckWin()
@@ -56,11 +61,6 @@ namespace GemSwipe.Models
         public Board GetBoard()
         {
             return _board;
-        }
-
-        private void PopGem()
-        {
-            var gem = _board.Pop();
         }
 
         private Board BuildBoardFromString(string boardString)

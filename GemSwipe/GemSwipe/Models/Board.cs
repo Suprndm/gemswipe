@@ -80,9 +80,9 @@ namespace GemSwipe.Models
             return gem;
         }
 
-        public GameUpdate Swipe(Direction direction)
+        public SwipeResult Swipe(Direction direction)
         {
-            GameUpdate gameUpdate = new GameUpdate
+            SwipeResult swipeResult = new SwipeResult
             {
                 MovedGems = new List<Gem>(),
                 DeadGems = new List<Gem>(),
@@ -109,7 +109,7 @@ namespace GemSwipe.Models
                             cell.AttachGem(gem);
                             gem.Move(cell.X, cell.Y);
 
-                            gameUpdate.MovedGems.Add(gem);
+                            swipeResult.MovedGems.Add(gem);
                             gemPositionned++;
                             break;
                         }
@@ -122,8 +122,8 @@ namespace GemSwipe.Models
                             gem.Die();
                             gem.Move(alreadyAttachedGem.TargetX, alreadyAttachedGem.TargetY);
 
-                            gameUpdate.DeadGems.Add(gem);
-                            gameUpdate.FusedGems.Add(alreadyAttachedGem);
+                            swipeResult.DeadGems.Add(gem);
+                            swipeResult.FusedGems.Add(alreadyAttachedGem);
                             break;
                         }
                     }
@@ -141,7 +141,7 @@ namespace GemSwipe.Models
                 Gems.Remove(deadGem);
             }
 
-            return gameUpdate;
+            return swipeResult;
         }
 
         public IList<Cell> GetEmptyCells()

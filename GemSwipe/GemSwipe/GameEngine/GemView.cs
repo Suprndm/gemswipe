@@ -21,8 +21,8 @@ namespace GemSwipe.GameEngine
         {
             Id = id;
             _size = 0;
-            _fluidX = X;
-            _fluidY = Y;
+            _fluidX = _x;
+            _fluidY = _y;
             _fluidSize = Width;
         }
 
@@ -42,20 +42,20 @@ namespace GemSwipe.GameEngine
                 Color = SKColor.FromHsl(330 - _size * 20, 90, 65)
             };
 
-            Canvas.DrawCircle(_fluidX, _fluidY, _fluidSize, gemColor);
-            Canvas.DrawCircle(_fluidX, _fluidY - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
+            Canvas.DrawCircle(X, Y, _fluidSize, gemColor);
+            Canvas.DrawCircle(X, Y - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
         }
 
         public  void MoveTo(float x, float y)
         {
-            var oldX = X;
-            var oldY = Y;
+            var oldX = _x;
+            var oldY = _y;
 
-            X = x;
-            Y = y;
+            var newX = x;
+            var newY = y;
 
-            this.Animate("moveX", p => this._fluidX = (float)p, oldX, X, 4, MovementAnimationMs, Easing.CubicOut);
-            this.Animate("moveY", p => this._fluidY = (float)p, oldY, Y, 8, MovementAnimationMs, Easing.CubicOut);
+            this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
+            this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
 
 
         }

@@ -2,7 +2,7 @@
 
 namespace GemSwipe.Models
 {
-    public class GameSetup
+    public class BoardSetup
     {
         public int Rows { get; set; }
         public int Columns { get; set; }

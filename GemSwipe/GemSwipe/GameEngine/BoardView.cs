@@ -59,23 +59,23 @@ namespace GemSwipe.GameEngine
         /// <summary>
         /// There are three kind of updates
         /// </summary>
-        /// <param name="gameUpdate"></param>
-        public void Update(GameUpdate gameUpdate)
+        /// <param name="swipeResult"></param>
+        public void Update(SwipeResult swipeResult)
         {
-            foreach (var movedGem in gameUpdate.MovedGems)
+            foreach (var movedGem in swipeResult.MovedGems)
             {
                 var gemView = GetViewByModel(movedGem);
                 gemView.MoveTo(ToGemViewX(movedGem.X), ToGemViewY(movedGem.Y));
             }
 
-            foreach (var deadGem in gameUpdate.DeadGems)
+            foreach (var deadGem in swipeResult.DeadGems)
             {
                 var gemView = GetViewByModel(deadGem);
                 gemView.ZIndex = -1;
                 gemView.DieTo(ToGemViewX(deadGem.X), ToGemViewY(deadGem.Y));
             }
 
-            foreach (var fusedGem in gameUpdate.FusedGems)
+            foreach (var fusedGem in swipeResult.FusedGems)
             {
                 var gemView = GetViewByModel(fusedGem);
                 gemView.Fuse();
@@ -118,13 +118,13 @@ namespace GemSwipe.GameEngine
 
         private float ToGemViewX(int gemStateX)
         {
-            return X + (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _cellWidth / 2 +
+            return (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _cellWidth / 2 +
                         _horizontalMarginPerCell);
         }
 
         private float ToGemViewY(int gemStateY)
         {
-            return Y + (gemStateY * (_cellWidth + _verticalMarginPerCell) + _cellHeight / 2 + _verticalMarginPerCell);
+            return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _cellHeight / 2 + _verticalMarginPerCell);
         }
     }
 }
