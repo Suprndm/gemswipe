@@ -1,4 +1,5 @@
-﻿using GemSwipe.Models;
+﻿using System.Threading.Tasks;
+using GemSwipe.Models;
 using SkiaSharp;
 
 namespace GemSwipe.GameEngine
@@ -8,6 +9,7 @@ namespace GemSwipe.GameEngine
         private BoardView _boardView;
         private BoardSetup _boardSetup;
         private double _remainingSeconds;
+        private bool _isBusy;
 
         public GameView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
@@ -27,6 +29,12 @@ namespace GemSwipe.GameEngine
         public void Update(SwipeResult swipeResult)
         {
             _boardView.Update(swipeResult);
+            Task.Run(async () =>
+            {
+                _isBusy = true;
+                await Task.Delay(200);
+                _isBusy = false;
+            });
         }
 
         public void UpdateCountDown(double remainingSeconds)
@@ -43,10 +51,14 @@ namespace GemSwipe.GameEngine
                 paint.Color = new SKColor(0, 0, 0);
                 paint.IsStroke = true;
 
-                Canvas.DrawText(_remainingSeconds.ToString("###.#"), Width / 2, (float)0.05*Height, paint);
+                Canvas.DrawText(_remainingSeconds.ToString("###.#"), Width / 2, (float)0.05 * Height, paint);
             }
         }
 
+        public bool IsBusy()
+        {
+            return _isBusy;
+        }
 
         public override void Dispose()
         {

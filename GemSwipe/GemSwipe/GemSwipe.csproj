@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameEngine\BoardFactoryView.cs" />
     <Compile Include="GameEngine\BoardView.cs" />
     <Compile Include="GameEngine\CountDownView.cs" />
     <Compile Include="GameEngine\GameView.cs" />

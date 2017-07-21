@@ -14,6 +14,7 @@ namespace GemSwipe.Views
         bool pageIsActive;
         private bool _isInitiated;
         private GameView _gameView;
+        private Point _chainedSwipeLastMove;
 
 
         public GamePage()
@@ -138,24 +139,30 @@ namespace GemSwipe.Views
 
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
-            var d = Math.Sqrt(e.TotalX * e.TotalX + e.TotalY * e.TotalY);
-            if (d > 25 && _panJustBegun)
+            if(e.TotalX==0 && e.TotalY==0) return;
+
+            var eX = e.TotalX - _chainedSwipeLastMove.X;
+            var eY = e.TotalY - _chainedSwipeLastMove.Y;
+            var d = Math.Sqrt(eX * eX + eY * eY);
+
+            if (d > 25 && !_gameView.IsBusy())
             {
+                _chainedSwipeLastMove = new Point(e.TotalX, e.TotalY);
                 _panJustBegun = false;
-                if (e.TotalX > 0)
+                if (eX > 0)
                 {
-                    if (e.TotalY > e.TotalX)
+                    if (eY > eX)
                         Swipe(Direction.Bottom);
-                    else if (Math.Abs(e.TotalY) > e.TotalX)
+                    else if (Math.Abs(eY) > eX)
                         Swipe(Direction.Top);
                     else
                         Swipe(Direction.Right);
                 }
                 else
                 {
-                    if (e.TotalY > Math.Abs(e.TotalX))
+                    if (eY > Math.Abs(eX))
                         Swipe(Direction.Bottom);
-                    else if (Math.Abs(e.TotalY) > Math.Abs(e.TotalX))
+                    else if (Math.Abs(eY) > Math.Abs(eX))
                         Swipe(Direction.Top);
                     else
                         Swipe(Direction.Left);
@@ -166,6 +173,7 @@ namespace GemSwipe.Views
 
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
         {
+            _chainedSwipeLastMove = new Point(0, 0);
             _panJustBegun = true;
         }
 
