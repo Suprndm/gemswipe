@@ -6,8 +6,12 @@ namespace GemSwipe.GameEngine
     {
         float X { get; }
         float Y { get; }
+
+        float Scale { get; }
+
         float Height { get; }
         float Width { get; }
+
         int ZIndex { get; set; }
         bool ToDispose { get; }
 

@@ -57,6 +57,11 @@ namespace GemSwipe.Models
             _pastSeconds = 0;
         }
 
+        public void AddMoreTime(int seconds)
+        {
+            _secondsToGo += seconds;
+        }
+
         public void Dispose()
         {
             _isDisposed = true;

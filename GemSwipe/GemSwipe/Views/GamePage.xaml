@@ -8,11 +8,11 @@
              x:Class="GemSwipe.Views.GamePage"
              NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
-        <Grid>
+        <Grid RowSpacing ="1" BackgroundColor="Black">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
+                <RowDefinition Height="0" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="0" />
             </Grid.RowDefinitions>
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
             <forms:SKGLView x:Name="SKGLView" Grid.Row="1"   HasRenderLoop="True">

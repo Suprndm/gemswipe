@@ -50,7 +50,8 @@ namespace GemSwipe.Views
 
         public void NextBoard()
         {
-
+           var board = _game.SetupBoard();
+            _gameView.NextBoard(board);
         }
 
         #endregion
@@ -73,10 +74,10 @@ namespace GemSwipe.Views
             else
             {
                 // Init SkiaSharp
-                _gameView = new GameView(e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Width, e.Surface.Canvas.ClipBounds.Width);
-                var gameSetup = _game.SetupBoard();
+                var boardSetup = _game.SetupBoard();
+                _gameView = new GameView(boardSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _game.Start();
-                _gameView.SetupNewBoard(gameSetup);
+                _gameView.NextBoard(boardSetup);
 
                 _isInitiated = true;
             }

@@ -11,12 +11,24 @@ namespace GemSwipe.GameEngine
 {
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
+        protected float _scale;
+        public float Scale
+        {
+            get
+            {
+                if (Parent != null) return _scale * Parent.Scale;
+                return _scale;
+            }
+            protected set => _scale = value;
+        }
+
+
         protected float _x;
         public float X
         {
             get
             {
-                if (Parent != null) return _x + Parent.X;
+                if (Parent != null) return _x * Scale + (1 - _scale) * _width / 2 + Parent.X;
                 return _x;
             }
             protected set => _x = value;
@@ -27,14 +39,34 @@ namespace GemSwipe.GameEngine
         {
             get
             {
-                if (Parent != null) return _y + Parent.Y;
+                if (Parent != null) return _y * Scale +(1-_scale)*_height/2 + Parent.Y;
                 return _y;
             }
             protected set => _y = value;
         }
 
-        public float Height { get; protected set; }
-        public float Width { get; protected set; }
+        protected float _width;
+        public float Width
+        {
+            get
+            {
+                if (Parent != null) return _width * Scale;
+                return _width;
+            }
+            protected set => _width = value;
+        }
+
+        protected float _height;
+        public float Height
+        {
+            get
+            {
+                if (Parent != null) return _height * Scale;
+                return _height;
+            }
+            protected set => _height = value;
+        }
+
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
         public SKCanvas Canvas { get; protected set; }
@@ -77,6 +109,8 @@ namespace GemSwipe.GameEngine
             Width = width;
             Canvas = canvas;
             _children = new List<ISkiaView>();
+
+            Scale = 1;
         }
 
         public virtual void Dispose()

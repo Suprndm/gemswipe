@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using GemSwipe.Models;
 using SkiaSharp;
 
@@ -6,29 +7,41 @@ namespace GemSwipe.GameEngine
 {
     public class GameView : SkiaView
     {
-        private BoardView _boardView;
+        private BoardFactoryView _boardFactoryView;
+        private HeaderView _headerView;
         private BoardSetup _boardSetup;
-        private double _remainingSeconds;
         private bool _isBusy;
+        private Random _randomizer;
 
-        public GameView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public GameView(BoardSetup boardSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+            _randomizer = new Random();
+            _boardFactoryView = new BoardFactoryView(boardSetup, canvas, 0, 0, Height, width);
+
+            _headerView = new HeaderView(canvas, 0, 0, (float)(0.1 * Height), width);
+            _headerView.ZIndex = 2;
+
+            AddChild(_boardFactoryView);
+            AddChild(_headerView);
         }
 
-        public void SetupNewBoard(BoardSetup boardSetup)
+
+
+        public void NextBoard(BoardSetup boardSetup)
         {
-            _boardSetup = boardSetup;
+            _boardFactoryView.MoveTo(_randomizer.Next(10), _randomizer.Next(10));
 
-            _boardView = new BoardView(Canvas, 0, (float)(0.1 * Height), Canvas.ClipBounds.Width, Canvas.ClipBounds.Width);
-            _boardView.Setup(_boardSetup.Columns, _boardSetup.Rows);
-            _boardView.Populate(_boardSetup.Gems);
+            Task.Run(async () =>
+            {
+                await Task.Delay(0);
+                _boardFactoryView.BoardView.Populate(boardSetup.Gems);
+            });
 
-            AddChild(_boardView);
         }
 
         public void Update(SwipeResult swipeResult)
         {
-            _boardView.Update(swipeResult);
+            _boardFactoryView.BoardView.Update(swipeResult);
             Task.Run(async () =>
             {
                 _isBusy = true;
@@ -39,20 +52,12 @@ namespace GemSwipe.GameEngine
 
         public void UpdateCountDown(double remainingSeconds)
         {
-            _remainingSeconds = remainingSeconds;
+            _headerView.CountDownView.RemainingSeconds = remainingSeconds;
         }
 
         protected override void Draw()
         {
-            using (var paint = new SKPaint())
-            {
-                paint.TextSize = 64.0f;
-                paint.IsAntialias = true;
-                paint.Color = new SKColor(0, 0, 0);
-                paint.IsStroke = true;
 
-                Canvas.DrawText(_remainingSeconds.ToString("###.#"), Width / 2, (float)0.05 * Height, paint);
-            }
         }
 
         public bool IsBusy()
@@ -62,7 +67,6 @@ namespace GemSwipe.GameEngine
 
         public override void Dispose()
         {
-            _boardView.Dispose();
         }
     }
 }

@@ -45,6 +45,8 @@ namespace GemSwipe.Models
             var swipeResult = _board.Swipe(direction);
             swipeResult.IsWon = CheckWin();
 
+            if(swipeResult.IsWon) _countDown.AddMoreTime(10);
+
             return swipeResult;
         }
 

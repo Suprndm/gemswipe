@@ -23,7 +23,6 @@ namespace GemSwipe.GameEngine
             _size = 0;
             _fluidX = _x;
             _fluidY = _y;
-            _fluidSize = Width;
         }
 
         protected override void Draw()
@@ -41,7 +40,7 @@ namespace GemSwipe.GameEngine
                 Style = SKPaintStyle.Fill,
                 Color = SKColor.FromHsl(330 - _size * 20, 90, 65)
             };
-
+            _fluidSize = Width;
             Canvas.DrawCircle(X, Y, _fluidSize, gemColor);
             Canvas.DrawCircle(X, Y - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
         }

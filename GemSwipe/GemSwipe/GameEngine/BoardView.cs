@@ -28,15 +28,12 @@ namespace GemSwipe.GameEngine
             _nbOfRows = nbOfRows;
             _nbOfColumns = nbOfColumns;
 
-            _horizontalMarginPerCell = (float)(Width * BoardCellMarginPercentage) / (nbOfColumns + 1);
-            _verticalMarginPerCell = (float)(Height * BoardCellMarginPercentage) / (nbOfRows + 1);
-
-            _cellWidth = (Width - (nbOfColumns + 1) * _horizontalMarginPerCell) / nbOfColumns;
-            _cellHeight = (Height - (nbOfRows + 1) * _verticalMarginPerCell) / nbOfRows;
         }
 
         public void Populate(IList<Gem> gems)
         {
+            UpdateDimensions();
+
             foreach (var gem in gems)
             {
                 AddGem(gem);
@@ -92,9 +89,21 @@ namespace GemSwipe.GameEngine
             DrawCells(Canvas);
         }
 
+        public void UpdateDimensions()
+        {
+            _horizontalMarginPerCell = (float)(Width * BoardCellMarginPercentage) / (_nbOfColumns + 1);
+            _verticalMarginPerCell = (float)(Height * BoardCellMarginPercentage) / (_nbOfRows + 1);
+
+            _cellWidth = (Width - (_nbOfColumns + 1) * _horizontalMarginPerCell) / _nbOfColumns;
+            _cellHeight = (Height - (_nbOfRows + 1) * _verticalMarginPerCell) / _nbOfRows;
+        }
+
         private void DrawCells(SKCanvas canvas)
         {
-            var cellColor = new SKPaint
+
+            UpdateDimensions();
+
+                var cellColor = new SKPaint
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,

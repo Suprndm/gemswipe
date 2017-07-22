@@ -38,11 +38,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameEngine\BoardFactoryView.cs" />
+    <Compile Include="GameEngine\BoardMapView.cs" />
     <Compile Include="GameEngine\BoardView.cs" />
     <Compile Include="GameEngine\CountDownView.cs" />
     <Compile Include="GameEngine\GameView.cs" />
     <Compile Include="GameEngine\GemView.cs" />
+    <Compile Include="GameEngine\HeaderView.cs" />
     <Compile Include="GameEngine\SkiaView.cs" />
     <Compile Include="GameEngine\ISkiaView.cs" />
     <Compile Include="Models\Board.cs" />
