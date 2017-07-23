@@ -41,11 +41,15 @@
     <Compile Include="GameEngine\BoardMapView.cs" />
     <Compile Include="GameEngine\BoardView.cs" />
     <Compile Include="GameEngine\CountDownView.cs" />
+    <Compile Include="GameEngine\ExplosionView.cs" />
     <Compile Include="GameEngine\GameView.cs" />
     <Compile Include="GameEngine\GemView.cs" />
     <Compile Include="GameEngine\HeaderView.cs" />
+    <Compile Include="GameEngine\ParticuleView.cs" />
+    <Compile Include="GameEngine\PhysicalParticule.cs" />
     <Compile Include="GameEngine\SkiaView.cs" />
     <Compile Include="GameEngine\ISkiaView.cs" />
+    <Compile Include="GameEngine\BackgroundView.cs" />
     <Compile Include="Models\Board.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Direction.cs" />

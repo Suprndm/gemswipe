@@ -31,7 +31,7 @@ namespace GemSwipe.GameEngine
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330 -_size * 20, 100, 50)
+                Color = SKColor.FromHsl(330 - _size * 20, 100, 50)
             };
 
             var gemReflectColor = new SKPaint
@@ -40,12 +40,27 @@ namespace GemSwipe.GameEngine
                 Style = SKPaintStyle.Fill,
                 Color = SKColor.FromHsl(330 - _size * 20, 90, 65)
             };
+
+            //Glow 
+            var colors = new SKColor[] {
+                SKColor.FromHsl(330 - _size * 20, 100, 50),
+                SKColor.FromHsl(330 - _size * 20, 100, 50,0)
+            };
+            var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), _fluidSize * 1.3f, colors, new []{0.5f,1f}, SKShaderTileMode.Clamp);
+
+
             _fluidSize = Width;
+            var paint = new SKPaint()
+            {
+                Shader = shader,
+            };
+
+            Canvas.DrawCircle(X , Y , _fluidSize * 19 / 10, paint);
             Canvas.DrawCircle(X, Y, _fluidSize, gemColor);
             Canvas.DrawCircle(X, Y - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
         }
 
-        public  void MoveTo(float x, float y)
+        public void MoveTo(float x, float y)
         {
             var oldX = _x;
             var oldY = _y;

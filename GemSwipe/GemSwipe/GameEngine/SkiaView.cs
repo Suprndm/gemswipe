@@ -75,7 +75,7 @@ namespace GemSwipe.GameEngine
 
         public void AddChild(ISkiaView child, int zindex = 0)
         {
-            child.ZIndex = 0;
+            child.ZIndex = zindex;
             _children.Add(child);
             child.Parent = this;
         }
@@ -92,7 +92,7 @@ namespace GemSwipe.GameEngine
         {
             Draw();
 
-            foreach (var child in _children.OrderBy(child => child.ZIndex))
+            foreach (var child in _children.OrderBy(child => child.ZIndex).ToList())
             {
                 if (child.ToDispose)
                     RemoveChild(child);

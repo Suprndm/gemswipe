@@ -40,9 +40,14 @@ namespace GemSwipe.GameEngine
             }
         }
 
+        private float GetGemSize()
+        {
+            return (float)2 / 3 * _cellWidth / 2;
+        }
+
         private void AddGem(Gem gem)
         {
-            var gemSize = (float)2 / 3 * _cellWidth / 2;
+            var gemSize = GetGemSize();
 
             var gemX = ToGemViewX(gem.X);
             var gemY = ToGemViewY(gem.Y);
@@ -107,22 +112,58 @@ namespace GemSwipe.GameEngine
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(0, 0, 93)
+                Color = SKColor.FromHsl(0, 0, 30)
             };
 
+            SKPath path = new SKPath
+            {
+                FillType = SKPathFillType.EvenOdd
+            };
+
+
+            path.AddRect(SKRect.Create(
+                X,
+                Y,
+                _nbOfColumns * (_cellWidth + _horizontalMarginPerCell),
+                _nbOfRows * (_cellHeight + _verticalMarginPerCell)));
+
+
+            SKPath pathCircles = new SKPath
+            {
+                FillType = SKPathFillType.EvenOdd
+            };
+
+            var gemSize = GetGemSize();
             for (int i = 0; i < _nbOfColumns; i++)
             {
                 for (int j = 0; j < _nbOfRows; j++)
                 {
-                    canvas.DrawRect(
-                        SKRect.Create(
-                            X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell),
-                            Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell),
-                            _cellWidth,
-                            _cellHeight),
-                        cellColor);
+                    pathCircles.AddCircle(
+                        X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2),
+                        Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellWidth / 2),
+                        gemSize);
+
+                    //pathCircles.AddRect(SKRect.Create(
+                    //    X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth),
+                    //    Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellWidth / 2),
+                    //    _cellWidth-gemSize,
+                    //    (_cellWidth - gemSize)/2));
+
+
+                    //canvas.DrawRect(
+                    //    SKRect.Create(
+                    //        X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell),
+                    //        Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell),
+                    //        _cellWidth,
+                    //        _cellHeight),
+                    //    cellColor);
                 }
             }
+
+            path.AddPath(pathCircles);
+
+            canvas.DrawPath(path, cellColor);
+
         }
 
         private float ToGemViewX(int gemStateX)
