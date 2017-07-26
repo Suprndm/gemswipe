@@ -52,7 +52,7 @@ namespace GemSwipe.GameEngine
             var gemX = ToGemViewX(gem.X);
             var gemY = ToGemViewY(gem.Y);
 
-            var gemView = new GemView(gem.Id, Canvas, gemX, gemY, gemSize, gemSize);
+            var gemView = new GemView(gem.Id, gem.Size, Canvas, gemX, gemY, gemSize, gemSize);
             _gemViews.Add(gemView);
 
             AddChild(gemView);

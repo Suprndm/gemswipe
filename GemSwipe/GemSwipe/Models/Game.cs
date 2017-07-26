@@ -15,7 +15,7 @@ namespace GemSwipe.Models
 
         public Game()
         {
-            _countDown = new CountDown(15);
+            _countDown = new CountDown(150);
             _countDown.Zero += _countDown_Zero;
         }
 
@@ -31,7 +31,7 @@ namespace GemSwipe.Models
 
         public BoardSetup SetupBoard()
         {
-            _board = BuildBoardFromString("1 0 0 1-0 1 1 0-0 0 1 0-1 0 1 1");
+            _board = new Board("1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1");
             return new BoardSetup
             {
                 Columns = _board.Width,
@@ -63,32 +63,6 @@ namespace GemSwipe.Models
         public Board GetBoard()
         {
             return _board;
-        }
-
-        private Board BuildBoardFromString(string boardString)
-        {
-            var rows = boardString.Split('-');
-            var height = rows.Length;
-            var width = rows[0].Split(' ').Length;
-            var boardCells = new List<Cell>();
-            for (int j = 0; j < height; j++)
-            {
-                var cells = rows[j].Split(' ');
-                for (int i = 0; i < width; i++)
-                {
-                    var gemSize = int.Parse(cells[i]);
-                    var newCell = new Cell(i, j);
-                    boardCells.Add(newCell);
-                    if (gemSize > 0)
-                    {
-                        var newGem = new Gem(i, j);
-                        newGem.SetSize(gemSize);
-                        newCell.AttachGem(newGem);
-                    }
-                }
-            }
-
-            return new Board(boardCells);
         }
     }
 }

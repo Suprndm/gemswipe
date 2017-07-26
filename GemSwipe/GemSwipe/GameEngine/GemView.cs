@@ -17,10 +17,10 @@ namespace GemSwipe.GameEngine
         private int _size;
         private bool _isDying;
         private const int MovementAnimationMs = 300;
-        public GemView(Guid id, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public GemView(Guid id, int size, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
             Id = id;
-            _size = 0;
+            _size = size;
             _fluidX = _x;
             _fluidY = _y;
         }

@@ -6,15 +6,41 @@ namespace GemSwipe.Models
 {
     public class Board
     {
-        public Cell[,] Cells { get; }
-        public IList<Cell> CellsList { get; }
-        public IList<Gem> Gems { get; }
+        public Cell[,] Cells { get; private set; }
+        public IList<Cell> CellsList { get; private set; }
+        public IList<Gem> Gems { get; private set; }
         private Random _randomizer;
 
-        public int Height { get; }
-        public int Width { get; }
+        public int Height { get; private set; }
+        public int Width { get; private set; }
 
-        public Board(IList<Cell> cellsList)
+        public Board(string boardString)
+        {
+            var rows = boardString.Split('-');
+            var height = rows.Length;
+            var width = rows[0].Split(' ').Length;
+            var boardCells = new List<Cell>();
+            for (int j = 0; j < height; j++)
+            {
+                var cells = rows[j].Split(' ');
+                for (int i = 0; i < width; i++)
+                {
+                    var gemSize = int.Parse(cells[i]);
+                    var newCell = new Cell(i, j);
+                    boardCells.Add(newCell);
+                    if (gemSize > 0)
+                    {
+                        var newGem = new Gem(i, j);
+                        newGem.SetSize(gemSize);
+                        newCell.AttachGem(newGem);
+                    }
+                }
+            }
+
+            InitFromCells(boardCells);
+        }
+
+        private void InitFromCells(IList<Cell> cellsList)
         {
             _randomizer = new Random();
 
@@ -43,6 +69,11 @@ namespace GemSwipe.Models
                     Cells[i, j] = cellsList.Single(cell => cell.X == i && cell.Y == j);
                 }
             }
+        }
+
+        public Board(IList<Cell> cellsList)
+        {
+            InitFromCells(cellsList);
         }
 
         public Board(int width, int height)
@@ -102,7 +133,7 @@ namespace GemSwipe.Models
                 int gemPositionned = 0;
                 foreach (Gem gem in gems)
                 {
-                    foreach (Cell cell in cellsLane.Skip(gemPositionned-1))
+                    foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
                     {
                         if (cell.IsEmpty())
                         {
@@ -213,6 +244,29 @@ namespace GemSwipe.Models
             }
 
             return cellsLanes;
+        }
+
+        public override string ToString()
+        {
+            var cellsGrid = Cells;
+            string draw = "";
+            for (int j = 0; j < Height; j++)
+            {
+                for (int i = 0; i < Width; i++)
+                {
+                    draw += "";
+                    var cell = cellsGrid[i, j];
+                    var gem = cell.GetAttachedGem();
+                    if (gem == null)
+                        draw += "0";
+                    else draw += gem.Size;
+                    draw += " ";
+                }
+                draw = draw.Substring(0, draw.Length - 1);
+                draw += "-";
+            }
+            draw = draw.Substring(0, draw.Length - 1);
+            return draw;
         }
     }
 }
