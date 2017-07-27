@@ -11,5 +11,9 @@ namespace GemSwipe.Generator.LittleStar
     public class GemSwipeMove : IMove
     {
         public Direction Direction { get; set; }
+        public override string ToString()
+        {
+            return Direction.ToString();
+        }
     }
 }

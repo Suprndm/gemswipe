@@ -46,8 +46,38 @@ namespace GemSwipe.Generator.LittleStar
 
         public double EvalEuristic(GemSwipeState gameState)
         {
-            return (double) 1 / gameState.Board.Gems.Count;
+            var horizontalEcart = GetEcartTypeForDirection(gameState.Board, Direction.Left);
+            var verticalEcart = GetEcartTypeForDirection(gameState.Board, Direction.Top);
+
+            return (double) 1 / gameState.Board.Gems.Count - ((horizontalEcart+ verticalEcart) / 2)*0.1;
         }
+
+        private double GetEcartTypeForDirection(Board board, Direction direction)
+        {
+            var cellsLanes = board.GetCellsLanes(direction);
+            double diff = 0;
+            List<int> sums = new List<int>();
+
+            foreach (var horizontalLane in cellsLanes)
+            {
+                var gems = horizontalLane.Where(c => !c.IsEmpty()).Select(c => c.GetAttachedGem()).ToList();
+                if (gems.Count > 0)
+                {
+                    sums.Add(gems.Sum(g=>g.Size));
+                }
+            }
+
+            var average = sums.Sum() / sums.Count;
+
+            foreach (var sum in sums)
+            {
+                diff += Math.Abs(average - sum);
+            }
+
+            return diff;
+        }
+
+
 
         public GemSwipeState Duplicate(GemSwipeState gameState)
         {

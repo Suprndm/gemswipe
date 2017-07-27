@@ -196,7 +196,7 @@ namespace GemSwipe.Models
             return CellsList.All(cell => !cell.IsEmpty());
         }
 
-        private IList<IList<Cell>> GetCellsLanes(Direction direction)
+        public IList<IList<Cell>> GetCellsLanes(Direction direction)
         {
             var cellsLanes = new List<IList<Cell>>();
             switch (direction)

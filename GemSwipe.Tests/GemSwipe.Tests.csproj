@@ -44,9 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardTests.cs" />
+    <Compile Include="GeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GemSwipe.Generator\GemSwipe.Generator.csproj">
+      <Project>{bf26d386-5d18-46c4-b27d-0ce82f6fef3b}</Project>
+      <Name>GemSwipe.Generator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GemSwipe\GemSwipe\GemSwipe.csproj">
       <Project>{6169a47d-6f19-4831-8564-17904e76fa2a}</Project>
       <Name>GemSwipe</Name>

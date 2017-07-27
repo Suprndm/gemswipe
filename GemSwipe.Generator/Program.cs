@@ -13,13 +13,12 @@ namespace GemSwipe.Generator
     {
         static void Main(string[] args)
         {
-            var game = new GemSwipeEngine(new Board("1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"));
-            var logger = new ConsoleLogger();
-            //logger.IsEnabled = false;
-            var littleStarEngine = new LittleStarEngine(logger);
+            var game = new GemSwipeEngine(new Board("3 0 0 3 2-2 0 0 0 2-0 1 0 2 1-1 0 2 2 1-3 0 2 0 2"));
+            var solver = new Solver();
 
-            var moves = littleStarEngine.Resolve(game, game.GetInitialState());
+            var moves = solver.Solve(game);
             if (moves.Count == 0) Console.Write("Impossible");
+            Console.WriteLine($"Résolu en {moves.Count} coups");
             foreach (var move in moves)
             {
                 Console.Write(move.Direction.ToString() + " ");
