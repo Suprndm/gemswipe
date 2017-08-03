@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.GameEngine.Floors;
 using GemSwipe.Generator;
 using GemSwipe.Generator.LittleStar;
 using GemSwipe.Models;

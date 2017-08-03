@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GemSwipe.GameEngine.SkiaEngine;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine
+namespace GemSwipe.GameEngine.Menu
 {
     public class CountDownView : SkiaView
     {
@@ -33,13 +29,26 @@ namespace GemSwipe.GameEngine
                     Height),
                 cellColor);
 
+
+
             using (var paint = new SKPaint())
             {
+                var text=  RemainingSeconds.ToString("###");
+                paint.TextSize = 24;
+                paint.Color = SKColors.Yellow;
+                paint.Typeface = SKTypeface.FromFamilyName(
+                    "Arial",
+                    SKFontStyleWeight.Bold,
+                    SKFontStyleWidth.Normal,
+                    SKFontStyleSlant.Italic);
+
                 paint.TextSize = Height / 2f;
                 paint.IsAntialias = true;
                 paint.Color = new SKColor(255, 255, 255, 255);
 
-                Canvas.DrawText(RemainingSeconds.ToString("###"), X + Width / 2, Y + Height / 2, paint);
+                var test = paint.MeasureText(text);
+
+                Canvas.DrawText(RemainingSeconds.ToString("###"), X + Width / 2 + -test/2, Y + Height / 2 + paint.TextSize/2, paint);
             }
         }
     }

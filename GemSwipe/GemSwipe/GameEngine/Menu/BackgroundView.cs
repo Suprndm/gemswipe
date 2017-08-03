@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using GemSwipe.GameEngine.Physical;
+using GemSwipe.GameEngine.SkiaEngine;
 using SkiaSharp;
-using Xamarin.Forms;
 
-namespace GemSwipe.GameEngine
+namespace GemSwipe.GameEngine.Menu
 {
     public class BackgroundView :SkiaView
     {

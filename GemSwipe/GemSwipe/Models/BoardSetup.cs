@@ -2,10 +2,17 @@
 
 namespace GemSwipe.Models
 {
-    public class BoardSetup
+    public struct BoardSetup
     {
-        public int Rows { get; set; }
-        public int Columns { get; set; }
-        public IList<Gem> Gems { get; set; }
+        public BoardSetup(int rows, int columns, string setupString)
+        {
+            Rows = rows;
+            Columns = columns;
+            SetupString = setupString;
+        }
+
+        public int Rows { get; }
+        public int Columns { get; }
+        public string SetupString { get; } 
     }
 }

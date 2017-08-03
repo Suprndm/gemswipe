@@ -1,4 +1,6 @@
-﻿namespace GemSwipe.Models
+﻿using GemSwipe.GameEngine;
+
+namespace GemSwipe.Models
 {
     public class Cell
     {

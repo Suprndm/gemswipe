@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SkiaSharp;
-using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
-namespace GemSwipe.GameEngine
+namespace GemSwipe.GameEngine.SkiaEngine
 {
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {

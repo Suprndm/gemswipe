@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -7,9 +8,17 @@ using Xamarin.Forms;
 
 namespace GemSwipe.GameEngine
 {
-    public class GemView : SkiaView
+    public class Gem : SkiaView
     {
-        public Guid Id { get; }
+        public int BoardX { get; private set; }
+        public int BoardY { get; private set; }
+        public int Size { get; private set; }
+        public int TargetBoardX { get; private set; }
+        public int TargetBoardY { get; private set; }
+        private bool _willLevelUp;
+        private bool _willDie;
+        private bool _isDead;
+
         private float _fluidX;
         private float _fluidY;
         private float _fluidLevel;
@@ -17,12 +26,68 @@ namespace GemSwipe.GameEngine
         private int _size;
         private bool _isDying;
         private const int MovementAnimationMs = 300;
-        public GemView(Guid id, int size, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+
+        public Gem(int boardX, int boardY, int size) : base(null, 0, 0, 0, 0)
         {
-            Id = id;
+            Size = size;
+            BoardX = boardX;
+            BoardY = boardY;
+        }
+        public Gem(int boardX, int boardY, int size, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        {
+            Size = size;
+            BoardX = boardX;
+            BoardY = boardY;
+
             _size = size;
             _fluidX = _x;
             _fluidY = _y;
+        }
+
+        public void LevelUp()
+        {
+            _willLevelUp = true;
+        }
+
+        public void Die()
+        {
+            _willDie = true;
+        }
+
+        public bool CanMerge()
+        {
+            return !_willLevelUp && !_willDie;
+        }
+
+        public void Resolve()
+        {
+            if (_willLevelUp)
+            {
+                Size++;
+                _willLevelUp = false;
+            }
+
+            BoardX = TargetBoardX;
+            BoardY = TargetBoardY;
+
+            _isDead = _willDie;
+        }
+
+
+        public bool IsDead()
+        {
+            return _isDead;
+        }
+
+        public bool WillDie()
+        {
+            return _willDie;
+        }
+
+        public void Move(int x, int y)
+        {
+            TargetBoardX = x;
+            TargetBoardY = y;
         }
 
         protected override void Draw()
@@ -70,8 +135,6 @@ namespace GemSwipe.GameEngine
 
             this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
             this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
-
-
         }
 
         public async void DieTo(float x, float y)

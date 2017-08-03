@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GemSwipe.GameEngine.SkiaEngine;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine
+namespace GemSwipe.GameEngine.Physical
 {
     public class ExplosionView : SkiaView
     {

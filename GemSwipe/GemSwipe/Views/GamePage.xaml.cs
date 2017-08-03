@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GemSwipe.GameEngine;
 using GemSwipe.Models;
 using SkiaSharp;
@@ -10,12 +11,9 @@ namespace GemSwipe.Views
     public partial class GamePage : ContentPage
     {
         private bool _panJustBegun;
-        private Game _game;
         bool pageIsActive;
         private bool _isInitiated;
-        private GameView _gameView;
-        private Point _chainedSwipeLastMove;
-
+        private Game _game;
 
         public GamePage()
         {
@@ -35,50 +33,28 @@ namespace GemSwipe.Views
 
         private void Swipe(Direction direction)
         {
-            var gameUpdate = _game.Swipe(direction);
-            _gameView.Update(gameUpdate);
-
-            if (gameUpdate.IsWon)
-            {
-                NextBoard();
-            }
+            _game.Swipe(direction);
         }
 
         #endregion
 
-        #region NextBoard
-
-        public void NextBoard()
-        {
-           var board = _game.SetupBoard();
-            _gameView.NextBoard(board);
-        }
-
-        #endregion
 
         #region Render
 
-        private void UpdateViewModel()
-        {
-            _gameView.UpdateCountDown(_game.SecondsTillLose());
-        }
 
         private void SKGLView_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
             if (_isInitiated)
             {
-                e.Surface.Canvas.Clear(SKColors.White);
-                UpdateViewModel();
-                _gameView.Render();
+                e.Surface.Canvas.Clear(SKColors.Black);
+                _game.Render();
             }
             else
             {
                 // Init SkiaSharp
-                var boardSetup = _game.SetupBoard();
-                _gameView = new GameView(boardSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                var gameSetup = SetupGame();
+                _game = new Game(gameSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _game.Start();
-                _gameView.NextBoard(boardSetup);
-
                 _isInitiated = true;
             }
         }
@@ -96,10 +72,16 @@ namespace GemSwipe.Views
             base.OnAppearing();
         }
 
-        private void SetupGame()
+        private GameSetup SetupGame()
         {
-            _game = new Game();
-            _game.Lost += _game_Lost;
+            return new GameSetup(1, new List<BoardSetup>
+            {
+                new BoardSetup(4,4,"1 1 1 1-0 0 0 0-0 0 0 0-0 0 0 0"),
+                new BoardSetup(4,4,"1 1 1 1-0 0 0 0-1 0 1 0-1 0 1 0"),
+                new BoardSetup(4,4,"1 1 0 1-0 1 0 1-0 0 0 0-1 0 1 1"),
+                new BoardSetup(4,4,"1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"),
+                new BoardSetup(4,4,"3 0 0 3-0 0 0 0-0 1 0 1-1 2 2 1"),
+            });
         }
 
         private void SetupSkiaView()
@@ -140,15 +122,14 @@ namespace GemSwipe.Views
 
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
-            if(e.TotalX==0 && e.TotalY==0) return;
+            if (e.TotalX == 0 && e.TotalY == 0) return;
 
-            var eX = e.TotalX - _chainedSwipeLastMove.X;
-            var eY = e.TotalY - _chainedSwipeLastMove.Y;
+            var eX = e.TotalX ;
+            var eY = e.TotalY;
             var d = Math.Sqrt(eX * eX + eY * eY);
 
-            if (d > 25 && !_gameView.IsBusy())
+            if (d > 25 && !_game.IsBusy() && _panJustBegun)
             {
-                _chainedSwipeLastMove = new Point(e.TotalX, e.TotalY);
                 _panJustBegun = false;
                 if (eX > 0)
                 {
@@ -174,7 +155,6 @@ namespace GemSwipe.Views
 
         private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
         {
-            _chainedSwipeLastMove = new Point(0, 0);
             _panJustBegun = true;
         }
 
@@ -187,7 +167,7 @@ namespace GemSwipe.Views
 
         private void Dispose()
         {
-            _gameView.Dispose();
+            _game.Dispose();
         }
     }
 }

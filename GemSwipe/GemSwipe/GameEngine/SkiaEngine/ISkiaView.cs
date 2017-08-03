@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GemSwipe.GameEngine
+﻿namespace GemSwipe.GameEngine.SkiaEngine
 {
     public interface ISkiaView
     {

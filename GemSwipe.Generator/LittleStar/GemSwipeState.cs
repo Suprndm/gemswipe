@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GemSwipe.Models;
+﻿using GemSwipe.GameEngine.Floors;
 using LittleStar;
 
 namespace GemSwipe.Generator.LittleStar
