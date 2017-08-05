@@ -38,8 +38,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
+    <Compile Include="GameEngine\Menu\TextBlock.cs" />
+    <Compile Include="GameEngine\Popped\PoppedElement.cs" />
+    <Compile Include="GameEngine\Popped\PoppedText.cs" />
     <Compile Include="GameEngine\Scene.cs" />
-    <Compile Include="GameEngine\Floors\Board.cs" />
+    <Compile Include="GameEngine\Board.cs" />
     <Compile Include="GameEngine\Physical\ExplosionView.cs" />
     <Compile Include="GameEngine\Floors\EndFloor.cs" />
     <Compile Include="GameEngine\Floors\StartingFloor.cs" />
@@ -47,7 +51,7 @@
     <Compile Include="GameEngine\Gem.cs" />
     <Compile Include="GameEngine\Physical\ParticuleView.cs" />
     <Compile Include="GameEngine\Physical\PhysicalParticule.cs" />
-    <Compile Include="GameEngine\Menu\BackgroundView.cs" />
+    <Compile Include="GameEngine\Menu\Background.cs" />
     <Compile Include="GameEngine\Menu\CountDownView.cs" />
     <Compile Include="GameEngine\Menu\HeaderView.cs" />
     <Compile Include="GameEngine\SkiaEngine\SkiaView.cs" />
@@ -58,6 +62,7 @@
     <Compile Include="Models\GameLostData.cs" />
     <Compile Include="Models\BoardSetup.cs" />
     <Compile Include="Models\GameSetup.cs" />
+    <Compile Include="Models\PlayableFloorSetup.cs" />
     <Compile Include="Models\SwipeResult.cs" />
     <Compile Include="Models\CountDown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

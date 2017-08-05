@@ -8,23 +8,24 @@ namespace GemSwipe.GameEngine.Floors
     {
         protected Floor(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+
         }
 
         protected override void Draw()
         {
-            using (var paint = new SKPaint())
-            {
-                paint.IsAntialias = true;
-                paint.Color = new SKColor(255, 255, 255, 255);
+            //using (var paint = new SKPaint())
+            //{
+            //    paint.IsAntialias = true;
+            //    paint.Color = new SKColor(255, 255, 255, 255);
 
-                Canvas.DrawRect(
-                    SKRect.Create(
-                        X+Width/2,
-                        Y,
-                        2,
-                        Height),
-                    paint);
-            }
+            //    Canvas.DrawRect(
+            //        SKRect.Create(
+            //            X+Width/2,
+            //            Y,
+            //            2,
+            //            Height),
+            //        paint);
+            //}
         }
     }
 }

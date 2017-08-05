@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.GameEngine.Menu;
 using SkiaSharp;
 
 namespace GemSwipe.GameEngine.Floors
@@ -11,6 +12,7 @@ namespace GemSwipe.GameEngine.Floors
     {
         public EndFloor(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+            AddChild(new TextBlock(Canvas, Width / 2, Height * .5f, $"Level Finished", (int)Width / 10, new SKColor(255, 255, 255, 255)));
         }
 
         protected override void Draw()

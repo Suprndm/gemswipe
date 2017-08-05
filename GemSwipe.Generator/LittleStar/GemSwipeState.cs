@@ -1,4 +1,5 @@
-﻿using GemSwipe.GameEngine.Floors;
+﻿using GemSwipe.GameEngine;
+using GemSwipe.GameEngine.Floors;
 using LittleStar;
 
 namespace GemSwipe.Generator.LittleStar

@@ -24,13 +24,13 @@ namespace GemSwipe.GameEngine
             _headerView.ZIndex = 2;
 
             AddChild(_scene);
-            AddChild(_headerView);
+         //   AddChild(_headerView);
         }
 
         public async void Start()
         {
-            await Task.Delay(3000);
-            _scene.NextFloor();
+            await _scene.StartingFloor.Start();
+            await _scene.NextFloor();
 
             _countDown = new CountDown(15);
             _countDown.Zero += () =>
@@ -43,11 +43,6 @@ namespace GemSwipe.GameEngine
         public void NextBoard(BoardSetup boardSetup)
         {
             _scene.NextFloor();
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(0);
-            });
         }
 
         public async void Swipe(Direction direction)

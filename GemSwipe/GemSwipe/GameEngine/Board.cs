@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine.Floors
+namespace GemSwipe.GameEngine
 {
-    public class Board : Floor
+    public class Board : SkiaView
     {
         public Cell[,] Cells { get; private set; }
         public IList<Cell> CellsList { get; private set; }
@@ -23,6 +24,7 @@ namespace GemSwipe.GameEngine.Floors
         private float _cellHeight;
         private float _boardWidth;
         private float _boardHeight;
+
 
         public Board(BoardSetup boardSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
@@ -299,7 +301,6 @@ namespace GemSwipe.GameEngine.Floors
         protected override void Draw()
         {
             DrawCells(Canvas);
-            base.Draw();
         }
 
         public void UpdateDimensions()
@@ -316,61 +317,25 @@ namespace GemSwipe.GameEngine.Floors
 
             UpdateDimensions();
 
-            var cellColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(0, 0, 30)
-            };
-
-            SKPath path = new SKPath
-            {
-                FillType = SKPathFillType.EvenOdd
-            };
-
-
-            path.AddRect(SKRect.Create(
-                X,
-                Y,
-                NbOfColumns * (_cellWidth + _horizontalMarginPerCell),
-                NbOfRows * (_cellHeight + _verticalMarginPerCell)));
-
-
-            SKPath pathCircles = new SKPath
-            {
-                FillType = SKPathFillType.EvenOdd
-            };
-
-            var gemSize = GetGemSize();
             for (int i = 0; i < NbOfColumns; i++)
             {
                 for (int j = 0; j < NbOfRows; j++)
                 {
-                    pathCircles.AddCircle(
-                        X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2),
-                        Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellWidth / 2),
-                        gemSize);
 
-                    //pathCircles.AddRect(SKRect.Create(
-                    //    X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth),
-                    //    Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellWidth / 2),
-                    //    _cellWidth-gemSize,
-                    //    (_cellWidth - gemSize)/2));
-
-
-                    //canvas.DrawRect(
-                    //    SKRect.Create(
-                    //        X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell),
-                    //        Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell),
-                    //        _cellWidth,
-                    //        _cellHeight),
-                    //    cellColor);
+                    using (var paint = new SKPaint())
+                    {
+                        paint.IsAntialias = true;
+                        paint.Color = new SKColor(255, 255, 255, 20);
+                        canvas.DrawRect(
+                            SKRect.Create(
+                                X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell),
+                                Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell),
+                                _cellWidth,
+                                _cellHeight),
+                            paint);
+                    }
                 }
             }
-
-            path.AddPath(pathCircles);
-
-            canvas.DrawPath(path, cellColor);
 
         }
 
