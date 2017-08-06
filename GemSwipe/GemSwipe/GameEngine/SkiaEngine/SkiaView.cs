@@ -73,6 +73,8 @@ namespace GemSwipe.GameEngine.SkiaEngine
         private readonly IList<ISkiaView> _children;
         private bool _tappable;
         public ISkiaView Parent { get; set; }
+        protected SKColor BackgroundColor { get; set; }
+        
 
 
         public void DeclareTappable(ISkiaView child)
@@ -111,6 +113,8 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public void Render()
         {
+            DrawBackground();
+
             Draw();
 
             foreach (var child in _children.OrderBy(child => child.ZIndex).ToList())
@@ -119,6 +123,22 @@ namespace GemSwipe.GameEngine.SkiaEngine
                     RemoveChild(child);
                 else
                     child.Render();
+            }
+        }
+
+        private void DrawBackground()
+        {
+            using (var paint = new SKPaint())
+            {
+                paint.IsAntialias = true;
+                paint.Color = BackgroundColor;
+                Canvas.DrawRect(
+                    SKRect.Create(
+                        X,
+                        Y,
+                        Width,
+                        Height),
+                    paint);
             }
         }
 
@@ -146,11 +166,16 @@ namespace GemSwipe.GameEngine.SkiaEngine
         {
             _x = x;
             _y = y;
+
             Height = height;
             Width = width;
+
             Tappables = new List<ISkiaView>();
-            Canvas = canvas;
             _children = new List<ISkiaView>();
+
+            BackgroundColor = new SKColor(255, 255, 255, 0);
+
+            Canvas = canvas;
 
             Scale = 1;
         }

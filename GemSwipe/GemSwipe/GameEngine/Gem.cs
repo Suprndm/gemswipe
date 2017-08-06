@@ -25,6 +25,7 @@ namespace GemSwipe.GameEngine
         private float _fluidSize;
         private int _size;
         private bool _isDying;
+        private readonly float _radius;
         private const int MovementAnimationMs = 300;
 
         public Gem(int boardX, int boardY, int size) : base(null, 0, 0, 0, 0)
@@ -33,21 +34,23 @@ namespace GemSwipe.GameEngine
             BoardX = boardX;
             BoardY = boardY;
         }
-        public Gem(int boardX, int boardY, int size, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Gem(int boardX, int boardY, int size, SKCanvas canvas, float x, float y, float radius) : base(canvas, x, y, radius * 2, radius * 2)
         {
             Size = size;
             BoardX = boardX;
             BoardY = boardY;
-
+            _radius = radius;
             _size = size;
             _fluidX = _x;
             _fluidY = _y;
 
             DeclareTappable(this);
 
+
             Tapped += () =>
             {
                 Width = Width * 1.1f;
+                Height = Height * 1.1f;
             };
         }
 
@@ -118,18 +121,18 @@ namespace GemSwipe.GameEngine
                 SKColor.FromHsl(330 - _size * 20, 100, 50),
                 SKColor.FromHsl(330 - _size * 20, 100, 50,0)
             };
-            var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), _fluidSize * 1.3f, colors, new []{0.5f,1f}, SKShaderTileMode.Clamp);
+            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y+ _radius), _fluidSize * 1.3f, colors, new[] { 0.5f, 1f }, SKShaderTileMode.Clamp);
 
 
-            _fluidSize = Width;
+            _fluidSize = _radius;
             var paint = new SKPaint()
             {
                 Shader = shader,
             };
 
-            Canvas.DrawCircle(X , Y , _fluidSize * 19 / 10, paint);
-            Canvas.DrawCircle(X, Y, _fluidSize, gemColor);
-            Canvas.DrawCircle(X, Y - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
+            Canvas.DrawCircle(X + _radius, Y + _radius, _fluidSize * 19 / 10, paint);
+            Canvas.DrawCircle(X + _radius, Y + _radius, _fluidSize, gemColor);
+            Canvas.DrawCircle(X + _radius, Y + _radius - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
         }
 
         public void MoveTo(float x, float y)
@@ -154,7 +157,6 @@ namespace GemSwipe.GameEngine
         public void Fuse()
         {
             _size++;
-            _fluidSize = Width;
         }
     }
 }

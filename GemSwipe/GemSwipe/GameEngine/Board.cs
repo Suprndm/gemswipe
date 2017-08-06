@@ -64,10 +64,10 @@ namespace GemSwipe.GameEngine
                     {
                         var gemRadius = GetGemSize();
 
-                        var gemX = ToGemViewX(i);
-                        var gemY = ToGemViewY(j);
+                        var gemX = ToGemViewX(i) +  _cellWidth/2  -gemRadius;
+                        var gemY = ToGemViewY(j) + _cellWidth/2 - gemRadius;
 
-                        var gem = new Gem(i, j, size, Canvas, gemX, gemY, gemRadius, gemRadius);
+                        var gem = new Gem(i, j, size, Canvas, gemX, gemY, gemRadius);
                         Gems.Add(gem);
 
                         AddChild(gem);
@@ -281,14 +281,15 @@ namespace GemSwipe.GameEngine
             foreach (var movedGem in swipeResult.MovedGems)
             {
                 var gemView = movedGem;
-                gemView.MoveTo(ToGemViewX(movedGem.BoardX), ToGemViewY(movedGem.BoardY));
+                ;
+                gemView.MoveTo(ToGemViewX(movedGem.BoardX )+ (_cellWidth - movedGem.Width) / 2, ToGemViewY(movedGem.BoardY) + (_cellWidth - movedGem.Width) / 2);
             }
 
             foreach (var deadGem in swipeResult.DeadGems)
             {
                 var gemView = deadGem;
                 gemView.ZIndex = -1;
-                gemView.DieTo(ToGemViewX(deadGem.BoardX), ToGemViewY(deadGem.BoardY));
+                gemView.DieTo(ToGemViewX(deadGem.BoardX) + (_cellWidth - deadGem.Width) / 2, ToGemViewY(deadGem.BoardY) + (_cellWidth - deadGem.Width) / 2);
             }
 
             foreach (var fusedGem in swipeResult.FusedGems)
@@ -341,13 +342,12 @@ namespace GemSwipe.GameEngine
 
         private float ToGemViewX(int gemStateX)
         {
-            return (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _cellWidth / 2 +
-                        _horizontalMarginPerCell);
+            return (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell);
         }
 
         private float ToGemViewY(int gemStateY)
         {
-            return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _cellHeight / 2 + _verticalMarginPerCell);
+            return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalMarginPerCell);
         }
     }
 }
