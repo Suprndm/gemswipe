@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using GemSwipe.GameEngine.Menu;
 using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.GameEngine
 {
@@ -24,7 +26,7 @@ namespace GemSwipe.GameEngine
             _headerView.ZIndex = 2;
 
             AddChild(_scene);
-         //   AddChild(_headerView);
+            //   AddChild(_headerView);
         }
 
         public async void Start()
@@ -66,7 +68,7 @@ namespace GemSwipe.GameEngine
 
                 if (swipeResult.GameFinished)
                 {
-                    
+
                 }
 
             }

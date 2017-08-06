@@ -1,4 +1,8 @@
-﻿namespace GemSwipe.GameEngine.SkiaEngine
+﻿using Xamarin.Forms;
+using System;
+using System.Collections.Generic;
+
+namespace GemSwipe.GameEngine.SkiaEngine
 {
     public interface ISkiaView
     {
@@ -15,9 +19,17 @@
 
         ISkiaView Parent { get; set; }
 
+        void DeclareTappable(ISkiaView child);
+        IList<ISkiaView> Tappables { get; }
+
         void AddChild(ISkiaView child, int zindex);
         void RemoveChild(ISkiaView child);
         void Render();
+
+        void DetectTap(Point p);
+        void Tap();
+        event Action Tapped;
+
         void Dispose();
 
     }

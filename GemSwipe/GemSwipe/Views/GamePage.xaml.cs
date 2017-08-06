@@ -14,6 +14,7 @@ namespace GemSwipe.Views
         bool pageIsActive;
         private bool _isInitiated;
         private Game _game;
+        private SKCanvas _canvas;
 
         public GamePage()
         {
@@ -53,6 +54,7 @@ namespace GemSwipe.Views
             {
                 // Init SkiaSharp
                 var gameSetup = SetupGame();
+                _canvas = e.Surface.Canvas;
                 _game = new Game(gameSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _game.Start();
                 _isInitiated = true;
@@ -88,6 +90,15 @@ namespace GemSwipe.Views
         {
             _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
+
+            Gestures.Gesture.SetTapped(SKGLView, new Command<Point>(OnCanvasTapped));
+        }
+
+        private void OnCanvasTapped(Point p)
+        {
+         
+            _game.DetectTap(p);;
+            _panJustBegun = true;
         }
 
         private void SetupEndMenu()
@@ -124,7 +135,7 @@ namespace GemSwipe.Views
         {
             if (e.TotalX == 0 && e.TotalY == 0) return;
 
-            var eX = e.TotalX ;
+            var eX = e.TotalX;
             var eY = e.TotalY;
             var d = Math.Sqrt(eX * eX + eY * eY);
 
@@ -150,12 +161,6 @@ namespace GemSwipe.Views
                         Swipe(Direction.Left);
                 }
             }
-        }
-
-
-        private void TapGestureRecognizer_OnTapped(object sender, EventArgs e)
-        {
-            _panJustBegun = true;
         }
 
         protected override void OnDisappearing()

@@ -36,7 +36,7 @@ namespace GemSwipe.GameEngine.SkiaEngine
         {
             get
             {
-                if (Parent != null) return _y * Scale +(1-_scale)*_height/2 + Parent.Y;
+                if (Parent != null) return _y * Scale + (1 - _scale) * _height / 2 + Parent.Y;
                 return _y;
             }
             protected set => _y = value;
@@ -66,15 +66,39 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
+
+        public IList<ISkiaView> Tappables { get; }
+
         public SKCanvas Canvas { get; protected set; }
         private readonly IList<ISkiaView> _children;
+        private bool _tappable;
         public ISkiaView Parent { get; set; }
+
+
+        public void DeclareTappable(ISkiaView child)
+        {
+            if (Parent != null)
+            {
+                Parent.DeclareTappable(child);
+            }
+            else
+            {
+                Tappables.Add(child);
+            }
+        }
 
         public void AddChild(ISkiaView child, int zindex = 0)
         {
             child.ZIndex = zindex;
             _children.Add(child);
             child.Parent = this;
+
+            foreach (var tappable in child.Tappables)
+            {
+                DeclareTappable(tappable);
+            }
+
+            child.Tappables.Clear();
         }
 
         public void RemoveChild(ISkiaView child)
@@ -98,12 +122,33 @@ namespace GemSwipe.GameEngine.SkiaEngine
             }
         }
 
+        public void DetectTap(Point p)
+        {
+            foreach (var tappable in Tappables)
+            {
+                if (p.X >= tappable.X && p.Y >= tappable.Y && p.X <= tappable.X + tappable.Width && p.Y <= tappable.Y + tappable.Height)
+                {
+                    tappable.Tap();
+                    return;
+                }
+            }
+        }
+
+        public void Tap()
+        {
+            Tapped?.Invoke();
+        }
+
+        public event Action Tapped;
+
+
         protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
         {
             _x = x;
             _y = y;
             Height = height;
             Width = width;
+            Tappables = new List<ISkiaView>();
             Canvas = canvas;
             _children = new List<ISkiaView>();
 

@@ -57,6 +57,7 @@
     <Compile Include="GameEngine\SkiaEngine\SkiaView.cs" />
     <Compile Include="GameEngine\SkiaEngine\ISkiaView.cs" />
     <Compile Include="GameEngine\Floors\Floor.cs" />
+    <Compile Include="Gestures\Gesture.cs" />
     <Compile Include="Models\Cell.cs" />
     <Compile Include="Models\Direction.cs" />
     <Compile Include="Models\GameLostData.cs" />

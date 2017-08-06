@@ -42,6 +42,13 @@ namespace GemSwipe.GameEngine
             _size = size;
             _fluidX = _x;
             _fluidY = _y;
+
+            DeclareTappable(this);
+
+            Tapped += () =>
+            {
+                Width = Width * 1.1f;
+            };
         }
 
         public void LevelUp()
