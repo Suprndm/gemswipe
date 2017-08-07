@@ -22,9 +22,9 @@ namespace GemSwipe.GameEngine.Floors
 
         public async Task Start()
         {
-            await Task.Delay(1000);
+            await Task.Delay(200);
 
-            var readyText = new PoppedText(Canvas, Width / 2, Height / 2, 1800, 500, 100, "Ready ?", 0.15f * Height, new SKColor(255, 255, 255, 255));
+            var readyText = new PoppedText(Canvas, Width / 2, Height / 2, 1800, 500, 100, "Ready ?", 0.10f * Height, new SKColor(255, 255, 255, 255));
             AddChild(readyText);
 
             var goText = new PoppedText(Canvas, Width / 2, Height / 2, 100, 100, 300, "Go !", 0.2f * Height, new SKColor(255, 255, 255, 255));

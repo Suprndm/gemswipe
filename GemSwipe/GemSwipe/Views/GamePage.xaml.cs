@@ -56,7 +56,6 @@ namespace GemSwipe.Views
                 var gameSetup = SetupGame();
                 _canvas = e.Surface.Canvas;
                 _game = new Game(gameSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
-                _game.Start();
                 _isInitiated = true;
             }
         }

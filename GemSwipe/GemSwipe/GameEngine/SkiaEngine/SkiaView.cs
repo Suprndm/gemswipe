@@ -75,8 +75,6 @@ namespace GemSwipe.GameEngine.SkiaEngine
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
         
-
-
         public void DeclareTappable(ISkiaView child)
         {
             if (Parent != null)
@@ -144,6 +142,13 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public void DetectTap(Point p)
         {
+            // Clear Tappables 
+            foreach (var child in Tappables.Where(child=>child.ToDispose).ToList())
+            {
+                Tappables.Remove(child);
+            }
+            
+            // Detect
             foreach (var tappable in Tappables)
             {
                 if (p.X >= tappable.X && p.Y >= tappable.Y && p.X <= tappable.X + tappable.Width && p.Y <= tappable.Y + tappable.Height)

@@ -39,6 +39,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
+    <Compile Include="GameEngine\Menu\TapToPlay.cs" />
     <Compile Include="GameEngine\Menu\TextBlock.cs" />
     <Compile Include="GameEngine\Popped\PoppedElement.cs" />
     <Compile Include="GameEngine\Popped\PoppedText.cs" />
