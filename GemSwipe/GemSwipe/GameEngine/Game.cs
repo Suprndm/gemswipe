@@ -28,7 +28,7 @@ namespace GemSwipe.GameEngine
             AddChild(_scene);
             //   AddChild(_headerView);
 
-            var tapToPlay = new TapToPlay(canvas,width/2, height/2, width, height);
+            var tapToPlay = new TapToPlay(canvas, 0, 0, height, width);
             AddChild(tapToPlay);
             tapToPlay.Tapped += Start;
         }
