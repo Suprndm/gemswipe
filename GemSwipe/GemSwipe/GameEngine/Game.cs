@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GemSwipe.BoardSolver;
 using GemSwipe.GameEngine.Menu;
+using GemSwipe.GameEngine.Popped;
 using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
@@ -15,6 +17,7 @@ namespace GemSwipe.GameEngine
         private HeaderView _headerView;
         private GameSetup _gameSetup;
         private CountDown _countDown;
+        private BlockedSensor _blockedSensor;
 
         private bool _isBusy;
 
@@ -24,6 +27,8 @@ namespace GemSwipe.GameEngine
 
             _headerView = new HeaderView(canvas, 0, 0, (float)(0.1 * Height), width);
             _headerView.ZIndex = 2;
+
+            _blockedSensor = new BlockedSensor();
 
             AddChild(_scene);
             //   AddChild(_headerView);
@@ -57,16 +62,28 @@ namespace GemSwipe.GameEngine
             {
                 _isBusy = true;
                 var swipeResult = _scene.CurrentBoard.Swipe(direction);
-                await Task.Delay(300);
+
 
                 if (swipeResult.BoardWon)
                 {
+                    await Task.Delay(300);
                     _countDown.AddMoreTime(8);
                     await _scene.NextFloor();
                     _isBusy = false;
                 }
                 else
                 {
+                    var isBlocked = await _blockedSensor.IsBlocked(_scene.CurrentBoard.ToString());
+                    if (isBlocked)
+                    {
+                        var blockedMessage = new PoppedText(Canvas, Width / 2, Height / 2, 1000, 300, 300, "Blocked",
+                            Height / 10, new SKColor(255, 0, 0));
+                        AddChild(blockedMessage);
+                        await blockedMessage.Pop();
+
+                        await _scene.ResetBoard();
+                    }
+
                     _isBusy = false;
                 }
 

@@ -18,6 +18,7 @@ namespace GemSwipe.GameEngine
 
         private const double BoardCellMarginPercentage = 0.10;
 
+        private readonly BoardSetup _boardSetup;
         private float _horizontalMarginPerCell;
         private float _verticalMarginPerCell;
         private float _cellWidth;
@@ -30,6 +31,7 @@ namespace GemSwipe.GameEngine
         {
             _boardWidth = width;
             _boardHeight = width;
+            _boardSetup = boardSetup;
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
             UpdateDimensions();
@@ -39,6 +41,17 @@ namespace GemSwipe.GameEngine
         public Board(string boardString) : base(null, 0, 0, 0, 0)
         {
             Setup(new BoardSetup(0, 0, boardString));
+        }
+
+        public void Reset()
+        {
+            CellsList.Clear();
+            foreach (var gem in Gems)
+            {
+                gem.Dispose();
+            }
+            Gems.Clear();
+            Setup(_boardSetup);
         }
 
 

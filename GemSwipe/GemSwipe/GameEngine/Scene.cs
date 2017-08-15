@@ -107,5 +107,10 @@ namespace GemSwipe.GameEngine
             if (floor is PlayableFloor)
                 CurrentBoard = (floor as PlayableFloor).Board;
         }
+
+        public async Task ResetBoard()
+        {
+            CurrentBoard.Reset();
+        }
     }
 }

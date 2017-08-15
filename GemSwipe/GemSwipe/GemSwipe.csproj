@@ -38,6 +38,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BoardSolver\LittleStar\Engine\IGameEngine.cs" />
+    <Compile Include="BoardSolver\LittleStar\Engine\IGameState.cs" />
+    <Compile Include="BoardSolver\LittleStar\Engine\ILogger.cs" />
+    <Compile Include="BoardSolver\LittleStar\Engine\IMove.cs" />
+    <Compile Include="BoardSolver\LittleStar\Engine\LittleStarEngine.cs" />
+    <Compile Include="BoardSolver\LittleStar\Engine\TrackingPoint.cs" />
+    <Compile Include="BoardSolver\LittleStar\GemSwipeEngine.cs" />
+    <Compile Include="BoardSolver\LittleStar\GemSwipeMove.cs" />
+    <Compile Include="BoardSolver\LittleStar\GemSwipeState.cs" />
+    <Compile Include="BoardSolver\Solver.cs" />
+    <Compile Include="BoardSolver\BlockedSensor.cs" />
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
     <Compile Include="GameEngine\Menu\TapToPlay.cs" />
     <Compile Include="GameEngine\Menu\TextBlock.cs" />
@@ -67,6 +78,7 @@
     <Compile Include="Models\PlayableFloorSetup.cs" />
     <Compile Include="Models\SwipeResult.cs" />
     <Compile Include="Models\CountDown.cs" />
+    <Compile Include="PortableLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Doors.xaml.cs">
       <DependentUpon>Doors.xaml</DependentUpon>

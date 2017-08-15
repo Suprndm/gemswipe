@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.BoardSolver;
+using GemSwipe.BoardSolver.LittleStar;
 using GemSwipe.GameEngine;
 using GemSwipe.GameEngine.Floors;
-using GemSwipe.Generator.LittleStar;
 using GemSwipe.Models;
 using LittleStar;
 

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GemSwipe.BoardSolver.LittleStar.Engine;
 using GemSwipe.GameEngine;
-using GemSwipe.GameEngine.Floors;
 using GemSwipe.Models;
-using LittleStar;
 
-namespace GemSwipe.Generator.LittleStar
+namespace GemSwipe.BoardSolver.LittleStar
 {
     public class GemSwipeEngine:IGameEngine<GemSwipeState, GemSwipeMove>
     {
