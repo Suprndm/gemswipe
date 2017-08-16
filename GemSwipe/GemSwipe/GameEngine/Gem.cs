@@ -18,7 +18,6 @@ namespace GemSwipe.GameEngine
         private bool _willLevelUp;
         private bool _willDie;
         private bool _isDead;
-
         private float _fluidX;
         private float _fluidY;
         private float _fluidLevel;
@@ -140,9 +139,12 @@ namespace GemSwipe.GameEngine
 
             var newX = x;
             var newY = y;
-
-            this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
-            this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
+            if(Canvas!=null) 
+            {
+                this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
+                this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
+            }
+           
         }
 
         public async void DieTo(float x, float y)

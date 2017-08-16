@@ -44,7 +44,7 @@ namespace GemSwipe.GameEngine
             await _scene.StartingFloor.Start();
             await _scene.NextBoard(_gameSetup.BoardSetups[4]);
 
-            _countDown = new CountDown(15);
+            _countDown = new CountDown(1500);
             _countDown.Zero += () =>
             {
                 EndGame();

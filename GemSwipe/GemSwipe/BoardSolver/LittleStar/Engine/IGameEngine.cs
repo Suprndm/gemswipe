@@ -9,6 +9,7 @@ namespace GemSwipe.BoardSolver.LittleStar.Engine
         TGameState PlayMove(TGameState gameState, TMove move);
         TGameState GetInitialState();
         bool GameStateIsFinal(TGameState gameState);
+        bool GameStateIsInvalid(TGameState gameState);
         double EvalEuristic(TGameState gameState);
         TGameState Duplicate(TGameState gameState);
         bool AreEqual(TGameState gameState1, TGameState gameState2);

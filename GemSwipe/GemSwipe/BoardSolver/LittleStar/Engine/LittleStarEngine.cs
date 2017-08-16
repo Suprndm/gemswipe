@@ -15,6 +15,9 @@ namespace GemSwipe.BoardSolver.LittleStar.Engine
         public IList<TMove> Resolve<TGameState, TMove>(IGameEngine<TGameState, TMove> gameEngine, TGameState gameState)
             where TGameState : IGameState where TMove : IMove
         {
+            if(gameEngine.GameStateIsInvalid(gameState)) 
+                return new List<TMove>();
+
             int iterationCount = 0;
             IList<TrackingPoint<TGameState, TMove>> tracker = new List<TrackingPoint<TGameState, TMove>>();
             var initialTrackingPoint = new TrackingPoint<TGameState, TMove>();

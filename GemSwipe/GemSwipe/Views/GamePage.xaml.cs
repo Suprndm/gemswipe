@@ -81,7 +81,7 @@ namespace GemSwipe.Views
                 new BoardSetup(4,4,"1 1 1 1-0 0 0 0-1 0 1 0-1 0 1 0"),
                 new BoardSetup(4,4,"1 1 0 1-0 1 0 1-0 0 0 0-1 0 1 1"),
                 new BoardSetup(4,4,"1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"),
-                new BoardSetup(4,4,"3 0 0 3-0 0 0 0-0 1 0 1-1 2 2 1"),
+                new BoardSetup(4,4,"1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"),
             });
         }
 
