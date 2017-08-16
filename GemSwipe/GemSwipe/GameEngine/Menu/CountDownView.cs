@@ -14,23 +14,6 @@ namespace GemSwipe.GameEngine.Menu
 
         protected override void Draw()
         {
-            var cellColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(259, 35, 35)
-            };
-
-            Canvas.DrawRect(
-                SKRect.Create(
-                    X,
-                    Y,
-                    Width,
-                    Height),
-                cellColor);
-
-
-
             using (var paint = new SKPaint())
             {
                 var text=  RemainingSeconds.ToString("###");

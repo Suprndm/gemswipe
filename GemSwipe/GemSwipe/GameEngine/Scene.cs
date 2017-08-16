@@ -17,62 +17,66 @@ namespace GemSwipe.GameEngine
 
         public Board CurrentBoard { get; private set; }
         public StartingFloor StartingFloor { get; private set; }
-        public EndFloor EndFloor { get; private set; }
 
         private const int MsPerBoardNavigation = 200;
         private readonly double _boardMargin;
         private readonly IList<Floor> _floors;
-        private int _currentFloor = 0;
         private readonly Background _background;
+        private float _floorrHeight;
+        private float _floorMargin;
+        private int _floorCount;
+        private int _currentFloor;
 
-        public Scene(GameSetup gameSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Scene(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
-            //_initialMarginX = x;
-            //_initialMarginY = y + (height - width) / 2;
-
-            //_x = _initialMarginX;
-            //_y = _initialMarginY;
-
-            var floorCount = 6;
-
+            _floorCount = 1;
+            _currentFloor = 1;
             _floors = new List<Floor>();
 
-            var floorHeight = height;
-            var floorMargin = height * 1.5f;
-            var startingFloor = new StartingFloor(canvas, X, Y, floorHeight, width, 1);
+            _floorrHeight = height;
+            _floorMargin = height * 1.5f;
+
+            var startingFloor = new StartingFloor(canvas, X, Y, _floorrHeight, width, 1);
             _floors.Add(startingFloor);
             AddChild(startingFloor);
             StartingFloor = startingFloor;
 
-            for (int i = 0; i < floorCount - 1; i++)
-            {
-                var boardSetup = gameSetup.BoardSetups[i];
 
-                var floorSetup = new PlayableFloorSetup(boardSetup, i + 1, i == floorCount - 2);
+            _background = new Background(canvas, 0, 0, _floorMargin * 6, width);
+            AddChild(_background, -1);
+        }
 
-                var board = new PlayableFloor(canvas, X, Y + floorMargin * (i + 1), floorHeight, width, floorSetup);
-                AddChild(board);
-                _floors.Add(board);
-            }
 
-            var endFloor = new EndFloor(canvas, X, Y + floorMargin * floorCount, floorHeight, width);
-            EndFloor = endFloor;
+
+        public async Task EndGame()
+        {
+            _floorCount++;
+            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorrHeight, Width);
             _floors.Add(endFloor);
             AddChild(endFloor);
+            await NextFloor();
+        }
 
+        public async Task NextBoard(BoardSetup boardSetup)
+        {
+            _floorCount++;
+            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false);
+            var board = new PlayableFloor(Canvas, X, - Y + _floorMargin, _floorrHeight, Width, floorSetup);
+            AddChild(board);
 
-            _background = new Background(canvas, 0, 0, floorMargin * floorCount, width);
-            AddChild(_background, -1);
+            _floors.Add(board);
+            await NextFloor();
         }
 
         protected override void Draw()
         {
+
         }
 
-        public async Task NextFloor()
+        private async Task NextFloor()
         {
             _currentFloor++;
-            var floor = _floors[_currentFloor];
+            var floor = _floors[_currentFloor-1];
 
             var oldX = _x;
             var oldY = _y;
@@ -83,26 +87,6 @@ namespace GemSwipe.GameEngine
 
             this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
             await Task.Delay(1000);
-            //this.Animate("zoomIn", p => _scale = (float)p, 1, zoomScaleTarget, 4, (uint)animationTimeScale, Easing.SinInOut);
-            //Task.Run(async () =>
-            //{
-            //    await Task.Delay(animationTimeScale);
-            //    this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, (uint)animationTimeX, Easing.SinInOut);
-
-            //    await Task.Run(async () =>
-            //    {
-            //        await Task.Delay(animationTimeX);
-            //        this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)animationTimeY, Easing.SinInOut);
-
-            //        await Task.Run(async () =>
-            //        {
-            //            await Task.Delay(animationTimeY);
-            //            this.Animate("zoomOut", p => _scale = (float)p, zoomScaleTarget, 1, 4, (uint)animationTimeScale, Easing.SinInOut);
-            //            await Task.Delay(animationTimeScale);
-            //            //AddChild(new ExplosionView(Canvas, targetedBoard.X-X, targetedBoard.Y-Y, Height, Width ));
-            //        });
-            //    });
-            //});
 
             if (floor is PlayableFloor)
                 CurrentBoard = (floor as PlayableFloor).Board;

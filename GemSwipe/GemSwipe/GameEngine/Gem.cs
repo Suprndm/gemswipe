@@ -49,8 +49,6 @@ namespace GemSwipe.GameEngine
 
             Tapped += () =>
             {
-                Width = Width * 1.1f;
-                Height = Height * 1.1f;
             };
         }
 
