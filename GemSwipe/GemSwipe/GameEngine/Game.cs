@@ -94,6 +94,7 @@ namespace GemSwipe.GameEngine
                       
                             await _scene.ResetBoard();
                             _isBusy = false;
+                            _isBlocked = false;
 
                         });
                     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using GemSwipe.GameEngine;
 using GemSwipe.GameEngine.Floors;
 using GemSwipe.Models;
 using LittleStar;
+using Newtonsoft.Json;
 
 namespace GemSwipe.Generator
 {
@@ -17,12 +19,12 @@ namespace GemSwipe.Generator
     {
         static void Main(string[] args)
         {
-            SolveLevel();
+            GenerateLevels();
         }
 
         static void SolveLevel()
         {
-            var game = new GemSwipeEngine(new Board("0 0 3 0-0 1 1 1-2 0 0 2-1 3 0 0"));
+            var game = new GemSwipeEngine(new Board("1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"));
             var solver = new Solver();
             var moves = solver.Solve(game);
 
@@ -48,7 +50,7 @@ namespace GemSwipe.Generator
             {
                 boards.TryAdd(i, new ConcurrentBag<string>());
             }
-            Parallel.ForEach(Enumerable.Range(0, 100), new ParallelOptions { MaxDegreeOfParallelism = 4 }, (i) =>
+            Parallel.ForEach(Enumerable.Range(0, 100000), new ParallelOptions { MaxDegreeOfParallelism = 4 }, (i) =>
             {
                 count++;
                 var board = generator.GenerateRandomLevel(4, 4);
@@ -69,9 +71,16 @@ namespace GemSwipe.Generator
                         Console.WriteLine($"Generated level {boardsKey} - {boards[boardsKey].Count} boards");
                     }
                 }
+                var save = false;
+                if (save)
+                {
+                    string json = JsonConvert.SerializeObject(boards, Formatting.Indented);
+                    File.WriteAllText("boards.json", json);
+                }
             });
 
-
+            //string json = JsonConvert.SerializeObject(boards, Formatting.Indented);
+            //File.WriteAllText("boards.json", json);
             Console.ReadKey();
         }
     }
