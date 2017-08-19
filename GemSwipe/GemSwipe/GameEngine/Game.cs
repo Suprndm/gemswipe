@@ -40,13 +40,19 @@ namespace GemSwipe.GameEngine
             tapToPlay.Tapped += Start;
         }
 
+        public async void Restart()
+        {
+            // Reset
+            _life.Reset();
+        }
+
         public async void Start()
         {
             _life.Start();
 
             await _scene.StartingFloor.Start();
             await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
-
+            _isBusy = false;
             _life.Zero += () =>
             {
                 EndGame();
@@ -57,6 +63,9 @@ namespace GemSwipe.GameEngine
         {
             _isBusy = true;
             await _scene.EndGame();
+            var tapToPlay = new TapToPlay(Canvas, 0, 0, Height, Width);
+            AddChild(tapToPlay);
+            tapToPlay.Tapped += Start;
         }
 
         public async void Swipe(Direction direction)

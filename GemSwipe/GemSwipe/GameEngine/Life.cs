@@ -20,6 +20,11 @@ namespace GemSwipe.GameEngine
 
         public Life(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
             Level = 0;
             _experience = 0;
             LevelUp();
@@ -38,7 +43,7 @@ namespace GemSwipe.GameEngine
 
         private void Consume()
         {
-            _experience += -BaseExperience * 0.0001 * Level;
+            _experience += -BaseExperience * 0.00005 * Level;
             if (_experience <= 0)
             {
                 Zero?.Invoke();

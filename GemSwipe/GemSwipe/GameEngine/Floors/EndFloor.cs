@@ -12,7 +12,7 @@ namespace GemSwipe.GameEngine.Floors
     {
         public EndFloor(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
-            AddChild(new TextBlock(Canvas, Width / 2, Height * .5f, $"Level Finished", (int)Width / 10, new SKColor(255, 255, 255, 255)));
+            AddChild(new TextBlock(Canvas, Width / 2, Height * .5f, $"Game Over", (int)Width / 10, new SKColor(255, 255, 255, 255)));
         }
 
         protected override void Draw()
