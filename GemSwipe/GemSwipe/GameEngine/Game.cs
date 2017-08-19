@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
+using GemSwipe.Data;
 using GemSwipe.GameEngine.Menu;
 using GemSwipe.GameEngine.Popped;
 using GemSwipe.GameEngine.SkiaEngine;
@@ -14,25 +15,25 @@ namespace GemSwipe.GameEngine
     public class Game : SkiaView
     {
         private Scene _scene;
-        private HeaderView _headerView;
-        private GameSetup _gameSetup;
-        private CountDown _countDown;
         private BlockedSensor _blockedSensor;
+        private readonly BoardRepository _boardRepository;
         private bool _isBlocked;
-
+        private Life _life;
         private bool _isBusy;
+        private int _level;
 
-        public Game(GameSetup gameSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Game(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+            _level = 1;
+            _boardRepository = new BoardRepository();
             _scene = new Scene(canvas, 0, 0, Height, width);
-            _gameSetup = gameSetup;
-            _headerView = new HeaderView(canvas, 0, 0, (float)(0.1 * Height), width);
-            _headerView.ZIndex = 2;
+            _life = new Life(canvas, 0, 0, (float)(0.1 * Height), width);
+            _life.ZIndex = 2;
 
             _blockedSensor = new BlockedSensor();
 
             AddChild(_scene);
-            AddChild(_headerView);
+            AddChild(_life);
 
             var tapToPlay = new TapToPlay(canvas, 0, 0, height, width);
             AddChild(tapToPlay);
@@ -41,15 +42,15 @@ namespace GemSwipe.GameEngine
 
         public async void Start()
         {
-            await _scene.StartingFloor.Start();
-            await _scene.NextBoard(_gameSetup.BoardSetups[4]);
+            _life.Start();
 
-            _countDown = new CountDown(1500);
-            _countDown.Zero += () =>
+            await _scene.StartingFloor.Start();
+            await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
+
+            _life.Zero += () =>
             {
                 EndGame();
             };
-            _countDown.Start();
         }
 
         public async Task EndGame()
@@ -71,8 +72,10 @@ namespace GemSwipe.GameEngine
                     _isBusy = true;
                     // Generate Floor
                     await Task.Delay(300);
-                    _countDown.AddMoreTime(8);
-                    await _scene.NextBoard(_gameSetup.BoardSetups[4]);
+                    _life.BoardFinished(false);
+                    _level = _life.Level;
+
+                    await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
                     _isBusy = false;
                 }
                 else if(!_isBlocked)
@@ -110,8 +113,6 @@ namespace GemSwipe.GameEngine
 
         protected override void Draw()
         {
-            if (_countDown != null)
-                _headerView.CountDownView.RemainingSeconds = _countDown.RemainingSeconds();
 
         }
 

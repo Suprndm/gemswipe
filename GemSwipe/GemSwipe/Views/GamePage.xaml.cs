@@ -53,9 +53,8 @@ namespace GemSwipe.Views
             else
             {
                 // Init SkiaSharp
-                var gameSetup = SetupGame();
                 _canvas = e.Surface.Canvas;
-                _game = new Game(gameSetup, e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                _game = new Game(e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _isInitiated = true;
             }
         }
@@ -66,24 +65,12 @@ namespace GemSwipe.Views
 
         protected override void OnAppearing()
         {
-            SetupGame();
             SetupEndMenu();
             SetupSkiaView();
 
             base.OnAppearing();
         }
 
-        private GameSetup SetupGame()
-        {
-            return new GameSetup(1, new List<BoardSetup>
-            {
-                new BoardSetup(4,4,"1 1 1 1-0 0 0 0-0 0 0 0-0 0 0 0"),
-                new BoardSetup(4,4,"1 1 1 1-0 0 0 0-1 0 1 0-1 0 1 0"),
-                new BoardSetup(4,4,"1 1 0 1-0 1 0 1-0 0 0 0-1 0 1 1"),
-                new BoardSetup(4,4,"1 1 1 1-0 0 0 0-1 0 1 0-1 0 1 0"),
-                new BoardSetup(4,4,"0 2 1 0-1 2 2 1-0 2 2 2-0 0 1 0"),
-            });
-        }
 
         private void SetupSkiaView()
         {

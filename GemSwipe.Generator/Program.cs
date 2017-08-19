@@ -45,42 +45,48 @@ namespace GemSwipe.Generator
             var generator = new Generator();
             var solver = new Solver();
             int count = 0;
-            ConcurrentDictionary<int, ConcurrentBag<string>> boards = new ConcurrentDictionary<int, ConcurrentBag<string>>();
+            ConcurrentBag<string> generatedBoards = new ConcurrentBag<string>();
+            ConcurrentDictionary<int, ConcurrentBag<string>> sortedBoards = new ConcurrentDictionary<int, ConcurrentBag<string>>();
             for (int i = 1; i < 20; i++)
             {
-                boards.TryAdd(i, new ConcurrentBag<string>());
+                sortedBoards.TryAdd(i, new ConcurrentBag<string>());
             }
-            Parallel.ForEach(Enumerable.Range(0, 100000), new ParallelOptions { MaxDegreeOfParallelism = 4 }, (i) =>
+
+            Parallel.ForEach(Enumerable.Range(0, 100000), new ParallelOptions { MaxDegreeOfParallelism = 8 }, (i) =>
             {
                 count++;
                 var board = generator.GenerateRandomLevel(4, 4);
-                var game = new GemSwipeEngine(new Board(board));
-
-                var moves = solver.Solve(game);
-                if (moves.Count > 0)
+                if (!generatedBoards.Contains(board))
                 {
-                    if (!boards[moves.Count].Contains(board))
-                        boards[moves.Count].Add(board);
+                    var game = new GemSwipeEngine(new Board(board));
+
+                    var moves = solver.Solve(game);
+                    generatedBoards.Add(board);
+
+                    if (moves.Count > 0)
+                    {
+                        sortedBoards[moves.Count].Add(board);
+                    }
                 }
 
                 if (count % 10 == 0)
                 {
                     Console.Clear();
-                    foreach (var boardsKey in boards.Keys)
+                    foreach (var boardsKey in sortedBoards.Keys)
                     {
-                        Console.WriteLine($"Generated level {boardsKey} - {boards[boardsKey].Count} boards");
+                        Console.WriteLine($"Generated level {boardsKey} - {sortedBoards[boardsKey].Count} boards");
                     }
                 }
                 var save = false;
                 if (save)
                 {
-                    string json = JsonConvert.SerializeObject(boards, Formatting.Indented);
+                    string json = JsonConvert.SerializeObject(sortedBoards, Formatting.Indented);
                     File.WriteAllText("boards.json", json);
                 }
             });
 
-            //string json = JsonConvert.SerializeObject(boards, Formatting.Indented);
-            //File.WriteAllText("boards.json", json);
+            string finalJson = JsonConvert.SerializeObject(sortedBoards, Formatting.Indented);
+            File.WriteAllText("boards.json", finalJson);
             Console.ReadKey();
         }
     }

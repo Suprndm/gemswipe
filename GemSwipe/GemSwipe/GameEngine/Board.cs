@@ -40,7 +40,7 @@ namespace GemSwipe.GameEngine
 
         public Board(string boardString) : base(null, 0, 0, 0, 0)
         {
-            Setup(new BoardSetup(0, 0, boardString));
+            Setup(new BoardSetup(0, 0, boardString, 0));
         }
 
         public void Reset()
@@ -77,8 +77,8 @@ namespace GemSwipe.GameEngine
                     {
                         var gemRadius = GetGemSize();
 
-                        var gemX = ToGemViewX(i) +  _cellWidth/2  -gemRadius;
-                        var gemY = ToGemViewY(j) + _cellWidth/2 - gemRadius;
+                        var gemX = ToGemViewX(i) + _cellWidth / 2 - gemRadius;
+                        var gemY = ToGemViewY(j) + _cellWidth / 2 - gemRadius;
 
                         var gem = new Gem(i, j, size, Canvas, gemX, gemY, gemRadius);
                         Gems.Add(gem);
@@ -92,7 +92,7 @@ namespace GemSwipe.GameEngine
 
             CellsList = boardCells;
             Gems = new List<Gem>();
-            var maxNbOfColumns= 0;
+            var maxNbOfColumns = 0;
             var maxNbOfRows = 0;
             foreach (var cell in CellsList)
             {
@@ -295,7 +295,7 @@ namespace GemSwipe.GameEngine
             {
                 var gemView = movedGem;
                 ;
-                gemView.MoveTo(ToGemViewX(movedGem.BoardX )+ (_cellWidth - movedGem.Width) / 2, ToGemViewY(movedGem.BoardY) + (_cellWidth - movedGem.Width) / 2);
+                gemView.MoveTo(ToGemViewX(movedGem.BoardX) + (_cellWidth - movedGem.Width) / 2, ToGemViewY(movedGem.BoardY) + (_cellWidth - movedGem.Width) / 2);
             }
 
             foreach (var deadGem in swipeResult.DeadGems)

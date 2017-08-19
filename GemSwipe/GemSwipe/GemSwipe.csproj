@@ -49,7 +49,11 @@
     <Compile Include="BoardSolver\LittleStar\GemSwipeState.cs" />
     <Compile Include="BoardSolver\Solver.cs" />
     <Compile Include="BoardSolver\BlockedSensor.cs" />
+    <Compile Include="Data\BoardData.cs" />
+    <Compile Include="Data\BoardRepository.cs" />
+    <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
+    <Compile Include="GameEngine\Life.cs" />
     <Compile Include="GameEngine\Menu\TapToPlay.cs" />
     <Compile Include="GameEngine\Menu\TextBlock.cs" />
     <Compile Include="GameEngine\Popped\PoppedElement.cs" />

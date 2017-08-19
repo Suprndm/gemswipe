@@ -27,10 +27,11 @@ namespace GemSwipe.Generator
                 {
                     int gem = 0;
                     var randomNumber = _random.Next(100);
-                    if (randomNumber < 70) gem = 0;
+                    if (randomNumber < 65) gem = 0;
                     else if (randomNumber < 85) gem = 1;
                     else if (randomNumber < 95) gem = 2;
-                    else gem = 3;
+                    else if (randomNumber < 98) gem = 3;
+                    else gem = 4;
 
                     board[i, j] = gem;
                 }

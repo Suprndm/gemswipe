@@ -16,8 +16,8 @@ namespace GemSwipe.GameEngine.Floors
         {
             _level = level;
 
-            AddChild(new TextBlock(Canvas, Width / 2, Height * .05f, $"Level", (int)Width / 10, new SKColor(255, 255, 255, 255)));
-            AddChild(new TextBlock(Canvas, Width / 2, Height * .2f, _level.ToString(), (int)Width / 5, new SKColor(255, 255, 255, 255)));
+            //AddChild(new TextBlock(Canvas, Width / 2, Height * .05f, $"Level", (int)Width / 10, new SKColor(255, 255, 255, 255)));
+            //AddChild(new TextBlock(Canvas, Width / 2, Height * .2f, _level.ToString(), (int)Width / 5, new SKColor(255, 255, 255, 255)));
         }
 
         public async Task Start()
