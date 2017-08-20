@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.Data;
+using GemSwipe.GameEngine.Effects;
 using GemSwipe.GameEngine.Menu;
 using GemSwipe.GameEngine.Popped;
 using GemSwipe.GameEngine.SkiaEngine;
@@ -19,6 +20,7 @@ namespace GemSwipe.GameEngine
         private readonly BoardRepository _boardRepository;
         private bool _isBlocked;
         private Life _life;
+        private EffectLayer _effectLayer;
         private bool _isBusy;
         private int _level;
 
@@ -26,14 +28,17 @@ namespace GemSwipe.GameEngine
         {
             _level = 1;
             _boardRepository = new BoardRepository();
-            _scene = new Scene(canvas, 0, 0, Height, width);
-            _life = new Life(canvas, 0, 0, (float)(0.1 * Height), width);
-            _life.ZIndex = 2;
-
             _blockedSensor = new BlockedSensor();
 
+            _life = new Life(canvas, 0, 0, (float)(0.1 * Height), width);
+            AddChild(_life, 2);
+
+            _scene = new Scene(canvas, 0, 0, Height, width);
             AddChild(_scene);
-            AddChild(_life);
+
+
+            _effectLayer = new EffectLayer(Canvas, 0, 0, Height, Width);
+            AddChild(_effectLayer, 3);
 
             var tapToPlay = new TapToPlay(canvas, 0, 0, height, width);
             AddChild(tapToPlay);
@@ -42,7 +47,7 @@ namespace GemSwipe.GameEngine
 
         public async void Restart()
         {
-            // Reset
+            _scene.Reset();
             _life.Reset();
         }
 
@@ -72,12 +77,13 @@ namespace GemSwipe.GameEngine
         {
             if (_scene.CurrentBoard != null)
             {
-              
+
                 var swipeResult = _scene.CurrentBoard.Swipe(direction);
 
 
                 if (swipeResult.BoardWon)
                 {
+                    _effectLayer.Explode();
                     _isBusy = true;
                     // Generate Floor
                     await Task.Delay(300);
@@ -87,7 +93,7 @@ namespace GemSwipe.GameEngine
                     await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
                     _isBusy = false;
                 }
-                else if(!_isBlocked)
+                else if (!_isBlocked)
                 {
                     var isBlocked = await _blockedSensor.IsBlocked(_scene.CurrentBoard.ToString());
                     if (isBlocked)
@@ -103,7 +109,7 @@ namespace GemSwipe.GameEngine
                                 Height / 10, new SKColor(255, 0, 0));
                             AddChild(blockedMessage);
                             await blockedMessage.Pop();
-                      
+
                             await _scene.ResetBoard();
                             _isBusy = false;
                             _isBlocked = false;

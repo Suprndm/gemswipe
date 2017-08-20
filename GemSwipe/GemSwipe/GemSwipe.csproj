@@ -52,6 +52,8 @@
     <Compile Include="Data\BoardData.cs" />
     <Compile Include="Data\BoardRepository.cs" />
     <Compile Include="Data\LevelMovesData.cs" />
+    <Compile Include="GameEngine\Effects\EffectLayer.cs" />
+    <Compile Include="GameEngine\Effects\ExplosionEffect.cs" />
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
     <Compile Include="GameEngine\Life.cs" />
     <Compile Include="GameEngine\Menu\TapToPlay.cs" />
@@ -60,13 +62,11 @@
     <Compile Include="GameEngine\Popped\PoppedText.cs" />
     <Compile Include="GameEngine\Scene.cs" />
     <Compile Include="GameEngine\Board.cs" />
-    <Compile Include="GameEngine\Physical\ExplosionView.cs" />
     <Compile Include="GameEngine\Floors\EndFloor.cs" />
     <Compile Include="GameEngine\Floors\StartingFloor.cs" />
     <Compile Include="GameEngine\Game.cs" />
     <Compile Include="GameEngine\Gem.cs" />
-    <Compile Include="GameEngine\Physical\ParticuleView.cs" />
-    <Compile Include="GameEngine\Physical\PhysicalParticule.cs" />
+    <Compile Include="GameEngine\Effects\PhysicalParticule.cs" />
     <Compile Include="GameEngine\Menu\Background.cs" />
     <Compile Include="GameEngine\Menu\CountDownView.cs" />
     <Compile Include="GameEngine\Menu\HeaderView.cs" />

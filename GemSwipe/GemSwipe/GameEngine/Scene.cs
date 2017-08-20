@@ -47,6 +47,15 @@ namespace GemSwipe.GameEngine
         }
 
 
+        public void Reset()
+        {
+            _currentFloor = 0;
+            foreach (var floor in _floors)
+            {
+                if(floor is PlayableFloor)
+                    floor.Dispose();
+            }
+        }
 
         public async Task EndGame()
         {
