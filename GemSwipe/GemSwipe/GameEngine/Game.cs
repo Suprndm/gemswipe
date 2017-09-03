@@ -18,8 +18,8 @@ namespace GemSwipe.GameEngine
         private Scene _scene;
         private BlockedSensor _blockedSensor;
         private readonly BoardRepository _boardRepository;
+        private readonly Background _background;
         private bool _isBlocked;
-        private Life _life;
         private EffectLayer _effectLayer;
         private bool _isBusy;
         private int _level;
@@ -29,9 +29,8 @@ namespace GemSwipe.GameEngine
             _level = 1;
             _boardRepository = new BoardRepository();
             _blockedSensor = new BlockedSensor();
-
-            _life = new Life(canvas, 0, 0, (float)(0.1 * Height), width);
-            AddChild(_life, 2);
+            _background = new Background(canvas, 0, 0, height, width);
+            AddChild(_background, -1);
 
             _scene = new Scene(canvas, 0, 0, Height, width);
             AddChild(_scene);
@@ -48,20 +47,14 @@ namespace GemSwipe.GameEngine
         public async void Restart()
         {
             _scene.Reset();
-            _life.Reset();
         }
 
         public async void Start()
         {
-            _life.Start();
 
             await _scene.StartingFloor.Start();
             await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
             _isBusy = false;
-            _life.Zero += () =>
-            {
-                EndGame();
-            };
         }
 
         public async Task EndGame()
@@ -83,12 +76,10 @@ namespace GemSwipe.GameEngine
 
                 if (swipeResult.BoardWon)
                 {
-                    _effectLayer.Explode();
+                    //_effectLayer.Explode();
                     _isBusy = true;
                     // Generate Floor
-                    await Task.Delay(300);
-                    _life.BoardFinished(false);
-                    _level = _life.Level;
+                    await Task.Delay(1500);
 
                     await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
                     _isBusy = false;

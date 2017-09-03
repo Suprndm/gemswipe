@@ -25,7 +25,11 @@ namespace GemSwipe.GameEngine
         private int _size;
         private bool _isDying;
         private readonly float _radius;
-        private const int MovementAnimationMs = 300;
+        private const int MovementAnimationMs = 600;
+        private Random _randomizer;
+        private int _cycle;
+        private int _cycleSpeed;
+        private float _opacity;
 
         public Gem(int boardX, int boardY, int size) : base(null, 0, 0, 0, 0)
         {
@@ -35,13 +39,17 @@ namespace GemSwipe.GameEngine
         }
         public Gem(int boardX, int boardY, int size, SKCanvas canvas, float x, float y, float radius) : base(canvas, x, y, radius * 2, radius * 2)
         {
+            _randomizer = new Random();
+            _cycle = 0;
             Size = size;
+            _fluidSize = size;
             BoardX = boardX;
             BoardY = boardY;
             _radius = radius;
             _size = size;
             _fluidX = _x;
             _fluidY = _y;
+            _opacity = 1;
 
             DeclareTappable(this);
 
@@ -99,37 +107,56 @@ namespace GemSwipe.GameEngine
 
         protected override void Draw()
         {
-            var gemColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330 - _size * 20, 100, 50)
-            };
 
-            var gemReflectColor = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.FromHsl(330 - _size * 20, 90, 65)
-            };
 
-            //Glow 
+            var innerRadius = _radius * (2 + (_fluidSize / 2)) / 10;
+            _cycle += (int)_fluidSize;
+            _cycle = _cycle % 365;
+            var result = (byte)(((Math.Cos(_cycle * Math.PI / 180) + 1) * 75 + 55) * _opacity);
             var colors = new SKColor[] {
-                SKColor.FromHsl(330 - _size * 20, 100, 50),
-                SKColor.FromHsl(330 - _size * 20, 100, 50,0)
+                new SKColor (255, 255,255,result),
+                new SKColor (255, 255, 255,0),
+
             };
-            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y+ _radius), _fluidSize * 1.3f, colors, new[] { 0.5f, 1f }, SKShaderTileMode.Clamp);
 
-
-            _fluidSize = _radius;
-            var paint = new SKPaint()
+            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y + _radius), innerRadius * 5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+            var glowPaint = new SKPaint()
             {
                 Shader = shader,
             };
+            Canvas.DrawCircle(X + _radius, Y + _radius, innerRadius * 5f, glowPaint);
 
-            Canvas.DrawCircle(X + _radius, Y + _radius, _fluidSize * 19 / 10, paint);
-            Canvas.DrawCircle(X + _radius, Y + _radius, _fluidSize, gemColor);
-            Canvas.DrawCircle(X + _radius, Y + _radius - (_fluidSize - _fluidSize * 7 / 10), _fluidSize * 7 / 10, gemReflectColor);
+
+            var innerPaint = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = new SKColor(255, 255, 255, (byte)(255 * _opacity))
+            };
+
+
+
+            Canvas.DrawCircle(X + _radius, Y + _radius, innerRadius, innerPaint);
+
+
+
+            for (int i = 0; i < Size; i++)
+            {
+                float lastRingOpacity = 1;
+                if (i == Size - 1 && _fluidSize < Size)
+                {
+                    lastRingOpacity = 1 - (Size - _fluidSize);
+                }
+                using (var paint = new SKPaint())
+                {
+                    paint.IsAntialias = true;
+                    paint.StrokeWidth = 4;
+                    paint.Style = SKPaintStyle.Stroke;
+                    paint.Color = new SKColor(255, 255, 255, (byte)(255 * _opacity * lastRingOpacity));
+
+                    Canvas.DrawCircle(X + _radius, Y + _radius, (float)(innerRadius * (2 + (double)i / 3)), paint);
+                }
+            }
         }
 
         public void MoveTo(float x, float y)
@@ -139,24 +166,29 @@ namespace GemSwipe.GameEngine
 
             var newX = x;
             var newY = y;
-            if(Canvas!=null) 
+            if (Canvas != null)
             {
                 this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
                 this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
             }
-           
+
         }
 
         public async void DieTo(float x, float y)
         {
             MoveTo(x, y);
-            await Task.Delay(MovementAnimationMs);
+            await Task.Delay(MovementAnimationMs/2);
+            this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs/2, Easing.CubicOut);
+            await Task.Delay(MovementAnimationMs/2);
             Dispose();
         }
 
-        public void Fuse()
+        public async void Fuse()
         {
+            var oldSize = _size;
             _size++;
+            await Task.Delay(MovementAnimationMs / 2);
+            this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs, Easing.CubicOut);
         }
     }
 }

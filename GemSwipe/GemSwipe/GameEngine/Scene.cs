@@ -21,7 +21,6 @@ namespace GemSwipe.GameEngine
         private const int MsPerBoardNavigation = 200;
         private readonly double _boardMargin;
         private readonly IList<Floor> _floors;
-        private readonly Background _background;
         private float _floorrHeight;
         private float _floorMargin;
         private int _floorCount;
@@ -42,8 +41,7 @@ namespace GemSwipe.GameEngine
             StartingFloor = startingFloor;
 
 
-            _background = new Background(canvas, 0, 0, _floorMargin * 6, width);
-            AddChild(_background, -1);
+
         }
 
 

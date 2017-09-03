@@ -13,6 +13,7 @@ namespace GemSwipe.GameEngine
         public IList<Cell> CellsList { get; private set; }
         public IList<Gem> Gems { get; private set; }
 
+        public int MovesToResolve { get; private set; }
         public int NbOfRows { get; private set; }
         public int NbOfColumns { get; private set; }
 
@@ -32,6 +33,7 @@ namespace GemSwipe.GameEngine
             _boardWidth = width;
             _boardHeight = width;
             _boardSetup = boardSetup;
+            MovesToResolve = boardSetup.Moves;
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
             UpdateDimensions();
@@ -339,14 +341,10 @@ namespace GemSwipe.GameEngine
                     using (var paint = new SKPaint())
                     {
                         paint.IsAntialias = true;
-                        paint.Color = new SKColor(255, 255, 255, 20);
-                        canvas.DrawRect(
-                            SKRect.Create(
-                                X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell),
-                                Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell),
-                                _cellWidth,
-                                _cellHeight),
-                            paint);
+                        paint.Style =SKPaintStyle.Stroke;
+                        paint.StrokeWidth = 2;
+                        paint.Color = new SKColor(255, 255, 255, 150);
+                        Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth/2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight/2), _cellWidth/2.5f, paint);
                     }
                 }
             }
