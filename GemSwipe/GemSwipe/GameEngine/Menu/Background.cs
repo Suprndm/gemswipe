@@ -20,12 +20,13 @@ namespace GemSwipe.GameEngine.Menu
         {
             _colors = new List<SKColor>
             {
-                new SKColor(71, 9, 196, 255),
-                new SKColor(119, 74, 212, 255),
-                new SKColor(23, 32, 149, 255),
-                new SKColor(26, 131, 204, 255),
-                new SKColor(155, 40, 208, 255),
-                new SKColor(0, 7, 101, 255),
+                new SKColor(34, 53, 196, 255),
+                new SKColor(18, 13, 83, 255),
+                new SKColor(119, 0, 253, 255),
+                new SKColor(61, 14, 108, 255),
+                new SKColor(0, 154, 192, 255),
+                new SKColor(0, 41, 51, 255),
+                new SKColor(108, 0, 218, 255),
 
             };
 
