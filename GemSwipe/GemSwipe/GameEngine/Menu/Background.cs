@@ -20,11 +20,13 @@ namespace GemSwipe.GameEngine.Menu
         {
             _colors = new List<SKColor>
             {
-                //new SKColor(71, 9, 196, 255),
-                //new SKColor(119, 74, 212, 255),
-                new SKColor(100,0,0, 255),
-                new SKColor(0,100,0, 255),
-                new SKColor(0,0,100, 255),
+                new SKColor(71, 9, 196, 255),
+                new SKColor(119, 74, 212, 255),
+                new SKColor(23, 32, 149, 255),
+                new SKColor(26, 131, 204, 255),
+                new SKColor(155, 40, 208, 255),
+                new SKColor(0, 7, 101, 255),
+
             };
 
             _colorIndex = 0;
@@ -44,7 +46,7 @@ namespace GemSwipe.GameEngine.Menu
         public async Task ScrollDown()
         {
             var oldY = _y;
-            var newY = _y - Height * 0.3;
+            var newY = _y - Height * 0.15;
             this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
             await Task.Delay(1000);
             foreach (var linear in _linears)
