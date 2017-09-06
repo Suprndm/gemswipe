@@ -79,8 +79,9 @@ namespace GemSwipe.GameEngine
                     //_effectLayer.Explode();
                     _isBusy = true;
                     // Generate Floor
-                    await Task.Delay(1500);
+                    await Task.Delay(1000);
 
+                    _background.ScrollDown();
                     await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
                     _isBusy = false;
                 }

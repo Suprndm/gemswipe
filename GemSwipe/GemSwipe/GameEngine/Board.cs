@@ -341,10 +341,10 @@ namespace GemSwipe.GameEngine
                     using (var paint = new SKPaint())
                     {
                         paint.IsAntialias = true;
-                        paint.Style =SKPaintStyle.Stroke;
+                        paint.Style = SKPaintStyle.Stroke;
                         paint.StrokeWidth = 2;
                         paint.Color = new SKColor(255, 255, 255, 150);
-                        Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth/2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight/2), _cellWidth/2.5f, paint);
+                        Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight / 2), _cellWidth / 2.5f, paint);
                     }
                 }
             }
@@ -359,6 +359,13 @@ namespace GemSwipe.GameEngine
         private float ToGemViewY(int gemStateY)
         {
             return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalMarginPerCell);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Gems.Clear();
+            CellsList.Clear();
         }
     }
 }

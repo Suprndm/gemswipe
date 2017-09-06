@@ -103,7 +103,6 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public void RemoveChild(ISkiaView child)
         {
-            child.Dispose();
             _children.Remove(child);
         }
 

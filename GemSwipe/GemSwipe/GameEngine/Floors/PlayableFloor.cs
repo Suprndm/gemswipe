@@ -16,13 +16,6 @@ namespace GemSwipe.GameEngine.Floors
             AddChild(board);
             Board = board;
             _setup = setup;
-
-            var text = $"Floor { _setup.Floor}";
-            if (_setup.IsFinal)
-                text = "Final Floor !";
-
-            AddChild(new TextBlock(Canvas, Width / 2, Height * .15f, text, (int)Width / 10, new SKColor(255, 255, 255, 255)));
-
         }
     }
 }

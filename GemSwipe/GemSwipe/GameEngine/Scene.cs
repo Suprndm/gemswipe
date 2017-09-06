@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.GameEngine.Floors;
 using GemSwipe.GameEngine.Menu;
@@ -50,7 +51,7 @@ namespace GemSwipe.GameEngine
             _currentFloor = 0;
             foreach (var floor in _floors)
             {
-                if(floor is PlayableFloor)
+                if (floor is PlayableFloor)
                     floor.Dispose();
             }
         }
@@ -68,10 +69,18 @@ namespace GemSwipe.GameEngine
         {
             _floorCount++;
             var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false);
-            var board = new PlayableFloor(Canvas, X, - Y + _floorMargin, _floorrHeight, Width, floorSetup);
+            var board = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorrHeight, Width, floorSetup);
             AddChild(board);
 
             _floors.Add(board);
+
+            // Recycle Boards
+            if (_floors.Count > 3)
+            {
+                var floorToDispose = _floors[1];
+                _floors.RemoveAt(1);
+                floorToDispose.Dispose();
+            }
             await NextFloor();
         }
 
@@ -82,8 +91,7 @@ namespace GemSwipe.GameEngine
 
         private async Task NextFloor()
         {
-            _currentFloor++;
-            var floor = _floors[_currentFloor-1];
+            var floor = _floors.Last();
 
             var oldX = _x;
             var oldY = _y;
