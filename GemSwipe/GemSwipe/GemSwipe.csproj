@@ -59,6 +59,8 @@
     <Compile Include="GameEngine\Menu\Halo.cs" />
     <Compile Include="GameEngine\Menu\LinearGradientBackground.cs" />
     <Compile Include="GameEngine\Menu\OceanDepth.cs" />
+    <Compile Include="GameEngine\Menu\Star.cs" />
+    <Compile Include="GameEngine\Menu\Stars.cs" />
     <Compile Include="GameEngine\Menu\TapToPlay.cs" />
     <Compile Include="GameEngine\Menu\TextBlock.cs" />
     <Compile Include="GameEngine\Popped\PoppedElement.cs" />

@@ -8,6 +8,7 @@ namespace GemSwipe.GameEngine.Menu
     public class Background : SkiaView
     {
         private readonly OceanDepth _oceanDepth;
+        private readonly Stars _stars;
 
         public Background(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height,
             width)
@@ -19,11 +20,15 @@ namespace GemSwipe.GameEngine.Menu
             var whiteHalo = new Halo(Canvas, X - Width / 3, Y, Height, Width * 3f, new SKColor(0, 0, 0), 0);
             AddChild(blackHalo);
             AddChild(whiteHalo);
+
+            _stars = new Stars(Canvas, X, Y, Height, Width);
+            AddChild(_stars);
         }
 
         public Task OnNextBoard()
         {
-           return _oceanDepth.ScrollDown();
+            _stars.ScrollDown();
+            return _oceanDepth.ScrollDown();
         }
 
         protected override void Draw()

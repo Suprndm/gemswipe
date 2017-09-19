@@ -53,6 +53,7 @@ namespace GemSwipe.GameEngine
         {
 
             await _scene.StartingFloor.Start();
+            _background.OnNextBoard();
             await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
             _isBusy = false;
         }
