@@ -59,12 +59,21 @@ namespace GemSwipe.GameEngine.Menu
             //var paint = new SKPaint() { Shader = shader };
             //Canvas.DrawCircle(X, Y, _size, paint);
 
+            //using (var secondPaint = new SKPaint())
+            //{
+            //    secondPaint.IsAntialias = true;
+            //    secondPaint.Style = SKPaintStyle.Fill;
+            //    secondPaint.Color = new SKColor(255, 255, 255, (byte)(opacity * 255));
+            //    Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
+            //}
+
             using (var secondPaint = new SKPaint())
             {
-                secondPaint.IsAntialias = true;
-                secondPaint.Style = SKPaintStyle.Fill;
+                secondPaint.IsAntialias = false;
+                secondPaint.Style = SKPaintStyle.Stroke;
+                secondPaint.StrokeWidth = 2 * _size / 3;
                 secondPaint.Color = new SKColor(255, 255, 255, (byte)(opacity * 255));
-                Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
+                Canvas.DrawPoint(X, Y, secondPaint);
             }
         }
 

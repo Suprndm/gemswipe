@@ -110,7 +110,6 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public void Render()
         {
-            DrawBackground();
 
             Draw();
 
