@@ -177,9 +177,12 @@ namespace GemSwipe.GameEngine
         public async void DieTo(float x, float y)
         {
             MoveTo(x, y);
-            await Task.Delay(MovementAnimationMs/2);
-            this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs/2, Easing.CubicOut);
-            await Task.Delay(MovementAnimationMs/2);
+            if (Canvas != null)
+            {
+                await Task.Delay(MovementAnimationMs / 2);
+                this.Animate("fade", p => _opacity = (float) p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
+                await Task.Delay(MovementAnimationMs / 2);
+            }
             Dispose();
         }
 
@@ -187,8 +190,12 @@ namespace GemSwipe.GameEngine
         {
             var oldSize = _size;
             _size++;
-            await Task.Delay(MovementAnimationMs / 2);
-            this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs, Easing.CubicOut);
+            if (Canvas != null)
+            {
+                await Task.Delay(MovementAnimationMs / 2);
+                this.Animate("size", p => _fluidSize = (float) p, oldSize, _size, 4, MovementAnimationMs,
+                    Easing.CubicOut);
+            }
         }
     }
 }

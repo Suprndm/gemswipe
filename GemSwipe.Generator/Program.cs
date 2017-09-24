@@ -19,12 +19,13 @@ namespace GemSwipe.Generator
     {
         static void Main(string[] args)
         {
-            GenerateLevels();
+            // GenerateLevels();
+            SolveLevel();
         }
 
         static void SolveLevel()
         {
-            var game = new GemSwipeEngine(new Board("1 1 2 1-0 1 2 1-0 0 2 2-1 0 1 1"));
+            var game = new GemSwipeEngine(new Board("0 9 0 0 0 0-0 0 0 0 0 2-9 0 0 0 0 3-0 0 0 0 0 2-0 0 0 0 0 0-0 0 0 0 0 0"));
             var solver = new Solver();
             var moves = solver.Solve(game);
 

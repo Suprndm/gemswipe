@@ -21,6 +21,27 @@ namespace GemSwipe.Tests
         }
 
         [Test]
+        [TestCase("1 9 0-0 0 0-1 0 0", "1 9 0-0 0 0-0 0 1", Direction.Right)]
+        [TestCase("1 9 1 1-0 0 0 0-1 0 0 0", "1 9 0 2-0 0 0 0-0 0 0 1", Direction.Right)]
+        [TestCase("1 9 0 1 1-0 0 0 0 9-0 1 0 0 0", "1 9 2 0 0-0 0 0 0 0-1 0 0 0 0", Direction.Left)]
+        [TestCase("1 9 9 1-1 1 9 9-1 0 0 0", "1 9 9 1-0 2 9 9-0 0 0 1", Direction.Right)]
+        public void ShouldNotMoveThroughBlockedCells(string intialBoardString, string finalBoardString, Direction direction)
+        {
+            // Given an initialBoard
+            var actualBoard = BuildBoardFromString(intialBoardString);
+            Console.WriteLine("InitialBoard board");
+            Console.WriteLine(DrawBoard(actualBoard));
+
+            // When Swiping
+            actualBoard.Swipe(direction);
+
+            // Then the board should have the following configuration
+            var excpectedBoard = BuildBoardFromString(finalBoardString);
+            AssertBoardEquality(excpectedBoard, actualBoard);
+        }
+
+
+        [Test]
         [TestCase("1 0 0-0 0 0-0 0 0", "0 0 1-0 0 0-0 0 0", Direction.Right)]
         [TestCase("0 0 1-0 0 0-0 0 0", "1 0 0-0 0 0-0 0 0", Direction.Left)]
         [TestCase("1 0 0-0 0 0-0 0 0", "0 0 0-0 0 0-1 0 0", Direction.Bottom)]
@@ -191,11 +212,11 @@ namespace GemSwipe.Tests
 
         private void AssertBoardEquality(Board expectedBoard, Board actualBoard)
         {
-            Console.WriteLine("Expected board");
-            Console.WriteLine(DrawBoard(expectedBoard));
+            TestContext.WriteLine("Expected board");
+            TestContext.WriteLine(DrawBoard(expectedBoard));
 
-            Console.WriteLine("Actual board");
-            Console.WriteLine(DrawBoard(actualBoard));
+            TestContext.WriteLine("Actual board");
+            TestContext.WriteLine(DrawBoard(actualBoard));
 
             var expectedCells = expectedBoard.CellsList;
             var actualCells = actualBoard.CellsList;
@@ -241,15 +262,17 @@ namespace GemSwipe.Tests
         {
             var cellsGrid = board.Cells;
             string draw = "";
-            for (int j = 0; j < board.Height; j++)
+            for (int j = 0; j < board.NbOfRows; j++)
             {
-                for (int i = 0; i < board.Width; i++)
+                for (int i = 0; i < board.NbOfColumns; i++)
                 {
                     draw += " ";
                     var cell = cellsGrid[i, j];
                     var gem = cell.GetAttachedGem();
-                    if (gem == null)
+                    if (gem == null && !cell.IsBlocked)
                         draw += "0";
+                    else if (gem == null && cell.IsBlocked)
+                        draw += "x";
                     else draw += gem.Size;
                     draw += " ";
                 }

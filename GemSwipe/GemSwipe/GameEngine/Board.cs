@@ -73,7 +73,16 @@ namespace GemSwipe.GameEngine
                 for (int i = 0; i < nbOfColumns; i++)
                 {
                     var size = int.Parse(cells[i]);
-                    var newCell = new Cell(i, j);
+
+                    bool cellIsBlocked = false;
+                    if (size == 9)
+                    {
+                        cellIsBlocked = true;
+                        size = 0;
+                    }
+
+                    var newCell = new Cell(i, j, cellIsBlocked);
+
                     boardCells.Add(newCell);
                     if (size > 0)
                     {
@@ -129,8 +138,9 @@ namespace GemSwipe.GameEngine
             };
 
             var cellsLanes = GetCellsLanes(direction);
+            var splitCellsLanes = SplitCellsLanesByBlocked(cellsLanes);
 
-            foreach (var cellsLane in cellsLanes)
+            foreach (var cellsLane in splitCellsLanes)
             {
                 var gems = cellsLane.Select(cell => cell.GetAttachedGem()).Where(gem => gem != null).ToList();
                 foreach (var cell in cellsLane)
@@ -209,6 +219,36 @@ namespace GemSwipe.GameEngine
             return CellsList.All(cell => !cell.IsEmpty());
         }
 
+        public IList<IList<Cell>> SplitCellsLanesByBlocked(IList<IList<Cell>> cellsLanes)
+        {
+            IList<IList<Cell>> splitedCellsLanes = new List<IList<Cell>>();
+            IList<Cell> currentLane = null;
+            foreach (var lane in cellsLanes)
+            {
+                foreach (var cell in lane)
+                {
+                    if (cell.IsBlocked)
+                        currentLane = null;
+                    else
+                    {
+                        if (currentLane == null)
+                        {
+                            currentLane = new List<Cell>() { cell };
+                            splitedCellsLanes.Add(currentLane);
+                        }
+                        else
+                        {
+                            currentLane.Add(cell);
+                        }
+                    }
+                }
+
+                currentLane = null;
+            }
+
+            return splitedCellsLanes;
+        }
+
         public IList<IList<Cell>> GetCellsLanes(Direction direction)
         {
             var cellsLanes = new List<IList<Cell>>();
@@ -271,7 +311,12 @@ namespace GemSwipe.GameEngine
                     var cell = cellsGrid[i, j];
                     var gem = cell.GetAttachedGem();
                     if (gem == null)
-                        draw += "0";
+                    {
+                        if (cell.IsBlocked)
+                            draw += "9";
+                        else
+                            draw += "0";
+                    }
                     else draw += gem.Size;
                     draw += " ";
                 }
@@ -337,15 +382,33 @@ namespace GemSwipe.GameEngine
             {
                 for (int j = 0; j < NbOfRows; j++)
                 {
-
-                    using (var paint = new SKPaint())
+                    if (Cells[i, j].IsBlocked)
                     {
-                        paint.IsAntialias = true;
-                        paint.Style = SKPaintStyle.Stroke;
-                        paint.StrokeWidth = 2;
-                        paint.Color = new SKColor(255, 255, 255, 150);
-                        Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight / 2), _cellWidth / 2.5f, paint);
+                        using (var paint = new SKPaint())
+                        {
+                            paint.IsAntialias = true;
+                            paint.Style = SKPaintStyle.StrokeAndFill;
+                            paint.StrokeWidth = 2;
+                            paint.Color = new SKColor(155, 155, 155, 255);
+                            Canvas.DrawCircle(
+                                X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell +
+                                     _cellWidth / 2),
+                                Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell +
+                                     _cellHeight / 2), _cellWidth / 2.5f, paint);
+                        }
                     }
+                    else
+                    {
+                        using (var paint = new SKPaint())
+                        {
+                            paint.IsAntialias = true;
+                            paint.Style = SKPaintStyle.Stroke;
+                            paint.StrokeWidth = 2;
+                            paint.Color = new SKColor(255, 255, 255, 150);
+                            Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight / 2), _cellWidth / 2.5f, paint);
+                        }
+                    }
+
                 }
             }
 

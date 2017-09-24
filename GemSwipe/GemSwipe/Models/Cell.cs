@@ -7,10 +7,13 @@ namespace GemSwipe.Models
         public int X { get;}
         public int Y { get;}
 
-        public Cell(int x, int y)
+        public bool IsBlocked { get;}
+
+        public Cell(int x, int y, bool isBlocked = false)
         {
             X = x;
             Y = y;
+            IsBlocked = isBlocked;
         }
 
         private Gem _attachedGem;

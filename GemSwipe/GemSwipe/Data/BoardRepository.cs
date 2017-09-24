@@ -25,8 +25,8 @@ namespace GemSwipe.Data
             var boardSection = _boardData[moveCount];
 
             var boardString = boardSection[_randomizer.Next(boardSection.Count)];
-
-            return new BoardSetup(4, 4, boardString, moveCount);
+            boardString = "0 9 0 0 0 0-2 0 0 0 0 0-9 0 0 3 0 0-2 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0";
+            return new BoardSetup(6, 6, boardString, moveCount);
         }
     }
 }
