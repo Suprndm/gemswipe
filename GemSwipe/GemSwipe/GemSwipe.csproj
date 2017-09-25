@@ -54,6 +54,7 @@
     <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="GameEngine\Effects\EffectLayer.cs" />
     <Compile Include="GameEngine\Effects\ExplosionEffect.cs" />
+    <Compile Include="GameEngine\Floors\FloorTitle.cs" />
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
     <Compile Include="GameEngine\Life.cs" />
     <Compile Include="GameEngine\Menu\Halo.cs" />

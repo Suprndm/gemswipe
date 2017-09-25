@@ -22,7 +22,7 @@ namespace GemSwipe.GameEngine
         private const int MsPerBoardNavigation = 200;
         private readonly double _boardMargin;
         private readonly IList<Floor> _floors;
-        private float _floorrHeight;
+        private float _floorHeight;
         private float _floorMargin;
         private int _floorCount;
         private int _currentFloor;
@@ -33,10 +33,10 @@ namespace GemSwipe.GameEngine
             _currentFloor = 1;
             _floors = new List<Floor>();
 
-            _floorrHeight = height;
+            _floorHeight = height;
             _floorMargin = height * 1.5f;
 
-            var startingFloor = new StartingFloor(canvas, X, Y, _floorrHeight, width, 1);
+            var startingFloor = new StartingFloor(canvas, X, Y, _floorHeight, width, 1);
             _floors.Add(startingFloor);
             AddChild(startingFloor);
             StartingFloor = startingFloor;
@@ -59,7 +59,7 @@ namespace GemSwipe.GameEngine
         public async Task EndGame()
         {
             _floorCount++;
-            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorrHeight, Width);
+            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width);
             _floors.Add(endFloor);
             AddChild(endFloor);
             await NextFloor();
@@ -68,11 +68,11 @@ namespace GemSwipe.GameEngine
         public async Task NextBoard(BoardSetup boardSetup)
         {
             _floorCount++;
-            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false);
-            var board = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorrHeight, Width, floorSetup);
-            AddChild(board);
+            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount-1).ToString());
+            var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
+            AddChild(floor);
 
-            _floors.Add(board);
+            _floors.Add(floor);
 
             // Recycle Boards
             if (_floors.Count > 3)
