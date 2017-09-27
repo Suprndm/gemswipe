@@ -18,7 +18,8 @@ namespace GemSwipe.GameEngine.Menu
             _randomizer = new Random();
             for (int i = 0; i < 100; i++)
             {
-                var star = new Star(Canvas, _randomizer.Next((int)Width), _randomizer.Next((int)Height), height, width, _randomizer.Next(1, 7), _randomizer.Next(10) / 100f, _randomizer.Next(400) / 100);
+                var star = new Star(Canvas, _randomizer, height, width);
+                //var star = new Star(Canvas, _randomizer.Next((int)Width), _randomizer.Next((int)Height), height, width, _randomizer.Next(1, 7), _randomizer.Next(10) / 100f, _randomizer.Next(400) / 100);
                 _stars.Add(star);
                 AddChild(star);
             }

@@ -11,16 +11,18 @@ namespace GemSwipe.GameEngine.Menu
 {
     public class Star : SkiaView
     {
-        public float Z { get; }
-        public double Speed { get; }
-        public double Phase { get; }
+        public float Z { get; set; }
+        public double Speed { get; set; }
+        public double Phase { get; set; }
         private double _angle;
         private float _size;
+        private float _direction { get; }
 
         private float _targetY;
         private Random _randomizer;
         public Star(SKCanvas canvas, float x, float y, float height, float width, float z, double speed, double phase) : base(canvas, x, y, height, width)
         {
+            _direction = 1;
             _targetY = Y;
             Z = z;
             _angle = phase;
@@ -29,9 +31,30 @@ namespace GemSwipe.GameEngine.Menu
             _size = (7 - Z);
         }
 
+        public Star(SKCanvas canvas, Random randomizer, float height, float width) : base(canvas, 0, 0, height, width)
+        {
+            _direction = -1;
+            _randomizer = randomizer;
+            _y = _randomizer.Next((int)Height);
+
+            ResetRandomCinematicProperties();
+        }
+
+        public void ResetRandomCinematicProperties()
+        {
+            _x = _randomizer.Next((int)Width);
+            Z = _randomizer.Next(1, 7);
+            Speed = _randomizer.Next(10) / 100f;
+            Phase = _randomizer.Next(400) / 100;
+
+            _targetY = Y;
+            _angle = Phase;
+            _size = (7 - Z);
+        }
+
         protected override void Draw()
         {
-            _targetY += -(float)Height / 10000 * _size;
+            _targetY += _direction*Height / 10000 * _size;
             if (Math.Abs(_targetY - Y) < 2)
             {
                 Y = _targetY;
@@ -41,10 +64,18 @@ namespace GemSwipe.GameEngine.Menu
                 _y += (_targetY - Y) * 0.04f;
             }
 
-            if (_y < 0)
+            //if (_y < 0)
+            //{
+            //    _y = Height;
+            //    _targetY = _y + _targetY;
+            //    ResetRandomCinematicProperties();
+            //}
+
+            if (_y > Height)
             {
-                _y = Height;
+                _y = 0;
                 _targetY = _y + _targetY;
+                ResetRandomCinematicProperties();
             }
 
             var opacity = (Math.Cos((_angle)) + 1) / 2;
