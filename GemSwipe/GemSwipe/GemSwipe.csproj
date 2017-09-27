@@ -54,8 +54,10 @@
     <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="GameEngine\Effects\EffectLayer.cs" />
     <Compile Include="GameEngine\Effects\ExplosionEffect.cs" />
+    <Compile Include="GameEngine\Floors\FloorMessage.cs" />
     <Compile Include="GameEngine\Floors\FloorTitle.cs" />
     <Compile Include="GameEngine\Floors\PlayableFloor.cs" />
+    <Compile Include="GameEngine\Floors\TransitionFloor.cs" />
     <Compile Include="GameEngine\Life.cs" />
     <Compile Include="GameEngine\Menu\Halo.cs" />
     <Compile Include="GameEngine\Menu\LinearGradientBackground.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Models\PlayableFloorSetup.cs" />
     <Compile Include="Models\SwipeResult.cs" />
     <Compile Include="Models\CountDown.cs" />
+    <Compile Include="Models\TransitionFloorSetup.cs" />
     <Compile Include="PortableLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Doors.xaml.cs">

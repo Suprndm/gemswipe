@@ -42,6 +42,8 @@ namespace GemSwipe.GameEngine
             var tapToPlay = new TapToPlay(canvas, 0, 0, height, width);
             AddChild(tapToPlay);
             tapToPlay.Tapped += Start;
+
+          
         }
 
         public async void Restart()
@@ -81,10 +83,12 @@ namespace GemSwipe.GameEngine
                     _isBusy = true;
                     // Generate Floor
                     await Task.Delay(1000);
+                    _scene.SetupBoard = _boardRepository.GetRandomBoardSetup(_level);
 
                     _background.OnNextBoard();
-                    await _scene.NextBoard(_boardRepository.GetRandomBoardSetup(_level));
+                    await _scene.NextTransitionBoard();
                     _isBusy = false;
+
                 }
                 else if (!_isBlocked)
                 {

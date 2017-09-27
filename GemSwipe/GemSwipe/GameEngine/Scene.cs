@@ -27,6 +27,8 @@ namespace GemSwipe.GameEngine
         private int _floorCount;
         private int _currentFloor;
 
+        public  BoardSetup SetupBoard;
+
         public Scene(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
             _floorCount = 1;
@@ -40,9 +42,6 @@ namespace GemSwipe.GameEngine
             _floors.Add(startingFloor);
             AddChild(startingFloor);
             StartingFloor = startingFloor;
-
-
-
         }
 
 
@@ -62,13 +61,13 @@ namespace GemSwipe.GameEngine
             var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width);
             _floors.Add(endFloor);
             AddChild(endFloor);
-            await NextFloor();
+            await GoToNextFloor();
         }
 
         public async Task NextBoard(BoardSetup boardSetup)
         {
             _floorCount++;
-            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount-1).ToString());
+            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount - 1).ToString());
             var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
             AddChild(floor);
 
@@ -81,15 +80,11 @@ namespace GemSwipe.GameEngine
                 _floors.RemoveAt(1);
                 floorToDispose.Dispose();
             }
-            await NextFloor();
+            await GoToNextFloor();
         }
 
-        protected override void Draw()
-        {
 
-        }
-
-        private async Task NextFloor()
+        private async Task GoToNextFloor()
         {
             var floor = _floors.Last();
 
@@ -107,6 +102,51 @@ namespace GemSwipe.GameEngine
                 CurrentBoard = (floor as PlayableFloor).Board;
         }
 
+        public async Task NextTransitionBoard()
+        {
+           var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
+            var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
+            AddChild(floor);
+          
+            _floors.Add(floor);
+
+            // Recycle Boards
+            if (_floors.Count > 3)
+            {
+                var floorToDispose = _floors[1];
+                _floors.RemoveAt(1);
+                floorToDispose.Dispose();
+            }
+            await GoToNextFloor();
+            floor.Tapped += NextBoard;
+        }
+
+
+        //method overload for event floor.Tapped subscription
+        private async void NextBoard()
+        {
+            _floorCount++;
+            var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, (_floorCount - 1).ToString());
+            var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
+            AddChild(floor);
+
+            _floors.Add(floor);
+
+            // Recycle Boards
+            if (_floors.Count > 3)
+            {
+                var floorToDispose = _floors[1];
+                _floors.RemoveAt(1);
+                floorToDispose.Dispose();
+            }
+            await GoToNextFloor();
+        }
+
+        protected override void Draw()
+        {
+
+        }
+        
         public async Task ResetBoard()
         {
             CurrentBoard.Reset();
