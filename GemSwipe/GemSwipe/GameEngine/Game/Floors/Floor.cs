@@ -1,8 +1,7 @@
-﻿using System;
-using GemSwipe.GameEngine.SkiaEngine;
+﻿using GemSwipe.GameEngine.SkiaEngine;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine.Floors
+namespace GemSwipe.GameEngine.Game.Floors
 {
     public abstract class Floor:SkiaView
     {

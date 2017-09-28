@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using System;
 using System.Collections.Generic;
+using GemSwipe.Models;
 
 namespace GemSwipe.GameEngine.SkiaEngine
 {
@@ -17,9 +18,12 @@ namespace GemSwipe.GameEngine.SkiaEngine
         int ZIndex { get; set; }
         bool ToDispose { get; }
 
+        bool IsVisible { get;}
+
         ISkiaView Parent { get; set; }
 
         void DeclareTappable(ISkiaView child);
+
         IList<ISkiaView> Tappables { get; }
 
         void AddChild(ISkiaView child, int zindex);
@@ -27,6 +31,7 @@ namespace GemSwipe.GameEngine.SkiaEngine
         void Render();
 
         void DetectTap(Point p);
+
         void Tap();
         event Action Tapped;
 

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GemSwipe.GameEngine.Menu;
+﻿using System.Threading.Tasks;
 using GemSwipe.GameEngine.Popped;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine.Floors
+namespace GemSwipe.GameEngine.Game.Floors
 {
     public class StartingFloor : Floor
     {

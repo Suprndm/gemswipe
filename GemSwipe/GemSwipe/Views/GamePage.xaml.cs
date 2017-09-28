@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GemSwipe.GameEngine;
+using GemSwipe.Gestures;
 using GemSwipe.Models;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -13,7 +14,7 @@ namespace GemSwipe.Views
         private bool _panJustBegun;
         bool pageIsActive;
         private bool _isInitiated;
-        private Game _game;
+        private SkiaRoot _skiaRoot;
         private SKCanvas _canvas;
 
         public GamePage()
@@ -34,7 +35,7 @@ namespace GemSwipe.Views
 
         private void Swipe(Direction direction)
         {
-            _game.Swipe(direction);
+            GestureEventHandler.Swipe(direction);
         }
 
         #endregion
@@ -48,13 +49,13 @@ namespace GemSwipe.Views
             if (_isInitiated)
             {
                 e.Surface.Canvas.Clear(SKColors.Black);
-                _game.Render();
+                _skiaRoot.Render();
             }
             else
             {
                 // Init SkiaSharp
                 _canvas = e.Surface.Canvas;
-                _game = new Game(e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                _skiaRoot = new SkiaRoot(e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _isInitiated = true;
             }
         }
@@ -83,7 +84,7 @@ namespace GemSwipe.Views
         private void OnCanvasTapped(Point p)
         {
          
-            _game.DetectTap(p);;
+            _skiaRoot.DetectTap(p);;
             _panJustBegun = true;
         }
 
@@ -125,7 +126,7 @@ namespace GemSwipe.Views
             var eY = e.TotalY;
             var d = Math.Sqrt(eX * eX + eY * eY);
 
-            if (d > 25 && !_game.IsBusy() && _panJustBegun)
+            if (d > 25 && _panJustBegun)
             {
                 _panJustBegun = false;
                 if (eX > 0)
@@ -158,7 +159,7 @@ namespace GemSwipe.Views
 
         private void Dispose()
         {
-            _game.Dispose();
+            _skiaRoot.Dispose();
         }
     }
 }

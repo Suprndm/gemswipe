@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using GemSwipe.GameEngine;
-using GemSwipe.GameEngine.Floors;
 using GemSwipe.Models;
 using NUnit.Framework;
 

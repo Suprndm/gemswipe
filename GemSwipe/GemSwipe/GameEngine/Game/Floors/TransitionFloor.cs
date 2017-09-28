@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GemSwipe.Models;
+﻿using GemSwipe.Models;
 using SkiaSharp;
-using Xamarin.Forms;
 
-namespace GemSwipe.GameEngine.Floors
+namespace GemSwipe.GameEngine.Game.Floors
 {
 
     public class TransitionFloor : Floor

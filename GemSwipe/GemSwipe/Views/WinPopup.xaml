@@ -4,7 +4,7 @@
              x:Class="GemSwipe.Views.WinPopup">
   <ContentView.Content>
       <StackLayout BackgroundColor="CornflowerBlue">
-          <Label Font="Bold" FontSize="30" HorizontalTextAlignment="Center" Margin="25" Text="Game Over" />
+          <Label Font="Bold" FontSize="30" HorizontalTextAlignment="Center" Margin="25" Text="SkiaRoot Over" />
             <Label Font="Bold" FontSize="40" HorizontalTextAlignment="Center" Margin="10" Text="Score" />
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,15">
                 <Button x:Name="BackButton" Text="Back" Clicked="BackButton_OnClicked"></Button>
