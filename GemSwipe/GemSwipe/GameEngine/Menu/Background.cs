@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GemSwipe.GameEngine.Navigation;
 using GemSwipe.GameEngine.SkiaEngine;
 using SkiaSharp;
 
@@ -29,6 +30,11 @@ namespace GemSwipe.GameEngine.Menu
         {
             _stars.ScrollDown();
             return _oceanDepth.ScrollDown();
+        }
+
+        public Task PlayTransition(PageType currentPage, PageType nextPage)
+        {
+            return Task.Delay(1000);
         }
 
         protected override void Draw()

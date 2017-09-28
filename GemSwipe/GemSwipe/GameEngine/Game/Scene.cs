@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GemSwipe.GameEngine.Floors;
-using GemSwipe.GameEngine.Menu;
+using GemSwipe.GameEngine.Game.Floors;
 using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
 using Xamarin.Forms;
 
-namespace GemSwipe.GameEngine
+namespace GemSwipe.GameEngine.Game
 {
     public class Scene : SkiaView
     {
@@ -119,6 +117,23 @@ namespace GemSwipe.GameEngine
             }
             await GoToNextFloor();
             floor.Tapped += NextBoard;
+        }
+
+        public async Task EndFloor()
+        {
+            var floor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width);
+            AddChild(floor);
+
+            _floors.Add(floor);
+
+            // Recycle Boards
+            if (_floors.Count > 3)
+            {
+                var floorToDispose = _floors[1];
+                _floors.RemoveAt(1);
+                floorToDispose.Dispose();
+            }
+            await GoToNextFloor();
         }
 
 

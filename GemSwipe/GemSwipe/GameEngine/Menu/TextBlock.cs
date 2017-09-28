@@ -40,6 +40,8 @@ namespace GemSwipe.GameEngine.Menu
 
                 var textLenght = paint.MeasureText(Text);
 
+                Width = textLenght;
+
                 Canvas.DrawText(Text, X - textLenght / 2, Y + Size / 2, paint);
             }
         }

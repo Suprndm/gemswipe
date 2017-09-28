@@ -1,8 +1,7 @@
-﻿using GemSwipe.GameEngine.Menu;
-using GemSwipe.Models;
+﻿using GemSwipe.Models;
 using SkiaSharp;
 
-namespace GemSwipe.GameEngine.Floors
+namespace GemSwipe.GameEngine.Game.Floors
 {
     public class PlayableFloor : Floor
     {

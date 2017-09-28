@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.BoardSolver.LittleStar;
 using GemSwipe.GameEngine;
-using GemSwipe.GameEngine.Floors;
 using GemSwipe.Generator;
 using GemSwipe.Models;
 using NUnit.Framework;

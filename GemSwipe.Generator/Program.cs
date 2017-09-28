@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.BoardSolver.LittleStar;
 using GemSwipe.GameEngine;
-using GemSwipe.GameEngine.Floors;
 using GemSwipe.Models;
 using LittleStar;
 using Newtonsoft.Json;

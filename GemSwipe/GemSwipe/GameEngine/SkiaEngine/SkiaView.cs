@@ -67,11 +67,22 @@ namespace GemSwipe.GameEngine.SkiaEngine
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
 
+        public bool IsVisible
+        {
+            get
+            {
+                if (Parent != null) return _isVisible && Parent.IsVisible;
+                return _isVisible;
+            }
+            protected set => _isVisible = value;
+        }
+
         public IList<ISkiaView> Tappables { get; }
 
         public SKCanvas Canvas { get; protected set; }
         private readonly IList<ISkiaView> _children;
         private bool _tappable;
+        private bool _isVisible;
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
         
@@ -110,6 +121,7 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         public void Render()
         {
+            if (!IsVisible) return;
 
             Draw();
 
@@ -149,7 +161,7 @@ namespace GemSwipe.GameEngine.SkiaEngine
             // Detect
             foreach (var tappable in Tappables)
             {
-                if (p.X >= tappable.X && p.Y >= tappable.Y && p.X <= tappable.X + tappable.Width && p.Y <= tappable.Y + tappable.Height)
+                if (tappable.IsVisible && p.X >= tappable.X && p.Y >= tappable.Y && p.X <= tappable.X + tappable.Width && p.Y <= tappable.Y + tappable.Height)
                 {
                     tappable.Tap();
                     return;
@@ -167,6 +179,8 @@ namespace GemSwipe.GameEngine.SkiaEngine
 
         protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
         {
+            _isVisible = true;
+
             _x = x;
             _y = y;
 
