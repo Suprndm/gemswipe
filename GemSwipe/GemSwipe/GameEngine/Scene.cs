@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GemSwipe.Data.Level;
 using GemSwipe.GameEngine.Floors;
 using GemSwipe.GameEngine.Menu;
 using GemSwipe.GameEngine.SkiaEngine;
@@ -104,7 +105,11 @@ namespace GemSwipe.GameEngine
 
         public async Task NextTransitionBoard()
         {
-           var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
+
+            //string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
+            string msg = await LevelLoader.LoadStringAsync("GemSwipe.Data.Level.LevelResources.json");
+            //var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
+            var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", msg);
             var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
             AddChild(floor);
           

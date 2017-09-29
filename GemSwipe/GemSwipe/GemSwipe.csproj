@@ -52,6 +52,11 @@
     <Compile Include="Data\BoardData.cs" />
     <Compile Include="Data\BoardRepository.cs" />
     <Compile Include="Data\LevelMovesData.cs" />
+    <Compile Include="Data\Level\LevelBuilder.cs" />
+    <Compile Include="Data\Level\LevelConfiguration.cs" />
+    <Compile Include="Data\Level\LevelFileReader.cs" />
+    <Compile Include="Data\Level\LevelLoader.cs" />
+    <Compile Include="Data\Level\LevelRepository.cs" />
     <Compile Include="GameEngine\Effects\EffectLayer.cs" />
     <Compile Include="GameEngine\Effects\ExplosionEffect.cs" />
     <Compile Include="GameEngine\Floors\FloorMessage.cs" />
@@ -113,6 +118,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SkiaSharp, Version=1.57.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SkiaSharp.1.57.1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.dll</HintPath>
     </Reference>
@@ -133,6 +141,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Level\LevelResources.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
