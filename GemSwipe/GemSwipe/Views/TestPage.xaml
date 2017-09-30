@@ -4,7 +4,7 @@
              xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:views="clr-namespace:GemSwipe.Views;assembly=GemSwipe"
              BackgroundColor="White"
-             x:Class="GemSwipe.Views.GamePage"
+             x:Class="GemSwipe.Views.TestPage"
              NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
         <Grid RowSpacing ="1" BackgroundColor="Black">
@@ -20,8 +20,8 @@
                 </forms:SKGLView.GestureRecognizers>
             </forms:SKGLView>
             <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand"
-                            HorizontalOptions="FillAndExpand">
-             
+                            HorizontalOptions="Center">
+                <Label Text="Test Mode" TextColor="White" VerticalOptions="Start" FontSize="15" HorizontalOptions="Center"></Label>
             </AbsoluteLayout>
         </Grid>
 

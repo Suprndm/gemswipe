@@ -17,7 +17,14 @@ namespace GemSwipe
 
         public static void SetMainPage()
         {
-            Current.MainPage = new NavigationPage(new GamePage());
+            if (AppSettings.TestModeEnabled)
+            {
+                Current.MainPage = new NavigationPage(new TestPage());
+            }
+            else
+            {
+                Current.MainPage = new NavigationPage(new GamePage());
+            }
         }
     }
 }
