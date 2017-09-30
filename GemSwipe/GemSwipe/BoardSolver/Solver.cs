@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using GemSwipe.BoardSolver.LittleStar;
 using GemSwipe.BoardSolver.LittleStar.Engine;
+using GemSwipe.Services;
 
 namespace GemSwipe.BoardSolver
 {
@@ -10,7 +11,7 @@ namespace GemSwipe.BoardSolver
 
         public Solver()
         {
-            var logger = new PortableLogger();
+            var logger = new LittleStarLogger();
             _littleStarEngine = new LittleStarEngine(logger);
         }
 

@@ -9,5 +9,6 @@ namespace GemSwipe
     public static class AppSettings
     {
         public static bool TestModeEnabled => false;
+        public static bool LogEnabled => true;
     }
 }

@@ -19,9 +19,9 @@
                     <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
                 </forms:SKGLView.GestureRecognizers>
             </forms:SKGLView>
-            <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand"
-                            HorizontalOptions="Center">
-                <Label Text="Test Mode" TextColor="White" VerticalOptions="Start" FontSize="15" HorizontalOptions="Center"></Label>
+            <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand">
+                <Label Text="Test Mode" TextColor="White" VerticalOptions="Start" FontSize="15"></Label>
+                <views:LogView></views:LogView>
             </AbsoluteLayout>
         </Grid>
 
