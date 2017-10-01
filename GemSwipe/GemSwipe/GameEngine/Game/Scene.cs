@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.GameEngine.Game.Floors;
+using GemSwipe.Data.Level;
 using GemSwipe.GameEngine.SkiaEngine;
 using GemSwipe.Models;
 using SkiaSharp;
@@ -102,21 +103,34 @@ namespace GemSwipe.GameEngine.Game
 
         public async Task NextTransitionBoard()
         {
-           var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
-            var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
-            AddChild(floor);
-          
-            _floors.Add(floor);
 
-            // Recycle Boards
-            if (_floors.Count > 3)
+            //string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
+            try
             {
-                var floorToDispose = _floors[1];
-                _floors.RemoveAt(1);
-                floorToDispose.Dispose();
+                string msg = await LevelLoader.LoadStringAsync("Data/Level/LevelResources.json");
+
+                //var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
+                var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", msg);
+                var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
+                AddChild(floor);
+
+                _floors.Add(floor);
+
+                // Recycle Boards
+                if (_floors.Count > 3)
+                {
+                    var floorToDispose = _floors[1];
+                    _floors.RemoveAt(1);
+                    floorToDispose.Dispose();
+                }
+                await GoToNextFloor();
+                floor.Tapped += NextBoard;
             }
-            await GoToNextFloor();
-            floor.Tapped += NextBoard;
+            catch (Exception e)
+            {
+                throw;
+            }
+
         }
 
         public async Task EndFloor()
