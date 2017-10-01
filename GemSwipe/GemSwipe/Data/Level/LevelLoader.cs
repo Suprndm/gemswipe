@@ -48,12 +48,7 @@ namespace GemSwipe.Data.Level
         {
             return Task.Run(async () =>
             {
-
-                    throw new ArgumentException($"loadstringasync started '{path}'.", nameof(path));
-                
-
                 using (var stream = LoadStream(path))
-
                 using (var reader = new StreamReader(stream))
                 {
 
