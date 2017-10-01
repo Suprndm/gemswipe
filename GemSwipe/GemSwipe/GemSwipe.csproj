@@ -77,7 +77,6 @@
     <Compile Include="GameEngine\Navigation\Navigator.cs" />
     <Compile Include="GameEngine\Navigation\Pages\IPage.cs" />
     <Compile Include="GameEngine\Navigation\Pages\PageBase.cs" />
-    <Compile Include="GameEngine\Navigation\Pages\PageFactory.cs" />
     <Compile Include="GameEngine\Navigation\PageType.cs" />
     <Compile Include="GameEngine\Popped\PoppedElement.cs" />
     <Compile Include="GameEngine\Popped\PoppedText.cs" />
