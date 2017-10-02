@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GemSwipe.GameEngine;
-using GemSwipe.Models;
+using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models;
 using NUnit.Framework;
 
 namespace GemSwipe.Tests

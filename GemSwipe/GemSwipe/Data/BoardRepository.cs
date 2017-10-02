@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GemSwipe.Models;
+using GemSwipe.Game.Models;
 
 namespace GemSwipe.Data
 {

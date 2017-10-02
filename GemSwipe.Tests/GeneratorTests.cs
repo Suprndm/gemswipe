@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.BoardSolver.LittleStar;
-using GemSwipe.GameEngine;
+using GemSwipe.Game.Entities;
 using GemSwipe.Generator;
-using GemSwipe.Models;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 

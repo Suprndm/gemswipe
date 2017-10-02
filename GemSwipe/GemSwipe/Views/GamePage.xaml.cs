@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GemSwipe.GameEngine;
-using GemSwipe.Gestures;
-using GemSwipe.Models;
+using GemSwipe.Game.Entities;
+using GemSwipe.Game.Gestures;
+using GemSwipe.Game.Models;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
@@ -68,7 +68,7 @@ namespace GemSwipe.Views
             _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
 
-            Gestures.Gesture.SetTapped(SKGLView, new Command<Point>(OnCanvasTapped));
+            Gesture.SetTapped(SKGLView, new Command<Point>(OnCanvasTapped));
         }
 
         private void OnCanvasTapped(Point p)

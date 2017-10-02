@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using GemSwipe.Gestures;
+using GemSwipe.Game.Gestures;
 using GemSwipe.iOS.Effects;
 using UIKit;
 using Xamarin.Forms;

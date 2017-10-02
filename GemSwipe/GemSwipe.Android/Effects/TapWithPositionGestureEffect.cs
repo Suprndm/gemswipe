@@ -4,7 +4,7 @@ using Android.Support.V4.View;
 using Android.Util;
 using Android.Views;
 using GemSwipe.Droid.Effects;
-using GemSwipe.Gestures;
+using GemSwipe.Game.Gestures;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using View = Android.Views.View;
