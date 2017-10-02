@@ -28,7 +28,7 @@ namespace GemSwipe.Game.Pages.Game
         private int _floorCount;
         private int _currentFloor;
 
-        public  BoardSetup SetupBoard;
+        public BoardSetup SetupBoard;
 
         public Scene(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
@@ -59,7 +59,7 @@ namespace GemSwipe.Game.Pages.Game
         public async Task EndGame()
         {
             _floorCount++;
-            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width);
+            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, SetupBoard.LevelId);
             _floors.Add(endFloor);
             AddChild(endFloor);
             await GoToNextFloor();
@@ -103,7 +103,7 @@ namespace GemSwipe.Game.Pages.Game
                 CurrentBoard = (floor as PlayableFloor).Board;
         }
 
-        public async Task NextTransitionBoard()
+        public async Task DisplayBoard(int levelId)
         {
 
             //string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
@@ -126,7 +126,7 @@ namespace GemSwipe.Game.Pages.Game
                     floorToDispose.Dispose();
                 }
                 await GoToNextFloor();
-                floor.Tapped += NextBoard;
+                floor.Tapped += () => { NextBoard(levelId); };
             }
             catch (Exception e)
             {
@@ -137,7 +137,7 @@ namespace GemSwipe.Game.Pages.Game
 
         public async Task EndFloor()
         {
-            var floor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width);
+            var floor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, SetupBoard.LevelId);
             AddChild(floor);
 
             _floors.Add(floor);
@@ -154,10 +154,10 @@ namespace GemSwipe.Game.Pages.Game
 
 
         //method overload for event floor.Tapped subscription
-        private async void NextBoard()
+        private async void NextBoard(int levelId)
         {
             _floorCount++;
-            var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, (_floorCount - 1).ToString());
+            var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
             var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
             AddChild(floor);
 
@@ -177,7 +177,7 @@ namespace GemSwipe.Game.Pages.Game
         {
 
         }
-        
+
         public async Task ResetBoard()
         {
             CurrentBoard.Reset();

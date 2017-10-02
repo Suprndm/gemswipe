@@ -42,7 +42,7 @@ namespace GemSwipe.Game.Entities
 
         public Board(string boardString) : base(null, 0, 0, 0, 0)
         {
-            Setup(new BoardSetup(0, 0, boardString, 0));
+            Setup(new BoardSetup(1, 0, 0, boardString, 0));
         }
 
         public void Reset()

@@ -24,7 +24,7 @@ namespace GemSwipe.Game.Pages.Home
          
         }
 
-        protected override void OnActivated()
+        protected override void OnActivated(object parameter = null)
         {
 
         }

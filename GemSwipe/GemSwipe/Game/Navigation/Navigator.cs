@@ -43,7 +43,7 @@ namespace GemSwipe.Game.Navigation
             return _currentPage.Show();
         }
 
-        public async Task GoTo(PageType pageType)
+        public async Task GoTo(PageType pageType, object parameter = null)
         {
             var nextPage = _pages[pageType];
          //   _background.PlayTransition(_currentPage.Type, nextPage.Type);
@@ -51,7 +51,7 @@ namespace GemSwipe.Game.Navigation
             await _currentPage.Hide();
 
             _currentPage = nextPage;
-            await nextPage.Show();
+            await nextPage.Show(parameter);
         }
     }
 }

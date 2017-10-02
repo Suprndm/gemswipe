@@ -17,7 +17,6 @@ namespace GemSwipe.Game.Pages.Game
         private bool _isBlocked;
         private EffectLayer _effectLayer;
         private bool _isBusy;
-        private int _level;
         private BoardRepository _boardRepository;
 
         public GamePage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
@@ -31,12 +30,12 @@ namespace GemSwipe.Game.Pages.Game
 
         }
 
-        public async void Start()
+        public async void Start(int levelId)
         {
             await _scene.StartingFloor.Start();
 
-            _scene.SetupBoard = _boardRepository.GetRandomBoardSetup(_level);
-            await _scene.NextTransitionBoard();
+            _scene.SetupBoard = _boardRepository.GetBoard(levelId);
+            await _scene.DisplayBoard(levelId);
             BackgroundNextBoard();
             _isBusy = false;
         }
@@ -106,9 +105,9 @@ namespace GemSwipe.Game.Pages.Game
         {
         }
 
-        protected override void OnActivated()
+        protected override void OnActivated(object parameter = null)
         {
-            _level = 1;
+            var levelId = (int) parameter;
 
             _scene = new Scene(Canvas, 0, 0, Height, Width);
             AddChild(_scene);
@@ -117,7 +116,7 @@ namespace GemSwipe.Game.Pages.Game
             _effectLayer = new EffectLayer(Canvas, 0, 0, Height, Width);
             AddChild(_effectLayer, 3);
 
-            Start();
+            Start(levelId);
             GestureEventHandler.Swipped += OnSwipped;
         }
 

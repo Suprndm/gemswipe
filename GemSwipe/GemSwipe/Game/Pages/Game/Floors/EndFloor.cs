@@ -6,10 +6,12 @@ namespace GemSwipe.Game.Pages.Game.Floors
 {
     public class EndFloor : Floor
     {
+        private readonly int _levelId;
 
-        public EndFloor(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public EndFloor(SKCanvas canvas, float x, float y, float height, float width, int levelId) : base(canvas, x, y, height, width)
         {
-            var nextLevelBlock = new TextBlock(Canvas, Width / 2, Height * .6f, $"Go to next level", (int) Width / 30,
+            _levelId = levelId;
+            var nextLevelBlock = new TextBlock(Canvas, Width / 2, Height * .6f, $"Go to next level", (int)Width / 30,
                 new SKColor(255, 255, 255, 255));
             AddChild(nextLevelBlock);
             nextLevelBlock.DeclareTappable(nextLevelBlock);
@@ -26,7 +28,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
 
         private void NextLevelBlock_Tapped()
         {
-            Navigator.Instance.GoTo(PageType.Game);
+            Navigator.Instance.GoTo(PageType.Game, _levelId + 1);
         }
 
         private void BackBlock_Tapped()

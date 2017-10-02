@@ -13,7 +13,7 @@ namespace GemSwipe.Game.Navigation.Pages
             IsVisible = false;
         }
 
-        protected abstract void OnActivated();
+        protected abstract void OnActivated(object parameter = null);
 
         protected abstract void OnDeactivated();
 
@@ -24,9 +24,9 @@ namespace GemSwipe.Game.Navigation.Pages
             throw new NotImplementedException();
         }
 
-        public async Task Show()
+        public async Task Show(object parameter = null)
         {
-            OnActivated();
+            OnActivated(parameter);
             IsVisible = true;
 
             // Fade

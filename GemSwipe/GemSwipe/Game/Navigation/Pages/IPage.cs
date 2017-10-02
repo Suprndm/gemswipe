@@ -9,7 +9,7 @@ namespace GemSwipe.Game.Navigation.Pages
 
         void Initialize();
 
-        Task Show();
+        Task Show(object parameter = null);
 
         Task Hide();
     }
