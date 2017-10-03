@@ -1,6 +1,11 @@
-﻿using GemSwipe.Data.Level;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Models/BoardSetup.cs
+﻿namespace GemSwipe.Game.Models
+=======
+﻿using System.Collections.Generic;
+using GemSwipe.Data.Level;
 
-namespace GemSwipe.Game.Models
+namespace GemSwipe.Models
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/Models/BoardSetup.cs
 {
     public struct BoardSetup
     {
@@ -13,19 +18,21 @@ namespace GemSwipe.Game.Models
             Moves = moves;
         }
 
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Models/BoardSetup.cs
+        public int LevelId { get; set; }
+=======
         public BoardSetup(LevelConfiguration levelConfig)
         {
-            LevelId = levelConfig.Id;
             Rows = levelConfig.Rows;
             Columns = levelConfig.Columns;
             SetupString = levelConfig.BoardSetupString;
             Moves = levelConfig.NbOfMovesToSolve;
         }
 
-        public int LevelId { get; set; }
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/Models/BoardSetup.cs
         public int Rows { get; }
         public int Columns { get; }
         public string SetupString { get; }
-        public int Moves { get; }
+        public int Moves { get;}
     }
 }

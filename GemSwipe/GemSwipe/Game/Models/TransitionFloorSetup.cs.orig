@@ -1,6 +1,15 @@
-﻿using GemSwipe.Data.Level;
-namespace GemSwipe.Game.Models
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Models/TransitionFloorSetup.cs
+﻿namespace GemSwipe.Game.Models
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using GemSwipe.Data.Level;
 
+namespace GemSwipe.Models
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/Models/TransitionFloorSetup.cs
 {
     public class TransitionFloorSetup
     {

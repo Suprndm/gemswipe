@@ -1,12 +1,20 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.Data;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/GamePage.cs
 using GemSwipe.Game.Effects;
-using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.Popped;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Navigation.Pages;
+=======
+using GemSwipe.Data.Level;
+using GemSwipe.GameEngine.Effects;
+using GemSwipe.GameEngine.Navigation.Pages;
+using GemSwipe.GameEngine.Popped;
+using GemSwipe.Gestures;
+using GemSwipe.Models;
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/GamePage.cs
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game
@@ -18,7 +26,10 @@ namespace GemSwipe.Game.Pages.Game
         private bool _isBlocked;
         private EffectLayer _effectLayer;
         private bool _isBusy;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/GamePage.cs
+=======
         private int _level=1;
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/GamePage.cs
         private BoardRepository _boardRepository;
         private LevelRepository _levelRepository;
 
@@ -39,13 +50,15 @@ namespace GemSwipe.Game.Pages.Game
         {
             await _scene.StartingFloor.Start();
 
-            LevelConfiguration levelconfig = _levelRepository.GetRepository()[(levelId-1)%5+1];
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/GamePage.cs
+            _scene.SetupBoard = _boardRepository.GetBoard(levelId);
+            await _scene.DisplayBoard(levelId);
+=======
+            LevelConfiguration levelconfig = _levelRepository.GetRepository()[(_level-1)%5+1];
             _scene.SetLevelConfig(levelconfig);
-            //_scene.SetupBoard = _boardRepository.GetBoard(1);
-            //await _scene.DisplayBoard(levelId);
-            await _scene.NextTransitionFloor(levelId);
-
-            //await _scene.NextTransitionFloor();
+         
+            await _scene.NextTransitionFloor();
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/GamePage.cs
             BackgroundNextBoard();
             _isBusy = false;
         }
@@ -62,7 +75,7 @@ namespace GemSwipe.Game.Pages.Game
                 {
                     //_effectLayer.Explode();
                     _isBusy = true;
-                    //_level++;
+                    _level++;
                     // Generate Floor
                     await Task.Delay(1000);
 
@@ -113,7 +126,11 @@ namespace GemSwipe.Game.Pages.Game
 
         protected override void OnActivated(object parameter = null)
         {
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/GamePage.cs
             var levelId = (int) parameter;
+
+=======
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/GamePage.cs
             _scene = new Scene(Canvas, 0, 0, Height, Width);
             AddChild(_scene);
 

@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GemSwipe.Data;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/Scene.cs
 using GemSwipe.Data.Level;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Pages.Game.Floors;
 using GemSwipe.Game.SkiaEngine;
+=======
+using GemSwipe.Data;
+using GemSwipe.GameEngine.Game.Floors;
+using GemSwipe.Data.Level;
+using GemSwipe.GameEngine.SkiaEngine;
+using GemSwipe.Models;
+using Newtonsoft.Json;
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/Scene.cs
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -29,7 +37,11 @@ namespace GemSwipe.Game.Pages.Game
         private int _floorCount;
         private int _currentFloor;
 
-        public LevelConfiguration _levelConfiguration;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/Scene.cs
+        public BoardSetup SetupBoard;
+=======
+        public LevelConfiguration _LevelConfiguration;
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/Scene.cs
 
         public Scene(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
@@ -46,6 +58,7 @@ namespace GemSwipe.Game.Pages.Game
             StartingFloor = startingFloor;
         }
 
+
         public void Reset()
         {
             _currentFloor = 0;
@@ -56,10 +69,15 @@ namespace GemSwipe.Game.Pages.Game
             }
         }
 
+        public void SetLevelConfig(LevelConfiguration levelConfig)
+        {
+            _LevelConfiguration = levelConfig;
+        }
+
         public async Task EndGame()
         {
             _floorCount++;
-            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration.Id);
+            var endFloor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, SetupBoard.LevelId);
             _floors.Add(endFloor);
             AddChild(endFloor);
             await GoToNextFloor();
@@ -79,10 +97,7 @@ namespace GemSwipe.Game.Pages.Game
             await GoToNextFloor();
         }
 
-        public void SetLevelConfig(LevelConfiguration levelConfig)
-        {
-            _levelConfiguration = levelConfig;
-        }
+
         private async Task GoToNextFloor()
         {
             var floor = _floors.Last();
@@ -101,24 +116,56 @@ namespace GemSwipe.Game.Pages.Game
                 CurrentBoard = (floor as PlayableFloor).Board;
         }
 
-        //public async Task DisplayBoard(int levelId)
-        public async Task NextTransitionFloor(int levelId)
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/Scene.cs
+        public async Task DisplayBoard(int levelId)
+=======
+        public async Task NextTransitionFloor()
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/Scene.cs
         {
-            var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration);
+            var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, _LevelConfiguration);
             AddChild(floor);
 
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/Scene.cs
+            //string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
+            try
+            {
+                string msg = await LevelLoader.LoadStringAsync("Data/Level/LevelResources.json");
+
+                //var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
+                var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", msg);
+                var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
+                AddChild(floor);
+
+                _floors.Add(floor);
+
+                // Recycle Boards
+                if (_floors.Count > 3)
+                {
+                    var floorToDispose = _floors[1];
+                    _floors.RemoveAt(1);
+                    floorToDispose.Dispose();
+                }
+                await GoToNextFloor();
+                floor.Tapped += () => { NextBoard(levelId); };
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+=======
             _floors.Add(floor);
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/Scene.cs
 
             // Recycle Boards
             ClearFloorsStack();
 
             await GoToNextFloor();
-            floor.Tapped += () => { NextBoard(levelId); };
+            floor.Tapped += NextBoard;
         }
 
         public async Task EndFloor()
         {
-            var floor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration.Id);
+            var floor = new EndFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, SetupBoard.LevelId);
             AddChild(floor);
 
             _floors.Add(floor);
@@ -133,9 +180,12 @@ namespace GemSwipe.Game.Pages.Game
         private async void NextBoard(int levelId)
         {
             _floorCount++;
-            BoardSetup boardSetup = new BoardSetup(_levelConfiguration);
-            //var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Pages/Game/Scene.cs
+            var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
+=======
+            BoardSetup boardSetup = new BoardSetup(_LevelConfiguration);
             var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount - 1).ToString());
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/GameEngine/Game/Scene.cs
             var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
             AddChild(floor);
 

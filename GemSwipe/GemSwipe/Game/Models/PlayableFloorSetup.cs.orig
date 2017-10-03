@@ -1,6 +1,16 @@
-﻿using GemSwipe.Data.Level;
+<<<<<<< HEAD:GemSwipe/GemSwipe/Game/Models/PlayableFloorSetup.cs
+﻿namespace GemSwipe.Game.Models
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using GemSwipe.Data.Level;
 
-namespace GemSwipe.Game.Models
+namespace GemSwipe.Models
+>>>>>>> levelconfig, repository:GemSwipe/GemSwipe/Models/PlayableFloorSetup.cs
 {
     public class PlayableFloorSetup
     {
