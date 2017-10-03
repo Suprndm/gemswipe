@@ -54,10 +54,9 @@
     <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="Data\Level\LevelBuilder.cs" />
     <Compile Include="Data\Level\LevelConfiguration.cs" />
-    <Compile Include="Data\Level\LevelFileReader.cs" />
-    <Compile Include="Data\Level\LevelLoader.cs" />
     <Compile Include="Data\Level\LevelRepository.cs" />
     <Compile Include="Game\Effects\EffectLayer.cs" />
+    <Compile Include="Data\ResourceLoader.cs" />
     <Compile Include="Game\Effects\ExplosionEffect.cs" />
     <Compile Include="Game\Pages\Game\Floors\FloorMessage.cs" />
     <Compile Include="Game\Pages\Game\Floors\FloorTitle.cs" />

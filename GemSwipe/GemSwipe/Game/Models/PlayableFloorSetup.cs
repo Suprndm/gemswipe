@@ -1,4 +1,5 @@
 ﻿namespace GemSwipe.Game.Models
+using GemSwipe.Data.Level;
 {
     public class PlayableFloorSetup
     {
@@ -10,10 +11,18 @@
             Title = title;
         }
 
+
+
+
+        public PlayableFloorSetup(LevelConfiguration levelConfig)
+        {
+
+        }
+
         public string Title { get; }
-        public BoardSetup BoardSetup { get;}
-        public int Floor { get;}
-        public bool IsFinal { get;}
+        public BoardSetup BoardSetup { get; }
+        public int Floor { get; }
+        public bool IsFinal { get; }
 
     }
 }

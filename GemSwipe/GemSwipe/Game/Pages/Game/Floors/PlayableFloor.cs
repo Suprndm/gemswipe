@@ -23,5 +23,6 @@ namespace GemSwipe.Game.Pages.Game.Floors
             Title = new FloorTitle(canvas, Width/2, Height/10, setup.Title, Height/20, color);
             AddChild(Title);
         }
+
     }
 }

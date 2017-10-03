@@ -7,16 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using SkiaSharp;
 
-namespace GemSwipe.Data.Level
+namespace GemSwipe.Data
 {
-    public static class LevelLoader
+    public static  class ResourceLoader
     {
         private static readonly Assembly assembly;
         private static readonly string[] resources;
 
-        static LevelLoader()
+        static ResourceLoader()
         {
-            var type = typeof(LevelLoader);
+            var type = typeof(ResourceLoader);
             assembly = type.GetTypeInfo().Assembly;
             resources = assembly.GetManifestResourceNames();
         }
@@ -51,11 +51,6 @@ namespace GemSwipe.Data.Level
                 using (var stream = LoadStream(path))
                 using (var reader = new StreamReader(stream))
                 {
-
-                    if (stream == null)
-                    {
-                        throw new ArgumentException($"stream null '{path}'.", nameof(path));
-                    }
                     return await reader.ReadToEndAsync().ConfigureAwait(false);
                 }
             });

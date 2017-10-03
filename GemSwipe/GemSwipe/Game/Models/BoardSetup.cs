@@ -1,4 +1,5 @@
 ﻿namespace GemSwipe.Game.Models
+using GemSwipe.Data.Level;
 {
     public struct BoardSetup
     {
@@ -9,6 +10,14 @@
             Columns = columns;
             SetupString = setupString;
             Moves = moves;
+        }
+
+        public BoardSetup(LevelConfiguration levelConfig)
+        {
+            Rows = levelConfig.Rows;
+            Columns = levelConfig.Columns;
+            SetupString = levelConfig.BoardSetupString;
+            Moves = levelConfig.NbOfMovesToSolve;
         }
 
         public int LevelId { get; set; }

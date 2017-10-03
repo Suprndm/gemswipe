@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GemSwipe.Data;
 using GemSwipe.Data.Level;
 using GemSwipe.Game.Models;
 using SkiaSharp;
@@ -16,31 +17,35 @@ namespace GemSwipe.Game.Pages.Game.Floors
         public TransitionFloor(SKCanvas canvas, float x, float y, float height, float width, TransitionFloorSetup setup) : base(canvas, x, y, height, width)
         {
 
-            //LevelFileReader fileReader = new LevelFileReader();
-            //string msgTask = await GetStringMsgAsync();
-            //@"d:\movie.json");
+            
             var boardMarginTop = height * 0.2f;
-           _setup = setup;
+            _setup = setup;
             SKColor color = new SKColor(255, 255, 255, 255);
+
             Title = new FloorTitle(canvas, Width / 2, Height / 10, setup.Title, Height / 20, color);
-            //Title = new FloorTitle(canvas, Width / 2, Height / 10, fileReader.TestString, Height / 20, color);
-            //AddChild(Title);
-            //Title = new FloorTitle(canvas, Width / 2, Height / 10, Msg, Height / 20, color);
             AddChild(Title);
 
             Quote = new FloorMessage(canvas, Width / 2, Height / 2, setup.Quote, Height / 20, color);
-            //Quote = new FloorMessage(canvas, Width / 2, Height / 2, fileReader.TestString, Height / 20, color);
             AddChild(Quote);
 
             DeclareTappable(this);
         }
 
-        public async Task GetStringMsgAsync()
+        public TransitionFloor(SKCanvas canvas, float x, float y, float height, float width, LevelConfiguration setup) : base(canvas, x, y, height, width)
         {
-            string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
-            Msg = msg;
-        }
 
-      
+
+            var boardMarginTop = height * 0.2f;
+            _setup = new TransitionFloorSetup(setup.Id, setup);
+            SKColor color = new SKColor(255, 255, 255, 255);
+
+            Title = new FloorTitle(canvas, Width / 2, Height / 10, setup.Title, Height / 20, color);
+            AddChild(Title);
+
+            Quote = new FloorMessage(canvas, Width / 2, Height / 2, setup.Story, Height / 20, color);
+            AddChild(Quote);
+
+            DeclareTappable(this);
+        }
     }
 }

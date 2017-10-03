@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GemSwipe.Data;
 using GemSwipe.Data.Level;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Models;
@@ -28,6 +29,7 @@ namespace GemSwipe.Game.Pages.Game
         private int _floorCount;
         private int _currentFloor;
 
+        public LevelConfiguration _LevelConfiguration;
         public BoardSetup SetupBoard;
 
         public Scene(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
@@ -56,6 +58,11 @@ namespace GemSwipe.Game.Pages.Game
             }
         }
 
+        public void SetLevelConfig(LevelConfiguration levelConfig)
+        {
+            _LevelConfiguration = levelConfig;
+        }
+
         public async Task EndGame()
         {
             _floorCount++;
@@ -75,12 +82,7 @@ namespace GemSwipe.Game.Pages.Game
             _floors.Add(floor);
 
             // Recycle Boards
-            if (_floors.Count > 3)
-            {
-                var floorToDispose = _floors[1];
-                _floors.RemoveAt(1);
-                floorToDispose.Dispose();
-            }
+            ClearFloorsStack();
             await GoToNextFloor();
         }
 
@@ -104,35 +106,19 @@ namespace GemSwipe.Game.Pages.Game
         }
 
         public async Task DisplayBoard(int levelId)
+        public async Task NextTransitionFloor()
         {
+            var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, _LevelConfiguration);
+            AddChild(floor);
 
-            //string msg = await LevelLoader.LoadStringAsync(@"d:\movie.json");
-            try
-            {
-                string msg = await LevelLoader.LoadStringAsync("Data/Level/LevelResources.json");
+            _floors.Add(floor);
 
-                //var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", "Transitionfloor");
-                var floorSetup = new TransitionFloorSetup(_floorCount, "coucou", msg);
-                var floor = new TransitionFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
-                AddChild(floor);
+            // Recycle Boards
+            ClearFloorsStack();
 
-                _floors.Add(floor);
-
-                // Recycle Boards
-                if (_floors.Count > 3)
-                {
-                    var floorToDispose = _floors[1];
-                    _floors.RemoveAt(1);
-                    floorToDispose.Dispose();
-                }
-                await GoToNextFloor();
+            await GoToNextFloor();
                 floor.Tapped += () => { NextBoard(levelId); };
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-
+            floor.Tapped += NextBoard;
         }
 
         public async Task EndFloor()
@@ -143,12 +129,7 @@ namespace GemSwipe.Game.Pages.Game
             _floors.Add(floor);
 
             // Recycle Boards
-            if (_floors.Count > 3)
-            {
-                var floorToDispose = _floors[1];
-                _floors.RemoveAt(1);
-                floorToDispose.Dispose();
-            }
+            ClearFloorsStack();
             await GoToNextFloor();
         }
 
@@ -157,20 +138,27 @@ namespace GemSwipe.Game.Pages.Game
         private async void NextBoard(int levelId)
         {
             _floorCount++;
+            BoardSetup boardSetup = new BoardSetup(_LevelConfiguration);
             var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
+            var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount - 1).ToString());
             var floor = new PlayableFloor(Canvas, X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
             AddChild(floor);
 
             _floors.Add(floor);
 
             // Recycle Boards
+            ClearFloorsStack();
+            await GoToNextFloor();
+        }
+
+        public void ClearFloorsStack()
+        {
             if (_floors.Count > 3)
             {
                 var floorToDispose = _floors[1];
                 _floors.RemoveAt(1);
                 floorToDispose.Dispose();
             }
-            await GoToNextFloor();
         }
 
         protected override void Draw()

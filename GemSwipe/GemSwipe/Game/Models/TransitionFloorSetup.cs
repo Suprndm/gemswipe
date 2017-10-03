@@ -1,4 +1,5 @@
 ﻿namespace GemSwipe.Game.Models
+using GemSwipe.Data.Level;
 {
     public class TransitionFloorSetup
     {
@@ -7,6 +8,13 @@
             Floor = floor;
             Quote = quote;
             Title = title;
+        }
+
+        public TransitionFloorSetup(int floor, LevelConfiguration levelconfig)
+        {
+            Floor = floor;
+            Quote = levelconfig.Story;
+            Title = levelconfig.Title;
         }
 
         public string Title { get; }
