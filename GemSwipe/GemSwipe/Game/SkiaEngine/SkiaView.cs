@@ -64,6 +64,35 @@ namespace GemSwipe.Game.SkiaEngine
             protected set => _height = value;
         }
 
+        protected float _opacity;
+        public float Opacity
+        {
+            get
+            {
+                if (_opacity < 0)
+                {
+                    return 0;
+                }
+                else if (_opacity > 1)
+                {
+                    return 1;
+                }
+                else
+                {
+
+                    if (Parent != null)
+                    {
+                        return Parent.Opacity * _opacity;
+                    }
+                    else
+                    {
+                        return _height;
+                    }
+                }
+            }
+            protected set => _opacity = value;
+        }
+
         public int ZIndex { get; set; }
         public bool ToDispose { get; protected set; }
 
@@ -85,7 +114,7 @@ namespace GemSwipe.Game.SkiaEngine
         private bool _isVisible;
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
-        
+
         public void DeclareTappable(ISkiaView child)
         {
             if (Parent != null)
@@ -153,11 +182,11 @@ namespace GemSwipe.Game.SkiaEngine
         public void DetectTap(Point p)
         {
             // Clear Tappables 
-            foreach (var child in Tappables.Where(child=>child.ToDispose).ToList())
+            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
             {
                 Tappables.Remove(child);
             }
-            
+
             // Detect
             foreach (var tappable in Tappables)
             {

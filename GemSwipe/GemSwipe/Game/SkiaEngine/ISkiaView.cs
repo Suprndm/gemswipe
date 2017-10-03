@@ -18,6 +18,7 @@ namespace GemSwipe.Game.SkiaEngine
         bool ToDispose { get; }
 
         bool IsVisible { get;}
+        float Opacity { get; }
 
         ISkiaView Parent { get; set; }
 

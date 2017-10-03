@@ -59,12 +59,12 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                 _y += (_targetY - Y) * 0.04f;
             }
 
-            //if (_y < 0)
-            //{
-            //    _y = Height;
-            //    _targetY = _y + _targetY;
-            //    ResetRandomCinematicProperties();
-            //}
+            if (_y < 0)
+            {
+                _y = Height;
+                _targetY = _y + _targetY;
+                ResetRandomCinematicProperties();
+            }
 
             if (_y > Height)
             {
