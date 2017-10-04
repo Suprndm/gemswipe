@@ -20,21 +20,7 @@ namespace GemSwipe.Data.Level
 
         public LevelConfiguration()
         {
-            
-        }
 
-        public LevelConfiguration(string jsonLevelData)
-        {
-            LevelConfiguration lvl = JsonConvert.DeserializeObject<LevelConfiguration>(jsonLevelData);
-        }
-
-        public LevelConfiguration(int id, string boardSetupString, int nbOfMoves, string story, string title)
-        {
-            Id = id;
-            BoardSetupString = boardSetupString;
-            NbOfMovesToSolve = nbOfMoves;
-            Story = story;
-            Title = title;
         }
     }
 }

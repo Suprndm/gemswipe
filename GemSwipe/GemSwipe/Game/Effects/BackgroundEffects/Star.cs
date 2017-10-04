@@ -1,4 +1,5 @@
 ﻿using System;
+using Android.Support.V4.App;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
 
@@ -109,6 +110,11 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             //    secondPaint.Color = new SKColor(255, 255, 255, (byte)(opacity * 255));
             //    Canvas.DrawPoint(X, Y, secondPaint);
             //}
+        }
+
+        public void Accelerate(float factor)
+        {
+            Velocity *= factor;
         }
 
         public void Slide(float factor)

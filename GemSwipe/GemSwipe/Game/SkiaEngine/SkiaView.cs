@@ -86,7 +86,7 @@ namespace GemSwipe.Game.SkiaEngine
                     }
                     else
                     {
-                        return _height;
+                        return _opacity;
                     }
                 }
             }

@@ -12,7 +12,7 @@
     "Id": "2",
     "Rows": "6",
     "Columns": "6",
-    "BoardSetupString": "0 0 9 0 0 0-2 0 0 0 0 0-0 0 9 3 0 0-2 0 0 0 0 0-0 0 9 0 0 0-0 0 0 0 0 0",
+    "BoardSetupString": "0 1 9 0 0 0-2 0 1 0 0 0-0 0 9 3 0 0-2 0 0 0 2 0-0 0 9 0 0 0-0 0 2 0 2 0",
     "NbOfMovesToSolve": "10",
     "Story": "La deuxieme story",
     "Title": "Le deuxieme title"

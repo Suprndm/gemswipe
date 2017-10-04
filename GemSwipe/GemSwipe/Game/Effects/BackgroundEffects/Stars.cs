@@ -23,20 +23,20 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             }
         }
 
-        public int tick = 0;
-        public float lambda = 2;
+        //public int tick = 0;
+        //public float lambda = 2;
         protected override void Draw()
         {
-            tick++;
+            //tick++;
         
-            if (tick % 200 == 0)
-            {
-                lambda *= 1;
-                foreach (var star in _stars)
-                {
-                    star.Slide(lambda);
-                }
-            }
+            //if (tick % 200 == 0)
+            //{
+            //    lambda *= 1;
+            //    foreach (var star in _stars)
+            //    {
+            //        star.Slide(lambda);
+            //    }
+            //}
         }
 
         public void ScrollDown()

@@ -52,7 +52,6 @@
     <Compile Include="Data\BoardData.cs" />
     <Compile Include="Data\BoardRepository.cs" />
     <Compile Include="Data\LevelMovesData.cs" />
-    <Compile Include="Data\Level\LevelBuilder.cs" />
     <Compile Include="Data\Level\LevelConfiguration.cs" />
     <Compile Include="Data\Level\LevelRepository.cs" />
     <Compile Include="Game\Effects\EffectLayer.cs" />
