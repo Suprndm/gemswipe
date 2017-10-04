@@ -12,6 +12,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private double _angle;
         private float _size;
         private float _direction { get; }
+        public float Velocity { get; set; }
 
         private float _targetY;
         private Random _randomizer;
@@ -28,7 +29,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         public Star(SKCanvas canvas, Random randomizer, float height, float width) : base(canvas, 0, 0, height, width)
         {
-            _direction = -1;
+            _direction = 1;
             _randomizer = randomizer;
             _y = _randomizer.Next((int)Height);
 
@@ -40,24 +41,16 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _x = _randomizer.Next((int)Width);
             Z = _randomizer.Next(1, 7);
             Speed = _randomizer.Next(10) / 100f;
+            Velocity = _direction*_randomizer.Next((int)(5*Height/2000),(int)(8*Height/2000));
             Phase = _randomizer.Next(400) / 100;
-
             _targetY = Y;
             _angle = Phase;
             _size = (7 - Z);
         }
 
-        protected override void Draw()
+        private void Update()
         {
-            _targetY += _direction*Height / 10000 * _size;
-            if (Math.Abs(_targetY - Y) < 2)
-            {
-                Y = _targetY;
-            }
-            else
-            {
-                _y += (_targetY - Y) * 0.04f;
-            }
+            _y += Velocity;
 
             if (_y < 0)
             {
@@ -73,8 +66,23 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                 ResetRandomCinematicProperties();
             }
 
-            var opacity = (Math.Cos((_angle)) + 1) / 2;
+            _opacity = (float)(Math.Cos((_angle)) + 1) / 2;
             _angle += Speed;
+        }
+
+        protected override void Draw()
+        {
+            //_targetY += _direction*Height / 10000 * _size;
+            ////if (Math.Abs(_targetY - Y) < 2)
+            ////{
+            ////    Y = _targetY;
+            ////}
+            ////else
+            ////{
+            ////    _y += (_targetY - Y) * 0.04f;
+            ////}
+
+            Update();
 
             //var colors = new SKColor[] {
             //    new SKColor(255,255,255, (byte)( opacity*100)),
@@ -89,7 +97,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             {
                 secondPaint.IsAntialias = true;
                 secondPaint.Style = SKPaintStyle.Fill;
-                secondPaint.Color = new SKColor(255, 255, 255, (byte)(opacity * 255));
+                secondPaint.Color = new SKColor(255, 255, 255, (byte)(_opacity * 255));
                 Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
             }
 
@@ -103,9 +111,11 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             //}
         }
 
-        public void Slide()
+        public void Slide(float factor)
         {
-            _targetY += -Height / 40 * _size;
+           // _targetY += -Height / 40 * _size;
+           
+            Velocity *= factor;
         }
     }
 }

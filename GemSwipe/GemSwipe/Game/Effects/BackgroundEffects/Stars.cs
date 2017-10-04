@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
+using Xamarin.Forms.Internals;
 
 namespace GemSwipe.Game.Effects.BackgroundEffects
 {
@@ -22,16 +23,27 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             }
         }
 
+        public int tick = 0;
+        public float lambda = 2;
         protected override void Draw()
         {
-
+            tick++;
+        
+            if (tick % 200 == 0)
+            {
+                lambda *= 1;
+                foreach (var star in _stars)
+                {
+                    star.Slide(lambda);
+                }
+            }
         }
 
         public void ScrollDown()
         {
             foreach (var star in _stars)
             {
-                star.Slide();
+                star.Slide(0);
             }
         }
     }
