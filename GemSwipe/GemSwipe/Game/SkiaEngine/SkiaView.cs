@@ -9,6 +9,9 @@ namespace GemSwipe.Game.SkiaEngine
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
         protected float _scale;
+
+    
+
         public float Scale
         {
             get
@@ -163,20 +166,22 @@ namespace GemSwipe.Game.SkiaEngine
             }
         }
 
-        private void DrawBackground()
+        protected void DrawHitbox()
         {
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = BackgroundColor;
+                paint.Color = new SKColor(255,255,255,50);
+                paint.Style = SKPaintStyle.Fill;
                 Canvas.DrawRect(
-                    SKRect.Create(
-                        X,
-                        Y,
-                        Width,
-                        Height),
+                  GetHitbox(),
                     paint);
             }
+        }
+
+        public virtual SKRect GetHitbox()
+        {
+            return SKRect.Create(X, Y, Width, Height);
         }
 
         public void DetectTap(Point p)
@@ -190,7 +195,8 @@ namespace GemSwipe.Game.SkiaEngine
             // Detect
             foreach (var tappable in Tappables)
             {
-                if (tappable.IsVisible && p.X >= tappable.X && p.Y >= tappable.Y && p.X <= tappable.X + tappable.Width && p.Y <= tappable.Y + tappable.Height)
+                var hitbox = tappable.GetHitbox();
+                if (tappable.IsVisible && p.X >= hitbox.Left && p.Y >= hitbox.Top && p.X <= hitbox.Right && p.Y <= hitbox.Bottom)
                 {
                     tappable.Tap();
                     return;

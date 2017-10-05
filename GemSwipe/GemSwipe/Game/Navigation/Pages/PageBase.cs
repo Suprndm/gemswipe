@@ -30,7 +30,7 @@ namespace GemSwipe.Game.Navigation.Pages
             IsVisible = true;
 
             // Fade
-            await Task.Delay(1000);
+            await Task.Delay(300);
         }
 
         public async Task Hide()
@@ -38,7 +38,7 @@ namespace GemSwipe.Game.Navigation.Pages
             OnDeactivated();
 
             // Fade
-            await Task.Delay(1000);
+            await Task.Delay(300);
             IsVisible = false;
         }
     }

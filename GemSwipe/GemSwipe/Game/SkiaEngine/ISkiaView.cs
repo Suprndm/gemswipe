@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SkiaSharp;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.SkiaEngine
@@ -8,6 +9,8 @@ namespace GemSwipe.Game.SkiaEngine
     {
         float X { get; }
         float Y { get; }
+
+        SKRect GetHitbox(); 
 
         float Scale { get; }
 

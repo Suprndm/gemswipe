@@ -5,12 +5,10 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 {
     public class TextBlock:SkiaView
     {
-
         public string Text { get; set; }
         public float Size { get; set; }
         public SKColor Color { get; set; }
-
-
+        private SKRect _hitbox;
         public TextBlock(SKCanvas canvas, float x, float y, string text, float size, SKColor color) : base(canvas, x, y, size, size)
         {
             Text = text;
@@ -20,6 +18,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         protected override void Draw()
         {
+
+
             using (var paint = new SKPaint())
             {
                 paint.Color = SKColors.Yellow;
@@ -37,8 +37,15 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
                 Width = textLenght;
 
+                _hitbox = SKRect.Create(X - textLenght / 2, Y- Size / 3, Width, Size);
                 Canvas.DrawText(Text, X - textLenght / 2, Y + Size / 2, paint);
+
             }
+        }
+
+        public override SKRect GetHitbox()
+        {
+            return _hitbox;
         }
     }
 }
