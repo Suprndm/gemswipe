@@ -22,16 +22,18 @@ namespace GemSwipe.Game.Entities
         private readonly BoardSetup _boardSetup;
         private float _horizontalMarginPerCell;
         private float _verticalMarginPerCell;
+        private float _horizontalBoardMargin;
+        private float _verticalBoardMargin;
         private float _cellWidth;
         private float _cellHeight;
-        private float _boardWidth;
-        private float _boardHeight;
+        private float _maxBoardWidth;
+        private float _maxBoardHeight;
 
 
         public Board(BoardSetup boardSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
-            _boardWidth = width;
-            _boardHeight = width;
+            _maxBoardWidth = width;
+            _maxBoardHeight = width;
             _boardSetup = boardSetup;
             MovesToResolve = boardSetup.Moves;
             NbOfRows = boardSetup.Rows;
@@ -366,16 +368,26 @@ namespace GemSwipe.Game.Entities
 
         public void UpdateDimensions()
         {
-            _horizontalMarginPerCell = (float)(_boardWidth * BoardCellMarginPercentage) / (NbOfColumns + 1);
-            _verticalMarginPerCell = (float)(_boardHeight * BoardCellMarginPercentage) / (NbOfRows + 1);
+            _horizontalMarginPerCell = (float)(_maxBoardWidth * BoardCellMarginPercentage) / (NbOfColumns + 1);
+            _verticalMarginPerCell = (float)(_maxBoardHeight * BoardCellMarginPercentage) / (NbOfRows + 1);
 
-            _cellWidth = (_boardWidth - (NbOfColumns + 1) * _horizontalMarginPerCell) / NbOfColumns;
-            _cellHeight = (_boardHeight - (NbOfRows + 1) * _verticalMarginPerCell) / NbOfRows;
+            _cellWidth = (_maxBoardWidth - (NbOfColumns + 1) * _horizontalMarginPerCell) / NbOfColumns;
+            _cellHeight = (_maxBoardHeight - (NbOfRows + 1) * _verticalMarginPerCell) / NbOfRows;
+
+            var min = Math.Min(_cellWidth, _cellHeight);
+            _cellWidth = min;
+            _cellHeight = min;
+
+            var boardHeight = (_cellHeight + _verticalMarginPerCell) * NbOfRows - _verticalMarginPerCell;
+            var boardWidth = (_cellWidth + _horizontalMarginPerCell) * NbOfColumns - _horizontalMarginPerCell;
+
+            _horizontalBoardMargin = (_maxBoardWidth - boardWidth) / 2;
+            _verticalBoardMargin = (_maxBoardHeight - boardHeight) / 2;
+
         }
 
         private void DrawCells(SKCanvas canvas)
         {
-
             UpdateDimensions();
 
             for (int i = 0; i < NbOfColumns; i++)
@@ -391,9 +403,9 @@ namespace GemSwipe.Game.Entities
                             paint.StrokeWidth = 2;
                             paint.Color = new SKColor(155, 155, 155, 255);
                             Canvas.DrawCircle(
-                                X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell +
+                                X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
                                      _cellWidth / 2),
-                                Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell +
+                                Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
                                      _cellHeight / 2), _cellWidth / 2.5f, paint);
                         }
                     }
@@ -405,7 +417,7 @@ namespace GemSwipe.Game.Entities
                             paint.Style = SKPaintStyle.Stroke;
                             paint.StrokeWidth = 2;
                             paint.Color = new SKColor(255, 255, 255, 150);
-                            Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalMarginPerCell + _cellHeight / 2), _cellWidth / 2.5f, paint);
+                            Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
                         }
                     }
 
@@ -416,12 +428,12 @@ namespace GemSwipe.Game.Entities
 
         private float ToGemViewX(int gemStateX)
         {
-            return (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _horizontalMarginPerCell);
+            return (gemStateX * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin);
         }
 
         private float ToGemViewY(int gemStateY)
         {
-            return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalMarginPerCell);
+            return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalBoardMargin);
         }
 
         public override void Dispose()
