@@ -50,7 +50,6 @@
     <Compile Include="BoardSolver\Solver.cs" />
     <Compile Include="BoardSolver\BlockedSensor.cs" />
     <Compile Include="Data\BoardData.cs" />
-    <Compile Include="Data\BoardRepository.cs" />
     <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="Data\Level\LevelConfiguration.cs" />
     <Compile Include="Data\Level\LevelRepository.cs" />

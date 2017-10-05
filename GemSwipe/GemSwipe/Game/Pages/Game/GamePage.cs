@@ -19,13 +19,11 @@ namespace GemSwipe.Game.Pages.Game
         private EffectLayer _effectLayer;
         private bool _isBusy;
         private int _level=1;
-        private BoardRepository _boardRepository;
         private LevelRepository _levelRepository;
 
         public GamePage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
             _blockedSensor = new BlockedSensor();
-            _boardRepository = new BoardRepository();
             _levelRepository = new LevelRepository();
             
         }
@@ -39,7 +37,7 @@ namespace GemSwipe.Game.Pages.Game
         {
             await _scene.StartingFloor.Start();
 
-            LevelConfiguration levelconfig = _levelRepository.GetRepository()[(levelId-1)%5+1];
+            LevelConfiguration levelconfig = _levelRepository.GetLevelConfigurationById((levelId-1)%5+1);
             _scene.SetLevelConfig(levelconfig);
             //_scene.SetupBoard = _boardRepository.GetBoard(1);
             //await _scene.DisplayBoard(levelId);

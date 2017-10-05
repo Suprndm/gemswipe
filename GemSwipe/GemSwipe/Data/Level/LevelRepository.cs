@@ -2,36 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace GemSwipe.Data.Level
 {
     public class LevelRepository
     {
-        private IDictionary<int,LevelConfiguration> _listOfLevelsConfigurations;
+        private IList<LevelConfiguration> _levelConfigurations;
 
         public LevelRepository()
         {
-            BuildListOfLevels();
+            Initialize();
         }
 
-        public void GetLevelConfigurationById(int id)
+        public LevelConfiguration GetLevelConfigurationById(int id)
         {
-           
+            return _levelConfigurations.Single(l => l.Id == id);
         }
 
-        public IDictionary<int, LevelConfiguration> GetRepository()
-        {
-            return _listOfLevelsConfigurations;
-        }
-
-        public void BuildListOfLevels()
+        private void Initialize()
         {
             string jsonString = ResourceLoader.LoadStringAsync("Data/Level/LevelResources.json").Result;
-            _listOfLevelsConfigurations = JsonConvert.DeserializeObject<Dictionary<int, LevelConfiguration>>(jsonString);
-            //LevelConfiguration levelconfig = _listOfLevelsConfiguration[i];
+            _levelConfigurations = JsonConvert.DeserializeObject<List<LevelConfiguration>>(jsonString);
         }
-
     }
 }
