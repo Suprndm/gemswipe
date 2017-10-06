@@ -1,6 +1,7 @@
 ﻿using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Utilities;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Map
@@ -29,6 +30,23 @@ namespace GemSwipe.Game.Pages.Map
             _level3Button = new TextBlock(canvas, width / 2, 7* height / 10, "Level 3", height / 40f, new SKColor(255, 255, 255));
             AddChild(_level3Button);
             DeclareTappable(_level3Button);
+
+            //SimpleButton _level4Button = new SimpleButton(canvas, width / 2, 8 * height / 10, width/5, height / 40f, new SKColor(255, 255, 255));
+            //AddChild(_level4Button);
+            ////_level4Button.Tapped += Level4Button_Tapped;
+            //_level4Button.OnTapped_Action(()=>Level4Button_Tapped(5));
+
+            TextButton _level5Button = new TextButton(canvas, width / 2, 9 * height, "Level 5", height / 40f,
+                new SKColor(255, 255, 255));
+            AddChild(_level5Button);
+            _level5Button.OnTapped_Action(()=>Level4Button_Tapped(2));
+
+        }
+
+        private int Level4Button_Tapped(int i)
+        {
+            Navigator.Instance.GoTo(PageType.Game, i);
+            return 3;
         }
 
         private void Level1Button_Tapped()

@@ -9,9 +9,7 @@ namespace GemSwipe.Game.SkiaEngine
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
         protected float _scale;
-
-    
-
+        
         public float Scale
         {
             get
@@ -21,8 +19,7 @@ namespace GemSwipe.Game.SkiaEngine
             }
             protected set => _scale = value;
         }
-
-
+        
         protected float _x;
         public float X
         {
@@ -210,7 +207,6 @@ namespace GemSwipe.Game.SkiaEngine
         }
 
         public event Action Tapped;
-
 
         protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
         {
