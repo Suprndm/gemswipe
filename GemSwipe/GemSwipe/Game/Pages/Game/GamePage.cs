@@ -7,6 +7,7 @@ using GemSwipe.Game.Effects.Popped;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Utilities.Sprites;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game
@@ -25,7 +26,6 @@ namespace GemSwipe.Game.Pages.Game
         {
             _blockedSensor = new BlockedSensor();
             _levelRepository = new LevelRepository();
-            
         }
 
         public void BackgroundNextBoard()

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Utilities
 {
@@ -29,7 +30,7 @@ namespace GemSwipe.Utilities
                 paint.IsAntialias = true;
                 paint.Color = Color;
 
-                _hitbox = SKRect.Create(X, Y, Width, Height);
+                _hitbox = SKRect.Create(X-Width/2, Y-Height/2, Width, Height);
                 //Canvas.DrawText(Text, X - textLenght / 2, Y + Size / 2, paint);
                 Canvas.DrawRect(_hitbox, paint);
 
