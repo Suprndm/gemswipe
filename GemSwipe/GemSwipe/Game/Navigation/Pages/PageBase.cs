@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Navigation.Pages
 {
@@ -28,18 +29,26 @@ namespace GemSwipe.Game.Navigation.Pages
         {
             OnActivated(parameter);
             IsVisible = true;
+            await TransitionIn();
+        }
 
-            // Fade
+        protected virtual async Task TransitionIn()
+        {
+            this.Animate("fadeIn", p => _opacity = (float)p, _opacity, 1f, 8, (uint)300, Easing.SinInOut);
+            await Task.Delay(300);
+        }
+
+        protected virtual async Task TransitionOut()
+        {
+            this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)300, Easing.SinInOut);
             await Task.Delay(300);
         }
 
         public async Task Hide()
         {
-            OnDeactivated();
-
-            // Fade
-            await Task.Delay(300);
+            await TransitionOut();
             IsVisible = false;
+            OnDeactivated();
         }
     }
 }

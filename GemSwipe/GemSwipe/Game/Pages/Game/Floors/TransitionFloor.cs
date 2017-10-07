@@ -16,7 +16,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
         public TransitionFloor(SKCanvas canvas, float x, float y, float height, float width, TransitionFloorSetup setup) : base(canvas, x, y, height, width)
         {
             var boardMarginTop = height * 0.2f;
-            SKColor color = new SKColor(255, 255, 255, 255);
+            SKColor color = CreateColor(255, 255, 255, 255);
 
             Title = new FloorTitle(canvas, Width / 2, Height / 10, setup.Title, Height / 20, color);
             AddChild(Title);
@@ -30,7 +30,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
         public TransitionFloor(SKCanvas canvas, float x, float y, float height, float width, LevelConfiguration setup) : base(canvas, x, y, height, width)
         {
             var boardMarginTop = height * 0.2f;
-            SKColor color = new SKColor(255, 255, 255, 255);
+            SKColor color = CreateColor(255, 255, 255, 255);
 
             Title = new FloorTitle(canvas, Width / 2, Height / 10, setup.Title, Height / 20, color);
             AddChild(Title);

@@ -12,19 +12,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
 
         protected override void Draw()
         {
-            //using (var paint = new SKPaint())
-            //{
-            //    paint.IsAntialias = true;
-            //    paint.Color = new SKColor(255, 255, 255, 255);
-
-            //    Canvas.DrawRect(
-            //        SKRect.Create(
-            //            X+Width/2,
-            //            Y,
-            //            2,
-            //            Height),
-            //        paint);
-            //}
+         
         }
     }
 }

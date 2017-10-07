@@ -401,7 +401,7 @@ namespace GemSwipe.Game.Entities
                             paint.IsAntialias = true;
                             paint.Style = SKPaintStyle.StrokeAndFill;
                             paint.StrokeWidth = 2;
-                            paint.Color = new SKColor(155, 155, 155, 255);
+                            paint.Color = CreateColor(155, 155, 155, 255);
                             Canvas.DrawCircle(
                                 X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
                                      _cellWidth / 2),
@@ -416,7 +416,7 @@ namespace GemSwipe.Game.Entities
                             paint.IsAntialias = true;
                             paint.Style = SKPaintStyle.Stroke;
                             paint.StrokeWidth = 2;
-                            paint.Color = new SKColor(255, 255, 255, 150);
+                            paint.Color = CreateColor(255, 255, 255, 150);
                             Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
                         }
                     }

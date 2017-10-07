@@ -28,13 +28,12 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private void TapToPlay_Tapped()
         {
             this.AbortAnimation("tapToPlay");
-            Dispose();
         }
 
         protected override void Draw()
         {
             byte opacity = (byte) (Math.Sin(Math.PI * _angle / 180) * 255);
-            _textBlock.Color = new SKColor(255, 255, 255, opacity);
+            _textBlock.Color = CreateColor(255, 255, 255, opacity);
         }
     }
 }

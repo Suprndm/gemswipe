@@ -112,9 +112,8 @@ namespace GemSwipe.Game.Entities
             _cycle = _cycle % 365;
             var result = (byte)(((Math.Cos(_cycle * Math.PI / 180) + 1) * 75 + 55) * _opacity);
             var colors = new SKColor[] {
-                new SKColor (255, 255,255,result),
-                new SKColor (255, 255, 255,0),
-
+                CreateColor (255, 255,255,result),
+                CreateColor (255, 255, 255,0),
             };
 
             var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y + _radius), innerRadius * 5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
@@ -129,7 +128,7 @@ namespace GemSwipe.Game.Entities
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = new SKColor(255, 255, 255, (byte)(255 * _opacity))
+                Color = CreateColor(255, 255, 255, (byte)(255 * _opacity))
             };
 
 
@@ -150,7 +149,7 @@ namespace GemSwipe.Game.Entities
                     paint.IsAntialias = true;
                     paint.StrokeWidth = 4;
                     paint.Style = SKPaintStyle.Stroke;
-                    paint.Color = new SKColor(255, 255, 255, (byte)(255 * _opacity * lastRingOpacity));
+                    paint.Color = CreateColor(255, 255, 255, (byte)(255 * _opacity * lastRingOpacity));
 
                     Canvas.DrawCircle(X + _radius, Y + _radius, (float)(innerRadius * (2 + (double)i / 3)), paint);
                 }

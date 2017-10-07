@@ -28,7 +28,7 @@ namespace GemSwipe.Utilities
             {
               
                 paint.IsAntialias = true;
-                paint.Color = Color;
+                paint.Color = CreateColor(Color);
 
                 _hitbox = SKRect.Create(X-Width/2, Y-Height/2, Width, Height);
                 //Canvas.DrawText(Text, X - textLenght / 2, Y + Size / 2, paint);

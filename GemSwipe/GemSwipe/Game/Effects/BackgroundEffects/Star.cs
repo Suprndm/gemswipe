@@ -86,8 +86,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             Update();
 
             //var colors = new SKColor[] {
-            //    new SKColor(255,255,255, (byte)( opacity*100)),
-            //    new SKColor(255,255,255, 0),
+            //    new CreateColor(255,255,255, (byte)( opacity*100)),
+            //    new CreateColor(255,255,255, 0),
             //};
 
             //var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), _size, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
@@ -98,7 +98,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             {
                 secondPaint.IsAntialias = true;
                 secondPaint.Style = SKPaintStyle.Fill;
-                secondPaint.Color = new SKColor(255, 255, 255, (byte)(_opacity * 255));
+                secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
                 Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
             }
 
@@ -107,7 +107,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             //    secondPaint.IsAntialias = false;
             //    secondPaint.Style = SKPaintStyle.Stroke;
             //    secondPaint.StrokeWidth = 2 * _size / 3;
-            //    secondPaint.Color = new SKColor(255, 255, 255, (byte)(opacity * 255));
+            //    secondPaint.Color = CreateColor(255, 255, 255, (byte)(opacity * 255));
             //    Canvas.DrawPoint(X, Y, secondPaint);
             //}
         }

@@ -38,11 +38,6 @@ namespace GemSwipe.Game.Pages.Map
             //_level4Button.Tapped += Level4Button_Tapped;
             _level4Button.OnTapped_Action(() => Level4Button_Tapped(5));
 
-            //TextButton _level5Button = new TextButton(canvas, width / 2, 9 * height/10, width / 5, height / 40f, "Level 5",
-            //    new SKColor(255, 255, 255));
-            //AddChild(_level5Button);
-            //_level5Button.OnTapped_Action(() => Level4Button_Tapped(2));
-
             SpriteButton spriteButton = new SpriteButton(canvas, "bg_day", width / 2, 9 * height / 10, width / 5, height / 40f);
             AddChild(spriteButton);
 

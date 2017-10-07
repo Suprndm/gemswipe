@@ -42,7 +42,7 @@ namespace GemSwipe.Game.Effects
             {
                 paint.IsAntialias = true;
                 paint.StrokeWidth = 2;
-                paint.Color = new SKColor(255, 255, 255, 255);
+                paint.Color = CreateColor(255, 255, 255, 255);
                 Canvas.DrawLine(oldx,oldy, X, Y, paint);
             }
         }

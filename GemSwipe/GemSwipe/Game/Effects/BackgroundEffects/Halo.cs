@@ -24,8 +24,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _x = (float)Math.Cos(Angle) * Width/3 + Width / 6;
 
             var colors = new SKColor[] {
-                new SKColor(Color.Red, Color.Green, Color.Blue, 50),
-                new SKColor(Color.Red, Color.Green, Color.Blue, 0),
+                CreateColor(Color.Red, Color.Green, Color.Blue, 50),
+                CreateColor(Color.Red, Color.Green, Color.Blue, 0),
             };
 
             var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), Width / 2, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);

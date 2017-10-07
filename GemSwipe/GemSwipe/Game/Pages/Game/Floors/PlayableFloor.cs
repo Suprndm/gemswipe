@@ -20,7 +20,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
             Board = board;
             _setup = setup;
 
-            SKColor color = new SKColor(255, 255, 255, 255);
+            SKColor color = CreateColor(255, 255, 255, 255);
             Title = new FloorTitle(canvas, Width/2, Height/10, setup.Title, Height/20, color);
             AddChild(Title);
         }
@@ -33,7 +33,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
             AddChild(board);
             Board = board;
 
-            SKColor color = new SKColor(255, 255, 255, 255);
+            SKColor color = CreateColor(255, 255, 255, 255);
             Title = new FloorTitle(canvas, Width / 2, Height / 10, levelConfig.Title, Height / 20, color);
             AddChild(Title);
         }

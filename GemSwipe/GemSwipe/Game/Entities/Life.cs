@@ -78,7 +78,7 @@ namespace GemSwipe.Game.Entities
 
                 paint.TextSize = Height / 2f;
                 paint.IsAntialias = true;
-                paint.Color = new SKColor(255, 255, 255, 255);
+                paint.Color = CreateColor(255, 255, 255, 255);
 
                 var test = paint.MeasureText(text);
 
@@ -88,7 +88,7 @@ namespace GemSwipe.Game.Entities
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = new SKColor(255, 255, 255);
+                paint.Color = CreateColor(255, 255, 255);
                 Canvas.DrawRect(
                     SKRect.Create(
                       X, Y, Width * (float)_experience / BaseExperience, Height * 0.1f),

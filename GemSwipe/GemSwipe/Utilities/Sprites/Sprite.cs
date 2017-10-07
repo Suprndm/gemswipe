@@ -18,7 +18,12 @@ namespace GemSwipe.Utilities.Sprites
 
         protected override void Draw()
         {
-            spriteModel.Draw(Canvas, X, Y, Width, Height);
+            using (var paint = new SKPaint())
+            {
+                paint.Color = CreateColor(255, 255, 255);
+                paint.IsAntialias = true;
+                spriteModel.Draw(Canvas, X, Y, Width, Height, paint: paint);
+            }
         }
     }
 }

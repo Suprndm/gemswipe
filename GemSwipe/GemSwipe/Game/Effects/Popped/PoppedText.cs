@@ -28,7 +28,7 @@ namespace GemSwipe.Game.Effects.Popped
 
         protected override void Draw()
         {
-            _textBlock.Color = new SKColor(_color.Red,_color.Green, _color.Blue, _animatedOpacity);
+            _textBlock.Color = CreateColor(_color.Red,_color.Green, _color.Blue, _animatedOpacity);
             _textBlock.Size = _animatedSize;
         }
 

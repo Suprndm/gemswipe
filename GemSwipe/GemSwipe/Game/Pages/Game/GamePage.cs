@@ -81,7 +81,7 @@ namespace GemSwipe.Game.Pages.Game
                             _isBusy = true;
                             var blockedMessage = new PoppedText(Canvas, Width / 2, Height / 2, 1000, 300, 300,
                                 "Blocked",
-                                Height / 10, new SKColor(255, 0, 0));
+                                Height / 10, CreateColor(255, 0, 0));
                             AddChild(blockedMessage);
                             await blockedMessage.Pop();
 

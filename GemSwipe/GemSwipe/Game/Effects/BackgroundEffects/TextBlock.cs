@@ -31,7 +31,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
                 paint.TextSize = Size;
                 paint.IsAntialias = true;
-                paint.Color = Color;
+                paint.Color = CreateColor(Color);
 
                 var textLenght = paint.MeasureText(Text);
 

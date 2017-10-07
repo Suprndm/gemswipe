@@ -210,6 +210,7 @@ namespace GemSwipe.Game.SkiaEngine
 
         protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
         {
+            _opacity = 1;
             _isVisible = true;
 
             _x = x;
@@ -220,8 +221,6 @@ namespace GemSwipe.Game.SkiaEngine
 
             Tappables = new List<ISkiaView>();
             _children = new List<ISkiaView>();
-
-            BackgroundColor = new SKColor(255, 255, 255, 0);
 
             Canvas = canvas;
 
@@ -245,6 +244,16 @@ namespace GemSwipe.Game.SkiaEngine
 
         public void BatchCommit()
         {
+        }
+
+        protected SKColor CreateColor(SKColor color)
+        {
+            return CreateColor(color.Red, color.Green, color.Blue, (byte)(color.Alpha * Opacity));
+        }
+
+        protected SKColor CreateColor(byte r, byte g, byte b, byte a = 255)
+        {
+            return new SKColor(r,g,b, (byte)(a * Opacity));
         }
     }
 }
