@@ -7,92 +7,92 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 {
     public class Star : SkiaView
     {
-        public float Z { get; set; }
-        public double Speed { get; set; }
-        public double Phase { get; set; }
-        private double _angle;
-        private float _size;
         private float _direction { get; }
-        public float Velocity { get; set; }
-
-        private float _targetY;
         private Random _randomizer;
+
+        private float _size;
+        private float _depthZ { get; set; }
+        private float _baseVelocity;
+        private float _velocityY { get; set; }
+        private float _accelerationY { get; set; }
+
+        private double _phase { get; set; }
+        private double _speed { get; set; }
+        
+        public float TargetVelocity { get; set; }
+        private float _targetY;
+
         public Star(SKCanvas canvas, float x, float y, float height, float width, float z, double speed, double phase) : base(canvas, x, y, height, width)
         {
             _direction = 1;
             _targetY = Y;
-            Z = z;
-            _angle = phase;
-            Speed = speed;
-            Phase = phase;
-            _size = (7 - Z);
+            _depthZ = z;
+            _speed = speed;
+            _phase = phase;
+            _size = (7 - _depthZ);
         }
 
         public Star(SKCanvas canvas, Random randomizer, float height, float width) : base(canvas, 0, 0, height, width)
         {
             _direction = 1;
             _randomizer = randomizer;
+
+            _x = _randomizer.Next((int)Width);
+
             _y = _randomizer.Next((int)Height);
+            _velocityY = _direction * _randomizer.Next((int)(5 * Height / 2000), (int)(8 * Height / 2000));
+            _baseVelocity = _velocityY;
+            TargetVelocity = _velocityY;
 
             ResetRandomCinematicProperties();
         }
 
         public void ResetRandomCinematicProperties()
         {
-            _x = _randomizer.Next((int)Width);
-            Z = _randomizer.Next(1, 7);
-            Speed = _randomizer.Next(10) / 100f;
-            Velocity = _direction*_randomizer.Next((int)(5*Height/2000),(int)(8*Height/2000));
-            Phase = _randomizer.Next(400) / 100;
-            _targetY = Y;
-            _angle = Phase;
-            _size = (7 - Z);
+            _depthZ = _randomizer.Next(1, 7);
+            _size = (7 - _depthZ);
+
+            _phase = _randomizer.Next(400) / 100;
+            _speed = _randomizer.Next(10) / 100f;
+
+            //_velocityY = _direction*_randomizer.Next((int)(5*Height/2000),(int)(8*Height/2000));
+        }
+
+        private void ApplyForce()
+        {
+            _targetY = _y + _direction * TargetVelocity;
+            float desiredVelocity = _targetY - _y;
+            float steering = desiredVelocity - _velocityY;
+            _accelerationY = steering * 0.05f;
+            //_accelerationY = DesiredVelocity;
         }
 
         private void Update()
         {
-            _y += Velocity;
-
-            if (_y < 0)
+           if (_y < 0)
             {
                 _y = Height;
-                _targetY = _y + _targetY;
                 ResetRandomCinematicProperties();
             }
 
             if (_y > Height)
             {
                 _y = 0;
-                _targetY = _y + _targetY;
                 ResetRandomCinematicProperties();
             }
 
-            _opacity = (float)(Math.Cos((_angle)) + 1) / 2;
-            _angle += Speed;
+            ApplyForce();
+            _velocityY += _accelerationY;
+            _y += _velocityY;
+
+            _phase += _speed;
+            _opacity = (float)(Math.Cos(_phase) + 1) / 2;
+            _accelerationY = 0;
         }
 
         protected override void Draw()
         {
-            //_targetY += _direction*Height / 10000 * _size;
-            ////if (Math.Abs(_targetY - Y) < 2)
-            ////{
-            ////    Y = _targetY;
-            ////}
-            ////else
-            ////{
-            ////    _y += (_targetY - Y) * 0.04f;
-            ////}
-
             Update();
-
-            //var colors = new SKColor[] {
-            //    new CreateColor(255,255,255, (byte)( opacity*100)),
-            //    new CreateColor(255,255,255, 0),
-            //};
-
-            //var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), _size, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
-            //var paint = new SKPaint() { Shader = shader };
-            //Canvas.DrawCircle(X, Y, _size, paint);
 
             using (var secondPaint = new SKPaint())
             {
@@ -101,32 +101,24 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                 secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
                 Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
             }
-
-            //using (var secondPaint = new SKPaint())
-            //{
-            //    secondPaint.IsAntialias = false;
-            //    secondPaint.Style = SKPaintStyle.Stroke;
-            //    secondPaint.StrokeWidth = 2 * _size / 3;
-            //    secondPaint.Color = CreateColor(255, 255, 255, (byte)(opacity * 255));
-            //    Canvas.DrawPoint(X, Y, secondPaint);
-            //}
         }
 
         public void Accelerate(float factor)
         {
-            Velocity *= factor;
+            TargetVelocity = factor * _velocityY;
+            // _velocityY *= factor;
         }
 
-        public void SetAcceleration(float acceleration)
+        public void SetAcceleration(float factor)
         {
-            Velocity = acceleration;
+            TargetVelocity = factor * _baseVelocity;
+            //Velocity = acceleration;
         }
 
         public void Slide(float factor)
         {
-           // _targetY += -Height / 40 * _size;
            
-            Velocity *= factor;
+            _velocityY *= factor;
         }
     }
 }

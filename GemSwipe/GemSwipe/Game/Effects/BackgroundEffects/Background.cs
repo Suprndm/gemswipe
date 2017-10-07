@@ -42,16 +42,22 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             switch (pageType)
             {
                 case PageType.Home:
+                    _stars.SetAcceleration(1);
                     break;
                 case PageType.Map:
-                    _stars.SetAcceleration(10);
+                    _stars.SetAcceleration(5);
                     break;
                 case PageType.Settings:
                     break;
                 case PageType.Game:
-                    _stars.SetAcceleration(20);
+                    _stars.SetAcceleration(2);
                     break;
             }
+        }
+
+        public void EndTransition()
+        {
+            //_stars.SetAcceleration(0.1f);
         }
 
         protected override void Draw()

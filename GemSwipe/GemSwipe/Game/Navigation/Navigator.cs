@@ -59,6 +59,7 @@ namespace GemSwipe.Game.Navigation
             _currentPage = nextPage;
             _background.OnNavigateTo(pageType);
             await nextPage.Show(parameter);
+            _background.EndTransition();
         }
     }
 }
