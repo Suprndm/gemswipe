@@ -12,6 +12,7 @@ namespace GemSwipe.Game.Navigation.Pages
         protected PageBase(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
             IsVisible = false;
+            _opacity = 0;
         }
 
         protected abstract void OnActivated(object parameter = null);
@@ -34,13 +35,13 @@ namespace GemSwipe.Game.Navigation.Pages
 
         protected virtual async Task TransitionIn()
         {
-            this.Animate("fadeIn", p => _opacity = (float)p, _opacity, 1f, 8, (uint)300, Easing.SinInOut);
+            this.Animate("fadeIn", p => _opacity = (float)p, _opacity, 1f, 8, (uint)300, Easing.CubicIn);
             await Task.Delay(300);
         }
 
         protected virtual async Task TransitionOut()
         {
-            this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)300, Easing.SinInOut);
+            this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)300, Easing.CubicIn);
             await Task.Delay(300);
         }
 

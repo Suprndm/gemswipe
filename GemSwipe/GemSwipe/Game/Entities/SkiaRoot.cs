@@ -4,6 +4,7 @@ using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Pages.Game;
 using GemSwipe.Game.Pages.Home;
 using GemSwipe.Game.Pages.Map;
+using GemSwipe.Game.Settings;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Sprites;
 using SkiaSharp;
@@ -18,8 +19,6 @@ namespace GemSwipe.Game.Entities
         public SkiaRoot(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
             Initialize();
-
-          
         }
         public async void Initialize()
         {
@@ -41,12 +40,16 @@ namespace GemSwipe.Game.Entities
             _background = new Background(Canvas, 0, 0, Height, Width);
             AddChild(_background, -1);
 
+            var settingsPanel  = new SettingsPanel(Canvas, 0, 0, Height, Width);
+            AddChild(settingsPanel, 10);
+
             var mapPage = new MapPage(Canvas, 0, 0, Height, Width);
             AddChild(mapPage);
             var gamePage = new GamePage(Canvas, 0, 0, Height, Width);
             AddChild(gamePage);
 
             Navigator.Instance.SetBackground(_background);
+            Navigator.Instance.SetSettingsPanel(settingsPanel);
             Navigator.Instance.RegisterPage(PageType.Home, homePage);
             Navigator.Instance.RegisterPage(PageType.Map, mapPage);
             Navigator.Instance.RegisterPage(PageType.Game, gamePage);

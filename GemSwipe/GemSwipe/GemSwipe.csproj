@@ -87,6 +87,7 @@
     <Compile Include="Game\Effects\BackgroundEffects\Background.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\CountDownView.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\HeaderView.cs" />
+    <Compile Include="Game\Settings\SettingsPanel.cs" />
     <Compile Include="Game\SkiaEngine\SkiaView.cs" />
     <Compile Include="Game\SkiaEngine\ISkiaView.cs" />
     <Compile Include="Game\Pages\Game\Floors\Floor.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Game\Models\SwipeResult.cs" />
     <Compile Include="Game\Models\CountDown.cs" />
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
+    <Compile Include="Game\Settings\TopBar.cs" />
     <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\LittleStarLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

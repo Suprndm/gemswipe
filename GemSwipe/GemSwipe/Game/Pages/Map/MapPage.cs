@@ -1,6 +1,8 @@
-﻿using GemSwipe.Game.Effects.BackgroundEffects;
+﻿using System.Threading.Tasks;
+using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Game.Settings;
 using GemSwipe.Utilities;
 using GemSwipe.Utilities.Buttons;
 using GemSwipe.Utilities.Sprites;
@@ -13,9 +15,12 @@ namespace GemSwipe.Game.Pages.Map
         private TextBlock _level1Button;
         private TextBlock _level2Button;
         private TextBlock _level3Button;
+        private TopBar _topBar;
 
         public MapPage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
+            _topBar = new TopBar(canvas, 0, 0, height, width);
+            AddChild(_topBar);
 
             AddChild(new TextBlock(canvas, width / 2, height / 4, "This is the map !", height / 20f,
                 new SKColor(255, 255, 255)));
@@ -40,9 +45,9 @@ namespace GemSwipe.Game.Pages.Map
 
             SpriteButton spriteButton = new SpriteButton(canvas, "bg_day", width / 2, 9 * height / 10, width / 5, height / 40f);
             AddChild(spriteButton);
-
-            Sprite sprite = new Sprite(canvas, "bg_day", width / 4, 9 * height / 10, width / 5, height / 40f);
-            AddChild(sprite);
+            spriteButton.OnTapped_Action(() => Level4Button_Tapped(4));
+            //Sprite sprite = new Sprite(canvas, "bg_day", width / 4, 9 * height / 10, width / 5, height / 40f);
+            //AddChild(sprite);
         }
 
         private int Level4Button_Tapped(int i)
@@ -75,6 +80,12 @@ namespace GemSwipe.Game.Pages.Map
             _level1Button.Tapped += Level1Button_Tapped;
             _level2Button.Tapped += Level2Button_Tapped;
             _level3Button.Tapped += Level3Button_Tapped;
+
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                _topBar.Show();
+            });
         }
 
         protected override void OnDeactivated()
@@ -82,6 +93,8 @@ namespace GemSwipe.Game.Pages.Map
             _level1Button.Tapped -= Level1Button_Tapped;
             _level2Button.Tapped -= Level2Button_Tapped;
             _level3Button.Tapped -= Level3Button_Tapped;
+
+            _topBar.Hide();
         }
     }
 }
