@@ -117,6 +117,11 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             Velocity *= factor;
         }
 
+        public void SetAcceleration(float acceleration)
+        {
+            Velocity = acceleration;
+        }
+
         public void Slide(float factor)
         {
            // _targetY += -Height / 40 * _size;

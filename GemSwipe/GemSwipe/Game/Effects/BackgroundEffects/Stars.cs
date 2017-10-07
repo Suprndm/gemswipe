@@ -39,6 +39,15 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             //}
         }
 
+
+        public void SetAcceleration(float acceleration)
+        {
+            foreach (var star in _stars)
+            {
+                star.SetAcceleration(acceleration);
+            }
+        }
+
         public void ScrollDown()
         {
             foreach (var star in _stars)

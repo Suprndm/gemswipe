@@ -31,6 +31,11 @@ namespace GemSwipe.Game.Navigation
             }
         }
 
+        public void SetBackground(Background background)
+        {
+            _background = background;
+        }
+
         public void RegisterPage(PageType pageType, IPage page)
         {
             _pages.Add(pageType, page);
@@ -40,6 +45,7 @@ namespace GemSwipe.Game.Navigation
         public Task GoToInitialPage(PageType pageType)
         {
             _currentPage = _pages[pageType];
+            _background.OnNavigateTo(pageType);
             return _currentPage.Show();
         }
 
@@ -51,6 +57,7 @@ namespace GemSwipe.Game.Navigation
             await _currentPage.Hide();
 
             _currentPage = nextPage;
+            _background.OnNavigateTo(pageType);
             await nextPage.Show(parameter);
         }
     }

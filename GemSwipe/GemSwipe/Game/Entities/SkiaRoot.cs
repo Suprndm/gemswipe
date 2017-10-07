@@ -1,4 +1,5 @@
-﻿using GemSwipe.Game.Effects.BackgroundEffects;
+﻿using System.Threading.Tasks;
+using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Pages.Game;
 using GemSwipe.Game.Pages.Home;
@@ -12,47 +13,46 @@ namespace GemSwipe.Game.Entities
     public class SkiaRoot : SkiaView
     {
         
-        private readonly Background _background;
+        private Background _background;
 
         public SkiaRoot(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
-            SetupSprite();
+            Initialize();
 
-            // RegisterPages 
-            //var homePage = new HomePage(canvas, 0, 0, height, width);
-            //AddChild(homePage);
-            //var mapPage = new MapPage(canvas, 0, 0, height, width);
-            //AddChild(mapPage);
-            //var gamePage = new GamePage(canvas, 0, 0, height, width);
-            //AddChild(gamePage);
-            //Navigator.Instance.RegisterPage(PageType.Home, homePage);
-            //Navigator.Instance.RegisterPage(PageType.Map, mapPage);
-            //Navigator.Instance.RegisterPage(PageType.Game, gamePage);
-            //Navigator.Instance.GoToInitialPage(PageType.Home);
-
-
-            _background = new Background(canvas, 0, 0, height, width);
-            AddChild(_background, -1);
+          
         }
-        public async void SetupSprite()
+        public async void Initialize()
+        {
+            await LoadResources();
+            SetupNavigation();
+        }
+
+        public async Task LoadResources()
+        {
+            SpriteSheet.Instance.Setup("Resources/Graphics/atlas.png", "Resources/Graphics/atlas.txt");
+            await SpriteSheet.Instance.LoadAsync();
+        }
+
+        public void SetupNavigation()
         {
             var homePage = new HomePage(Canvas, 0, 0, Height, Width);
             AddChild(homePage);
 
-            SpriteSheet.Instance.Setup("Resources/Graphics/atlas.png", "Resources/Graphics/atlas.txt");
-            await SpriteSheet.Instance.LoadAsync();
-           
+            _background = new Background(Canvas, 0, 0, Height, Width);
+            AddChild(_background, -1);
+
             var mapPage = new MapPage(Canvas, 0, 0, Height, Width);
             AddChild(mapPage);
             var gamePage = new GamePage(Canvas, 0, 0, Height, Width);
             AddChild(gamePage);
+
+            Navigator.Instance.SetBackground(_background);
             Navigator.Instance.RegisterPage(PageType.Home, homePage);
             Navigator.Instance.RegisterPage(PageType.Map, mapPage);
             Navigator.Instance.RegisterPage(PageType.Game, gamePage);
             Navigator.Instance.GoToInitialPage(PageType.Home);
-            
-
         }
+
         protected override void Draw()
         {
 

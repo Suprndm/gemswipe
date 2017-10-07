@@ -37,6 +37,23 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             return Task.Delay(1000);
         }
 
+        public void OnNavigateTo(PageType pageType)
+        {
+            switch (pageType)
+            {
+                case PageType.Home:
+                    break;
+                case PageType.Map:
+                    _stars.SetAcceleration(10);
+                    break;
+                case PageType.Settings:
+                    break;
+                case PageType.Game:
+                    _stars.SetAcceleration(20);
+                    break;
+            }
+        }
+
         protected override void Draw()
         {
 
