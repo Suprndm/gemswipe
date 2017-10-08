@@ -87,6 +87,7 @@
     <Compile Include="Game\Effects\BackgroundEffects\Background.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\CountDownView.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\HeaderView.cs" />
+    <Compile Include="Game\Polygonal.cs" />
     <Compile Include="Game\Settings\SettingsPanel.cs" />
     <Compile Include="Game\SkiaEngine\SkiaView.cs" />
     <Compile Include="Game\SkiaEngine\ISkiaView.cs" />
