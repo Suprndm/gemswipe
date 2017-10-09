@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using GemSwipe.Game;
 using GemSwipe.Game.Gestures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -13,7 +15,9 @@ namespace GemSwipe.Views
         bool pageIsActive;
         private bool _isInitiated;
         private SKCanvas _canvas;
-
+        private TestView _testView;
+        private Stopwatch _stopwatch;
+        private long _lastElapsedTime = 0;
         public TestPage()
         {
             InitializeComponent();
@@ -28,12 +32,22 @@ namespace GemSwipe.Views
             if (_isInitiated)
             {
                 e.Surface.Canvas.Clear(SKColors.Black);
+                _testView.Render();
+
+                var fps = 1000/(_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
+                _lastElapsedTime = _stopwatch.ElapsedMilliseconds;
+
+                _testView.UpdateFps(fps);
             }
             else
             {
                 // Init SkiaSharp
                 _canvas = e.Surface.Canvas;
+                _testView = new TestView(e.Surface.Canvas, 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _isInitiated = true;
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
+
             }
         }
 

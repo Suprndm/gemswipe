@@ -104,6 +104,7 @@
     <Compile Include="Game\Models\CountDown.cs" />
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
+    <Compile Include="Game\TestView.cs" />
     <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\LittleStarLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

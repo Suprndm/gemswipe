@@ -45,7 +45,6 @@ namespace GemSwipe.Game.Pages.Map
 
             SpriteButton spriteButton = new SpriteButton(canvas, "bg_day", width / 2, 9 * height / 10, width / 5, height / 40f);
             AddChild(spriteButton);
-            spriteButton.OnTapped_Action(() => Level4Button_Tapped(4));
             //Sprite sprite = new Sprite(canvas, "bg_day", width / 4, 9 * height / 10, width / 5, height / 40f);
             //AddChild(sprite);
         }
