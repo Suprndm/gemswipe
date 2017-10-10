@@ -7,7 +7,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
     {
         private SKColor _color1;
         private SKColor _color2;
-        public LinearGradientBackground(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public LinearGradientBackground( float x, float y, float height, float width) : base( x, y, height, width)
         {
         }
 

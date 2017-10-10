@@ -30,7 +30,7 @@ namespace GemSwipe.Game.Entities
         private float _maxBoardHeight;
 
 
-        public Board(BoardSetup boardSetup, SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Board(BoardSetup boardSetup,  float x, float y, float height, float width) : base( x, y, height, width)
         {
             _maxBoardWidth = width;
             _maxBoardHeight = width;
@@ -42,7 +42,7 @@ namespace GemSwipe.Game.Entities
             Setup(boardSetup);
         }
 
-        public Board(string boardString) : base(null, 0, 0, 0, 0)
+        public Board(string boardString) : base(0, 0, 0, 0)
         {
             Setup(new BoardSetup(1, 0, 0, boardString, 0));
         }
@@ -93,7 +93,7 @@ namespace GemSwipe.Game.Entities
                         var gemX = ToGemViewX(i) + _cellWidth / 2 - gemRadius;
                         var gemY = ToGemViewY(j) + _cellWidth / 2 - gemRadius;
 
-                        var gem = new Gem(i, j, size, Canvas, gemX, gemY, gemRadius);
+                        var gem = new Gem(i, j, size, gemX, gemY, gemRadius);
                         Gems.Add(gem);
 
                         AddChild(gem);

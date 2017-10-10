@@ -10,7 +10,7 @@ namespace GemSwipe.Game.Effects
         private readonly float G;
         private readonly float F;
         private readonly float K;
-        public ExplosionEffect(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public ExplosionEffect( float x, float y, float height, float width) : base( x, y, height, width)
         {
             G = 0;
             F = 50f;
@@ -19,7 +19,7 @@ namespace GemSwipe.Game.Effects
             for (int i = 0; i < ParticuleNumbers; i++)
             {
                 var randomValue = randomizer.Next(1, 100) / 100f;
-                AddChild(new PhysicalParticule(G, K, randomizer.Next(360), F * randomValue, canvas, 0, 0, 1, 1));
+                AddChild(new PhysicalParticule(G, K, randomizer.Next(360), F * randomValue, 0, 0, 1, 1));
             }
         }
 

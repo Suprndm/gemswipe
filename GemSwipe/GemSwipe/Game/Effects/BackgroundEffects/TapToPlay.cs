@@ -10,12 +10,12 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private readonly TextBlock _textBlock;
         private double _angle;
 
-        public TapToPlay(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public TapToPlay( float x, float y, float height, float width) : base( x, y, height, width)
         {
             Width = width;
             Height = height;
 
-            _textBlock = new TextBlock(canvas, width / 2, height / 2, "Tap to play", height / 20, SKColor.Empty);
+            _textBlock = new TextBlock( width / 2, height / 2, "Tap to play", height / 20, SKColor.Empty);
             AddChild(_textBlock);
 
             var animation = new Animation(p => _angle = p, 0, 179);

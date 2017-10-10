@@ -12,7 +12,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private IList<SKColor> _colors;
         private int _colorIndex;
         private IList<LinearGradientBackground> _linears;
-        public OceanDepth(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public OceanDepth( float x, float y, float height, float width) : base( x, y, height, width)
         {
             _colors = new List<SKColor>
             {
@@ -31,7 +31,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             var linearHeight = Height * 2;
             for (int i = 0; i < 2; i++)
             {
-                var linear = new LinearGradientBackground(Canvas, X, Y + linearHeight * i, linearHeight, Width);
+                var linear = new LinearGradientBackground( X, Y + linearHeight * i, linearHeight, Width);
                 linear.Reset(_colors[i], _colors[i + 1], Y + linearHeight * i);
                 _linears.Add(linear);
                 _colorIndex++;

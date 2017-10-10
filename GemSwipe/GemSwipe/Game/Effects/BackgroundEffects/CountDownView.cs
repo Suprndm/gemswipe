@@ -7,7 +7,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
     {
         public double RemainingSeconds { get; set; }
 
-        public CountDownView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public CountDownView( float x, float y, float height, float width) : base( x, y, height, width)
         {
         }
 

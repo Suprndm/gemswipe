@@ -14,15 +14,15 @@ namespace GemSwipe.Game.Effects.Popped
         private readonly SKColor _color;
 
 
-        public PoppedText(SKCanvas canvas, float x, float y, int displayDuration, int appearingDuration, int disappearingDuration, string text, float size, SKColor color) 
-            : base(canvas, x, y, size, size, displayDuration, appearingDuration, disappearingDuration)
+        public PoppedText( float x, float y, int displayDuration, int appearingDuration, int disappearingDuration, string text, float size, SKColor color) 
+            : base( x, y, size, size, displayDuration, appearingDuration, disappearingDuration)
         {
             _size = size;
             _color = color;
             _animatedSize = 0;
             _animatedOpacity = 0;
 
-            _textBlock = new TextBlock(canvas, 0, 0, text, 0, color);
+            _textBlock = new TextBlock( 0, 0, text, 0, color);
             AddChild(_textBlock);
         }
 

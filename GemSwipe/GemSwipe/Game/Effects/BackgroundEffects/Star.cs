@@ -22,7 +22,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         public float TargetVelocity { get; set; }
         private float _targetY;
 
-        public Star(SKCanvas canvas, float x, float y, float height, float width, float z, double speed, double phase) : base(canvas, x, y, height, width)
+        public Star( float x, float y, float height, float width, float z, double speed, double phase) : base( x, y, height, width)
         {
             _direction = 1;
             _targetY = Y;
@@ -32,7 +32,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _size = (7 - _depthZ);
         }
 
-        public Star(SKCanvas canvas, Random randomizer, float height, float width) : base(canvas, 0, 0, height, width)
+        public Star( Random randomizer, float height, float width) : base( 0, 0, height, width)
         {
             _direction = 1;
             _randomizer = randomizer;

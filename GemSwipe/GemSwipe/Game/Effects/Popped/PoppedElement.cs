@@ -10,7 +10,7 @@ namespace GemSwipe.Game.Effects.Popped
         protected readonly int AppearingDuration;
         protected readonly int DisappearingDuration;
 
-        protected PoppedElement(SKCanvas canvas, float x, float y, float height, float width, int displayDuration, int appearingDuration, int disappearingDuration) : base(canvas, x, y, height, width)
+        protected PoppedElement( float x, float y, float height, float width, int displayDuration, int appearingDuration, int disappearingDuration) : base( x, y, height, width)
         {
             DisplayDuration = displayDuration;
             AppearingDuration = appearingDuration;

@@ -15,7 +15,7 @@ namespace GemSwipe.Utilities
         public string Text { get; set; }
         public object Info { get; set; }
 
-        public TextButton(SKCanvas canvas, float x, float y, float height, string text, object info, SKColor color) : base(canvas, x, y, 0, height, color)
+        public TextButton( float x, float y, float height, string text, object info, SKColor color) : base( x, y, 0, height, color)
         {
             Text = text;
             Info = info;

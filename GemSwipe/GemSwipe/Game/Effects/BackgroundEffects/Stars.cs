@@ -10,13 +10,13 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
     {
         private IList<Star> _stars;
         private Random _randomizer;
-        public Stars(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Stars( float x, float y, float height, float width) : base( x, y, height, width)
         {
             _stars= new List<Star>();
             _randomizer = new Random();
             for (int i = 0; i < 200; i++)
             {
-                var star = new Star(Canvas, _randomizer, height, width);
+                var star = new Star( _randomizer, height, width);
                 _stars.Add(star);
                 AddChild(star);
             }

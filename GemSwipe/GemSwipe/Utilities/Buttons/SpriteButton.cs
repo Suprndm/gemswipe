@@ -13,9 +13,9 @@ namespace GemSwipe.Utilities.Buttons
     {
         public Sprite _sprite { get; set; }
 
-        public SpriteButton(SKCanvas canvas, string name, float x, float y, float width, float height) : base(canvas, x, y, height, width, new SKColor(255, 255, 255))
+        public SpriteButton( string name, float x, float y, float width, float height) : base( x, y, height, width, new SKColor(255, 255, 255))
         {
-            _sprite = new Sprite(canvas, name, 0, 0, width, height);
+            _sprite = new Sprite( name, 0, 0, width, height);
             AddChild(_sprite);
         }
 

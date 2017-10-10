@@ -19,7 +19,7 @@ namespace GemSwipe.Game.Entities
         private Background _background;
         private LevelRepository _levelRepository;
 
-        public SkiaRoot(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public SkiaRoot( float x, float y, float height, float width) : base( x, y, height, width)
         {
             Initialize();
         }
@@ -38,18 +38,18 @@ namespace GemSwipe.Game.Entities
 
         public void SetupNavigation()
         {
-            var homePage = new HomePage(Canvas, 0, 0, Height, Width);
+            var homePage = new HomePage( 0, 0, Height, Width);
             AddChild(homePage);
 
-            _background = new Background(Canvas, 0, 0, Height, Width);
+            _background = new Background( 0, 0, Height, Width);
             AddChild(_background, -1);
 
-            var settingsPanel = new SettingsPanel(Canvas, 0, 0, Height, Width);
+            var settingsPanel = new SettingsPanel( 0, 0, Height, Width);
             AddChild(settingsPanel, 10);
 
-            var mapPage = new MapPage(Canvas, 0, 0, Height, Width,_levelRepository.CountOfLevels());
+            var mapPage = new MapPage( 0, 0, Height, Width,_levelRepository.CountOfLevels());
             AddChild(mapPage);
-            var gamePage = new GamePage(Canvas, 0, 0, Height, Width, _levelRepository);
+            var gamePage = new GamePage( 0, 0, Height, Width, _levelRepository);
             AddChild(gamePage);
 
             Navigator.Instance.SetBackground(_background);

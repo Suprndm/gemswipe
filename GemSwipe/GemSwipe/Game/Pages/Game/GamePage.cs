@@ -23,7 +23,7 @@ namespace GemSwipe.Game.Pages.Game
         private int _level=1;
         private LevelRepository _levelRepository;
 
-        public GamePage(SKCanvas canvas, float x, float y, float height, float width, LevelRepository levelRepository) : base(canvas, x, y, height, width)
+        public GamePage( float x, float y, float height, float width, LevelRepository levelRepository) : base( x, y, height, width)
         {
             _blockedSensor = new BlockedSensor();
             _levelRepository = levelRepository;
@@ -77,7 +77,7 @@ namespace GemSwipe.Game.Pages.Game
                         {
                             await Task.Delay(2000);
                             _isBusy = true;
-                            var blockedMessage = new PoppedText(Canvas, Width / 2, Height / 2, 1000, 300, 300,
+                            var blockedMessage = new PoppedText( Width / 2, Height / 2, 1000, 300, 300,
                                 "Blocked",
                                 Height / 10, CreateColor(255, 0, 0));
                             AddChild(blockedMessage);
@@ -110,11 +110,11 @@ namespace GemSwipe.Game.Pages.Game
         protected override void OnActivated(object parameter = null)
         {
             var levelId = (int) parameter;
-            _scene = new Scene(Canvas, 0, 0, Height, Width);
+            _scene = new Scene( 0, 0, Height, Width);
             AddChild(_scene);
 
 
-            _effectLayer = new EffectLayer(Canvas, 0, 0, Height, Width);
+            _effectLayer = new EffectLayer( 0, 0, Height, Width);
             AddChild(_effectLayer, 3);
 
             Start(levelId);
