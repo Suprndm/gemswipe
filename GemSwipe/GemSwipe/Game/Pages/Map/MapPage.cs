@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Gestures;
+using GemSwipe.Game.Models;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
 using GemSwipe.Game.Settings;
@@ -7,79 +12,142 @@ using GemSwipe.Utilities;
 using GemSwipe.Utilities.Buttons;
 using GemSwipe.Utilities.Sprites;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Pages.Map
 {
     public class MapPage : PageBase
     {
-        private TextBlock _level1Button;
-        private TextBlock _level2Button;
-        private TextBlock _level3Button;
+        private float startY;
+        private float lastVY;
+        private float _verticalMargin;
+        private float _maxHeight;
+        private float _minHeight;
+        private bool _canPan = true;
+
+        private int _playerProgress;
+        private IList<IButton> _listOfLevelButtons;
         private TopBar _topBar;
 
-        public MapPage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public MapPage(SKCanvas canvas, float x, float y, float height, float width, int playerProgress) : base(canvas, x, y, height, width)
         {
+            _playerProgress = 20;
+            _listOfLevelButtons = new List<IButton>();
+
+            _verticalMargin = height / 10;
+            _minHeight = 0;
+
+            _maxHeight = Math.Min(height - _playerProgress * height / 10, 0);
+            _maxHeight = -height+_verticalMargin +_playerProgress * height / 10+_verticalMargin;
+
+            //ajouter au skiaroot?
             _topBar = new TopBar(canvas, 0, 0, height, width);
             AddChild(_topBar);
 
-            AddChild(new TextBlock(canvas, width / 2, height / 4, "This is the map !", height / 20f,
+            AddChild(new TextBlock(canvas, width / 2, height -_verticalMargin , "This is the map !", height / 20f,
                 new SKColor(255, 255, 255)));
 
 
-            _level1Button = new TextBlock(canvas, width / 2, 5 * height / 10, "Level 1", height / 40f, new SKColor(255, 255, 255));
-            AddChild(_level1Button);
-            DeclareTappable(_level1Button);
-
-            _level2Button = new TextBlock(canvas, width / 2, 6 * height / 10, "Level 2", height / 40f, new SKColor(255, 255, 255));
-            AddChild(_level2Button);
-            DeclareTappable(_level2Button);
-
-            _level3Button = new TextBlock(canvas, width / 2, 7 * height / 10, "Level 3", height / 40f, new SKColor(255, 255, 255));
-            AddChild(_level3Button);
-            DeclareTappable(_level3Button);
-
-            SimpleButton _level4Button = new SimpleButton(canvas, width / 2, 8 * height / 10, width / 5, height / 40f, new SKColor(255, 255, 255));
-            AddChild(_level4Button);
-            //_level4Button.Tapped += Level4Button_Tapped;
-            _level4Button.OnTapped_Action(() => Level4Button_Tapped(5));
-
-            SpriteButton spriteButton = new SpriteButton(canvas, "bg_day", width / 2, 9 * height / 10, width / 5, height / 40f);
-            AddChild(spriteButton);
-            spriteButton.OnTapped_Action(() => Level4Button_Tapped(4));
-            //Sprite sprite = new Sprite(canvas, "bg_day", width / 4, 9 * height / 10, width / 5, height / 40f);
-            //AddChild(sprite);
+            for (int i = 1; i <= _playerProgress; i++)
+            {
+                TextButton levelButton = new TextButton(canvas, width / 2, height - _verticalMargin - i * height / 10, height / 40f, "Level " + i, i, new SKColor(255, 255, 255));
+                _listOfLevelButtons.Add(levelButton);
+                AddChild(levelButton);
+                DeclareTappable(levelButton);
+                int j = i;
+                levelButton.Tapped += () => LevelButton_Tapped(j);
+            }
         }
 
-        private int Level4Button_Tapped(int i)
+
+
+        private void LevelButton_Tapped(int i)
         {
             Navigator.Instance.GoTo(PageType.Game, i);
-            return 3;
-        }
-
-        private void Level1Button_Tapped()
-        {
-            Navigator.Instance.GoTo(PageType.Game, 1);
-        }
-
-        private void Level2Button_Tapped()
-        {
-            Navigator.Instance.GoTo(PageType.Game, 2);
-        }
-
-        private void Level3Button_Tapped()
-        {
-            Navigator.Instance.GoTo(PageType.Game, 3);
         }
 
         protected override void Draw()
         {
         }
 
+        private async Task ScrollMap(Direction direction)
+        {
+            if (direction == Direction.Top || direction == Direction.Bottom)
+            {
+                float dir = 0;
+
+                if (direction == Direction.Top)
+                {
+                    dir = 1;
+                }
+                else if (direction == Direction.Bottom)
+                {
+                    dir = -1;
+                }
+                var scroll = 150;
+                var oldY = _y;
+                var newY = _y + dir * scroll;
+                int animationTimeScale = 200 * 4;
+
+                //foreach (IButton levelButton in _listOfLevelButtons)
+                //{
+                //    levelButton.ScrollUp();
+                //}
+
+                this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
+                await Task.Delay(1000);
+
+            }
+        }
+
+        private void OnPanning(PanUpdatedEventArgs e)
+        {
+            Pan(e);
+        }
+
+        private async void Pan(PanUpdatedEventArgs e)
+        {
+            await ScrollMap(e);
+        }
+
+        private async Task ScrollMap(PanUpdatedEventArgs e)
+        {
+            switch (e.StatusType)
+            {
+                case GestureStatus.Started:
+                    startY = _y;
+                    break;
+                case GestureStatus.Running:
+                    {
+                        float oldY = _y;
+                        _y = startY + (float)e.TotalY;
+
+                        if (_y < _minHeight)
+                        {
+                            _y = _minHeight;
+                        }
+                        if (_y > _maxHeight)
+                        {
+                            _y = _maxHeight;
+                        }
+                        lastVY = oldY - _y;
+
+
+                    }
+                    break;
+
+                case GestureStatus.Completed:
+
+                    //float stoppingScale = 3;
+                    //this.Animate("moveY", p => _y = (float)p, _y, _y + lastVY * stoppingScale, 8, (uint)1000, Easing.SinInOut);
+                    break;
+
+            }
+        }
+
         protected override void OnActivated(object parameter = null)
         {
-            _level1Button.Tapped += Level1Button_Tapped;
-            _level2Button.Tapped += Level2Button_Tapped;
-            _level3Button.Tapped += Level3Button_Tapped;
+            GestureEventHandler.Panning += OnPanning;
 
             Task.Run(async () =>
             {
@@ -87,13 +155,12 @@ namespace GemSwipe.Game.Pages.Map
                 _topBar.Show();
             });
         }
-
         protected override void OnDeactivated()
         {
-            _level1Button.Tapped -= Level1Button_Tapped;
-            _level2Button.Tapped -= Level2Button_Tapped;
-            _level3Button.Tapped -= Level3Button_Tapped;
-
+            foreach (IButton levelButton in _listOfLevelButtons)
+            {
+                levelButton.Tapped -= () => LevelButton_Tapped(_listOfLevelButtons.IndexOf(levelButton));
+            }
             _topBar.Hide();
         }
     }

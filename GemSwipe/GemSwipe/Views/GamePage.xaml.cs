@@ -31,6 +31,10 @@ namespace GemSwipe.Views
 
         #endregion
 
+        private void Pan(PanUpdatedEventArgs e)
+        {
+            GestureEventHandler.Pan(e);
+        }
 
         #region Render
 
@@ -84,6 +88,8 @@ namespace GemSwipe.Views
 
         private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
         {
+            Pan(e);
+
             if (e.TotalX == 0 && e.TotalY == 0) return;
 
             var eX = e.TotalX;
@@ -112,6 +118,7 @@ namespace GemSwipe.Views
                         Swipe(Direction.Left);
                 }
             }
+
         }
 
         protected override void OnDisappearing()

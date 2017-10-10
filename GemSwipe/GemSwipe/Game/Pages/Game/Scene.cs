@@ -82,6 +82,7 @@ namespace GemSwipe.Game.Pages.Game
             var newY = -(floor.Y - Y) + _initialMarginY;
             int animationTimeScale = MsPerBoardNavigation * 4;
 
+            
             this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
             await Task.Delay(1000);
 

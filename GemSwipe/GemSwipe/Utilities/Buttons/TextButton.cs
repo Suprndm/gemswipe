@@ -4,18 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Utilities;
+using GemSwipe.Utilities.Buttons;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Utilities
 {
-    public class TextButton : SimpleButton
+    public class TextButton : SimpleButton, IButton
     {
         public string Text { get; set; }
+        public object Info { get; set; }
 
-        public TextButton(SKCanvas canvas, float x, float y, float width, float height, string text, SKColor color) : base(canvas, x, y, width, height, color)
+        public TextButton(SKCanvas canvas, float x, float y, float height, string text, object info, SKColor color) : base(canvas, x, y, 0, height, color)
         {
             Text = text;
+            Info = info;
         }
+
         protected override void Draw()
         {
             using (var paint = new SKPaint())

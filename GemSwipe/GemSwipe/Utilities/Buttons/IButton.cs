@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace GemSwipe.Utilities.Buttons
 {
-    class IButton
+    public interface IButton
     {
+        event Action Tapped;
+
+        //gérer les states, disabled, reactive,
+        //gérer les clicks
+        //command pattern
     }
 }

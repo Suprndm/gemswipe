@@ -1,5 +1,6 @@
 ﻿using System;
 using GemSwipe.Game.Models;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Gestures
 {
@@ -10,6 +11,13 @@ namespace GemSwipe.Game.Gestures
         public static void Swipe(Direction direction)
         {
             Swipped?.Invoke(direction);
+        }
+
+        public static event Action<PanUpdatedEventArgs> Panning;
+
+        public static void Pan(PanUpdatedEventArgs e)
+        {
+            Panning?.Invoke(e);
         }
     }
 }

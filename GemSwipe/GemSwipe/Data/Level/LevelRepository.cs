@@ -20,6 +20,11 @@ namespace GemSwipe.Data.Level
             return _levelConfigurations.Single(l => l.Id == id);
         }
 
+        public int CountOfLevels()
+        {
+            return _levelConfigurations.Count;
+        }
+
         private void Initialize()
         {
             string jsonString = ResourceLoader.LoadStringAsync("Data/Level/LevelResources.json").Result;

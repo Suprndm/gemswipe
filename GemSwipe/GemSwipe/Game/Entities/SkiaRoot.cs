@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Pages.Game;
@@ -8,13 +9,15 @@ using GemSwipe.Game.Settings;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Sprites;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Entities
 {
     public class SkiaRoot : SkiaView
     {
-        
+
         private Background _background;
+        private LevelRepository _levelRepository;
 
         public SkiaRoot(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
         {
@@ -23,6 +26,7 @@ namespace GemSwipe.Game.Entities
         public async void Initialize()
         {
             await LoadResources();
+            _levelRepository = new LevelRepository();
             SetupNavigation();
         }
 
@@ -40,12 +44,12 @@ namespace GemSwipe.Game.Entities
             _background = new Background(Canvas, 0, 0, Height, Width);
             AddChild(_background, -1);
 
-            var settingsPanel  = new SettingsPanel(Canvas, 0, 0, Height, Width);
+            var settingsPanel = new SettingsPanel(Canvas, 0, 0, Height, Width);
             AddChild(settingsPanel, 10);
 
-            var mapPage = new MapPage(Canvas, 0, 0, Height, Width);
+            var mapPage = new MapPage(Canvas, 0, 0, Height, Width,_levelRepository.CountOfLevels());
             AddChild(mapPage);
-            var gamePage = new GamePage(Canvas, 0, 0, Height, Width);
+            var gamePage = new GamePage(Canvas, 0, 0, Height, Width, _levelRepository);
             AddChild(gamePage);
 
             Navigator.Instance.SetBackground(_background);
@@ -60,7 +64,6 @@ namespace GemSwipe.Game.Entities
         {
 
         }
-
 
         public override void Dispose()
         {

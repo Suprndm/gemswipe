@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.Data;
 using GemSwipe.Game.Effects;
@@ -22,10 +23,10 @@ namespace GemSwipe.Game.Pages.Game
         private int _level=1;
         private LevelRepository _levelRepository;
 
-        public GamePage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public GamePage(SKCanvas canvas, float x, float y, float height, float width, LevelRepository levelRepository) : base(canvas, x, y, height, width)
         {
             _blockedSensor = new BlockedSensor();
-            _levelRepository = new LevelRepository();
+            _levelRepository = levelRepository;
         }
 
         public void BackgroundNextBoard()
@@ -37,13 +38,10 @@ namespace GemSwipe.Game.Pages.Game
         {
             await _scene.StartingFloor.Start();
 
-            LevelConfiguration levelconfig = _levelRepository.GetLevelConfigurationById((levelId-1)%5+1);
+            LevelConfiguration levelconfig = _levelRepository.GetLevelConfigurationById(Math.Min(5,Math.Max(levelId,0)));
             _scene.SetLevelConfig(levelconfig);
-            //_scene.SetupBoard = _boardRepository.GetBoard(1);
-            //await _scene.DisplayBoard(levelId);
             await _scene.NextTransitionFloor(levelId);
 
-            //await _scene.NextTransitionFloor();
             BackgroundNextBoard();
             _isBusy = false;
         }
