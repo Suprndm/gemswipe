@@ -20,7 +20,6 @@
                 </forms:SKGLView.GestureRecognizers>
             </forms:SKGLView>
             <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand">
-                <Label Text="Test Mode" TextColor="White" VerticalOptions="Start" FontSize="15"></Label>
                 <views:LogView></views:LogView>
             </AbsoluteLayout>
         </Grid>
