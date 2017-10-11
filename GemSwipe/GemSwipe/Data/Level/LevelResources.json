@@ -37,7 +37,7 @@
   },
   {
     "Id": 5,
-    "BoardSetupString": "2 0 9 0 0 0-0 9 9 3 0 0-2 9 9 0 0 0-0 0 9 0 9 0-0 0 0 9 0 0",
+    "BoardSetupString": "2 0 0 0 0 0-0 9 9 3 0 0-2 9 9 0 0 0-0 0 9 0 9 0-0 0 0 9 0 0",
     "NbOfMovesToSolve": 10,
     "Story": "La 5 story",
     "Title": "Le 5 title",

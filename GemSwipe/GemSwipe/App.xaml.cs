@@ -25,6 +25,7 @@ namespace GemSwipe
             {
                 Current.MainPage = new NavigationPage(new GamePage());
             }
+           
         }
     }
 }

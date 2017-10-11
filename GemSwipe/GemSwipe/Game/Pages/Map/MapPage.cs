@@ -50,12 +50,13 @@ namespace GemSwipe.Game.Pages.Map
 
             for (int i = 1; i <= _playerProgress; i++)
             {
-                TextButton levelButton = new TextButton(canvas, width / 2, height - _verticalMargin - i * height / 10, height / 40f, "Level " + i, i, new SKColor(255, 255, 255));
+                LevelButton levelButton = new LevelButton(canvas, width / 2, height - _verticalMargin - i * height / 10, height / 40f, "Level " + i, i, new SKColor(255, 255, 255));
                 _listOfLevelButtons.Add(levelButton);
                 AddChild(levelButton);
                 DeclareTappable(levelButton);
                 int j = i;
                 levelButton.Tapped += () => LevelButton_Tapped(j);
+                levelButton.Tapped += () => levelButton.ActivateOrbitingStars(Width, Height);
             }
         }
 
@@ -137,12 +138,17 @@ namespace GemSwipe.Game.Pages.Map
                     break;
 
                 case GestureStatus.Completed:
-
                     //float stoppingScale = 3;
                     //this.Animate("moveY", p => _y = (float)p, _y, _y + lastVY * stoppingScale, 8, (uint)1000, Easing.SinInOut);
                     break;
 
             }
+        }
+
+        protected override async Task TransitionOut()
+        {
+            this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)3000, Easing.CubicIn);
+            await Task.Delay(5000);
         }
 
         protected override void OnActivated(object parameter = null)

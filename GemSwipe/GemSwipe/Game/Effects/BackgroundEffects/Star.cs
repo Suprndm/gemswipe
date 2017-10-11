@@ -54,8 +54,6 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
             _phase = _randomizer.Next(400) / 100;
             _speed = _randomizer.Next(10) / 100f;
-
-            //_velocityY = _direction*_randomizer.Next((int)(5*Height/2000),(int)(8*Height/2000));
         }
 
         private void ApplyForce()
@@ -64,7 +62,6 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             float desiredVelocity = _targetY - _y;
             float steering = desiredVelocity - _velocityY;
             _accelerationY = steering * 0.05f;
-            //_accelerationY = DesiredVelocity;
         }
 
         private void Update()
@@ -106,13 +103,11 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         public void Accelerate(float factor)
         {
             TargetVelocity = factor * _velocityY;
-            // _velocityY *= factor;
         }
 
         public void SetAcceleration(float factor)
         {
             TargetVelocity = factor * _baseVelocity;
-            //Velocity = acceleration;
         }
 
         public void Slide(float factor)
