@@ -7,7 +7,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
     {
         public TextBlock Message { get; }
 
-        public FloorMessage(SKCanvas canvas, float x, float y, string text, float size, SKColor color) : base(canvas, x, y, text, size, color)
+        public FloorMessage( float x, float y, string text, float size, SKColor color) : base( x, y, text, size, color)
         {
         }
     }

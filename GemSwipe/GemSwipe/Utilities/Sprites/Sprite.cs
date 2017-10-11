@@ -11,7 +11,7 @@ namespace GemSwipe.Utilities.Sprites
     public class Sprite : SkiaView
     {
         public SpriteModel spriteModel;
-        public Sprite(SKCanvas canvas, string name, float x, float y, float width, float height) : base(canvas, x, y, height, width)
+        public Sprite( string name, float x, float y, float width, float height) : base( x, y, height, width)
         {
             spriteModel = SpriteSheet.Instance.Sprites[name];
         }

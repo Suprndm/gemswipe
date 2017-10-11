@@ -10,7 +10,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         public double Angle { get; private set; }
         public SKColor Color { get; }
 
-        public Halo(SKCanvas canvas, float x, float y, float height, float width, SKColor color, double angle) : base(canvas, x, y, height, width)
+        public Halo( float x, float y, float height, float width, SKColor color, double angle) : base( x, y, height, width)
         {
             Color = color;
             Angle = angle;

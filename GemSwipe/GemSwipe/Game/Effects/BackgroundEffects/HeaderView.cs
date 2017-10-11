@@ -7,13 +7,13 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
     {
         public CountDownView CountDownView { get; set; }
 
-        public HeaderView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height,
+        public HeaderView( float x, float y, float height, float width) : base( x, y, height,
             width)
         {
             var countDownWidth = width * 0.2f;
             var countDownHeight = height;
 
-            CountDownView = new CountDownView(canvas, width / 2 - countDownWidth / 2, y, countDownHeight,
+            CountDownView = new CountDownView( width / 2 - countDownWidth / 2, y, countDownHeight,
                 countDownWidth);
             AddChild(CountDownView);
         }

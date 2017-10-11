@@ -5,7 +5,7 @@ namespace GemSwipe.Game.Effects
 {
     public  class EffectLayer:SkiaView
     {
-        public EffectLayer(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public EffectLayer( float x, float y, float height, float width) : base( x, y, height, width)
         {
         }
 
@@ -16,7 +16,7 @@ namespace GemSwipe.Game.Effects
 
         public void Explode()
         {
-            AddChild(new ExplosionEffect(Canvas, Width / 2, Height / 2, 1, 1));
+            AddChild(new ExplosionEffect( Width / 2, Height / 2, 1, 1));
         }
 
         protected override void Draw()

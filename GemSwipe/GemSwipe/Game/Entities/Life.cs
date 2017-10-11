@@ -14,7 +14,7 @@ namespace GemSwipe.Game.Entities
         private const float LevelUpExperianceRatio = 0.33f;
         private double _experience;
 
-        public Life(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public Life( float x, float y, float height, float width) : base( x, y, height, width)
         {
             Reset();
         }

@@ -33,6 +33,8 @@ namespace GemSwipe.Game.SkiaEngine
         void RemoveChild(ISkiaView child);
         void Render();
 
+        void SetCanvas(SKCanvas canvas);
+
         void DetectTap(Point p);
 
         void Tap();

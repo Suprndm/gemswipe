@@ -13,10 +13,10 @@ namespace GemSwipe.Game
     {
         private float _angle = 0;
         private TextBlock _fpsText;
-        public TestView(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public TestView( float x, float y, float height, float width) : base( x, y, height, width)
         {
 
-            _fpsText = new TextBlock(Canvas, width / 2, width / 40, "0", width / 40, CreateColor(255, 255, 255));
+            _fpsText = new TextBlock( width / 2, width / 40, "0", width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
         }
 

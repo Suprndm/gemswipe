@@ -129,6 +129,7 @@ namespace GemSwipe.Game.SkiaEngine
 
         public void AddChild(ISkiaView child, int zindex = 0)
         {
+            child.SetCanvas(Canvas);
             child.ZIndex = zindex;
             _children.Add(child);
             child.Parent = this;
@@ -144,6 +145,7 @@ namespace GemSwipe.Game.SkiaEngine
         public void RemoveChild(ISkiaView child)
         {
             _children.Remove(child);
+            child.SetCanvas(null);
         }
 
         protected abstract void Draw();
@@ -162,6 +164,16 @@ namespace GemSwipe.Game.SkiaEngine
                     child.Render();
             }
         }
+
+        public void SetCanvas(SKCanvas canvas)
+        {
+            Canvas = canvas;
+            foreach (var child in _children)
+            {
+                child.SetCanvas(canvas);
+            }
+        }
+
 
         protected void DrawHitbox()
         {
@@ -208,7 +220,7 @@ namespace GemSwipe.Game.SkiaEngine
 
         public event Action Tapped;
 
-        protected SkiaView(SKCanvas canvas, float x, float y, float height, float width)
+        protected SkiaView(float x, float y, float height, float width)
         {
             _opacity = 1;
             _isVisible = true;
@@ -221,8 +233,6 @@ namespace GemSwipe.Game.SkiaEngine
 
             Tappables = new List<ISkiaView>();
             _children = new List<ISkiaView>();
-
-            Canvas = canvas;
 
             Scale = 1;
         }

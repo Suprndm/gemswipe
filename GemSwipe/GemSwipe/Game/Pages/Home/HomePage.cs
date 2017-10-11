@@ -7,9 +7,9 @@ namespace GemSwipe.Game.Pages.Home
 {
     public class HomePage: PageBase
     {
-        public HomePage(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public HomePage( float x, float y, float height, float width) : base( x, y, height, width)
         {
-            var tapToPlay = new TapToPlay(canvas, 0, 0, height, width);
+            var tapToPlay = new TapToPlay( 0, 0, height, width);
             AddChild(tapToPlay);
             tapToPlay.Tapped += OnTapped;
         }

@@ -16,7 +16,7 @@ namespace GemSwipe.Utilities
         protected SKRect _hitbox;
         private Action _onTappedHandler;
 
-        public SimpleButton(SKCanvas canvas, float x, float y, float width, float height, SKColor color) : base(canvas, x, y, height, width)
+        public SimpleButton( float x, float y, float width, float height, SKColor color) : base( x, y, height, width)
         {
             Color = color;
             DeclareTappable(this);

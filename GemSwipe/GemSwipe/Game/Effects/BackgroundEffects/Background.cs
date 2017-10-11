@@ -11,18 +11,18 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private readonly OceanDepth _oceanDepth;
         private readonly Stars _stars;
 
-        public Background(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height,
+        public Background( float x, float y, float height, float width) : base( x, y, height,
             width)
         {
-            _oceanDepth = new OceanDepth(Canvas, X, Y, Height, Width);
+            _oceanDepth = new OceanDepth( X, Y, Height, Width);
             AddChild(_oceanDepth);
 
-            var blackHalo = new Halo(Canvas, X - Width / 3, Y, Height, Width * 3f, CreateColor(255, 255, 255), Math.PI);
-            var whiteHalo = new Halo(Canvas, X - Width / 3, Y, Height, Width * 3f, CreateColor(0, 0, 0), 0);
+            var blackHalo = new Halo( X - Width / 3, Y, Height, Width * 3f, CreateColor(255, 255, 255), Math.PI);
+            var whiteHalo = new Halo( X - Width / 3, Y, Height, Width * 3f, CreateColor(0, 0, 0), 0);
             AddChild(blackHalo);
             AddChild(whiteHalo);
 
-            _stars = new Stars(Canvas, X, Y, Height, Width);
+            _stars = new Stars( X, Y, Height, Width);
             AddChild(_stars);
         }
 

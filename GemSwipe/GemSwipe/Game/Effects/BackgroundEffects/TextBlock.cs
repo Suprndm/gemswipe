@@ -9,7 +9,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         public float Size { get; set; }
         public SKColor Color { get; set; }
         private SKRect _hitbox;
-        public TextBlock(SKCanvas canvas, float x, float y, string text, float size, SKColor color) : base(canvas, x, y, size, size)
+        public TextBlock( float x, float y, string text, float size, SKColor color) : base( x, y, size, size)
         {
             Text = text;
             Size = size;

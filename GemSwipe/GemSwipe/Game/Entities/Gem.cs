@@ -29,13 +29,13 @@ namespace GemSwipe.Game.Entities
         private int _cycleSpeed;
         private float _opacity;
 
-        public Gem(int boardX, int boardY, int size) : base(null, 0, 0, 0, 0)
+        public Gem(int boardX, int boardY, int size) : base( 0, 0, 0, 0)
         {
             Size = size;
             BoardX = boardX;
             BoardY = boardY;
         }
-        public Gem(int boardX, int boardY, int size, SKCanvas canvas, float x, float y, float radius) : base(canvas, x, y, radius * 2, radius * 2)
+        public Gem(int boardX, int boardY, int size,  float x, float y, float radius) : base( x, y, radius * 2, radius * 2)
         {
             _randomizer = new Random();
             _cycle = 0;

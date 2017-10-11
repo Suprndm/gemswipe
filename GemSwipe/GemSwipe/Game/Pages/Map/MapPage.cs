@@ -29,7 +29,7 @@ namespace GemSwipe.Game.Pages.Map
         private IList<IButton> _listOfLevelButtons;
         private TopBar _topBar;
 
-        public MapPage(SKCanvas canvas, float x, float y, float height, float width, int playerProgress) : base(canvas, x, y, height, width)
+        public MapPage( float x, float y, float height, float width, int playerProgress) : base( x, y, height, width)
         {
             _playerProgress = 20;
             _listOfLevelButtons = new List<IButton>();
@@ -41,10 +41,10 @@ namespace GemSwipe.Game.Pages.Map
             _maxHeight = -height+_verticalMargin +_playerProgress * height / 10+_verticalMargin;
 
             //ajouter au skiaroot?
-            _topBar = new TopBar(canvas, 0, 0, height, width);
+            _topBar = new TopBar( 0, 0, height, width);
             AddChild(_topBar);
 
-            AddChild(new TextBlock(canvas, width / 2, height -_verticalMargin , "This is the map !", height / 20f,
+            AddChild(new TextBlock( width / 2, height -_verticalMargin , "This is the map !", height / 20f,
                 new SKColor(255, 255, 255)));
 
 

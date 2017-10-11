@@ -9,11 +9,11 @@ namespace GemSwipe.Game.Settings
 {
     public class TopBar:SkiaView
     {
-        public TopBar(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public TopBar( float x, float y, float height, float width) : base( x, y, height, width)
         {
             _height = 0.1f * height;
 
-            var settingsButton = new SimpleButton(canvas, width -_height/2, _height/2, _height, _height,
+            var settingsButton = new SimpleButton( width -_height/2, _height/2, _height, _height,
                 CreateColor(255, 255, 255));
             AddChild(settingsButton);
             DeclareTappable(settingsButton);

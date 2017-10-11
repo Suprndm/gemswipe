@@ -9,7 +9,7 @@ namespace GemSwipe.Game.Navigation.Pages
     public abstract class PageBase : SkiaView, IPage
     {
         protected bool IsActive { get; private set; }
-        protected PageBase(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        protected PageBase( float x, float y, float height, float width) : base( x, y, height, width)
         {
             IsVisible = false;
             _opacity = 0;

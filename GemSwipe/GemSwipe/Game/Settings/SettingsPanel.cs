@@ -8,7 +8,7 @@ namespace GemSwipe.Game.Settings
 {
     public class SettingsPanel : PageBase
     {
-        public SettingsPanel(SKCanvas canvas, float x, float y, float height, float width) : base(canvas, x, y, height, width)
+        public SettingsPanel( float x, float y, float height, float width) : base( x, y, height, width)
         {
             _x = width;
             DeclareTappable(this);
