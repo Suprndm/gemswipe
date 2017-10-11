@@ -68,8 +68,6 @@ namespace GemSwipe.Views
         {
             _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
-
-            Gesture.SetTapped(SKGLView, new Command<Point>(OnCanvasTapped));
         }
 
         private void OnCanvasTapped(Point p)

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Pages.Game;
 using GemSwipe.Game.Pages.Home;
@@ -28,6 +29,13 @@ namespace GemSwipe.Game.Entities
             await LoadResources();
             _levelRepository = new LevelRepository();
             SetupNavigation();
+
+            Gesture.Up += Gesture_Up;
+        }
+
+        private void Gesture_Up(Point p)
+        {
+            DetectTap(p);
         }
 
         public async Task LoadResources()

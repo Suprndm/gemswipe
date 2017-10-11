@@ -25,7 +25,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private float _targetX { get; set; }
         private float _targetY { get; set; }
 
-        public OrbitingStarParticle(SKCanvas canvas, float x, float y, float radius, float size, float shift, float speed, SKColor color) : base(canvas, x, y, size, size)
+        public OrbitingStarParticle(float x, float y, float radius, float size, float shift, float speed, SKColor color) : base( x, y, size, size)
         {
             _centerX = x;
             _centerY = y;
@@ -36,7 +36,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _speed = speed;
         }
 
-        public OrbitingStarParticle(SKCanvas canvas, float x, float y, float orbit, Random randomizer, SKColor color) : base(canvas, x, y, 10, 10)
+        public OrbitingStarParticle(float x, float y, float orbit, Random randomizer, SKColor color) : base( x, y, 10, 10)
         {
             _centerX = x;
             _centerY = y;

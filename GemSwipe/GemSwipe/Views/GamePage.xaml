@@ -15,9 +15,7 @@
             </Grid.RowDefinitions>
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
             <forms:SKGLView x:Name="SKGLView" Grid.Row="1"   HasRenderLoop="True">
-                <forms:SKGLView.GestureRecognizers>
-                    <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
-                </forms:SKGLView.GestureRecognizers>
+
             </forms:SKGLView>
             <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand"
                             HorizontalOptions="FillAndExpand">

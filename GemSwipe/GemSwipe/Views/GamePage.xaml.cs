@@ -22,22 +22,7 @@ namespace GemSwipe.Views
             InitializeComponent();
         }
 
-        #region Swipe
-
-        private void Swipe(Direction direction)
-        {
-            GestureEventHandler.Swipe(direction);
-        }
-
-        #endregion
-
-        private void Pan(PanUpdatedEventArgs e)
-        {
-            GestureEventHandler.Pan(e);
-        }
-
         #region Render
-
 
         private void SKGLView_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
@@ -73,58 +58,8 @@ namespace GemSwipe.Views
             _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
 
-            Gesture.SetTapped(SKGLView, new Command<Point>(OnCanvasTapped));
-        }
 
-        private void OnCanvasTapped(Point p)
-        {
-         
-            _skiaRoot.DetectTap(p);;
-            _panJustBegun = true;
-        }
-
-        #endregion
-
-        #region UserControls
-
-        private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
-        {
-            Pan(e);
-
-            if (e.TotalX == 0 && e.TotalY == 0) return;
-
-            var eX = e.TotalX;
-            var eY = e.TotalY;
-            var d = Math.Sqrt(eX * eX + eY * eY);
-
-            if (d > 25 && _panJustBegun)
-            {
-                _panJustBegun = false;
-                if (eX > 0)
-                {
-                    if (eY > eX)
-                        Swipe(Direction.Bottom);
-                    else if (Math.Abs(eY) > eX)
-                        Swipe(Direction.Top);
-                    else
-                        Swipe(Direction.Right);
-                }
-                else
-                {
-                    if (eY > Math.Abs(eX))
-                        Swipe(Direction.Bottom);
-                    else if (Math.Abs(eY) > Math.Abs(eX))
-                        Swipe(Direction.Top);
-                    else
-                        Swipe(Direction.Left);
-                }
-            }
-
-        }
-
-        protected override void OnDisappearing()
-        {
-            SKGLView.PaintSurface -= SKGLView_PaintSurface;
+            Gesture.Setup(SKGLView);
         }
 
         #endregion

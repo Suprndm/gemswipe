@@ -16,7 +16,7 @@ namespace GemSwipe.Utilities.Buttons
 
 
 
-        public LevelButton(SKCanvas canvas, float x, float y, float height, string text, object info, SKColor color) : base(canvas, x, y, 0, height, color)
+        public LevelButton(float x, float y, float height, string text, object info, SKColor color) : base (x, y, 0, height, color)
         {
             Text = text;
             Info = info;
@@ -29,7 +29,7 @@ namespace GemSwipe.Utilities.Buttons
             Random randomizer = new Random();
             for (int i = 0; i < 20; i++)
             {
-                OrbitingStarParticle star = new OrbitingStarParticle(Canvas, randomizer.Next((int)screenWidth) - screenWidth / 2, randomizer.Next((int)screenHeight) - screenHeight / 2, Height, randomizer, CreateColor(255, 255, 255));
+                OrbitingStarParticle star = new OrbitingStarParticle(randomizer.Next((int)screenWidth) - screenWidth / 2, randomizer.Next((int)screenHeight) - screenHeight / 2, Height, randomizer, CreateColor(255, 255, 255));
                 star.SetTarget(0, 0);
                 AddChild(star);
                 star.SteerToTarget();

@@ -56,10 +56,7 @@ namespace GemSwipe.Game.Pages.Game
 
                 if (swipeResult.BoardWon)
                 {
-                    //_effectLayer.Explode();
                     _isBusy = true;
-                    //_level++;
-                    // Generate Floor
                     await Task.Delay(1000);
 
                     BackgroundNextBoard();
@@ -96,12 +93,10 @@ namespace GemSwipe.Game.Pages.Game
             }
         }
 
-
         public bool IsBusy()
         {
             return _isBusy;
         }
-
 
         protected override void Draw()
         {
@@ -118,7 +113,7 @@ namespace GemSwipe.Game.Pages.Game
             AddChild(_effectLayer, 3);
 
             Start(levelId);
-            GestureEventHandler.Swipped += OnSwipped;
+            Gesture.Swipe += OnSwipped;
         }
 
         private void OnSwipped(Direction direction)
@@ -131,7 +126,7 @@ namespace GemSwipe.Game.Pages.Game
             _scene.Dispose();
             _effectLayer.Dispose();
 
-            GestureEventHandler.Swipped -= OnSwipped;
+            Gesture.Swipe -= OnSwipped;
         }
     }
 }

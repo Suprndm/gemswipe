@@ -5,8 +5,10 @@ using Android.Util;
 using Android.Views;
 using GemSwipe.Droid.Effects;
 using GemSwipe.Game.Gestures;
+using Java.Lang;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using String = System.String;
 using View = Android.Views.View;
 
 [assembly: ResolutionGroupName("GemSwipe")]
@@ -18,39 +20,36 @@ namespace GemSwipe.Droid.Effects
     {
         private GestureDetectorCompat gestureRecognizer;
         private readonly InternalGestureDetector tapDetector;
-        private Command<Point> tapWithPositionCommand;
+
         private DisplayMetrics displayMetrics;
 
         public TapWithPositionGestureEffect()
         {
             tapDetector = new InternalGestureDetector
             {
-                TapAction = motionEvent =>
+                DownAction = motionEvent =>
                 {
-                    var tap = tapWithPositionCommand;
-                    if (tap != null)
-                    {
                         var x = motionEvent.GetX();
                         var y = motionEvent.GetY();
 
                         var point = new Point(x, y);
-                        if (tap.CanExecute(point))
-                            tap.Execute(point);
-                    }
+                        Gesture.OnDown(point);
+                },
+
+                UpAction = motionEvent =>
+                {
+
+                        var x = motionEvent.GetX();
+                        var y = motionEvent.GetY();
+
+                        var point = new Point(x, y);
+                        Gesture.OnUp(point);
+                },
+                SwipeAction = point =>
+                {
+                        Gesture.OnSwipe(point);
                 }
             };
-        }
-
-        private Point PxToDp(Point point)
-        {
-            point.X = point.X / displayMetrics.Density;
-            point.Y = point.Y / displayMetrics.Density;
-            return point;
-        }
-
-        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
-        {
-            tapWithPositionCommand = Gesture.GetCommand(Element);
         }
 
         protected override void OnAttached()
@@ -65,13 +64,16 @@ namespace GemSwipe.Droid.Effects
                 gestureRecognizer = new GestureDetectorCompat(context, tapDetector);
             control.Touch += ControlOnTouch;
 
-            OnElementPropertyChanged(new PropertyChangedEventArgs(String.Empty));
         }
 
         private void ControlOnTouch(object sender, View.TouchEventArgs touchEventArgs)
         {
+            if (touchEventArgs.Event.Action == MotionEventActions.Move)
+            {
+                Gesture.OnPan(new Point(touchEventArgs.Event.GetX(), touchEventArgs.Event.GetY()));
+            }
+
             gestureRecognizer?.OnTouchEvent(touchEventArgs.Event);
-            touchEventArgs.Handled = false;
         }
 
         protected override void OnDetached()
@@ -83,13 +85,32 @@ namespace GemSwipe.Droid.Effects
 
         sealed class InternalGestureDetector : GestureDetector.SimpleOnGestureListener
         {
-            public Action<MotionEvent> TapAction { get; set; }
+            public Action<MotionEvent> DownAction { get; set; }
+            public Action<MotionEvent> UpAction { get; set; }
+            public Action<Point> SwipeAction { get; set; }
             public float Density { get; set; }
 
             public override bool OnDown(MotionEvent e)
             {
-                TapAction?.Invoke(e);
-                return true;
+                DownAction?.Invoke(e);
+                return base.OnDown(e);
+            }
+
+            public override void OnLongPress(MotionEvent e)
+            {
+                UpAction?.Invoke(e);
+            }
+
+            public override bool OnSingleTapUp(MotionEvent e)
+            {
+                UpAction?.Invoke(e);
+                return base.OnSingleTapUp(e);
+            }
+
+            public override bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+            {
+                SwipeAction?.Invoke(new Point(-distanceX, -distanceY));
+                return base.OnScroll(e1, e2, distanceX, distanceY);
             }
         }
     }

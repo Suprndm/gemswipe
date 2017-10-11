@@ -18,8 +18,6 @@ namespace GemSwipe.Game.Pages.Map
 {
     public class MapPage : PageBase
     {
-        private float startY;
-        private float lastVY;
         private float _verticalMargin;
         private float _maxHeight;
         private float _minHeight;
@@ -29,7 +27,7 @@ namespace GemSwipe.Game.Pages.Map
         private IList<IButton> _listOfLevelButtons;
         private TopBar _topBar;
 
-        public MapPage( float x, float y, float height, float width, int playerProgress) : base( x, y, height, width)
+        public MapPage(float x, float y, float height, float width, int playerProgress) : base(x, y, height, width)
         {
             _playerProgress = 20;
             _listOfLevelButtons = new List<IButton>();
@@ -38,19 +36,19 @@ namespace GemSwipe.Game.Pages.Map
             _minHeight = 0;
 
             _maxHeight = Math.Min(height - _playerProgress * height / 10, 0);
-            _maxHeight = -height+_verticalMargin +_playerProgress * height / 10+_verticalMargin;
+            _maxHeight = -height + _verticalMargin + _playerProgress * height / 10 + _verticalMargin;
 
             //ajouter au skiaroot?
-            _topBar = new TopBar( 0, 0, height, width);
+            _topBar = new TopBar(0, 0, height, width);
             AddChild(_topBar);
 
-            AddChild(new TextBlock( width / 2, height -_verticalMargin , "This is the map !", height / 20f,
+            AddChild(new TextBlock(width / 2, height - _verticalMargin, "This is the map !", height / 20f,
                 new SKColor(255, 255, 255)));
 
 
             for (int i = 1; i <= _playerProgress; i++)
             {
-                LevelButton levelButton = new LevelButton(canvas, width / 2, height - _verticalMargin - i * height / 10, height / 40f, "Level " + i, i, new SKColor(255, 255, 255));
+                LevelButton levelButton = new LevelButton(width / 2, height - _verticalMargin - i * height / 10, height / 40f, "Level " + i, i, new SKColor(255, 255, 255));
                 _listOfLevelButtons.Add(levelButton);
                 AddChild(levelButton);
                 DeclareTappable(levelButton);
@@ -59,8 +57,6 @@ namespace GemSwipe.Game.Pages.Map
                 levelButton.Tapped += () => levelButton.ActivateOrbitingStars(Width, Height);
             }
         }
-
-
 
         private void LevelButton_Tapped(int i)
         {
@@ -71,7 +67,7 @@ namespace GemSwipe.Game.Pages.Map
         {
         }
 
-        private async Task ScrollMap(Direction direction)
+        private void Swipe(Direction direction)
         {
             if (direction == Direction.Top || direction == Direction.Bottom)
             {
@@ -96,52 +92,21 @@ namespace GemSwipe.Game.Pages.Map
                 //}
 
                 this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
-                await Task.Delay(1000);
-
+                Task.Delay(1000).Wait();
             }
         }
 
-        private void OnPanning(PanUpdatedEventArgs e)
+        private void Pan(Point p)
         {
-            Pan(e);
-        }
+            _y += (float)p.Y;
 
-        private async void Pan(PanUpdatedEventArgs e)
-        {
-            await ScrollMap(e);
-        }
-
-        private async Task ScrollMap(PanUpdatedEventArgs e)
-        {
-            switch (e.StatusType)
+            if (_y < _minHeight)
             {
-                case GestureStatus.Started:
-                    startY = _y;
-                    break;
-                case GestureStatus.Running:
-                    {
-                        float oldY = _y;
-                        _y = startY + (float)e.TotalY;
-
-                        if (_y < _minHeight)
-                        {
-                            _y = _minHeight;
-                        }
-                        if (_y > _maxHeight)
-                        {
-                            _y = _maxHeight;
-                        }
-                        lastVY = oldY - _y;
-
-
-                    }
-                    break;
-
-                case GestureStatus.Completed:
-                    //float stoppingScale = 3;
-                    //this.Animate("moveY", p => _y = (float)p, _y, _y + lastVY * stoppingScale, 8, (uint)1000, Easing.SinInOut);
-                    break;
-
+                _y = _minHeight;
+            }
+            if (_y > _maxHeight)
+            {
+                _y = _maxHeight;
             }
         }
 
@@ -153,7 +118,8 @@ namespace GemSwipe.Game.Pages.Map
 
         protected override void OnActivated(object parameter = null)
         {
-            GestureEventHandler.Panning += OnPanning;
+            Gesture.Pan += Pan;
+           //  Gesture.Swipe += Swipe;
 
             Task.Run(async () =>
             {
