@@ -10,5 +10,6 @@ namespace GemSwipe.Services
     {
         string Write(string text);
         void SaveText(string filename, string text);
+        string Read(string filename);
     }
 }

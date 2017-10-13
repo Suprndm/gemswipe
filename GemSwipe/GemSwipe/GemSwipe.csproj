@@ -96,7 +96,6 @@
     <Compile Include="Game\SkiaEngine\ISkiaView.cs" />
     <Compile Include="Game\Pages\Game\Floors\Floor.cs" />
     <Compile Include="Game\Gestures\Gesture.cs" />
-    <Compile Include="Game\Gestures\GestureEventHandler.cs" />
     <Compile Include="Game\Models\Cell.cs" />
     <Compile Include="Game\Models\Direction.cs" />
     <Compile Include="Game\Models\GameLostData.cs" />

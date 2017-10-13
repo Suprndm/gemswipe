@@ -66,9 +66,19 @@ namespace GemSwipe.Game.Pages.Map
         }
         public string SaveAFile()
         {
-            DependencyService.Get<ISaveAndLoad>().SaveText("temp.txt", "lol");
-            string str = DependencyService.Get<ISaveAndLoad>().LoadText("temp.txt");
-            return str;
+            try
+            {
+                var fileWriter = DependencyService.Get<IWriteToFile>();
+
+                fileWriter.SaveText("temp.txt", "lal");
+                var result = fileWriter.Read("temp.txt");
+                return result;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        
         }
         private void LevelButton_Tapped(int i)
         {

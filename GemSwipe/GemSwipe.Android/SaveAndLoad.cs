@@ -15,6 +15,7 @@ namespace GemSwipe.Droid
             var filePath = Path.Combine(documentsPath, filename);
             System.IO.File.WriteAllText(filePath, text);
         }
+
         public string LoadText(string filename)
         {
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

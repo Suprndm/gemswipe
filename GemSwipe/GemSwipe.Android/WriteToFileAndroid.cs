@@ -32,17 +32,18 @@ namespace GemSwipe.Droid
 
         public void SaveText(string filename, string text)
         {
-            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = System.IO.Path.Combine(documentsPath, filename);
-            System.IO.File.Create(filePath);
             System.IO.File.WriteAllText(filePath, text);
         }
-        public string LoadText(string filename)
+
+        public string Read(string filename)
         {
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var filePath = Path.Combine(documentsPath, filename);
             return System.IO.File.ReadAllText(filePath);
         }
+
         //    }
         //}
 
