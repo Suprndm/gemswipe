@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace GemSwipe.Data.Player
 {
-    class PlayerData
+    public class PlayerData
     {
+        private int _maxLevelReached { get; set; }
+
     }
 }

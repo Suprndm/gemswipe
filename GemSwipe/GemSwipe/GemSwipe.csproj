@@ -53,6 +53,8 @@
     <Compile Include="Data\LevelMovesData.cs" />
     <Compile Include="Data\Level\LevelConfiguration.cs" />
     <Compile Include="Data\Level\LevelRepository.cs" />
+    <Compile Include="Data\Player\PlayerData.cs" />
+    <Compile Include="Data\Player\PlayerProgress.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStarParticle.cs" />
     <Compile Include="Game\Effects\EffectLayer.cs" />
     <Compile Include="Data\ResourceLoader.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Game\SkiaEngine\ISkiaView.cs" />
     <Compile Include="Game\Pages\Game\Floors\Floor.cs" />
     <Compile Include="Game\Gestures\Gesture.cs" />
+    <Compile Include="Game\Gestures\GestureEventHandler.cs" />
     <Compile Include="Game\Models\Cell.cs" />
     <Compile Include="Game\Models\Direction.cs" />
     <Compile Include="Game\Models\GameLostData.cs" />
