@@ -106,6 +106,8 @@
     <Compile Include="Game\Settings\TopBar.cs" />
     <Compile Include="Game\TestView.cs" />
     <Compile Include="Services\DependencyService.cs" />
+    <Compile Include="Services\ISaveAndLoad.cs" />
+    <Compile Include="Services\IWriteToFile.cs" />
     <Compile Include="Services\Logger.cs" />
     <Compile Include="Services\LittleStarLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

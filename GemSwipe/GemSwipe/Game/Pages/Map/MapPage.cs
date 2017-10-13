@@ -8,11 +8,13 @@ using GemSwipe.Game.Models;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
 using GemSwipe.Game.Settings;
+using GemSwipe.Services;
 using GemSwipe.Utilities;
 using GemSwipe.Utilities.Buttons;
 using GemSwipe.Utilities.Sprites;
 using SkiaSharp;
 using Xamarin.Forms;
+using DependencyService = Xamarin.Forms.DependencyService;
 
 namespace GemSwipe.Game.Pages.Map
 {
@@ -42,7 +44,11 @@ namespace GemSwipe.Game.Pages.Map
             _topBar = new TopBar(0, 0, height, width);
             AddChild(_topBar);
 
-            AddChild(new TextBlock(width / 2, height - _verticalMargin, "This is the map !", height / 20f,
+            SaveAFile();
+
+            //AddChild(new TextBlock( width / 2, height -_verticalMargin , "This is the map !", height / 20f,
+            //    new SKColor(255, 255, 255)));
+            AddChild(new TextBlock(width / 2, height - _verticalMargin, SaveAFile(), height / 20f,
                 new SKColor(255, 255, 255)));
 
 
@@ -56,8 +62,14 @@ namespace GemSwipe.Game.Pages.Map
                 levelButton.Tapped += () => LevelButton_Tapped(j);
                 levelButton.Tapped += () => levelButton.ActivateOrbitingStars(Width, Height);
             }
-        }
 
+        }
+        public string SaveAFile()
+        {
+            DependencyService.Get<ISaveAndLoad>().SaveText("temp.txt", "lol");
+            string str = DependencyService.Get<ISaveAndLoad>().LoadText("temp.txt");
+            return str;
+        }
         private void LevelButton_Tapped(int i)
         {
             Navigator.Instance.GoTo(PageType.Game, i);
