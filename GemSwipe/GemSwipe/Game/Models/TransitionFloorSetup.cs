@@ -11,7 +11,7 @@ namespace GemSwipe.Game.Models
             Title = title;
         }
 
-        public TransitionFloorSetup(int floor, LevelConfiguration levelconfig)
+        public TransitionFloorSetup(int floor, LevelData levelconfig)
         {
             Floor = floor;
             Quote = levelconfig.Story;

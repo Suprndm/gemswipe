@@ -67,7 +67,7 @@ namespace GemSwipe.Game.Entities
             }
             using (var paint = new SKPaint())
             {
-                var text = $"Level {Level}";
+                var text = $"LevelData {Level}";
                 paint.TextSize = 24;
                 paint.Color = SKColors.Yellow;
                 paint.Typeface = SKTypeface.FromFamilyName(

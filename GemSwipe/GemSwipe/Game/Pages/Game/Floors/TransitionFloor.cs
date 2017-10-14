@@ -27,7 +27,7 @@ namespace GemSwipe.Game.Pages.Game.Floors
             DeclareTappable(this);
         }
 
-        public TransitionFloor( float x, float y, float height, float width, LevelConfiguration setup) : base( x, y, height, width)
+        public TransitionFloor( float x, float y, float height, float width, LevelData setup) : base( x, y, height, width)
         {
             var boardMarginTop = height * 0.2f;
             SKColor color = CreateColor(255, 255, 255, 255);

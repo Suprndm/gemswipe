@@ -1,0 +1,15 @@
+﻿[
+  {
+    "Id": 1,
+    "Size": 5.0,
+    "SpriteName": "planet_1",
+    "HaloColor": {
+      "Alpha": 255,
+      "Red": 255,
+      "Green": 255,
+      "Blue": 255,
+      "Hue": 0.0
+    },
+    "HaloStrenght": 3
+  }
+]

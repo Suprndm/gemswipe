@@ -12,7 +12,7 @@ namespace GemSwipe.Game.Models
             Title = title;
         }
 
-       public PlayableFloorSetup(LevelConfiguration levelConfig)
+       public PlayableFloorSetup(LevelData levelDataConfig)
         {
 
         }

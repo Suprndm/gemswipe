@@ -18,7 +18,7 @@ namespace GemSwipe.Game.Entities
     {
 
         private Background _background;
-        private LevelRepository _levelRepository;
+        private LevelDataRepository _levelDataRepository;
 
         public SkiaRoot( float x, float y, float height, float width) : base( x, y, height, width)
         {
@@ -27,7 +27,7 @@ namespace GemSwipe.Game.Entities
         public async void Initialize()
         {
             await LoadResources();
-            _levelRepository = new LevelRepository();
+            _levelDataRepository = new LevelDataRepository();
             SetupNavigation();
 
             Gesture.Up += Gesture_Up;
@@ -55,9 +55,9 @@ namespace GemSwipe.Game.Entities
             var settingsPanel = new SettingsPanel( 0, 0, Height, Width);
             AddChild(settingsPanel, 10);
 
-            var mapPage = new MapPage( 0, 0, Height, Width,_levelRepository.CountOfLevels());
+            var mapPage = new MapPage( 0, 0, Height, Width,_levelDataRepository.Count());
             AddChild(mapPage);
-            var gamePage = new GamePage( 0, 0, Height, Width, _levelRepository);
+            var gamePage = new GamePage( 0, 0, Height, Width, _levelDataRepository);
             AddChild(gamePage);
 
             Navigator.Instance.SetBackground(_background);

@@ -13,13 +13,13 @@ namespace GemSwipe.Game.Models
             Moves = moves;
         }
 
-        public BoardSetup(LevelConfiguration levelConfig)
+        public BoardSetup(LevelData levelDataConfig)
         {
-            LevelId = levelConfig.Id;
-            Rows = levelConfig.Rows;
-            Columns = levelConfig.Columns;
-            SetupString = levelConfig.BoardSetupString;
-            Moves = levelConfig.NbOfMovesToSolve;
+            LevelId = levelDataConfig.Id;
+            Rows = levelDataConfig.Rows;
+            Columns = levelDataConfig.Columns;
+            SetupString = levelDataConfig.BoardSetupString;
+            Moves = levelDataConfig.NbOfMovesToSolve;
         }
 
         public int LevelId { get; set; }

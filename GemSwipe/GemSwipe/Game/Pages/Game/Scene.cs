@@ -29,7 +29,7 @@ namespace GemSwipe.Game.Pages.Game
         private int _floorCount;
         private int _currentFloor;
 
-        public LevelConfiguration _levelConfiguration;
+        public LevelData LevelData;
 
         public Scene( float x, float y, float height, float width) : base( x, y, height, width)
         {
@@ -59,7 +59,7 @@ namespace GemSwipe.Game.Pages.Game
         public async Task EndGame()
         {
             _floorCount++;
-            var endFloor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration.Id);
+            var endFloor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData.Id);
             _floors.Add(endFloor);
             AddChild(endFloor);
             await GoToNextFloor();
@@ -67,9 +67,9 @@ namespace GemSwipe.Game.Pages.Game
 
 
 
-        public void SetLevelConfig(LevelConfiguration levelConfig)
+        public void SetLevelData(LevelData levelData)
         {
-            _levelConfiguration = levelConfig;
+            LevelData = levelData;
         }
         private async Task GoToNextFloor()
         {
@@ -93,7 +93,7 @@ namespace GemSwipe.Game.Pages.Game
         //public async Task DisplayBoard(int levelId)
         public async Task NextTransitionFloor(int levelId)
         {
-            var floor = new TransitionFloor( X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration);
+            var floor = new TransitionFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);
             AddChild(floor);
 
             _floors.Add(floor);
@@ -107,7 +107,7 @@ namespace GemSwipe.Game.Pages.Game
 
         public async Task EndFloor()
         {
-            var floor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration.Id);
+            var floor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData.Id);
             AddChild(floor);
 
             _floors.Add(floor);
@@ -120,11 +120,11 @@ namespace GemSwipe.Game.Pages.Game
         private async void NextBoard(int levelId)
         {
             _floorCount++;
-            BoardSetup boardSetup = new BoardSetup(_levelConfiguration);
+            BoardSetup boardSetup = new BoardSetup(LevelData);
             //var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
             //var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount - 1).ToString());
             //var floor = new PlayableFloor( X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
-            var floor = new PlayableFloor( X, -Y + _floorMargin, _floorHeight, Width, _levelConfiguration);
+            var floor = new PlayableFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);
             AddChild(floor);
 
             _floors.Add(floor);

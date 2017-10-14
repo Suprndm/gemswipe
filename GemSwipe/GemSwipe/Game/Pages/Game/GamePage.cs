@@ -21,12 +21,12 @@ namespace GemSwipe.Game.Pages.Game
         private EffectLayer _effectLayer;
         private bool _isBusy;
         private int _level=1;
-        private LevelRepository _levelRepository;
+        private LevelDataRepository _levelDataRepository;
 
-        public GamePage( float x, float y, float height, float width, LevelRepository levelRepository) : base( x, y, height, width)
+        public GamePage( float x, float y, float height, float width, LevelDataRepository levelDataRepository) : base( x, y, height, width)
         {
             _blockedSensor = new BlockedSensor();
-            _levelRepository = levelRepository;
+            _levelDataRepository = levelDataRepository;
         }
 
         public void BackgroundNextBoard()
@@ -38,8 +38,8 @@ namespace GemSwipe.Game.Pages.Game
         {
             await _scene.StartingFloor.Start();
 
-            LevelConfiguration levelconfig = _levelRepository.GetLevelConfigurationById(Math.Min(5,Math.Max(levelId,0)));
-            _scene.SetLevelConfig(levelconfig);
+            LevelData levelconfig = _levelDataRepository.Get(Math.Min(5,Math.Max(levelId,0)));
+            _scene.SetLevelData(levelconfig);
             await _scene.NextTransitionFloor(levelId);
 
             BackgroundNextBoard();

@@ -155,8 +155,8 @@ namespace GemSwipe.Game.SkiaEngine
             if (!IsVisible) return;
 
             Draw();
-
-            foreach (var child in _children.OrderBy(child => child.ZIndex).ToList())
+            var children = _children.ToList();
+            foreach (var child in children.OrderBy(child => child.ZIndex).ToList())
             {
                 if (child.ToDispose)
                     RemoveChild(child);

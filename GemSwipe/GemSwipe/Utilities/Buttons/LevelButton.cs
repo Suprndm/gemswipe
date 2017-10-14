@@ -11,15 +11,13 @@ namespace GemSwipe.Utilities.Buttons
 {
     public class LevelButton : SimpleButton, IButton
     {
-        public string Text { get; set; }
-        public object Info { get; set; }
+        public int Level { get; set; }
 
 
 
-        public LevelButton(float x, float y, float height, string text, object info, SKColor color) : base (x, y, 0, height, color)
+        public LevelButton(float x, float y, float height, int level, SKColor color) : base (x, y, 0, height, color)
         {
-            Text = text;
-            Info = info;
+            Level = level;
             //Tapped+=ActivateOrbitingStars;
 
         }
@@ -39,25 +37,45 @@ namespace GemSwipe.Utilities.Buttons
 
         protected override void Draw()
         {
+
+            var outerPaint = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = CreateColor(255, 255, 255)
+            };
+
+            Canvas.DrawCircle(X, Y, Height*1.2f, outerPaint);
+
+            var innerPaint = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Fill,
+                Color = CreateColor(14, 0, 163)
+            };
+
+            Canvas.DrawCircle(X, Y, Height, innerPaint);
+
+
             using (var paint = new SKPaint())
             {
                 //paint.Color = SKColors.Yellow;
                 paint.Typeface = SKTypeface.FromFamilyName(
-                    "Arial",
+                    "Courier New",
                     SKFontStyleWeight.Bold,
                     SKFontStyleWidth.Normal,
-                    SKFontStyleSlant.Italic);
+                    SKFontStyleSlant.Upright);
 
                 paint.TextSize = Height;
                 paint.IsAntialias = true;
-                paint.Color = Color;
+                paint.Color = CreateColor(Color);
 
-                var textLenght = paint.MeasureText(Text);
+                var textLenght = paint.MeasureText(Level.ToString());
 
                 Width = textLenght;
 
                 _hitbox = SKRect.Create(X - textLenght / 2, Y - Height / 3, Width, Height);
-                Canvas.DrawText(Text, X - textLenght / 2, Y + Height / 2, paint);
+                Canvas.DrawText(Level.ToString(), X - textLenght / 2, Y + Height / 4, paint);
 
             }
         }

@@ -26,15 +26,15 @@ namespace GemSwipe.Game.Pages.Game.Floors
         }
 
         public PlayableFloor( float x, float y, float height, float width,
-            LevelConfiguration levelConfig) : base( x, y, height, width)
+            LevelData levelDataConfig) : base( x, y, height, width)
         {
             var boardMarginTop = height * 0.2f;
-            var board = new Board(new BoardSetup(levelConfig), 0, 0 + boardMarginTop, width, width);
+            var board = new Board(new BoardSetup(levelDataConfig), 0, 0 + boardMarginTop, width, width);
             AddChild(board);
             Board = board;
 
             SKColor color = CreateColor(255, 255, 255, 255);
-            Title = new FloorTitle( Width / 2, Height / 10, levelConfig.Title, Height / 20, color);
+            Title = new FloorTitle( Width / 2, Height / 10, levelDataConfig.Title, Height / 20, color);
             AddChild(Title);
         }
 

@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.Data.LevelMapPosition;
+using GemSwipe.Data.Planet;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.SkiaEngine;
+using Newtonsoft.Json;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game
 {
@@ -66,7 +70,7 @@ namespace GemSwipe.Game
                         Style = SKPaintStyle.Fill,
                         Color = CreateColor(175, 175, 175),
                         StrokeWidth = 2,
-                        IsAntialias = true
+                        IsAntialias = false
                     };
 
                     Canvas.DrawPath(path, paint);

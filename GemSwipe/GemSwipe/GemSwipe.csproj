@@ -51,8 +51,14 @@
     <Compile Include="BoardSolver\BlockedSensor.cs" />
     <Compile Include="Data\BoardData.cs" />
     <Compile Include="Data\LevelMovesData.cs" />
-    <Compile Include="Data\Level\LevelConfiguration.cs" />
-    <Compile Include="Data\Level\LevelRepository.cs" />
+    <Compile Include="Data\IRepository.cs" />
+    <Compile Include="Data\LevelData\LevelData.cs" />
+    <Compile Include="Data\LevelData\LevelDataRepository.cs" />
+    <Compile Include="Data\LevelMapPosition\LevelMapPositionRepository.cs" />
+    <Compile Include="Data\LevelMapPosition\LevelMapPosition.cs" />
+    <Compile Include="Data\PlanetData\PlanetData.cs" />
+    <Compile Include="Data\PlanetData\PlanetDataRepository.cs" />
+    <Compile Include="Data\RepositoryBase.cs" />
     <Compile Include="Data\Player\PlayerData.cs" />
     <Compile Include="Data\Player\PlayerProgress.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStarParticle.cs" />
@@ -66,6 +72,7 @@
     <Compile Include="Game\Pages\Game\GamePage.cs" />
     <Compile Include="Game\Pages\Home\HomePage.cs" />
     <Compile Include="Game\Entities\Life.cs" />
+    <Compile Include="Game\Pages\Map\Map.cs" />
     <Compile Include="Game\Pages\Map\MapPage.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\Halo.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\LinearGradientBackground.cs" />
@@ -119,6 +126,7 @@
     <Compile Include="Utilities\Buttons\SimpleButton.cs" />
     <Compile Include="Utilities\Buttons\SpriteButton.cs" />
     <Compile Include="Utilities\Buttons\TextButton.cs" />
+    <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="Utilities\Sprites\Sprite.cs" />
     <Compile Include="Utilities\Sprites\SpriteModel.cs" />
     <Compile Include="Utilities\Sprites\SpriteSheet.cs" />
@@ -162,7 +170,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\Level\LevelResources.json" />
+    <EmbeddedResource Include="Data\LevelData\LevelData.json" />
+    <EmbeddedResource Include="Data\PlanetData\PlanetDataResources.json" />
+    <EmbeddedResource Include="Data\LevelMapPosition\LevelMapPosition.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -189,6 +199,7 @@
     <EmbeddedResource Include="Resources\Graphics\atlas.png" />
     <EmbeddedResource Include="Resources\Graphics\atlas.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

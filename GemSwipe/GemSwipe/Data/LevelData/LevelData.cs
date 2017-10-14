@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
-
-namespace GemSwipe.Data.Level
+﻿namespace GemSwipe.Data.Level
 {
-    public class LevelConfiguration
+    public class LevelData
     {
         public int Id { get; set; }
         public string BoardSetupString { get; set; }
@@ -18,9 +10,8 @@ namespace GemSwipe.Data.Level
         public int Rows { get; set; }
         public int Columns { get; set; }
 
-        public LevelConfiguration()
+        public LevelData()
         {
-
         }
     }
 }

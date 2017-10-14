@@ -21,10 +21,13 @@ namespace GemSwipe.Game.Gestures
         {
             var dragX = p.X - _previousPosX;
             var dragY = p.Y - _previousPosY;
-            Pan?.Invoke(new Point(dragX, dragY));
 
             _previousPosX = p.X;
             _previousPosY = p.Y;
+
+            Pan?.Invoke(new Point(dragX, dragY));
+
+        
         }
 
         public static void OnSwipe(Point p)
