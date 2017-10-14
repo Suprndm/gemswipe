@@ -28,7 +28,7 @@ namespace GemSwipe.Game.SkiaEngine
                 if (Parent != null) return _x * Scale + (1 - _scale) * _width / 2 + Parent.X;
                 return _x;
             }
-            protected set => _x = value;
+            set => _x = value;
         }
 
         protected float _y;
@@ -39,7 +39,7 @@ namespace GemSwipe.Game.SkiaEngine
                 if (Parent != null) return _y * Scale + (1 - _scale) * _height / 2 + Parent.Y;
                 return _y;
             }
-            protected set => _y = value;
+            set => _y = value;
         }
 
         protected float _width;

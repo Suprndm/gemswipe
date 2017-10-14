@@ -59,6 +59,17 @@ namespace GemSwipe.Game.Pages.Map
             _curve = SmoothCurve(_curve);
             _curve = SmoothCurve(_curve);
             _curve = SmoothCurve(_curve);
+            _curve = SmoothCurve(_curve);
+            _curve = SmoothCurve(_curve);
+
+            foreach (var levelButton in _levelButtons)
+            {
+               var closestPoint = _curve.Select(p => new KeyValuePair<SKPoint, float>(p,
+                    MathHelper.Distance(p, new SKPoint(levelButton.X, levelButton.Y)))).OrderBy(p => p.Value).First().Key;
+
+                levelButton.X = closestPoint.X;
+                levelButton.Y = closestPoint.Y;
+            }
 
         }
 
@@ -90,14 +101,11 @@ namespace GemSwipe.Game.Pages.Map
                         (float) (p3.Y + d3 * Math.Sin(angle3)));
 
                     newCurve.Add(newP1);
-                   // newCurve.Add(p2);
                     newCurve.Add(newP3);
                 }
                 else
                 {
-                    //newCurve.Add(p1);
                     newCurve.Add(p2);
-                    //newCurve.Add(p3);
                 }
             }
 
@@ -129,18 +137,18 @@ namespace GemSwipe.Game.Pages.Map
             var paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
-                Color = CreateColor(255, 255, 255),
-                StrokeWidth = 8,
-                IsAntialias = false
+                Color = CreateColor(255, 255, 255,125),
+                StrokeWidth = Width/50,
+                IsAntialias = true
             };
 
             Canvas.DrawPath(path, paint);
 
 
             path = new SKPath();
-            for (int i = 0; i < _oldCurve.Count; i++)
+            for (int i = 0; i < _curve.Count; i++)
             {
-                var posWithScroll = new SKPoint(_oldCurve[i].X + _x, _oldCurve[i].Y + _y);
+                var posWithScroll = new SKPoint(_curve[i].X + _x, _curve[i].Y + _y);
 
                 if (i == 0)
                     path.MoveTo(posWithScroll);
@@ -151,9 +159,9 @@ namespace GemSwipe.Game.Pages.Map
             paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
-                Color = CreateColor(255, 0, 0),
-                StrokeWidth = 2,
-                IsAntialias = false
+                Color = CreateColor(255, 255, 255),
+                StrokeWidth = Width / 200,
+                IsAntialias = true
             };
 
             Canvas.DrawPath(path, paint);
