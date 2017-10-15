@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using SkiaSharp;
@@ -15,11 +16,14 @@ namespace GemSwipe.Utilities.Buttons
 
 
 
-        public LevelButton(float x, float y, float height, int level, SKColor color) : base (x, y, 0, height, color)
+        public LevelButton(float x, float y, float height, int level) : base (x, y, 0, height)
         {
             Level = level;
-            //Tapped+=ActivateOrbitingStars;
+            //Activated+=ActivateOrbitingStars;
 
+            NormalColor = new SKColor(14, 0, 163);
+            DownColor = new SKColor(79, 0, 163);
+            ActivatedColor = new SKColor(184, 117, 255);
         }
 
         public void ActivateOrbitingStars(float screenWidth, float screenHeight)
@@ -38,6 +42,7 @@ namespace GemSwipe.Utilities.Buttons
         protected override void Draw()
         {
 
+            Color = new SKColor(R, G, B);
             var outerPaint = new SKPaint
             {
                 IsAntialias = true,
@@ -51,7 +56,7 @@ namespace GemSwipe.Utilities.Buttons
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = CreateColor(14, 0, 163)
+                Color = CreateColor(Color)
             };
 
             Canvas.DrawCircle(X, Y, Height, innerPaint);
@@ -68,15 +73,14 @@ namespace GemSwipe.Utilities.Buttons
 
                 paint.TextSize = Height;
                 paint.IsAntialias = true;
-                paint.Color = CreateColor(Color);
+                paint.Color = CreateColor(new SKColor(255,255,255));
 
                 var textLenght = paint.MeasureText(Level.ToString());
 
                 Width = textLenght;
 
-                _hitbox = SKRect.Create(X - textLenght / 2, Y - Height / 3, Width, Height);
+                _hitbox = SKRect.Create(X - Height*2, Y - Height*2 , Height*4, Height*4);
                 Canvas.DrawText(Level.ToString(), X - textLenght / 2, Y + Height / 4, paint);
-
             }
         }
     }

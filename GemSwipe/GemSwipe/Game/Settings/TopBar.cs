@@ -2,6 +2,7 @@
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities;
+using GemSwipe.Utilities.Buttons;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -13,12 +14,11 @@ namespace GemSwipe.Game.Settings
         {
             _height = 0.1f * height;
 
-            var settingsButton = new SimpleButton( width -_height/2, _height/2, _height, _height,
-                CreateColor(255, 255, 255));
+            var settingsButton = new SimpleButton( width -_height/2, _height/2, _height, _height);
             AddChild(settingsButton);
             DeclareTappable(settingsButton);
             _y = -height;
-            settingsButton.Tapped += SettingsButton_Tapped;
+            settingsButton.Activated += SettingsButton_Tapped;
         }
 
         public Task Show()

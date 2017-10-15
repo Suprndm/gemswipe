@@ -11,7 +11,7 @@ namespace GemSwipe.Game.Pages.Home
         {
             var tapToPlay = new TapToPlay( 0, 0, height, width);
             AddChild(tapToPlay);
-            tapToPlay.Tapped += OnTapped;
+            tapToPlay.Down += OnTapped;
         }
 
         private void OnTapped()

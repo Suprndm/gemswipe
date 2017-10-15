@@ -1,4 +1,4 @@
-﻿namespace GemSwipe.Data.Planet
+﻿namespace GemSwipe.Data.PlanetData
 {
     public class PlanetDataRepository : RepositoryBase<PlanetData>
     {

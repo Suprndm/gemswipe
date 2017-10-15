@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.Data;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Effects;
-using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.Popped;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
@@ -61,7 +61,6 @@ namespace GemSwipe.Game.Pages.Game
 
                     BackgroundNextBoard();
                     await _scene.EndFloor();
-                    _isBusy = false;
                 }
                 else if (!_isBlocked)
                 {

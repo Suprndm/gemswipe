@@ -5,6 +5,7 @@ using Android.Util;
 using Android.Views;
 using GemSwipe.Droid.Effects;
 using GemSwipe.Game.Gestures;
+using GemSwipe.Services;
 using Java.Lang;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -29,25 +30,25 @@ namespace GemSwipe.Droid.Effects
             {
                 DownAction = motionEvent =>
                 {
-                        var x = motionEvent.GetX();
-                        var y = motionEvent.GetY();
+                    var x = motionEvent.GetX();
+                    var y = motionEvent.GetY();
 
-                        var point = new Point(x, y);
-                        Gesture.OnDown(point);
+                    var point = new Point(x, y);
+                    Gesture.OnDown(point);
                 },
 
                 UpAction = motionEvent =>
                 {
 
-                        var x = motionEvent.GetX();
-                        var y = motionEvent.GetY();
+                    var x = motionEvent.GetX();
+                    var y = motionEvent.GetY();
 
-                        var point = new Point(x, y);
-                        Gesture.OnUp(point);
+                    var point = new Point(x, y);
+                    Gesture.OnUp(point);
                 },
                 SwipeAction = point =>
                 {
-                        Gesture.OnSwipe(point);
+                    Gesture.OnSwipe(point);
                 }
             };
         }
@@ -72,8 +73,11 @@ namespace GemSwipe.Droid.Effects
             {
                 Gesture.OnPan(new Point(touchEventArgs.Event.GetX(), touchEventArgs.Event.GetY()));
             }
-
-            gestureRecognizer?.OnTouchEvent(touchEventArgs.Event);
+            if (touchEventArgs.Event.Action == MotionEventActions.Up)
+            {
+                Gesture.OnUp(new Point(touchEventArgs.Event.GetX(), touchEventArgs.Event.GetY()));
+            }
+                gestureRecognizer?.OnTouchEvent(touchEventArgs.Event);
         }
 
         protected override void OnDetached()
@@ -94,17 +98,6 @@ namespace GemSwipe.Droid.Effects
             {
                 DownAction?.Invoke(e);
                 return base.OnDown(e);
-            }
-
-            public override void OnLongPress(MotionEvent e)
-            {
-                UpAction?.Invoke(e);
-            }
-
-            public override bool OnSingleTapUp(MotionEvent e)
-            {
-                UpAction?.Invoke(e);
-                return base.OnSingleTapUp(e);
             }
 
             public override bool OnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)

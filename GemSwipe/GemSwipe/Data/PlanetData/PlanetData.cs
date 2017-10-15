@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace GemSwipe.Data.Planet
+namespace GemSwipe.Data.PlanetData
 {
     public class PlanetData
     {

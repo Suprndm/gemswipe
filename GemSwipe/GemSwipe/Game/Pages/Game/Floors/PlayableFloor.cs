@@ -1,4 +1,4 @@
-﻿using GemSwipe.Data.Level;
+﻿using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Models;
 using SkiaSharp;

@@ -1,48 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GemSwipe.Utilities;
-using GemSwipe.Utilities.Buttons;
-using SkiaSharp;
-using Xamarin.Forms;
+﻿using SkiaSharp;
 
-namespace GemSwipe.Utilities
+namespace GemSwipe.Utilities.Buttons
 {
-    public class TextButton : SimpleButton, IButton
+    public class TextButton : SimpleButton
     {
         public string Text { get; set; }
         public object Info { get; set; }
-
-        public TextButton( float x, float y, float height, string text, object info, SKColor color) : base( x, y, 0, height, color)
+        public SKColor TextColor { get; set; }
+        protected float Padding { get; set; }
+        public TextButton(float x, float y, float height, string text) : base(x, y, 0, height)
         {
+            TextColor = new SKColor(255, 255, 255);
             Text = text;
-            Info = info;
+            Padding = height;
         }
 
         protected override void Draw()
         {
-            using (var paint = new SKPaint())
+            Color = new SKColor(R, G, B);
+
+
+            using (var textPaint = new SKPaint())
             {
-                paint.Color = SKColors.Yellow;
-                paint.Typeface = SKTypeface.FromFamilyName(
+                textPaint.Color = SKColors.Yellow;
+                textPaint.Typeface = SKTypeface.FromFamilyName(
                     "Arial",
                     SKFontStyleWeight.Bold,
                     SKFontStyleWidth.Normal,
                     SKFontStyleSlant.Italic);
 
-                paint.TextSize = Height;
-                paint.IsAntialias = true;
-                paint.Color = Color;
+                textPaint.TextSize = Height;
+                textPaint.IsAntialias = true;
+                textPaint.Color = TextColor;
 
-                var textLenght = paint.MeasureText(Text);
+                var textLenght = textPaint.MeasureText(Text);
 
                 Width = textLenght;
 
-                _hitbox = SKRect.Create(X - textLenght / 2, Y - Height / 3, Width, Height);
-                Canvas.DrawText(Text, X - textLenght / 2, Y + Height / 2, paint);
 
+                var blockWidth = Width + 2 * Padding;
+                var blockHeight = Height + 2 * Padding;
+
+                _hitbox = SKRect.Create(X - blockWidth/2, Y - Height / 3 - Padding, blockWidth, blockHeight);
+
+                using (var blockPaint = new SKPaint())
+                {
+                    blockPaint.Color = Color;
+                    blockPaint.IsAntialias = true;
+                    blockPaint.Style = SKPaintStyle.Fill;
+
+                    Canvas.DrawRect(GetHitbox(), blockPaint);
+
+                    Canvas.DrawCircle(X - blockWidth / 2, Y - Height / 3 - Padding + blockHeight / 2, blockHeight / 2, blockPaint);
+                    Canvas.DrawCircle(X + blockWidth / 2, Y - Height / 3 - Padding + blockHeight / 2, blockHeight / 2, blockPaint);
+                }
+
+                Canvas.DrawText(Text, X - textLenght / 2, Y + Height / 2, textPaint);
             }
         }
     }

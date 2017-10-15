@@ -8,7 +8,7 @@ namespace GemSwipe.Utilities.Buttons
 {
     public interface IButton
     {
-        event Action Tapped;
+        event Action Activated;
 
         //gérer les states, disabled, reactive,
         //gérer les clicks

@@ -1,6 +1,9 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation;
+using GemSwipe.Utilities;
+using GemSwipe.Utilities.Buttons;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game.Floors
@@ -9,20 +12,18 @@ namespace GemSwipe.Game.Pages.Game.Floors
     {
         private readonly int _levelId;
 
+        private TextButton _nextLevelButton;
+        private TextButton _backButton;
         public EndFloor( float x, float y, float height, float width, int levelId) : base( x, y, height, width)
         {
             _levelId = levelId;
-            var nextLevelBlock = new TextBlock( Width / 2, Height * .6f, $"Go to next level", (int)Width / 30,
-                CreateColor(255, 255, 255, 255));
-            AddChild(nextLevelBlock);
-            nextLevelBlock.DeclareTappable(nextLevelBlock);
-            nextLevelBlock.Tapped += NextLevelBlock_Tapped;
+            _nextLevelButton = new TextButton( Width / 2, Height * .6f, Width / 30, $"Go to next level");
+            AddChild(_nextLevelButton);
+            _nextLevelButton.Activated += NextLevelBlock_Tapped;
 
-            var backBlock = new TextBlock( Width / 2, Height * .8f, $"Go back to the map", (int)Width / 30,
-                CreateColor(255, 255, 255, 255));
-            AddChild(backBlock);
-            backBlock.DeclareTappable(backBlock);
-            backBlock.Tapped += BackBlock_Tapped;
+            _backButton = new TextButton( Width / 2, Height * .8f, Width / 30, $"Go back to the map");
+            AddChild(_backButton);
+            _backButton.Activated += BackBlock_Tapped;
 
             AddChild(new TextBlock( Width / 2, Height * .4f, $"Congratulation !", (int)Width / 10, CreateColor(255, 255, 255, 255)));
         }
@@ -40,7 +41,8 @@ namespace GemSwipe.Game.Pages.Game.Floors
 
         public override void Dispose()
         {
-            base.Dispose();
+            _nextLevelButton.Activated -= NextLevelBlock_Tapped;
+            _backButton.Activated -= BackBlock_Tapped;
         }
 
         protected override void Draw()

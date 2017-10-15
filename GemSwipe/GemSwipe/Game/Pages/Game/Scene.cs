@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Data;
-using GemSwipe.Data.Level;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Pages.Game.Floors;
@@ -20,20 +20,19 @@ namespace GemSwipe.Game.Pages.Game
 
         public Board CurrentBoard { get; private set; }
         public StartingFloor StartingFloor { get; private set; }
+        public TransitionFloor TransitionFloor { get; private set; }
 
         private const int MsPerBoardNavigation = 200;
         private readonly double _boardMargin;
         private readonly IList<Floor> _floors;
         private float _floorHeight;
         private float _floorMargin;
-        private int _floorCount;
         private int _currentFloor;
 
         public LevelData LevelData;
 
         public Scene( float x, float y, float height, float width) : base( x, y, height, width)
         {
-            _floorCount = 1;
             _currentFloor = 1;
             _floors = new List<Floor>();
 
@@ -58,7 +57,6 @@ namespace GemSwipe.Game.Pages.Game
 
         public async Task EndGame()
         {
-            _floorCount++;
             var endFloor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData.Id);
             _floors.Add(endFloor);
             AddChild(endFloor);
@@ -93,38 +91,38 @@ namespace GemSwipe.Game.Pages.Game
         //public async Task DisplayBoard(int levelId)
         public async Task NextTransitionFloor(int levelId)
         {
-            var floor = new TransitionFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);
-            AddChild(floor);
+            TransitionFloor = new TransitionFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);
+            AddChild(TransitionFloor);
 
-            _floors.Add(floor);
+            _floors.Add(TransitionFloor);
 
             // Recycle Boards
             ClearFloorsStack();
 
             await GoToNextFloor();
-            floor.Tapped += () => { NextBoard(levelId); };
+            TransitionFloor.Down += TransitionFloor_Down;
+        }
+
+        private void TransitionFloor_Down()
+        {
+            NextBoard();
+        }
+
+        private async void NextBoard()
+        {
+            var floor = new PlayableFloor(X, -Y + _floorMargin, _floorHeight, Width, LevelData);
+            AddChild(floor);
+
+            _floors.Add(floor);
+
+            ClearFloorsStack();
+            await GoToNextFloor();
         }
 
         public async Task EndFloor()
         {
+            TransitionFloor.Down -= TransitionFloor_Down;
             var floor = new EndFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData.Id);
-            AddChild(floor);
-
-            _floors.Add(floor);
-
-            // Recycle Boards
-            ClearFloorsStack();
-            await GoToNextFloor();
-        }
-
-        private async void NextBoard(int levelId)
-        {
-            _floorCount++;
-            BoardSetup boardSetup = new BoardSetup(LevelData);
-            //var floorSetup = new PlayableFloorSetup(SetupBoard, _floorCount - 1, false, levelId.ToString());
-            //var floorSetup = new PlayableFloorSetup(boardSetup, _floorCount - 1, false, (_floorCount - 1).ToString());
-            //var floor = new PlayableFloor( X, -Y + _floorMargin, _floorHeight, Width, floorSetup);
-            var floor = new PlayableFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);
             AddChild(floor);
 
             _floors.Add(floor);
@@ -152,5 +150,6 @@ namespace GemSwipe.Game.Pages.Game
         {
             CurrentBoard.Reset();
         }
+
     }
 }

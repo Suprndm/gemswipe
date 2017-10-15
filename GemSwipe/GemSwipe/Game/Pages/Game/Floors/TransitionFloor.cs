@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Data;
-using GemSwipe.Data.Level;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Models;
 using SkiaSharp;
 

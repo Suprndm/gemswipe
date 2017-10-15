@@ -9,7 +9,7 @@ namespace GemSwipe.Game.SkiaEngine
     public abstract class SkiaView : IAnimatable, ISkiaView, IDisposable
     {
         protected float _scale;
-        
+
         public float Scale
         {
             get
@@ -19,7 +19,7 @@ namespace GemSwipe.Game.SkiaEngine
             }
             protected set => _scale = value;
         }
-        
+
         protected float _x;
         public float X
         {
@@ -106,7 +106,6 @@ namespace GemSwipe.Game.SkiaEngine
             protected set => _isVisible = value;
         }
 
-        public IList<ISkiaView> Tappables { get; }
 
         public SKCanvas Canvas { get; protected set; }
         private readonly IList<ISkiaView> _children;
@@ -114,6 +113,67 @@ namespace GemSwipe.Game.SkiaEngine
         private bool _isVisible;
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
+
+
+        public void AddChild(ISkiaView child, int zindex = 0)
+        {
+            lock (_children)
+            {
+                child.SetCanvas(Canvas);
+                child.ZIndex = zindex;
+                _children.Add(child);
+                child.Parent = this;
+
+                foreach (var tappable in child.Tappables)
+                {
+                    DeclareTappable(tappable);
+                }
+
+                child.Tappables.Clear();
+            }
+        }
+
+        public void RemoveChild(ISkiaView child)
+        {
+                _children.Remove(child);
+                child.SetCanvas(null);
+        }
+
+        protected abstract void Draw();
+
+        public void Render()
+        {
+            if (!IsVisible) return;
+
+            Draw();
+
+            lock (_children)
+            {
+                var children = _children.ToList();
+
+                foreach (var child in children.OrderBy(child => child.ZIndex).ToList())
+                {
+                    if (child.ToDispose)
+                        RemoveChild(child);
+                    else
+                        child.Render();
+                }
+            }
+        }
+
+        public void SetCanvas(SKCanvas canvas)
+        {
+            Canvas = canvas;
+            foreach (var child in _children)
+            {
+                child.SetCanvas(canvas);
+            }
+        }
+
+        #region TapEvents
+
+
+        public IList<ISkiaView> Tappables { get; }
 
         public void DeclareTappable(ISkiaView child)
         {
@@ -127,60 +187,77 @@ namespace GemSwipe.Game.SkiaEngine
             }
         }
 
-        public void AddChild(ISkiaView child, int zindex = 0)
+        public void DetectDown(Point p)
         {
-            child.SetCanvas(Canvas);
-            child.ZIndex = zindex;
-            _children.Add(child);
-            child.Parent = this;
-
-            foreach (var tappable in child.Tappables)
+            // Clear Tappables 
+            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
             {
-                DeclareTappable(tappable);
+                Tappables.Remove(child);
             }
 
-            child.Tappables.Clear();
-        }
-
-        public void RemoveChild(ISkiaView child)
-        {
-            _children.Remove(child);
-            child.SetCanvas(null);
-        }
-
-        protected abstract void Draw();
-
-        public void Render()
-        {
-            if (!IsVisible) return;
-
-            Draw();
-            var children = _children.ToList();
-            foreach (var child in children.OrderBy(child => child.ZIndex).ToList())
+            // Detect
+            foreach (var tappable in Tappables)
             {
-                if (child.ToDispose)
-                    RemoveChild(child);
-                else
-                    child.Render();
+                if (tappable.HitTheBox(p))
+                {
+                    tappable.InvokeDown();
+                    return;
+                }
             }
         }
 
-        public void SetCanvas(SKCanvas canvas)
+        public void DetectUp(Point p)
         {
-            Canvas = canvas;
-            foreach (var child in _children)
+            // Clear Tappables 
+            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
             {
-                child.SetCanvas(canvas);
+                Tappables.Remove(child);
+            }
+
+            // Detect
+            foreach (var tappable in Tappables)
+            {
+                if (tappable.HitTheBox(p))
+                {
+                    tappable.InvokeUp();
+                    return;
+                }
             }
         }
 
+        public bool HitTheBox(Point p)
+        {
+            var hitbox = GetHitbox();
+
+            if (IsVisible && p.X >= hitbox.Left && p.Y >= hitbox.Top && p.X <= hitbox.Right && p.Y <= hitbox.Bottom)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void InvokeDown()
+        {
+            Down?.Invoke();
+        }
+
+        public void InvokeUp()
+        {
+            Up?.Invoke();
+        }
+
+        public event Action Down;
+        public event Action Up;
+
+        #endregion
 
         protected void DrawHitbox()
         {
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;
-                paint.Color = new SKColor(255,255,255,50);
+                paint.Color = new SKColor(255, 255, 255, 50);
                 paint.Style = SKPaintStyle.Fill;
                 Canvas.DrawRect(
                   GetHitbox(),
@@ -193,32 +270,7 @@ namespace GemSwipe.Game.SkiaEngine
             return SKRect.Create(X, Y, Width, Height);
         }
 
-        public void DetectTap(Point p)
-        {
-            // Clear Tappables 
-            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
-            {
-                Tappables.Remove(child);
-            }
 
-            // Detect
-            foreach (var tappable in Tappables)
-            {
-                var hitbox = tappable.GetHitbox();
-                if (tappable.IsVisible && p.X >= hitbox.Left && p.Y >= hitbox.Top && p.X <= hitbox.Right && p.Y <= hitbox.Bottom)
-                {
-                    tappable.Tap();
-                    return;
-                }
-            }
-        }
-
-        public void Tap()
-        {
-            Tapped?.Invoke();
-        }
-
-        public event Action Tapped;
 
         protected SkiaView(float x, float y, float height, float width)
         {
@@ -263,7 +315,7 @@ namespace GemSwipe.Game.SkiaEngine
 
         protected SKColor CreateColor(byte r, byte g, byte b, byte a = 255)
         {
-            return new SKColor(r,g,b, (byte)(a * Opacity));
+            return new SKColor(r, g, b, (byte)(a * Opacity));
         }
     }
 }

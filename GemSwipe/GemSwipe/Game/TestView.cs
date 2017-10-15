@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Data.LevelMapPosition;
-using GemSwipe.Data.Planet;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.SkiaEngine;
 using Newtonsoft.Json;

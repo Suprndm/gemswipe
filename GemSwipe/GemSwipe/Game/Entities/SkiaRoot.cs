@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using GemSwipe.Data.Level;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Navigation;
@@ -31,11 +31,17 @@ namespace GemSwipe.Game.Entities
             SetupNavigation();
 
             Gesture.Up += Gesture_Up;
+            Gesture.Down += Gesture_Down;
+        }
+
+        private void Gesture_Down(Point p)
+        {
+            DetectDown(p);
         }
 
         private void Gesture_Up(Point p)
         {
-            DetectTap(p);
+         //   DetectUp(p);
         }
 
         public async Task LoadResources()

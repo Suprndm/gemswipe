@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GemSwipe.Data.Level;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;

@@ -12,7 +12,7 @@ namespace GemSwipe.Game.Settings
         {
             _x = width;
             DeclareTappable(this);
-            Tapped += SettingsPanel_Tapped;
+            Down += SettingsPanel_Tapped;
             _opacity = 1;
         }
 

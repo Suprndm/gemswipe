@@ -35,10 +35,15 @@ namespace GemSwipe.Game.SkiaEngine
 
         void SetCanvas(SKCanvas canvas);
 
-        void DetectTap(Point p);
+        void DetectDown(Point p);
+        void DetectUp(Point p);
 
-        void Tap();
-        event Action Tapped;
+        bool HitTheBox(Point p);
+
+        void InvokeDown();
+        void InvokeUp();
+        event Action Down;
+        event Action Up;
 
         void Dispose();
 

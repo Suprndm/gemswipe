@@ -34,14 +34,13 @@ namespace GemSwipe.Game.Pages.Map
                     (float)levelMapPosition.Position.X / 100 * Width,
                     Height - (float)levelMapPosition.Position.Y / 100 * Height,
                     Height / 40,
-                    levelMapPosition.Id,
-                    CreateColor(255, 255, 255));
+                    levelMapPosition.Id);
 
                 AddChild(levelButton);
                 DeclareTappable(levelButton);
 
-                levelButton.Tapped += () => LevelButton_Tapped(levelMapPosition.Id);
-                levelButton.Tapped += () => levelButton.ActivateOrbitingStars(Width, Height);
+                levelButton.Activated += () => LevelButton_Tapped(levelMapPosition.Id);
+                levelButton.Activated += () => levelButton.ActivateOrbitingStars(Width, Height);
 
                 _levelButtons.Add(levelButton);
             }

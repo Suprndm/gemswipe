@@ -22,7 +22,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             animation.Commit(this, "tapToPlay", 16, 2000, Easing.Linear, repeat: () => true);
 
             DeclareTappable(this);
-            Tapped += TapToPlay_Tapped;
+            Down += TapToPlay_Tapped;
         }
 
         private void TapToPlay_Tapped()

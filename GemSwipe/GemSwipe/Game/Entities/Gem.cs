@@ -48,13 +48,6 @@ namespace GemSwipe.Game.Entities
             _fluidX = _x;
             _fluidY = _y;
             _opacity = 1;
-
-            DeclareTappable(this);
-
-
-            Tapped += () =>
-            {
-            };
         }
 
         public void LevelUp()
