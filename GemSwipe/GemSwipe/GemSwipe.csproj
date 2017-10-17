@@ -58,9 +58,8 @@
     <Compile Include="Data\LevelMapPosition\LevelMapPosition.cs" />
     <Compile Include="Data\PlanetData\PlanetData.cs" />
     <Compile Include="Data\PlanetData\PlanetDataRepository.cs" />
+    <Compile Include="Data\PlayerData\PlayerData.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
-    <Compile Include="Data\Player\PlayerData.cs" />
-    <Compile Include="Data\Player\PlayerProgress.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStarParticle.cs" />
     <Compile Include="Game\Effects\EffectLayer.cs" />
     <Compile Include="Data\ResourceLoader.cs" />
@@ -114,7 +113,7 @@
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
     <Compile Include="Game\TestView.cs" />
-    <Compile Include="Services\DependencyService.cs" />
+    <Compile Include="Services\IFileHandler.cs" />
     <Compile Include="Services\ISaveAndLoad.cs" />
     <Compile Include="Services\IWriteToFile.cs" />
     <Compile Include="Services\Logger.cs" />
@@ -130,6 +129,7 @@
     <Compile Include="Utilities\Sprites\Sprite.cs" />
     <Compile Include="Utilities\Sprites\SpriteModel.cs" />
     <Compile Include="Utilities\Sprites\SpriteSheet.cs" />
+    <Compile Include="Views\InputDialog.cs" />
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
     </Compile>

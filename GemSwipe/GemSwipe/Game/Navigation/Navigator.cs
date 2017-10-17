@@ -18,6 +18,7 @@ namespace GemSwipe.Game.Navigation
         private Navigator()
         {
             _pages = new Dictionary<PageType, IPage>();
+
         }
 
         public static Navigator Instance

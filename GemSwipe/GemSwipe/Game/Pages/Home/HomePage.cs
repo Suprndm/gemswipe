@@ -2,6 +2,7 @@
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Pages.Home
 {

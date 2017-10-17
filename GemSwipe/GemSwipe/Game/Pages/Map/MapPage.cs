@@ -29,40 +29,18 @@ namespace GemSwipe.Game.Pages.Map
 
             _verticalMargin = height / 10;
 
-
             //ajouter au skiaroot?
             _topBar = new TopBar(0, 0, height, width);
-
             AddChild(_topBar);
-
-            SaveAFile();
 
             _map = new Map(0, 0, Height, Width);
 
             AddChild(_map);
         }
 
-        public string SaveAFile()
-        {
-            try
-            {
-                var fileWriter = DependencyService.Get<IWriteToFile>();
-
-                fileWriter.SaveText("temp.txt", "lal");
-                var result = fileWriter.Read("temp.txt");
-                return result;
-            }
-            catch (Exception e)
-            {
-                return "";
-            }
-        }
-
-
         protected override void Draw()
         {
         }
-
 
         private void Pan(Point p)
         {

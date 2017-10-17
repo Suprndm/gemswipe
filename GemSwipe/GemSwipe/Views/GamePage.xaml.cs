@@ -47,11 +47,17 @@ namespace GemSwipe.Views
 
         protected override void OnAppearing()
         {
+            CreateInput();
+
             SetupSkiaView();
 
             base.OnAppearing();
         }
 
+        public async void CreateInput()
+        {
+            string myinput = await InputDialog.InputBox(this.Navigation);
+        }
 
         private void SetupSkiaView()
         {
