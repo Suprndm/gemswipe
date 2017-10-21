@@ -50,7 +50,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                 case PageType.Settings:
                     break;
                 case PageType.Game:
-                    _stars.SetAcceleration(2);
+                    _stars.SetAcceleration(0.1f);
                     break;
             }
         }

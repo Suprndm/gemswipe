@@ -131,15 +131,14 @@ namespace GemSwipe.Game.Entities
             var starRed = (byte)(255 - (255 - _finalColor.Red) * colorReduction);
             var starGreen = (byte)(255 - (255 - _finalColor.Green) * colorReduction);
             var starBlue = (byte)(255 - (255 - _finalColor.Blue) * colorReduction);
-            var startColor = CreateColor(starRed, starGreen, starBlue, (byte) (255 * _opacity));
+            var startColor = CreateColor(starRed, starGreen, starBlue, (byte)(255 * _opacity));
 
             _angle += 0.01f / (_size * 0.5f);
             var outerRadius = starRadius * 1.0f;
             var innerRadius = outerRadius * .4f;
 
-
             var colors = new SKColor[] {
-                CreateColor (255, 255,255, (byte)(255*_opacity*(reduction))),
+                CreateColor (255, 255,255, (byte)(200*_opacity*(reduction))),
                 CreateColor (255, 255, 255,0),
             };
 
@@ -176,7 +175,7 @@ namespace GemSwipe.Game.Entities
 
             var paint = new SKPaint
             {
-                Style = SKPaintStyle.Fill,
+                Style = SKPaintStyle.StrokeAndFill,
                 Color = CreateColor(175, 175, 175, (byte)(255 * _opacity)),
                 StrokeWidth = 2,
                 IsAntialias = false
@@ -201,13 +200,23 @@ namespace GemSwipe.Game.Entities
             paint = new SKPaint
             {
                 Style = SKPaintStyle.Fill,
-                Color = startColor,
-                StrokeWidth = 2,
+                Color = CreateColor(255, 255, 255, (byte)(255 * _opacity)),
                 IsAntialias = true
             };
 
             Canvas.DrawPath(path, paint);
 
+            paint = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = startColor,
+                StrokeWidth = 10*_radius/100,
+                IsAntialias = true
+            };
+
+            Canvas.DrawPath(path, paint);
+
+            paint.StrokeWidth = 2;
             paint.Style = SKPaintStyle.Stroke;
             Canvas.DrawCircle(starX, starY, outerRadius * 1.2f, paint);
         }
