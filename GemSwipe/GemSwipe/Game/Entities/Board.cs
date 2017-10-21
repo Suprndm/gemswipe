@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
@@ -16,6 +17,7 @@ namespace GemSwipe.Game.Entities
         public int MovesToResolve { get; private set; }
         public int NbOfRows { get; private set; }
         public int NbOfColumns { get; private set; }
+        private Random _randomizer;
 
         private const double BoardCellMarginPercentage = 0.10;
 
@@ -35,6 +37,9 @@ namespace GemSwipe.Game.Entities
             _maxBoardWidth = width;
             _maxBoardHeight = width;
             _boardSetup = boardSetup;
+
+            _randomizer = new Random();
+
             MovesToResolve = boardSetup.Moves;
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
@@ -127,6 +132,18 @@ namespace GemSwipe.Game.Entities
                 {
                     Cells[i, j] = boardCells.Single(cell => cell.X == i && cell.Y == j);
                 }
+            }
+            PopGems();
+        }
+
+        private async Task PopGems()
+        {
+            await Task.Delay(500);
+            var shuffledGems = Gems.OrderBy(g => _randomizer.Next()).Select(g=> g).ToList();
+            foreach (var gem in shuffledGems)
+            {
+               await Task.Delay((_randomizer.Next(100)+10 )* 4);
+                gem.Pop();
             }
         }
 

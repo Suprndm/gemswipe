@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GemSwipe.Game.Effects;
 using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
 using Xamarin.Forms;
@@ -29,6 +30,8 @@ namespace GemSwipe.Game.Entities
         private int _cycleSpeed;
         private float _opacity;
 
+        private bool _isActive;
+
         public Gem(int boardX, int boardY, int size) : base( 0, 0, 0, 0)
         {
             Size = size;
@@ -47,12 +50,25 @@ namespace GemSwipe.Game.Entities
             _size = size;
             _fluidX = _x;
             _fluidY = _y;
-            _opacity = 1;
+            _opacity = 0;
         }
 
         public void LevelUp()
         {
             _willLevelUp = true;
+        }
+
+        private void Shine()
+        {
+            var effect = new GemPopEffect(Width / 2, Height / 2, Height, Width);
+            AddChild(effect);
+            effect.Start();
+        }
+        public async Task Pop()
+        {
+            Shine();
+            await Task.Delay(150);
+            this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
         }
 
         public void Die()
@@ -185,6 +201,7 @@ namespace GemSwipe.Game.Entities
                 await Task.Delay(MovementAnimationMs / 2);
                 this.Animate("size", p => _fluidSize = (float) p, oldSize, _size, 4, MovementAnimationMs,
                     Easing.CubicOut);
+                Shine();
             }
         }
     }

@@ -14,11 +14,6 @@ namespace GemSwipe.Game.Effects
             
         }
 
-        public void Explode()
-        {
-            AddChild(new ExplosionEffect( Width / 2, Height / 2, 1, 1));
-        }
-
         protected override void Draw()
         {
             

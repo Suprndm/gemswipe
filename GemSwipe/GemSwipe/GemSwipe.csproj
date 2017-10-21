@@ -64,6 +64,7 @@
     <Compile Include="Game\Effects\EffectLayer.cs" />
     <Compile Include="Data\ResourceLoader.cs" />
     <Compile Include="Game\Effects\ExplosionEffect.cs" />
+    <Compile Include="Game\Effects\GemPopEffect.cs" />
     <Compile Include="Game\Pages\Game\Floors\FloorMessage.cs" />
     <Compile Include="Game\Pages\Game\Floors\FloorTitle.cs" />
     <Compile Include="Game\Pages\Game\Floors\PlayableFloor.cs" />
@@ -112,7 +113,8 @@
     <Compile Include="Game\Models\CountDown.cs" />
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
-    <Compile Include="Game\TestView.cs" />
+    <Compile Include="Game\Test\GemTester.cs" />
+    <Compile Include="Game\Test\TestView.cs" />
     <Compile Include="Services\IFileHandler.cs" />
     <Compile Include="Services\ISaveAndLoad.cs" />
     <Compile Include="Services\IWriteToFile.cs" />

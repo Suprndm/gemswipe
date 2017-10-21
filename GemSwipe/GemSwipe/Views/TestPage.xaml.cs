@@ -49,6 +49,8 @@ namespace GemSwipe.Views
                 _stopwatch = new Stopwatch();
                 _stopwatch.Start();
 
+
+
             }
         }
 
@@ -68,6 +70,8 @@ namespace GemSwipe.Views
         {
             _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
+
+            Gesture.Setup(SKGLView);
         }
 
         private void OnCanvasTapped(Point p)
