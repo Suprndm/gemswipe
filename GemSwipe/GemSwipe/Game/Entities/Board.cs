@@ -30,10 +30,16 @@ namespace GemSwipe.Game.Entities
         private float _cellHeight;
         private float _maxBoardWidth;
         private float _maxBoardHeight;
+        private IList<int> _gemsToAdd;
 
 
-        public Board(BoardSetup boardSetup,  float x, float y, float height, float width) : base( x, y, height, width)
+        public Board(BoardSetup boardSetup, float x, float y, float height, float width) : base(x, y, height, width)
         {
+            _gemsToAdd = new List<int>
+            {
+                1,1,2,3,2,1,3,2,1
+            };
+
             _maxBoardWidth = width;
             _maxBoardHeight = width;
             _boardSetup = boardSetup;
@@ -63,6 +69,23 @@ namespace GemSwipe.Game.Entities
             Setup(_boardSetup);
         }
 
+        public void RefillGems()
+        {
+            if (_gemsToAdd.Count == 0)
+                return;
+
+            var cells = GetEmptyCells();
+            var cell = cells[_randomizer.Next(cells.Count)];
+
+            var gem = CreateGem(cell.X, cell.Y, _gemsToAdd.First());
+            cell.AttachGem(gem);
+
+            Gems.Add(gem);
+
+            _gemsToAdd.RemoveAt(0);
+
+            gem.Pop();
+        }
 
         private void Setup(BoardSetup boardSetup)
         {
@@ -93,16 +116,8 @@ namespace GemSwipe.Game.Entities
                     boardCells.Add(newCell);
                     if (size > 0)
                     {
-                        var gemRadius = GetGemSize();
 
-                        var gemX = ToGemViewX(i) + _cellWidth / 2 - gemRadius;
-                        var gemY = ToGemViewY(j) + _cellWidth / 2 - gemRadius;
-
-                        var gem = new Gem(i, j, size, gemX, gemY, gemRadius);
-                        Gems.Add(gem);
-
-                        AddChild(gem);
-                        newCell.AttachGem(gem);
+                        newCell.AttachGem(CreateGem(i, j, size));
                     }
                 }
             }
@@ -133,16 +148,32 @@ namespace GemSwipe.Game.Entities
                     Cells[i, j] = boardCells.Single(cell => cell.X == i && cell.Y == j);
                 }
             }
+
             PopGems();
+        }
+
+        private Gem CreateGem(int boardX, int boardY, int size)
+        {
+            var gemRadius = GetGemSize();
+
+            var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
+            var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+
+            var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius);
+            Gems.Add(gem);
+
+            AddChild(gem);
+
+            return gem;
         }
 
         private async Task PopGems()
         {
             await Task.Delay(500);
-            var shuffledGems = Gems.OrderBy(g => _randomizer.Next()).Select(g=> g).ToList();
+            var shuffledGems = Gems.OrderBy(g => _randomizer.Next()).Select(g => g).ToList();
             foreach (var gem in shuffledGems)
             {
-               await Task.Delay((_randomizer.Next(100)+10 )* 4);
+                await Task.Delay((_randomizer.Next(100) + 10) * 4);
                 gem.Pop();
             }
         }
@@ -210,7 +241,8 @@ namespace GemSwipe.Game.Entities
             }
 
             swipeResult.IsBlocked = false; // TODO
-            swipeResult.BoardWon = Gems.Count == 1;
+            swipeResult.BoardWon = _gemsToAdd.Count == 0;
+            swipeResult.IsFull = IsFull();
 
             UpdateGemsPositions(swipeResult);
 

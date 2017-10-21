@@ -1,12 +1,12 @@
 ﻿[
   {
     "Id": 1,
-    "BoardSetupString": "0 9 0 0 0 0-2 0 0 0 0 0-9 0 0 3 0 0-2 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0",
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
     "NbOfMovesToSolve": 10,
     "Story": "La premiere story",
     "Title": "Le premier title",
-    "Rows": 6,
-    "Columns": 6
+    "Rows": 4,
+    "Columns": 4
   },
   {
     "Id": 2,

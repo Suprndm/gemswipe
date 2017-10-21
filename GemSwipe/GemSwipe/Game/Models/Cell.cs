@@ -20,7 +20,7 @@ namespace GemSwipe.Game.Models
 
         public bool IsEmpty()
         {
-            return _attachedGem == null;
+            return _attachedGem == null && !IsBlocked;
         }
 
         public void AttachGem(Gem gem)
