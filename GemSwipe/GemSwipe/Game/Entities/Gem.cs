@@ -29,16 +29,19 @@ namespace GemSwipe.Game.Entities
         private int _cycle;
         private int _cycleSpeed;
         private float _opacity;
+        private float _angle;
+
+        private SKColor _finalColor;
 
         private bool _isActive;
 
-        public Gem(int boardX, int boardY, int size) : base( 0, 0, 0, 0)
+        public Gem(int boardX, int boardY, int size) : base(0, 0, 0, 0)
         {
             Size = size;
             BoardX = boardX;
             BoardY = boardY;
         }
-        public Gem(int boardX, int boardY, int size,  float x, float y, float radius) : base( x, y, radius * 2, radius * 2)
+        public Gem(int boardX, int boardY, int size, float x, float y, float radius) : base(x, y, radius * 2, radius * 2)
         {
             _randomizer = new Random();
             _cycle = 0;
@@ -51,6 +54,9 @@ namespace GemSwipe.Game.Entities
             _fluidX = _x;
             _fluidY = _y;
             _opacity = 0;
+            _angle = (float)(_randomizer.Next(100) * Math.PI * 2 / 100);
+            _finalColor = new SKColor(195, 184, 85);
+
         }
 
         public void LevelUp()
@@ -114,55 +120,96 @@ namespace GemSwipe.Game.Entities
 
         protected override void Draw()
         {
+            var starX = X + _radius;
+            var starY = Y + _radius;
+
+            var branches = (int)_fluidSize + 1;
+            var reduction = 1f / (8f / Math.Min(8, branches));
+            var starRadius = (float)(_radius * Math.Min(1, reduction + 0.3));
+
+            var colorReduction = reduction * reduction;
+            var starRed = (byte)(255 - (255 - _finalColor.Red) * colorReduction);
+            var starGreen = (byte)(255 - (255 - _finalColor.Green) * colorReduction);
+            var starBlue = (byte)(255 - (255 - _finalColor.Blue) * colorReduction);
+            var startColor = CreateColor(starRed, starGreen, starBlue, (byte) (255 * _opacity));
+
+            _angle += 0.01f / (_size * 0.5f);
+            var outerRadius = starRadius * 1.0f;
+            var innerRadius = outerRadius * .4f;
 
 
-            var innerRadius = _radius * (2 + (_fluidSize / 2)) / 10;
-            _cycle += (int)_fluidSize;
-            _cycle = _cycle % 365;
-            var result = (byte)(((Math.Cos(_cycle * Math.PI / 180) + 1) * 75 + 55) * _opacity);
             var colors = new SKColor[] {
-                CreateColor (255, 255,255,result),
+                CreateColor (255, 255,255, (byte)(255*_opacity*(reduction))),
                 CreateColor (255, 255, 255,0),
             };
 
-            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y + _radius), innerRadius * 5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y + _radius), starRadius * 1.5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
             var glowPaint = new SKPaint()
             {
-                Shader = shader,
-            };
-            Canvas.DrawCircle(X + _radius, Y + _radius, innerRadius * 5f, glowPaint);
-
-
-            var innerPaint = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = CreateColor(255, 255, 255, (byte)(255 * _opacity))
+                Shader = shader
             };
 
+            Canvas.DrawCircle(starX, starY, starRadius * 1.5f, glowPaint);
+
+            // Shadowed
 
 
-            Canvas.DrawCircle(X + _radius, Y + _radius, innerRadius, innerPaint);
+            float reductionCoef = 0.95f;
 
 
+            var points = Polygonal.GetStarPolygon(innerRadius * reductionCoef, outerRadius * reductionCoef, branches,
+                2 * (float)(_angle + Math.PI / 2 * 1 / branches));
 
-            for (int i = 0; i < Size; i++)
+            var path = new SKPath();
+
+            for (int k = 0; k < points.Count; k++)
             {
-                float lastRingOpacity = 1;
-                if (i == Size - 1 && _fluidSize < Size)
-                {
-                    lastRingOpacity = 1 - (Size - _fluidSize);
-                }
-                using (var paint = new SKPaint())
-                {
-                    paint.IsAntialias = true;
-                    paint.StrokeWidth = 4;
-                    paint.Style = SKPaintStyle.Stroke;
-                    paint.Color = CreateColor(255, 255, 255, (byte)(255 * _opacity * lastRingOpacity));
-
-                    Canvas.DrawCircle(X + _radius, Y + _radius, (float)(innerRadius * (2 + (double)i / 3)), paint);
-                }
+                var point = points[k];
+                var translatedPoint = new SKPoint(point.X + starX, point.Y + starY);
+                if (k == 0)
+                    path.MoveTo(translatedPoint);
+                else
+                    path.LineTo(translatedPoint);
             }
+
+            path.Close();
+
+            var paint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = CreateColor(175, 175, 175, (byte)(255 * _opacity)),
+                StrokeWidth = 2,
+                IsAntialias = false
+            };
+
+            Canvas.DrawPath(path, paint);
+
+            points = Polygonal.GetStarPolygon(innerRadius, outerRadius, branches, 2 * _angle);
+            path = new SKPath();
+            for (int k = 0; k < points.Count; k++)
+            {
+                var point = points[k];
+                var translatedPoint = new SKPoint(point.X + starX, point.Y + starY);
+                if (k == 0)
+                    path.MoveTo(translatedPoint);
+                else
+                    path.LineTo(translatedPoint);
+            }
+
+            path.Close();
+
+            paint = new SKPaint
+            {
+                Style = SKPaintStyle.Fill,
+                Color = startColor,
+                StrokeWidth = 2,
+                IsAntialias = true
+            };
+
+            Canvas.DrawPath(path, paint);
+
+            paint.Style = SKPaintStyle.Stroke;
+            Canvas.DrawCircle(starX, starY, outerRadius * 1.2f, paint);
         }
 
         public void MoveTo(float x, float y)
@@ -186,7 +233,7 @@ namespace GemSwipe.Game.Entities
             if (Canvas != null)
             {
                 await Task.Delay(MovementAnimationMs / 2);
-                this.Animate("fade", p => _opacity = (float) p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
+                this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
                 await Task.Delay(MovementAnimationMs / 2);
             }
             Dispose();
@@ -199,7 +246,7 @@ namespace GemSwipe.Game.Entities
             if (Canvas != null)
             {
                 await Task.Delay(MovementAnimationMs / 2);
-                this.Animate("size", p => _fluidSize = (float) p, oldSize, _size, 4, MovementAnimationMs,
+                this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs,
                     Easing.CubicOut);
                 Shine();
             }

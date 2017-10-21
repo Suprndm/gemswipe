@@ -15,28 +15,38 @@ namespace GemSwipe.Game.Test
         public GemTester(float x, float y, float height, float width) : base(x, y, height, width)
         {
 
+            var levelUpButton = new TextButton(width / 2, 6.5f * height / 10, height / 40, "Level up");
             var newButton = new TextButton(width / 2, 7.5f * height / 10, height / 40, "New");
             var popButton = new TextButton(width / 2, 8.5f * height / 10, height / 40, "Pop");
             var dieButton = new TextButton(width / 2, 9.5f * height / 10, height / 40, "Die");
 
+            AddChild(levelUpButton);
             AddChild(newButton);
             AddChild(popButton);
             AddChild(dieButton);
 
+            levelUpButton.Activated += LevelUpButton_Activated; ;
             newButton.Activated += NewButton_Activated;
             popButton.Activated += PopButton_Activated;
             dieButton.Activated += DieButton_Activated;
         }
 
+        private void LevelUpButton_Activated()
+        {
+            _gem.LevelUp();
+            _gem.Resolve();
+            _gem.Fuse();
+        }
+
         private void NewButton_Activated()
         {
-            _gem = new Gem(0, 0, 1, Width / 2, Height / 2, Width / 10);
+            _gem = new Gem(0, 0, 1, Width / 2 - Width/10, Height /3, Width / 10);
             AddChild(_gem);
         }
 
         private void DieButton_Activated()
         {
-            _gem.DieTo(Width / 2, Height/5 );
+            _gem.DieTo(Width / 2 - Width / 10, Height/5 );
         }
 
         private void PopButton_Activated()
