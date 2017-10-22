@@ -133,7 +133,7 @@ namespace GemSwipe.Game.Entities
             var starBlue = (byte)(255 - (255 - _finalColor.Blue) * colorReduction);
             var startColor = CreateColor(starRed, starGreen, starBlue, (byte)(255 * _opacity));
 
-            _angle += 0.01f / (_size * 0.5f);
+            _angle += 0.001f / (_size * 0.5f);
             var outerRadius = starRadius * 1.0f;
             var innerRadius = outerRadius * .4f;
 

@@ -37,7 +37,10 @@ namespace GemSwipe.Game.Entities
         {
             _gemsToAdd = new List<int>
             {
-                1,1,2,3,2,1,3,2,1
+                1,1,2,3,2,1,3,2,1,
+                1,1,2,3,2,1,3,2,1,
+                1,1,2,3,2,1,3,2,1,
+                1,1,2,3,2,1,3,2,1,
             };
 
             _maxBoardWidth = width;
