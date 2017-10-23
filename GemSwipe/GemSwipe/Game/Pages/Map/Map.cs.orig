@@ -17,19 +17,25 @@ namespace GemSwipe.Game.Pages.Map
         private readonly IList<LevelButton> _levelButtons;
         private IList<SKPoint> _curve;
         private IList<SKPoint> _oldCurve;
+<<<<<<< HEAD
         private float _screenHeight;
-        private PlayerData _playerData;
-
-        private TextButton _nicknameButton;
 
         private bool _isDragged;
+
         public Map(float x, float y, float height, float width) : base(x, y, height, width)
         {
             _screenHeight = height;
+=======
+        private PlayerData _playerData;
+        private TextButton _nicknameButton;
+        public Map(float x, float y, float height, float width) : base(x, y, height, width)
+        {
+          
             _playerData = PlayerDataService.Instance.GetData();
             _nicknameButton = new TextButton(width / 2, height / 2, 100, _playerData.Nickname);
 
             AddChild(_nicknameButton);
+>>>>>>> player profile save service
             _levelButtons = new List<LevelButton>();
             _aY = 0;
             DeclareTappable(this);

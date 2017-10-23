@@ -1,5 +1,9 @@
 ﻿using System.Threading.Tasks;
+<<<<<<< HEAD
+=======
+using GemSwipe.Data.LevelData;
 using GemSwipe.Data.PlayerData;
+>>>>>>> player profile save service
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Layers;
@@ -13,7 +17,11 @@ namespace GemSwipe.Game.Entities
     {
 
         private Background _background;
+<<<<<<< HEAD
+=======
+        private LevelDataRepository _levelDataRepository;
         private PlayerData _playerData;
+>>>>>>> player profile save service
 
         public SkiaRoot(float x, float y, float height, float width) : base(x, y, height, width)
         {
@@ -21,11 +29,18 @@ namespace GemSwipe.Game.Entities
         }
         public async void Initialize()
         {
-            SetupLayers();
+<<<<<<< HEAD
             await LoadResources();
+            SetupLayers();
+=======
+            _levelDataRepository = new LevelDataRepository();
+            await LoadSpriteSheetResources();
 
+            SetupNavigation();
+>>>>>>> player profile save service
 
             Gesture.Down += Gesture_Down;
+<<<<<<< HEAD
             Gesture.Up += Gesture_Up;
             Gesture.Pan += Gesture_Pan;
         }
@@ -33,6 +48,9 @@ namespace GemSwipe.Game.Entities
         private void Gesture_Pan(Point p)
         {
             SkiaGestureService.Instance.HandlePan(p);
+=======
+
+>>>>>>> player profile save service
         }
 
         private void Gesture_Down(Point p)
@@ -45,8 +63,12 @@ namespace GemSwipe.Game.Entities
             SkiaGestureService.Instance.HandleUp(Tappables, p);
         }
 
+<<<<<<< HEAD
 
         public async Task LoadResources()
+=======
+        public async Task LoadSpriteSheetResources()
+>>>>>>> player profile save service
         {
             SpriteSheet.Instance.Setup("Resources/Graphics/atlas.png", "Resources/Graphics/atlas.txt");
             await SpriteSheet.Instance.LoadAsync();
@@ -54,10 +76,33 @@ namespace GemSwipe.Game.Entities
 
         public void SetupLayers()
         {
+<<<<<<< HEAD
             AddChild(new BackgroundLayer(Height, Width));
             AddChild(new NavigationLayer(Height, Width));
             AddChild(new InterfaceLayer(Height, Width));
             AddChild(new PopupLayer(Height, Width));
+=======
+            var homePage = new HomePage( 0, 0, Height, Width);
+            AddChild(homePage);
+
+            _background = new Background( 0, 0, Height, Width);
+            AddChild(_background, -1);
+
+            var settingsPanel = new SettingsPanel( 0, 0, Height, Width);
+            AddChild(settingsPanel, 10);
+
+            var mapPage = new MapPage( 0, 0, Height, Width);
+            AddChild(mapPage);
+            var gamePage = new GamePage( 0, 0, Height, Width, _levelDataRepository);
+            AddChild(gamePage);
+
+            Navigator.Instance.SetBackground(_background);
+            Navigator.Instance.SetSettingsPanel(settingsPanel);
+            Navigator.Instance.RegisterPage(PageType.Home, homePage);
+            Navigator.Instance.RegisterPage(PageType.Map, mapPage);
+            Navigator.Instance.RegisterPage(PageType.Game, gamePage);
+            Navigator.Instance.GoToInitialPage(PageType.Home);
+>>>>>>> player profile save service
         }
 
         protected override void Draw()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using SkiaSharp;
 using Xamarin.Forms;
@@ -13,13 +14,15 @@ namespace GemSwipe.Utilities.Buttons
     public class LevelButton : SimpleButton, IButton
     {
         public int Level { get; set; }
+        public LevelProgressStatus ProgressStatus { get; set; }
 
 
 
-        public LevelButton(float x, float y, float height, int level) : base (x, y, 0, height)
+        public LevelButton(float x, float y, float height, int level, LevelProgressStatus progressStatus) : base (x, y, 0, height)
         {
+            
             Level = level;
-            //Activated+=ActivateOrbitingStars;
+            ProgressStatus = progressStatus;
 
             NormalColor = new SKColor(14, 0, 163);
             DownColor = new SKColor(79, 0, 163);
@@ -52,11 +55,26 @@ namespace GemSwipe.Utilities.Buttons
 
             Canvas.DrawCircle(X, Y, Height*1.2f, outerPaint);
 
+            SKColor ProgressColor = CreateColor(R, G, B);
+            switch (ProgressStatus)
+            {
+                    case LevelProgressStatus.InProgress:
+                        ProgressColor = Color;
+                        break;
+                    case LevelProgressStatus.Completed:
+                        ProgressColor = CreateColor(R, G, 0);
+                        break;
+                    case LevelProgressStatus.Locked:
+                        ProgressColor = CreateColor(R, R, R);
+                        break;
+            }
+
             var innerPaint = new SKPaint
             {
                 IsAntialias = true,
                 Style = SKPaintStyle.Fill,
-                Color = CreateColor(Color)
+                Color = ProgressColor
+                //Color = CreateColor(Color)
             };
 
             Canvas.DrawCircle(X, Y, Height, innerPaint);

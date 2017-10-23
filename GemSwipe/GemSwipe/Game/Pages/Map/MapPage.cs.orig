@@ -51,11 +51,16 @@ namespace GemSwipe.Game.Pages.Map
 
         protected override void OnActivated(object parameter = null)
         {
+<<<<<<< HEAD
+=======
             // Get latest player informations
             PlayerData playerData = PlayerDataService.Instance.GetData();
             _map.UpdateNickname(playerData.Nickname);
             _map.UpdateLevelStatus();
             
+            Gesture.Pan += Pan;
+
+>>>>>>> player profile save service
             Task.Run(async () =>
             {
                 await Task.Delay(1000);

@@ -63,8 +63,6 @@ namespace GemSwipe.Game.Pages.Game
             await GoToNextFloor();
         }
 
-
-
         public void SetLevelData(LevelData levelData)
         {
             LevelData = levelData;
@@ -88,7 +86,6 @@ namespace GemSwipe.Game.Pages.Game
                 CurrentBoard = (floor as PlayableFloor).Board;
         }
 
-        //public async Task DisplayBoard(int levelId)
         public async Task NextTransitionFloor(int levelId)
         {
             TransitionFloor = new TransitionFloor( X, -Y + _floorMargin, _floorHeight, Width, LevelData);

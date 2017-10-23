@@ -121,9 +121,13 @@
     <Compile Include="Game\Models\CountDown.cs" />
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
+<<<<<<< HEAD
     <Compile Include="Game\Test\GemTester.cs" />
     <Compile Include="Game\Test\TestView.cs" />
+=======
+    <Compile Include="Game\TestView.cs" />
     <Compile Include="Properties\Annotations.cs" />
+>>>>>>> player profile save service
     <Compile Include="Services\IFileHandler.cs" />
     <Compile Include="Services\ISaveAndLoad.cs" />
     <Compile Include="Services\IWriteToFile.cs" />

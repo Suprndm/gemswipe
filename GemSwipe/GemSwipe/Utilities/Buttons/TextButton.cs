@@ -1,4 +1,6 @@
-﻿using SkiaSharp;
+﻿using GemSwipe.Game.Pages.Home;
+using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Utilities.Buttons
 {
@@ -8,9 +10,16 @@ namespace GemSwipe.Utilities.Buttons
         public object Info { get; set; }
         public SKColor TextColor { get; set; }
         protected float Padding { get; set; }
+
+        private static void OnTextPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
+        {
+            
+        }
+
+
         public TextButton(float x, float y, float height, string text) : base(x, y, 0, height)
         {
-            TextColor = new SKColor(255, 255, 255);
+             TextColor = new SKColor(255, 255, 255);
             Text = text;
             Padding = height;
         }

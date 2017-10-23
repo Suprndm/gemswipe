@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.Data;
 using GemSwipe.Data.LevelData;
+using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.Popped;
 using GemSwipe.Game.Gestures;
@@ -19,8 +20,8 @@ namespace GemSwipe.Game.Pages.Game
         private bool _isBlocked;
         private EffectLayer _effectLayer;
         private bool _isBusy;
-        private int _level=1;
         private LevelDataRepository _levelDataRepository;
+        private int _currentLevelId;
 
         public GamePage( float x, float y, float height, float width) : base( x, y, height, width)
         {
@@ -34,6 +35,7 @@ namespace GemSwipe.Game.Pages.Game
 
         public async void Start(int levelId)
         {
+            _currentLevelId = levelId;
             await _scene.StartingFloor.Start();
 
             LevelData levelconfig = _levelDataRepository.Get(Math.Min(5,Math.Max(levelId,0)));
@@ -57,6 +59,8 @@ namespace GemSwipe.Game.Pages.Game
                 _scene.CurrentBoard.RefillGems();
                 if (swipeResult.BoardWon)
                 {
+                    PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
+
                     _isBusy = true;
                     await Task.Delay(1000);
 

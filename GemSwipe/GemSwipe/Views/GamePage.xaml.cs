@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
+using GemSwipe.Services;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
@@ -35,7 +37,7 @@ namespace GemSwipe.Views
             {
                 // Init SkiaSharp
                 _canvas = e.Surface.Canvas;
-                _skiaRoot = new SkiaRoot( 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                _skiaRoot = new SkiaRoot(0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _skiaRoot.SetCanvas(e.Surface.Canvas);
                 _isInitiated = true;
             }
@@ -47,16 +49,25 @@ namespace GemSwipe.Views
 
         protected override void OnAppearing()
         {
-            CreateInput();
+            var fileHandler = DependencyService.Get<IFileHandler>();
+            if (!(fileHandler.CheckExistenceOf(AppSettings.PlayerPersonalDataFileName)))
+            {
+                GetPlayerNickname();
+            }
 
             SetupSkiaView();
 
             base.OnAppearing();
         }
 
-        public async void CreateInput()
+        public async void GetPlayerNickname()
         {
             string myinput = await InputDialog.InputBox(this.Navigation);
+            var playerData = PlayerDataService.Instance.GetData();
+            playerData.Nickname = myinput;
+
+            //PlayerDataService.Instance.Update(playerData);
+            PlayerDataService.Instance.SaveChanges();
         }
 
         private void SetupSkiaView()
