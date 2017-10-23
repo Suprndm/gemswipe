@@ -12,6 +12,7 @@ namespace GemSwipe.Game.Navigation.Pages
         protected PageBase( float x, float y, float height, float width) : base( x, y, height, width)
         {
             IsVisible = false;
+            IsEnabled = false;
             _opacity = 0;
         }
 
@@ -23,13 +24,13 @@ namespace GemSwipe.Game.Navigation.Pages
 
         public virtual void Initialize()
         {
-            throw new NotImplementedException();
         }
 
         public async Task Show(object parameter = null)
         {
             OnActivated(parameter);
             IsVisible = true;
+            IsEnabled = true;
             await TransitionIn();
         }
 
@@ -49,6 +50,7 @@ namespace GemSwipe.Game.Navigation.Pages
         {
             await TransitionOut();
             IsVisible = false;
+            IsEnabled = false;
             OnDeactivated();
         }
     }

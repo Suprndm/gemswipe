@@ -1,24 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Navigation.Pages;
-using GemSwipe.Game.Settings;
 
 namespace GemSwipe.Game.Navigation
 {
     public class Navigator
     {
         private readonly IDictionary<PageType, IPage> _pages;
-
         private IPage _currentPage;
-        private Background _background;
-        private SettingsPanel _settingsPanel;
         private static Navigator _instance;
+
+        public static event Action<NavigationEventArgs> NavigationStarted;
+        public static event Action<NavigationEventArgs> NavigationEnded;
 
         private Navigator()
         {
             _pages = new Dictionary<PageType, IPage>();
-
         }
 
         public static Navigator Instance
@@ -33,49 +31,28 @@ namespace GemSwipe.Game.Navigation
             }
         }
 
-        public void SetBackground(Background background)
-        {
-            _background = background;
-        }
-
-        public void SetSettingsPanel(SettingsPanel settingsPanel)
-        {
-            _settingsPanel = settingsPanel;
-        }
-
         public void RegisterPage(PageType pageType, IPage page)
         {
             _pages.Add(pageType, page);
         }
 
-
         public Task GoToInitialPage(PageType pageType)
         {
             _currentPage = _pages[pageType];
-            _background.OnNavigateTo(pageType);
             return _currentPage.Show();
         }
 
-        public async Task GoTo(PageType pageType, object parameter = null)
+        public async Task GoTo(PageType nextPageType, object parameter = null)
         {
-            var nextPage = _pages[pageType];
+            var nextPage = _pages[nextPageType];
+
+            NavigationStarted?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
 
             await _currentPage.Hide();
 
             _currentPage = nextPage;
-            _background.OnNavigateTo(pageType);
             await nextPage.Show(parameter);
-            _background.EndTransition();
-        }
-
-        public async Task ShowSettings()
-        {
-           await _settingsPanel.Show();
-        }
-
-        public Task HideSettings()
-        {
-            return _settingsPanel.Hide();
+            NavigationEnded?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
         }
     }
 }

@@ -63,6 +63,8 @@
     <Compile Include="BoardTests.cs" />
     <Compile Include="GeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkiaElement.cs" />
+    <Compile Include="ZIndexTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GemSwipe.Generator\GemSwipe.Generator.csproj">

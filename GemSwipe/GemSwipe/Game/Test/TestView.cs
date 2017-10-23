@@ -36,18 +36,24 @@ namespace GemSwipe.Game
 
         public void Initialize()
         {
-            Gesture.Up += Gesture_Up;
             Gesture.Down += Gesture_Down;
+            Gesture.Up += Gesture_Up;
+            Gesture.Pan += Gesture_Pan;
+        }
+
+        private void Gesture_Pan(Point p)
+        {
+            SkiaGestureService.Instance.HandlePan(p);
         }
 
         private void Gesture_Down(Point p)
         {
-            DetectDown(p);
+            SkiaGestureService.Instance.HandleDown(Tappables, p);
         }
 
         private void Gesture_Up(Point p)
         {
-            DetectUp(p);
+            SkiaGestureService.Instance.HandleDown(Tappables, p);
         }
 
 

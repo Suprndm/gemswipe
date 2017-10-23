@@ -21,17 +21,12 @@ namespace GemSwipe.Game.Pages.Map
     {
         private float _verticalMargin;
 
-        private TopBar _topBar;
         private Map _map;
 
-        public MapPage(float x, float y, float height, float width, int playerProgress) : base(x, y, height, width)
+        public MapPage(float x, float y, float height, float width) : base(x, y, height, width)
         {
 
             _verticalMargin = height / 10;
-
-            //ajouter au skiaroot?
-            _topBar = new TopBar(0, 0, height, width);
-            AddChild(_topBar);
 
             _map = new Map(0, 0, Height, Width);
 
@@ -55,18 +50,13 @@ namespace GemSwipe.Game.Pages.Map
 
         protected override void OnActivated(object parameter = null)
         {
-            Gesture.Pan += Pan;
-
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
-                _topBar.Show();
             });
         }
         protected override void OnDeactivated()
         {
-            Gesture.Pan -= Pan;
-            _topBar.Hide();
         }
     }
 }

@@ -1,14 +1,18 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Game.SkiaEngine;
 using SkiaSharp;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.Settings
 {
-    public class SettingsPanel : PageBase
+    public class SettingsPanel : SkiaView
     {
-        public SettingsPanel( float x, float y, float height, float width) : base( x, y, height, width)
+
+        public bool IsShowed { get; set; }
+        
+        public SettingsPanel(float x, float y, float height, float width) : base(x, y, height, width)
         {
             _x = width;
             DeclareTappable(this);
@@ -18,25 +22,19 @@ namespace GemSwipe.Game.Settings
 
         private void SettingsPanel_Tapped()
         {
-            Navigator.Instance.HideSettings();
+            Hide();
         }
 
-        protected override void OnActivated(object parameter = null)
+        public Task Show()
         {
-        }
-
-        protected override void OnDeactivated()
-        {
-        }
-
-        protected override Task TransitionIn()
-        {
+            IsShowed = true;
             this.Animate("slideOut", p => _x = (float)p, _x, 0f, 8, (uint)300, Easing.SpringOut);
             return Task.Delay(300);
         }
 
-        protected override Task TransitionOut()
+        public Task Hide()
         {
+            IsShowed = false;
             this.Animate("slideOut", p => _x = (float)p, _x, Width, 8, (uint)300, Easing.SpringIn);
             return Task.Delay(300);
         }
@@ -51,7 +49,7 @@ namespace GemSwipe.Game.Settings
                 paint.IsAntialias = true;
                 paint.Color = CreateColor(168, 174, 240);
 
-                Canvas.DrawRect(SKRect.Create(X + (Width - panelWidth), Y+(Height- panelHeight) , panelWidth*1.2f, panelHeight), paint);
+                Canvas.DrawRect(SKRect.Create(X + (Width - panelWidth), Y + (Height - panelHeight), panelWidth * 1.2f, panelHeight), paint);
             }
         }
     }

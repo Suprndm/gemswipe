@@ -1,15 +1,9 @@
 ﻿using System.Threading.Tasks;
-using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
-using GemSwipe.Game.Navigation;
-using GemSwipe.Game.Pages.Game;
-using GemSwipe.Game.Pages.Home;
-using GemSwipe.Game.Pages.Map;
-using GemSwipe.Game.Settings;
+using GemSwipe.Game.Layers;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Sprites;
-using SkiaSharp;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.Entities
@@ -18,31 +12,36 @@ namespace GemSwipe.Game.Entities
     {
 
         private Background _background;
-        private LevelDataRepository _levelDataRepository;
 
-        public SkiaRoot( float x, float y, float height, float width) : base( x, y, height, width)
+        public SkiaRoot(float x, float y, float height, float width) : base(x, y, height, width)
         {
             Initialize();
         }
         public async void Initialize()
         {
             await LoadResources();
-            _levelDataRepository = new LevelDataRepository();
-            SetupNavigation();
+            SetupLayers();
 
-            Gesture.Up += Gesture_Up;
             Gesture.Down += Gesture_Down;
+            Gesture.Up += Gesture_Up;
+            Gesture.Pan += Gesture_Pan;
+        }
+
+        private void Gesture_Pan(Point p)
+        {
+            SkiaGestureService.Instance.HandlePan(p);
         }
 
         private void Gesture_Down(Point p)
         {
-            DetectDown(p);
+            SkiaGestureService.Instance.HandleDown(Tappables, p);
         }
 
         private void Gesture_Up(Point p)
         {
-         //   DetectUp(p);
+            SkiaGestureService.Instance.HandleUp(Tappables, p);
         }
+
 
         public async Task LoadResources()
         {
@@ -50,28 +49,12 @@ namespace GemSwipe.Game.Entities
             await SpriteSheet.Instance.LoadAsync();
         }
 
-        public void SetupNavigation()
+        public void SetupLayers()
         {
-            var homePage = new HomePage( 0, 0, Height, Width);
-            AddChild(homePage);
-
-            _background = new Background( 0, 0, Height, Width);
-            AddChild(_background, -1);
-
-            var settingsPanel = new SettingsPanel( 0, 0, Height, Width);
-            AddChild(settingsPanel, 10);
-
-            var mapPage = new MapPage( 0, 0, Height, Width,_levelDataRepository.Count());
-            AddChild(mapPage);
-            var gamePage = new GamePage( 0, 0, Height, Width, _levelDataRepository);
-            AddChild(gamePage);
-
-            Navigator.Instance.SetBackground(_background);
-            Navigator.Instance.SetSettingsPanel(settingsPanel);
-            Navigator.Instance.RegisterPage(PageType.Home, homePage);
-            Navigator.Instance.RegisterPage(PageType.Map, mapPage);
-            Navigator.Instance.RegisterPage(PageType.Game, gamePage);
-            Navigator.Instance.GoToInitialPage(PageType.Home);
+            AddChild(new BackgroundLayer(Height, Width));
+            AddChild(new NavigationLayer(Height, Width));
+            AddChild(new InterfaceLayer(Height, Width));
+            AddChild(new PopupLayer(Height, Width));
         }
 
         protected override void Draw()

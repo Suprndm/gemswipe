@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities;
@@ -10,15 +11,19 @@ namespace GemSwipe.Game.Settings
 {
     public class TopBar:SkiaView
     {
-        public TopBar( float x, float y, float height, float width) : base( x, y, height, width)
+        public event Action SettingsButtonPressed;
+
+        public TopBar(float x, float y, float height, float width) : base(x, y, height, width)
         {
             _height = 0.1f * height;
 
-            var settingsButton = new SimpleButton( width -_height/2, _height/2, _height, _height);
+            var settingsButton = new SimpleButton(width - _height / 2, _height / 2, _height, _height);
             AddChild(settingsButton);
             DeclareTappable(settingsButton);
             _y = -height;
             settingsButton.Activated += SettingsButton_Tapped;
+
+            DeclareTappable(this);
         }
 
         public Task Show()
@@ -35,7 +40,7 @@ namespace GemSwipe.Game.Settings
 
         private void SettingsButton_Tapped()
         {
-            Navigator.Instance.ShowSettings();
+            SettingsButtonPressed?.Invoke();
         }
 
         protected override void Draw()

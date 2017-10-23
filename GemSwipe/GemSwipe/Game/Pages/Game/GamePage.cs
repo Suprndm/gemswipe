@@ -16,17 +16,15 @@ namespace GemSwipe.Game.Pages.Game
     public class GamePage:PageBase
     {
         private Scene _scene;
-        private BlockedSensor _blockedSensor;
         private bool _isBlocked;
         private EffectLayer _effectLayer;
         private bool _isBusy;
         private int _level=1;
         private LevelDataRepository _levelDataRepository;
 
-        public GamePage( float x, float y, float height, float width, LevelDataRepository levelDataRepository) : base( x, y, height, width)
+        public GamePage( float x, float y, float height, float width) : base( x, y, height, width)
         {
-            _blockedSensor = new BlockedSensor();
-            _levelDataRepository = levelDataRepository;
+            _levelDataRepository = new LevelDataRepository();
         }
 
         public void BackgroundNextBoard()
@@ -112,7 +110,7 @@ namespace GemSwipe.Game.Pages.Game
 
 
             _effectLayer = new EffectLayer( 0, 0, Height, Width);
-            AddChild(_effectLayer, 3);
+            AddChild(_effectLayer);
 
             Start(levelId);
             Gesture.Swipe += OnSwipped;

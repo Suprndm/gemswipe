@@ -17,10 +17,12 @@ namespace GemSwipe.Game.SkiaEngine
         float Height { get; }
         float Width { get; }
 
-        int ZIndex { get; set; }
+        decimal ZIndex { get; set; }
+        decimal VisualTreeDepth { get; set; }
         bool ToDispose { get; }
 
         bool IsVisible { get;}
+        bool IsEnabled { get;}
         float Opacity { get; }
 
         ISkiaView Parent { get; set; }
@@ -29,21 +31,18 @@ namespace GemSwipe.Game.SkiaEngine
 
         IList<ISkiaView> Tappables { get; }
 
-        void AddChild(ISkiaView child, int zindex);
+        void AddChild(ISkiaView child);
         void RemoveChild(ISkiaView child);
         void Render();
 
         void SetCanvas(SKCanvas canvas);
 
-        void DetectDown(Point p);
-        void DetectUp(Point p);
-
         bool HitTheBox(Point p);
 
         void InvokeDown();
         void InvokeUp();
-        event Action Down;
-        event Action Up;
+        void InvokePan(Point p);
+        void InvokeDragOut();
 
         void Dispose();
 

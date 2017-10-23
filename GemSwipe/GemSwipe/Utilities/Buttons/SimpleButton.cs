@@ -46,32 +46,34 @@ namespace GemSwipe.Utilities.Buttons
 
             NormalColor = new SKColor(125, 125, 125);
 
-            Gesture.Down += Gesture_Down;
-            Gesture.Up += Gesture_Up;
+            DeclareTappable(this);
+
+            Down += Gesture_Down;
+            Up += Gesture_Up;
+            DragOut += SimpleButton_DragOut;
         }
 
-        private void Gesture_Up(Point p)
+        private void SimpleButton_DragOut()
         {
-            if (HitTheBox(p))
-                OnUp();
-            else if (_isDown)
-            {
-                _isDown = false;
-                AnimateColorChange(NormalColor);
-            }
+            AnimateColorChange(NormalColor);
+            _isDown = false;
         }
 
-        private void Gesture_Down(Point p)
+        private void Gesture_Up()
         {
-            if (HitTheBox(p))
-                OnDown();
+            OnUp();
+        }
+
+        private void Gesture_Down()
+        {
+            OnDown();
         }
 
         public virtual async Task OnUp()
         {
-            _isDown = false;
-            if (CanActivate())
+            if (_isDown && CanActivate())
             {
+                _isDown = false;
                 Activated?.Invoke();
                 await AnimateColorChange(ActivatedColor);
                 AnimateColorChange(NormalColor);

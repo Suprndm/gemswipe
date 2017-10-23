@@ -16,23 +16,34 @@ namespace GemSwipe.Game.Pages.Map
         private readonly IList<LevelButton> _levelButtons;
         private IList<SKPoint> _curve;
         private IList<SKPoint> _oldCurve;
+        private float _screenHeight;
+
+        private bool _isDragged;
 
         public Map(float x, float y, float height, float width) : base(x, y, height, width)
         {
+            _screenHeight = height;
             _levelButtons = new List<LevelButton>();
             _aY = 0;
+            DeclareTappable(this);
             Build();
+
+            Up += () => Release();
+            Pan += (p) => MoveToY((float)p.Y);
         }
 
         private void Build()
         {
             var levelMapPositionRepository = new LevelMapPositionRepository();
+            var levelMapPositions = levelMapPositionRepository.GetAll();
 
+            var higherPointY = levelMapPositions.Max(l => l.Position.Y);
+            var newHeight = (float)(Height / 3 + higherPointY / 100 * Height);
             foreach (var levelMapPosition in levelMapPositionRepository.GetAll())
             {
                 var levelButton = new LevelButton(
                     (float)levelMapPosition.Position.X / 100 * Width,
-                    Height - (float)levelMapPosition.Position.Y / 100 * Height,
+                    newHeight - (float)levelMapPosition.Position.Y / 100 * Height,
                     Height / 40,
                     levelMapPosition.Id);
 
@@ -44,9 +55,6 @@ namespace GemSwipe.Game.Pages.Map
 
                 _levelButtons.Add(levelButton);
             }
-
-            var minButtonPosition = _levelButtons.Min(b => b.Y);
-            Height = Height / 3 - minButtonPosition;
 
             _curve = new List<SKPoint>();
             foreach (var levelButton in _levelButtons)
@@ -63,18 +71,24 @@ namespace GemSwipe.Game.Pages.Map
 
             foreach (var levelButton in _levelButtons)
             {
-               var closestPoint = _curve.Select(p => new KeyValuePair<SKPoint, float>(p,
+                var closestPoint = _curve.Select(p => new KeyValuePair<SKPoint, float>(p,
                     MathHelper.Distance(p, new SKPoint(levelButton.X, levelButton.Y)))).OrderBy(p => p.Value).First().Key;
 
                 levelButton.X = closestPoint.X;
                 levelButton.Y = closestPoint.Y;
             }
 
+
+            _y = -newHeight + 2 * _screenHeight / 3;
+            Height = newHeight;
+
+          
+
         }
 
         private IList<SKPoint> SmoothCurve(IList<SKPoint> curve)
         {
-          
+
             var newCurve = new List<SKPoint>();
             newCurve.Add(curve.First());
 
@@ -91,13 +105,13 @@ namespace GemSwipe.Game.Pages.Map
                     var angle1 = MathHelper.Angle(p1, p2);
 
                     var d1 = MathHelper.Distance(p1, p2) * 0.7f;
-                    var newP1 = new SKPoint((float) (p1.X + d1 * Math.Cos(angle1)),
-                        (float) (p1.Y + d1 * Math.Sin(angle1)));
+                    var newP1 = new SKPoint((float)(p1.X + d1 * Math.Cos(angle1)),
+                        (float)(p1.Y + d1 * Math.Sin(angle1)));
 
                     var angle3 = MathHelper.Angle(p3, p2);
                     var d3 = MathHelper.Distance(p2, p3) * 0.7f;
-                    var newP3 = new SKPoint((float) (p3.X + d3 * Math.Cos(angle3)),
-                        (float) (p3.Y + d3 * Math.Sin(angle3)));
+                    var newP3 = new SKPoint((float)(p3.X + d3 * Math.Cos(angle3)),
+                        (float)(p3.Y + d3 * Math.Sin(angle3)));
 
                     newCurve.Add(newP1);
                     newCurve.Add(newP3);
@@ -125,7 +139,7 @@ namespace GemSwipe.Game.Pages.Map
             var path = new SKPath();
             for (int i = 0; i < _curve.Count; i++)
             {
-                var posWithScroll = new SKPoint(_curve[i].X+_x, _curve[i].Y +_y);
+                var posWithScroll = new SKPoint(_curve[i].X + _x, _curve[i].Y + _y);
 
                 if (i == 0)
                     path.MoveTo(posWithScroll);
@@ -136,8 +150,8 @@ namespace GemSwipe.Game.Pages.Map
             var paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
-                Color = CreateColor(255, 255, 255,125),
-                StrokeWidth = Width/50,
+                Color = CreateColor(255, 255, 255, 125),
+                StrokeWidth = Width / 50,
                 IsAntialias = true
             };
 
@@ -170,26 +184,47 @@ namespace GemSwipe.Game.Pages.Map
 
         public void MoveToY(float y)
         {
-            _aY += y * .1f;
+            Y += y;
+            _aY = y * 1f;
+            _isDragged = true;
 
+
+            if (_y > 0)
+            {
+                _y = 0;
+            }
+
+            if (_y < -Height + 2 * _screenHeight / 3)
+            {
+                _y = -Height + 2 * _screenHeight / 3;
+            }
+        }
+
+        public void Release()
+        {
+            _isDragged = false;
         }
 
         private void UpdateScroll()
         {
-            _y += _aY;
-
-            if (_y < 0)
+            if (!_isDragged)
             {
-                _y = 0;
-                _aY = -_aY * .5f;
-            }
-            if (_y > Height)
-            {
-                _y = Height;
-                _aY = -_aY * .5f;
+                _y += _aY;
+
+                if (_y > 0)
+                {
+                    _y = 0;
+                    _aY = -_aY * .5f;
+                }
+                if (_y < -Height + 2 * _screenHeight / 3)
+                {
+                    _y = -Height + 2 * _screenHeight / 3;
+                    _aY = -_aY * .5f;
+                }
+
+                _aY = _aY * .9f;
             }
 
-            _aY = _aY * .9f;
         }
     }
 }

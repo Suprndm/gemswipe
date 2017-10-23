@@ -64,7 +64,20 @@ namespace GemSwipe.Game.SkiaEngine
             protected set => _height = value;
         }
 
+        public bool IsEnabled
+        {
+            get
+            {
+                if (Parent != null)
+                    return _isEnabled && Parent.IsEnabled;
+                return _isEnabled;
+            }
+            protected set => _isEnabled = value;
+        }
+
         protected float _opacity;
+
+
         public float Opacity
         {
             get
@@ -93,7 +106,34 @@ namespace GemSwipe.Game.SkiaEngine
             protected set => _opacity = value;
         }
 
-        public int ZIndex { get; set; }
+        private decimal _visualTreeDepth;
+        public decimal VisualTreeDepth
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    return  0.1m * Parent.VisualTreeDepth;
+                }
+                return _visualTreeDepth;
+            }
+            set { _visualTreeDepth = value; }
+        }
+
+        private decimal _zIndex;
+        public decimal ZIndex
+        {
+            get
+            {
+                if (Parent != null)
+                {
+                    return _zIndex * 0.1m * Parent.VisualTreeDepth + Parent.ZIndex;
+                }
+                return _zIndex;
+            }
+            set { _zIndex = value; }
+        }
+
         public bool ToDispose { get; protected set; }
 
         public bool IsVisible
@@ -111,15 +151,23 @@ namespace GemSwipe.Game.SkiaEngine
         private readonly IList<ISkiaView> _children;
         private bool _tappable;
         private bool _isVisible;
+        private bool _isEnabled;
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
 
 
-        public void AddChild(ISkiaView child, int zindex = 0)
+        public void AddChild(ISkiaView child)
         {
             lock (_children)
             {
+                decimal zindex = 0.4m;
                 child.SetCanvas(Canvas);
+
+                if ( _children.Count > 0)
+                {
+                    zindex = 1-1m/(_children.Count + 1);
+                }
+               
                 child.ZIndex = zindex;
                 _children.Add(child);
                 child.Parent = this;
@@ -135,8 +183,8 @@ namespace GemSwipe.Game.SkiaEngine
 
         public void RemoveChild(ISkiaView child)
         {
-                _children.Remove(child);
-                child.SetCanvas(null);
+            _children.Remove(child);
+            child.SetCanvas(null);
         }
 
         protected abstract void Draw();
@@ -187,44 +235,6 @@ namespace GemSwipe.Game.SkiaEngine
             }
         }
 
-        public void DetectDown(Point p)
-        {
-            // Clear Tappables 
-            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
-            {
-                Tappables.Remove(child);
-            }
-
-            // Detect
-            foreach (var tappable in Tappables)
-            {
-                if (tappable.HitTheBox(p))
-                {
-                    tappable.InvokeDown();
-                    return;
-                }
-            }
-        }
-
-        public void DetectUp(Point p)
-        {
-            // Clear Tappables 
-            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
-            {
-                Tappables.Remove(child);
-            }
-
-            // Detect
-            foreach (var tappable in Tappables)
-            {
-                if (tappable.HitTheBox(p))
-                {
-                    tappable.InvokeUp();
-                    return;
-                }
-            }
-        }
-
         public bool HitTheBox(Point p)
         {
             var hitbox = GetHitbox();
@@ -247,8 +257,20 @@ namespace GemSwipe.Game.SkiaEngine
             Up?.Invoke();
         }
 
+        public void InvokePan(Point p)
+        {
+            Pan?.Invoke(p);
+        }
+
+        public void InvokeDragOut()
+        {
+            DragOut?.Invoke();
+        }
+
         public event Action Down;
         public event Action Up;
+        public event Action<Point> Pan;
+        public event Action DragOut;
 
         #endregion
 
@@ -275,10 +297,13 @@ namespace GemSwipe.Game.SkiaEngine
         protected SkiaView(float x, float y, float height, float width)
         {
             _opacity = 1;
+            _visualTreeDepth = 1;
             _isVisible = true;
+            _isEnabled = true;
 
             _x = x;
             _y = y;
+            _zIndex = 1;
 
             Height = height;
             Width = width;
