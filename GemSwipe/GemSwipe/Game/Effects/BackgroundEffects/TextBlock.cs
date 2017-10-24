@@ -19,15 +19,16 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         protected override void Draw()
         {
 
+            if(string.IsNullOrEmpty(Text))
+                return;
 
             using (var paint = new SKPaint())
             {
-                paint.Color = SKColors.Yellow;
                 paint.Typeface = SKTypeface.FromFamilyName(
                     "Arial",
-                    SKFontStyleWeight.Bold,
+                    SKFontStyleWeight.Light,
                     SKFontStyleWidth.Normal,
-                    SKFontStyleSlant.Italic);
+                    SKFontStyleSlant.Upright);
 
                 paint.TextSize = Size;
                 paint.IsAntialias = true;

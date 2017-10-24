@@ -21,22 +21,21 @@ namespace GemSwipe.Utilities.Buttons
         {
              TextColor = new SKColor(255, 255, 255);
             Text = text;
-            Padding = height;
+            Padding = height /2;
         }
 
         protected override void Draw()
         {
-            Color = new SKColor(R, G, B);
-
+            Color = CreateColor(R, G, B);
 
             using (var textPaint = new SKPaint())
             {
                 textPaint.Color = SKColors.Yellow;
                 textPaint.Typeface = SKTypeface.FromFamilyName(
                     "Arial",
-                    SKFontStyleWeight.Bold,
+                    SKFontStyleWeight.Light,
                     SKFontStyleWidth.Normal,
-                    SKFontStyleSlant.Italic);
+                    SKFontStyleSlant.Upright);
 
                 textPaint.TextSize = Height;
                 textPaint.IsAntialias = true;

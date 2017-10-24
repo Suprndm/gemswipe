@@ -31,7 +31,7 @@ namespace GemSwipe.Views
         {
             if (_isInitiated)
             {
-                e.Surface.Canvas.Clear(SKColors.Black);
+                e.Surface.Canvas.Clear(new SKColor(87, 0, 168));
                 _testView.Render();
 
                 var fps = 1000/(_stopwatch.ElapsedMilliseconds - _lastElapsedTime);

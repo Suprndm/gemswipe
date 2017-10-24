@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
@@ -32,27 +33,38 @@ namespace GemSwipe.Game.Entities
 
         private void Gesture_Pan(Point p)
         {
+            ClearTappables();
             SkiaGestureService.Instance.HandlePan(p);
         }
 
         private void Gesture_Down(Point p)
         {
+            ClearTappables();
             SkiaGestureService.Instance.HandleDown(Tappables, p);
         }
 
         private void Gesture_Up(Point p)
         {
+            ClearTappables();
             SkiaGestureService.Instance.HandleUp(Tappables, p);
         }
 
+        private void ClearTappables()
+        {
+            foreach (var child in Tappables.Where(child => child.ToDispose).ToList())
+            {
+                Tappables.Remove(child);
+            }
+        }
+  
 
-        public async Task LoadResources()
+        public virtual async Task LoadResources()
         {
             SpriteSheet.Instance.Setup("Resources/Graphics/atlas.png", "Resources/Graphics/atlas.txt");
             await SpriteSheet.Instance.LoadAsync();
         }
 
-        public void SetupLayers()
+        public virtual void SetupLayers()
         {
             AddChild(new BackgroundLayer(Height, Width));
             AddChild(new NavigationLayer(Height, Width));

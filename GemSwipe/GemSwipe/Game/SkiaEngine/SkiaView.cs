@@ -155,7 +155,6 @@ namespace GemSwipe.Game.SkiaEngine
         public ISkiaView Parent { get; set; }
         protected SKColor BackgroundColor { get; set; }
 
-
         public void AddChild(ISkiaView child)
         {
             lock (_children)

@@ -24,15 +24,17 @@ namespace GemSwipe.Utilities.Buttons
                 R = NormalColor.Red;
                 G = NormalColor.Green;
                 B = NormalColor.Blue;
+                A = NormalColor.Alpha;
             }
         }
 
-        protected SKColor DownColor = new SKColor(75, 75, 75);
+        protected SKColor DownColor = new SKColor(100, 100, 100);
         protected SKColor ActivatedColor = new SKColor(0, 168, 214);
 
         protected Byte R { get; set; }
         protected Byte G { get; set; }
         protected Byte B { get; set; }
+        protected Byte A { get; set; }
 
         protected SKColor Color { get; set; }
 
@@ -44,7 +46,7 @@ namespace GemSwipe.Utilities.Buttons
         public SimpleButton(float x, float y, float width, float height) : base(x, y, height, width)
         {
 
-            NormalColor = new SKColor(125, 125, 125);
+            NormalColor = new SKColor(150, 150, 150);
 
             DeclareTappable(this);
 
@@ -75,7 +77,6 @@ namespace GemSwipe.Utilities.Buttons
             {
                 _isDown = false;
                 Activated?.Invoke();
-                await AnimateColorChange(ActivatedColor);
                 AnimateColorChange(NormalColor);
 
             }
@@ -107,7 +108,7 @@ namespace GemSwipe.Utilities.Buttons
 
         protected override void Draw()
         {
-            Color = new SKColor(R, G, B);
+            Color = CreateColor(R, G, B, A);
             using (var paint = new SKPaint())
             {
 

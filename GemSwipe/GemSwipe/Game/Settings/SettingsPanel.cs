@@ -28,7 +28,7 @@ namespace GemSwipe.Game.Settings
         public Task Show()
         {
             IsShowed = true;
-            this.Animate("slideOut", p => _x = (float)p, _x, 0f, 8, (uint)300, Easing.SpringOut);
+            this.Animate("slideIn", p => _x = (float)p, _x, 0f, 8, (uint)300, Easing.SpringOut);
             return Task.Delay(300);
         }
 

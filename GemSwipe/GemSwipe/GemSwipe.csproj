@@ -106,6 +106,10 @@
     <Compile Include="Game\Effects\BackgroundEffects\CountDownView.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\HeaderView.cs" />
     <Compile Include="Game\Polygonal.cs" />
+    <Compile Include="Game\Popups\Popup.cs" />
+    <Compile Include="Game\Popups\PopupBackground.cs" />
+    <Compile Include="Game\Popups\PopupRightButton.cs" />
+    <Compile Include="Game\Popups\PopupLeftButton.cs" />
     <Compile Include="Game\Settings\SettingsPanel.cs" />
     <Compile Include="Game\SkiaEngine\SkiaView.cs" />
     <Compile Include="Game\SkiaEngine\ISkiaView.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
     <Compile Include="Game\Test\GemTester.cs" />
+    <Compile Include="Game\Test\PopupTester.cs" />
     <Compile Include="Game\Test\TestView.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\IFileHandler.cs" />
