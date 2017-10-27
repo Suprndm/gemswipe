@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.SkiaEngine;
@@ -13,8 +14,8 @@ namespace GemSwipe.Utilities.Buttons
         public event Action Activated;
         protected SKRect _hitbox;
 
-        protected long DelayBetweenPresses = 300;
-
+        protected int DelayBetweenPresses = 1000;
+        protected bool IsActivated;
         protected SKColor NormalColor
         {
             get { return _normalColor; }
@@ -45,9 +46,8 @@ namespace GemSwipe.Utilities.Buttons
 
         public SimpleButton(float x, float y, float width, float height) : base(x, y, height, width)
         {
-
             NormalColor = new SKColor(150, 150, 150);
-
+            IsActivated = true;
             DeclareTappable(this);
 
             Down += Gesture_Down;
@@ -66,6 +66,13 @@ namespace GemSwipe.Utilities.Buttons
             OnUp();
         }
 
+        private async Task Reactivate()
+        {
+            IsActivated = false;
+            await Task.Delay(DelayBetweenPresses);
+            IsActivated = true;
+        }
+
         private void Gesture_Down()
         {
             OnDown();
@@ -78,7 +85,7 @@ namespace GemSwipe.Utilities.Buttons
                 _isDown = false;
                 Activated?.Invoke();
                 AnimateColorChange(NormalColor);
-
+                Reactivate();
             }
             else
             {
@@ -122,7 +129,7 @@ namespace GemSwipe.Utilities.Buttons
 
         protected virtual bool CanActivate()
         {
-            return true;
+            return IsActivated;
         }
 
 

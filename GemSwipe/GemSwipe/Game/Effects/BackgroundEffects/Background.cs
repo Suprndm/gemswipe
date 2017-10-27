@@ -11,8 +11,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private readonly OceanDepth _oceanDepth;
         private readonly Stars _stars;
 
-        public Background( float x, float y, float height, float width) : base( x, y, height,
-            width)
+        public Background()
         {
             _oceanDepth = new OceanDepth( X, Y, Height, Width);
             AddChild(_oceanDepth);

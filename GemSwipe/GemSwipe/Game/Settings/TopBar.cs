@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GemSwipe.Game.Navigation;
 using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities;
 using GemSwipe.Utilities.Buttons;
-using SkiaSharp;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.Settings
@@ -13,14 +10,14 @@ namespace GemSwipe.Game.Settings
     {
         public event Action SettingsButtonPressed;
 
-        public TopBar(float x, float y, float height, float width) : base(x, y, height, width)
+        public TopBar()
         {
-            _height = 0.1f * height;
+            _height = 0.1f * Height;
 
-            var settingsButton = new SimpleButton(width - _height / 2, _height / 2, _height, _height);
+            var settingsButton = new SimpleButton(Width - _height / 2, _height / 2, _height, _height);
             AddChild(settingsButton);
             DeclareTappable(settingsButton);
-            _y = -height;
+            _y = -Height;
             settingsButton.Activated += SettingsButton_Tapped;
 
             DeclareTappable(this);

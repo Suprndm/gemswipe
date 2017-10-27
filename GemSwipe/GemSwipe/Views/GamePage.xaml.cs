@@ -38,6 +38,7 @@ namespace GemSwipe.Views
                 // Init SkiaSharp
                 _canvas = e.Surface.Canvas;
                 _skiaRoot = new SkiaRoot(0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                _skiaRoot.Initialize();
                 _skiaRoot.SetCanvas(e.Surface.Canvas);
                 _isInitiated = true;
             }

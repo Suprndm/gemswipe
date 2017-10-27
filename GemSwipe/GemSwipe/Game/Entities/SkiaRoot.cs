@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Data.PlayerData;
+using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Layers;
+using GemSwipe.Game.Navigation;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Sprites;
 using Xamarin.Forms;
@@ -16,10 +18,15 @@ namespace GemSwipe.Game.Entities
         private Background _background;
         private PlayerData _playerData;
 
+        public static float ScreenHeight { get; private set; }
+        public static float ScreenWidth { get; private set; }
+
         public SkiaRoot(float x, float y, float height, float width) : base(x, y, height, width)
         {
-            Initialize();
+            ScreenHeight = height;
+            ScreenWidth = width;
         }
+
         public async void Initialize()
         {
             SetupLayers();
@@ -66,10 +73,13 @@ namespace GemSwipe.Game.Entities
 
         public virtual void SetupLayers()
         {
-            AddChild(new BackgroundLayer(Height, Width));
-            AddChild(new NavigationLayer(Height, Width));
-            AddChild(new InterfaceLayer(Height, Width));
-            AddChild(new PopupLayer(Height, Width));
+            AddChild(new BackgroundLayer());
+            AddChild(new NavigationLayer());
+            AddChild(new InterfaceLayer());
+            AddChild(new PopupLayer());
+            AddChild(new LoadingLayer());
+
+            Navigator.Instance.GoToInitialPage(PageType.Home);
         }
 
         protected override void Draw()

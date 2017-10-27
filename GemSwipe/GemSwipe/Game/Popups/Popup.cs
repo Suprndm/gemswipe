@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Entities;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Buttons;
 using SkiaSharp;
@@ -14,8 +15,26 @@ namespace GemSwipe.Game.Popups
         public event Action NextAction;
 
         public float ContentHeight { get; set; }
-        public string Title { get; set; }
-        public string ActionName { get; set; }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                _titleBlock.Text = value;
+            }
+        }
+
+        public string ActionName
+        {
+            get { return _actionName; }
+            set
+            {
+                _actionName = value;
+                _rightButton.Text = value;
+            }
+        }
 
         protected const float HeaderHeightRatio = 0.07f;
         protected const float FooterHeightRatio = 0.10f;
@@ -32,12 +51,17 @@ namespace GemSwipe.Game.Popups
         private float _secondButtonX;
         private float _secondButtonWidth;
 
-        public Popup(float height, float width) : base(0 ,0, height, width)
+        private TextBlock _titleBlock;
+        private PopupRightButton _rightButton;
+        private string _actionName;
+        private string _title;
+
+
+        public Popup(ISkiaView contentView) : base()
         {
             _y = -Height;
-            ContentHeight = height * 0.3f;
-            Title = "Popup title";
-            ActionName = "Action";
+            ContentHeight = Height * 0.3f;
+       
             _popupWidth = WidthRatio * Width;
             _headerHeight = HeaderHeightRatio * Height;
             _footerHeight = FooterHeightRatio * Height;
@@ -49,16 +73,27 @@ namespace GemSwipe.Game.Popups
             _popupHeight =  _headerHeight + ContentHeight +  _footerHeight;
 
 
-            var title = new TextBlock(_popupX+ _popupWidth/2,_popupY + _headerHeight / 2, Title, _headerHeight/2, new SKColor(255,255,255));
-            AddChild(title);
+            _titleBlock = new TextBlock(_popupX+ _popupWidth/2,_popupY + _headerHeight / 2, Title, _headerHeight/2, new SKColor(255,255,255));
+            AddChild(_titleBlock);
 
             var leftButton = new PopupLeftButton(_popupX, _popupY + _headerHeight + ContentHeight,
                 _popupWidth * ButtonWidthRatio, _footerHeight, _popupWidth, _popupHeight, _radius);
 
-            var rightButton = new PopupRightButton( _secondButtonX, _popupY + _headerHeight + ContentHeight, _secondButtonWidth, _footerHeight, _popupWidth, _popupHeight, _radius, ActionName);
+            _rightButton = new PopupRightButton( _secondButtonX, _popupY + _headerHeight + ContentHeight, _secondButtonWidth, _footerHeight, _popupWidth, _popupHeight, _radius, ActionName);
+
+            Title = "Popup title";
+            ActionName = "Action";
 
             AddChild(leftButton);
-            AddChild(rightButton);
+            AddChild(_rightButton);
+
+            if (contentView != null)
+            {
+                contentView.X = _popupX;
+                contentView.Y = _popupY + _headerHeight;
+
+                AddChild(contentView);
+            }
 
             leftButton.Activated += () =>
             {
@@ -66,18 +101,25 @@ namespace GemSwipe.Game.Popups
                 BackAction?.Invoke();
             };
 
-            rightButton.Activated += () =>
+            _rightButton.Activated += () =>
             {
                 HideRight();
                 NextAction?.Invoke();
             };
+
+            DeclareTappable(this);
+        }
+
+        public override SKRect GetHitbox()
+        {
+            return SKRect.Create(_popupX, _popupY, _popupWidth, _popupHeight);
         }
 
 
         public Task Show()
         {
             this.Animate("slideIn", p => _y = (float)p, _y, 0, 8, (uint)500, Easing.SpringOut);
-            return Task.Delay(300);
+            return Task.Delay(500);
         }
 
         public async Task HideLeft()

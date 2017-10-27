@@ -9,7 +9,7 @@ namespace GemSwipe.Game.Navigation.Pages
     public abstract class PageBase : SkiaView, IPage
     {
         protected bool IsActive { get; private set; }
-        protected PageBase( float x, float y, float height, float width) : base( x, y, height, width)
+        protected PageBase() : base()
         {
             IsVisible = false;
             IsEnabled = false;
@@ -36,14 +36,17 @@ namespace GemSwipe.Game.Navigation.Pages
 
         protected virtual async Task TransitionIn()
         {
-            this.Animate("fadeIn", p => _opacity = (float)p, _opacity, 1f, 8, (uint)300, Easing.CubicIn);
-            await Task.Delay(300);
+            _opacity = 1;
+            //this.Animate("fadeIn", p => _opacity = (float)p, _opacity, 1f, 8, (uint)1000, Easing.CubicIn);
+            await Task.Delay(1000);
         }
 
         protected virtual async Task TransitionOut()
         {
-            this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)300, Easing.CubicIn);
-            await Task.Delay(300);
+            //this.Animate("fadeOut", p => _opacity = (float)p, _opacity, 0f, 8, (uint)1000, Easing.CubicIn);
+            await Task.Delay(1000);
+            _opacity = 0;
+
         }
 
         public async Task Hide()

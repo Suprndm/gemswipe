@@ -3,14 +3,17 @@ using SkiaSharp;
 
 namespace GemSwipe.Game.Effects.BackgroundEffects
 {
-    public class TextBlock:SkiaView
+    public class TextBlock : SkiaView
     {
         public string Text { get; set; }
         public float Size { get; set; }
         public SKColor Color { get; set; }
         private SKRect _hitbox;
-        public TextBlock( float x, float y, string text, float size, SKColor color) : base( x, y, size, size)
+        private HorizontalAlignment _horizontalAlignment;
+
+        public TextBlock(float x, float y, string text, float size, SKColor color, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center) : base(x, y, size, size)
         {
+            _horizontalAlignment = horizontalAlignment;
             Text = text;
             Size = size;
             Color = color;
@@ -19,7 +22,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         protected override void Draw()
         {
 
-            if(string.IsNullOrEmpty(Text))
+            if (string.IsNullOrEmpty(Text))
                 return;
 
             using (var paint = new SKPaint())
@@ -38,8 +41,15 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
                 Width = textLenght;
 
-                _hitbox = SKRect.Create(X - textLenght / 2, Y- Size / 3, Width, Size);
-                Canvas.DrawText(Text, X - textLenght / 2, Y + Size / 2, paint);
+                float xModifier = 0;
+
+                if (_horizontalAlignment == HorizontalAlignment.Center)
+                    xModifier = -textLenght / 2;
+                else if (_horizontalAlignment == HorizontalAlignment.Left)
+                    xModifier = -textLenght;
+
+                _hitbox = SKRect.Create(X + xModifier, Y - Size / 3, Width, Size);
+                Canvas.DrawText(Text, X + xModifier, Y + Size / 2, paint);
 
             }
         }

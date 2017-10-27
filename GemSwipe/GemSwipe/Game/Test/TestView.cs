@@ -22,10 +22,12 @@ namespace GemSwipe.Game
         private TextBlock _fpsText;
         public TestView(float x, float y, float height, float width) : base(x, y, height, width)
         {
+            var skiaRoot = new SkiaRoot(0, 0, height, width);
+
             _fpsText = new TextBlock(width / 2, width / 40, "0", width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new PopupTester( Height, Width));
+            AddChild(new PopupTester(Height, Width));
         }
 
 

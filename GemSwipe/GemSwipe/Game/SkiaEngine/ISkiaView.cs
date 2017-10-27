@@ -7,8 +7,8 @@ namespace GemSwipe.Game.SkiaEngine
 {
     public interface ISkiaView
     {
-        float X { get; }
-        float Y { get; }
+        float X { get; set; }
+        float Y { get; set; }
 
         SKRect GetHitbox(); 
 

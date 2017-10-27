@@ -13,6 +13,7 @@ namespace GemSwipe.Game.Navigation
 
         public static event Action<NavigationEventArgs> NavigationStarted;
         public static event Action<NavigationEventArgs> NavigationEnded;
+        public static event Action InitialNavigationStarted;
 
         private Navigator()
         {
@@ -36,10 +37,12 @@ namespace GemSwipe.Game.Navigation
             _pages.Add(pageType, page);
         }
 
-        public Task GoToInitialPage(PageType pageType)
+        public async Task GoToInitialPage(PageType pageType)
         {
             _currentPage = _pages[pageType];
-            return _currentPage.Show();
+            InitialNavigationStarted?.Invoke();
+            await _currentPage.Show();
+            NavigationEnded?.Invoke(new NavigationEventArgs(pageType, pageType));
         }
 
         public async Task GoTo(PageType nextPageType, object parameter = null)

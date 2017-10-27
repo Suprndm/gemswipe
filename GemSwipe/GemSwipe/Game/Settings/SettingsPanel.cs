@@ -12,9 +12,9 @@ namespace GemSwipe.Game.Settings
 
         public bool IsShowed { get; set; }
         
-        public SettingsPanel(float x, float y, float height, float width) : base(x, y, height, width)
+        public SettingsPanel()
         {
-            _x = width;
+            _x = Width;
             DeclareTappable(this);
             Down += SettingsPanel_Tapped;
             _opacity = 1;

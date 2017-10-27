@@ -13,9 +13,9 @@ namespace GemSwipe.Game.Layers
     {
         private Background _background;
 
-        public BackgroundLayer(float height, float width) : base(0, 0, height, width)
+        public BackgroundLayer()
         {
-            _background = new Background(0, 0, Height, Width);
+            _background = new Background();
             AddChild(_background);
         }
 

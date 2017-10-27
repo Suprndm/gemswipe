@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GemSwipe.Game.Entities;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -103,7 +104,7 @@ namespace GemSwipe.Game.SkiaEngine
                     }
                 }
             }
-            protected set => _opacity = value;
+            set => _opacity = value;
         }
 
         private decimal _visualTreeDepth;
@@ -148,7 +149,7 @@ namespace GemSwipe.Game.SkiaEngine
 
 
         public SKCanvas Canvas { get; protected set; }
-        private readonly IList<ISkiaView> _children;
+        private IList<ISkiaView> _children;
         private bool _tappable;
         private bool _isVisible;
         private bool _isEnabled;
@@ -220,7 +221,7 @@ namespace GemSwipe.Game.SkiaEngine
         #region TapEvents
 
 
-        public IList<ISkiaView> Tappables { get; }
+        public IList<ISkiaView> Tappables { get; private set; }
 
         public void DeclareTappable(ISkiaView child)
         {
@@ -291,21 +292,35 @@ namespace GemSwipe.Game.SkiaEngine
             return SKRect.Create(X, Y, Width, Height);
         }
 
+        protected SkiaView()
+        {
+            _x = 0;
+            _y = 0;
+            Height = SkiaRoot.ScreenHeight;
+            Width = SkiaRoot.ScreenWidth;
+
+            Initialize();
+        }
 
 
         protected SkiaView(float x, float y, float height, float width)
+        {
+            _x = x;
+            _y = y;
+            Height = height;
+            Width = width;
+
+            Initialize();
+        }
+
+        private void Initialize()
         {
             _opacity = 1;
             _visualTreeDepth = 1;
             _isVisible = true;
             _isEnabled = true;
 
-            _x = x;
-            _y = y;
             _zIndex = 1;
-
-            Height = height;
-            Width = width;
 
             Tappables = new List<ISkiaView>();
             _children = new List<ISkiaView>();

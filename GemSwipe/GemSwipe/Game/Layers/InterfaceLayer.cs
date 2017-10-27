@@ -10,12 +10,12 @@ namespace GemSwipe.Game.Layers
         private readonly TopBar _topBar;
         private readonly SettingsPanel _settingsPanel;
 
-        public InterfaceLayer(float height, float width) : base(0, 0, height, width)
+        public InterfaceLayer()
         {
-            _topBar = new TopBar(0, 0, height, width);
+            _topBar = new TopBar();
             AddChild(_topBar);
 
-            _settingsPanel = new SettingsPanel(0, 0, height, width);
+            _settingsPanel = new SettingsPanel();
             AddChild(_settingsPanel);
 
             _topBar.SettingsButtonPressed += () =>

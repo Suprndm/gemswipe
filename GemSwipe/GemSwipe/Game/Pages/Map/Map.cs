@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Data.LevelMapPosition;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Navigation;
+using GemSwipe.Game.Popups;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities;
 using GemSwipe.Utilities.Buttons;
@@ -19,6 +22,7 @@ namespace GemSwipe.Game.Pages.Map
         private IList<SKPoint> _oldCurve;
         private float _screenHeight;
         private PlayerData _playerData;
+        private readonly LevelDataRepository _levelDataRepository;
 
         private TextButton _nicknameButton;
 
@@ -26,6 +30,7 @@ namespace GemSwipe.Game.Pages.Map
         public Map(float x, float y, float height, float width) : base(x, y, height, width)
         {
             _screenHeight = height;
+            _levelDataRepository = new LevelDataRepository();
             _playerData = PlayerDataService.Instance.GetData();
             _nicknameButton = new TextButton(width / 2, height / 2, 100, _playerData.Nickname);
 
@@ -54,6 +59,18 @@ namespace GemSwipe.Game.Pages.Map
                 levelButton.ProgressStatus = levelProgress;
             }
         }
+
+        private void LevelButton_Tapped(int i)
+        {
+            var levelData = _levelDataRepository.Get(i);
+            var dialogPopup = new LevelDialogPopup(i);
+            PopupService.Instance.ShowPopup(dialogPopup);
+            dialogPopup.NextCommand = () =>
+            {
+                Navigator.Instance.GoTo(PageType.Game, i);
+            };
+        }
+
 
         private void Build()
         {
@@ -151,10 +168,6 @@ namespace GemSwipe.Game.Pages.Map
             return newCurve;
         }
 
-        private void LevelButton_Tapped(int i)
-        {
-            Navigator.Instance.GoTo(PageType.Game, i);
-        }
 
         protected override void Draw()
         {

@@ -18,12 +18,11 @@ namespace GemSwipe.Game.Pages.Game
     {
         private Scene _scene;
         private bool _isBlocked;
-        private EffectLayer _effectLayer;
         private bool _isBusy;
         private LevelDataRepository _levelDataRepository;
         private int _currentLevelId;
 
-        public GamePage( float x, float y, float height, float width) : base( x, y, height, width)
+        public GamePage()
         {
             _levelDataRepository = new LevelDataRepository();
         }
@@ -112,10 +111,6 @@ namespace GemSwipe.Game.Pages.Game
             _scene = new Scene( 0, 0, Height, Width);
             AddChild(_scene);
 
-
-            _effectLayer = new EffectLayer( 0, 0, Height, Width);
-            AddChild(_effectLayer);
-
             Start(levelId);
             Gesture.Swipe += OnSwipped;
         }
@@ -128,8 +123,6 @@ namespace GemSwipe.Game.Pages.Game
         protected override void OnDeactivated()
         {
             _scene.Dispose();
-            _effectLayer.Dispose();
-
             Gesture.Swipe -= OnSwipped;
         }
     }
