@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
 using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Utilities.Buttons;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -18,6 +20,23 @@ namespace GemSwipe.Game.Settings
             DeclareTappable(this);
             Down += SettingsPanel_Tapped;
             _opacity = 1;
+
+            var recoverButton = new TextButton(Width / 2, Height / 6, Height/40, "Recover Life");
+            var backButton = new TextButton(Width / 2, Height / 4, Height/40, "Exit");
+
+            recoverButton.Activated += () =>
+            {
+                PlayerLifeService.Instance.GainLife();
+            };
+
+            backButton.Activated += () =>
+            {
+                Navigator.Instance.GoTo(PageType.Map);
+                Hide();
+            };
+
+            AddChild(recoverButton);
+            AddChild(backButton);
         }
 
         private void SettingsPanel_Tapped()

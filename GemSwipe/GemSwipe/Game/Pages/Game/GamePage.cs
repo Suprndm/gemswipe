@@ -73,13 +73,15 @@ namespace GemSwipe.Game.Pages.Game
                 _isBusy = true;
                 await Task.Delay(600);
                 _isBusy = false;
-                _board.RefillGems();
+                 var isFull =_board.RefillGems();
                 _movesLeft--;
                 _movesCount.Text = _movesLeft.ToString();
                 UpdateObjectivesView();
 
-                if (EvalWinStatus())
+                if (EvalWinStatus() &&  !isFull)
                 {
+                    // WIN
+
                     PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
                     PlayerLifeService.Instance.GainLife();
                     _isBusy = true;
@@ -101,7 +103,8 @@ namespace GemSwipe.Game.Pages.Game
                 }
                 else
                 {
-                    if (_movesLeft == 0)
+                    // LOSE
+                    if (_movesLeft == 0  || isFull)
                     {
                         _isBusy = true;
                         await Task.Delay(1000);

@@ -15,7 +15,7 @@ namespace GemSwipe.Game.Pages.Map
             _map = new Map(0, 0, Height, Width);
             AddChild(_map);
 
-            _playerLifeDisplayer = new PlayerLifeDisplayer(0,Height- Height / 10, Height, Width);
+            _playerLifeDisplayer = new PlayerLifeDisplayer(Width/2- Width / 8, Height- Height / 20, Height, Width/4);
             _map.GetLifeDisplayer(_playerLifeDisplayer);
             AddChild(_playerLifeDisplayer);
         }

@@ -82,8 +82,8 @@ namespace GemSwipe.Data.PlayerLife
                 for (int i = 1; i <= _numberOfLives; i++)
                 {
                     paint.IsAntialias = true;
-                    paint.Color = CreateColor(CreateColor(255, 0, 0));
-                    Canvas.DrawCircle(DistinguishLastLifeCoordX(i), DistinguishLastLifeCoordY(i), Width/20, paint);
+                    paint.Color = CreateColor(CreateColor(241, 142, 142));
+                    Canvas.DrawCircle(DistinguishLastLifeCoordX(i), DistinguishLastLifeCoordY(i), Width/10, paint);
                 }
             }
         }
