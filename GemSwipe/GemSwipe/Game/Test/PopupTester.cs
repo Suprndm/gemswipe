@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Entities;
 using GemSwipe.Game.Popups;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Buttons;
@@ -24,7 +25,7 @@ namespace GemSwipe.Game.Test
 
         private void PopButton_Activated()
         {
-            var popupDialogue = new DialogPopup(true);
+            var popupDialogue = new DialogPopup(SkiaRoot.ScreenWidth * 0.7f, SkiaRoot.ScreenHeight * 0.3f, true);
             AddChild(popupDialogue);
             popupDialogue.Show();
 

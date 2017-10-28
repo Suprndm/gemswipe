@@ -1,31 +1,39 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using GemSwipe.BoardSolver;
-using GemSwipe.Data;
 using GemSwipe.Data.LevelData;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
-using GemSwipe.Game.Effects;
-using GemSwipe.Game.Effects.Popped;
+using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Entities;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
+using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Navigation.Pages;
-using GemSwipe.Utilities.Sprites;
+using GemSwipe.Game.Popups;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game
 {
-    public class GamePage:PageBase
+    public class GamePage : PageBase
     {
-        private Scene _scene;
+        private Board _board;
         private bool _isBlocked;
         private bool _isBusy;
         private LevelDataRepository _levelDataRepository;
         private int _currentLevelId;
+        private LevelData _levelData;
 
+        private TextBlock _movesCount;
+        private int _movesLeft;
+
+        private ObjectivesView _objectivesView;
+        
         public GamePage()
         {
             _levelDataRepository = new LevelDataRepository();
+            _movesCount = new TextBlock(Width / 2, 0.05f * Height, "0", Height / 40f, new SKColor(255, 255, 255));
+            AddChild(_movesCount);
         }
 
         public void BackgroundNextBoard()
@@ -36,67 +44,111 @@ namespace GemSwipe.Game.Pages.Game
         public async void Start(int levelId)
         {
             _currentLevelId = levelId;
-            await _scene.StartingFloor.Start();
 
-            LevelData levelconfig = _levelDataRepository.Get(Math.Min(5,Math.Max(levelId,0)));
-            _scene.SetLevelData(levelconfig);
-            await _scene.NextTransitionFloor(levelId);
+            LevelData levelData = _levelDataRepository.Get(Math.Min(5, Math.Max(levelId, 0)));
+
+            _objectivesView = new ObjectivesView(levelData.Objectives, true, Width / 2, 0.1f * Height, 0.1f * Height);
+            AddChild(_objectivesView);
+
+            _levelData = levelData;
+            var boardMarginTop = Height * 0.2f;
+            _movesLeft = levelData.Moves;
+            _movesCount.Text = _movesLeft.ToString();
+            _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
+            AddChild(_board);
 
             BackgroundNextBoard();
             _isBusy = false;
+
+            UpdateObjectivesView();
         }
 
         public async void Swipe(Direction direction)
         {
-            if(IsBusy()) return;
+            if (IsBusy()) return;
 
-            if (_scene.CurrentBoard != null)
+            if (_board != null)
             {
-                var swipeResult = _scene.CurrentBoard.Swipe(direction);
+                var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
                 await Task.Delay(600);
                 _isBusy = false;
-                _scene.CurrentBoard.RefillGems();
-                swipeResult.BoardWon = true;
+                _board.RefillGems();
+                _movesLeft--;
+                _movesCount.Text = _movesLeft.ToString();
+                UpdateObjectivesView();
 
-                if (swipeResult.BoardWon)
+                if (EvalWinStatus())
                 {
                     PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
                     PlayerLifeService.Instance.GainLife();
                     _isBusy = true;
                     await Task.Delay(1000);
 
+                    var dialogPopup = new WinDialogPopup();
+                    PopupService.Instance.ShowPopup(dialogPopup);
+                    dialogPopup.NextCommand = () =>
+                    {
+                        Navigator.Instance.GoTo(PageType.Map);
+                    };
+                    dialogPopup.BackCommand = () =>
+                    {
+                        Navigator.Instance.GoTo(PageType.Game, _currentLevelId);
+                    };
+
+
                     BackgroundNextBoard();
-                    await _scene.EndFloor();
                 }
-                //else if (!_isBlocked)
-                //{
-                //    var isBlocked = await _blockedSensor.IsBlocked(_scene.CurrentBoard.ToString());
-                //    if (isBlocked)
-                //    {
-                //        _isBlocked = true;
-
-                //        await Task.Run(async () =>
-                //        {
-                //            await Task.Delay(2000);
-                //            _isBusy = true;
-                //            var blockedMessage = new PoppedText( Width / 2, Height / 2, 1000, 300, 300,
-                //                "Blocked",
-                //                Height / 10, CreateColor(255, 0, 0));
-                //            AddChild(blockedMessage);
-                //            await blockedMessage.Pop();
-
-                //            await _scene.ResetBoard();
-                //            _isBusy = false;
-                //            _isBlocked = false;
-
-                //        });
-                //    }
-                //}
-                if (swipeResult.GameFinished)
+                else
                 {
+                    if (_movesLeft == 0)
+                    {
+                        _isBusy = true;
+                        await Task.Delay(1000);
+                        var dialogPopup = new LoseDialogPopup();
+                        PopupService.Instance.ShowPopup(dialogPopup);
+                        dialogPopup.NextCommand = () =>
+                        {
+                            Navigator.Instance.GoTo(PageType.Game, _currentLevelId);
+                        };
+                        dialogPopup.BackCommand = () =>
+                        {
+                            Navigator.Instance.GoTo(PageType.Map);
+                        };
+                    }
                 }
             }
+        }
+
+        private void UpdateObjectivesView()
+        {
+            var gems = _board.Gems;
+            foreach (var objective in _levelData.Objectives)
+            {
+                var count = gems.Count(g => g.Size == objective.Key);
+
+                if (count <= objective.Value)
+                    _objectivesView.UpdateObjective(objective.Key, count);
+                else
+                {
+                    _objectivesView.UpdateObjective(objective.Key, objective.Value);
+                }
+            }
+        }
+
+        private bool EvalWinStatus()
+        {
+            var gems = _board.Gems;
+            bool isWon = true;
+            foreach (var objective in _levelData.Objectives)
+            {
+                var count = gems.Count(g => g.Size == objective.Key);
+
+                if (count < objective.Value)
+                    isWon = false;
+            }
+
+            return isWon;
         }
 
         public bool IsBusy()
@@ -110,9 +162,7 @@ namespace GemSwipe.Game.Pages.Game
 
         protected override void OnActivated(object parameter = null)
         {
-            var levelId = (int) parameter;
-            _scene = new Scene( 0, 0, Height, Width);
-            AddChild(_scene);
+            var levelId = (int)parameter;
 
             Start(levelId);
             Gesture.Swipe += OnSwipped;
@@ -125,7 +175,8 @@ namespace GemSwipe.Game.Pages.Game
 
         protected override void OnDeactivated()
         {
-            _scene.Dispose();
+            _board.Dispose();
+            _objectivesView.Dispose();
             Gesture.Swipe -= OnSwipped;
         }
     }

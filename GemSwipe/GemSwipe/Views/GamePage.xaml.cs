@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.Gestures;
@@ -18,7 +19,8 @@ namespace GemSwipe.Views
         private bool _isInitiated;
         private SkiaRoot _skiaRoot;
         private SKCanvas _canvas;
-
+        private Stopwatch _stopwatch;
+        private long _lastElapsedTime = 0;
         public GamePage()
         {
             InitializeComponent();
@@ -32,6 +34,11 @@ namespace GemSwipe.Views
             {
                 e.Surface.Canvas.Clear(SKColors.Black);
                 _skiaRoot.Render();
+
+                var fps = 1000 / (_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
+                _lastElapsedTime = _stopwatch.ElapsedMilliseconds;
+
+                _skiaRoot.UpdateFps(fps);
             }
             else
             {
@@ -41,6 +48,8 @@ namespace GemSwipe.Views
                 _skiaRoot.Initialize();
                 _skiaRoot.SetCanvas(e.Surface.Canvas);
                 _isInitiated = true;
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
             }
         }
 

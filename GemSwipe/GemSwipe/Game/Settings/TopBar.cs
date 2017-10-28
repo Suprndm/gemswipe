@@ -42,7 +42,6 @@ namespace GemSwipe.Game.Settings
 
         protected override void Draw()
         {
-            DrawHitbox();
 
         }
     }

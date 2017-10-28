@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GemSwipe.Game.Containers;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Entities;
 using GemSwipe.Game.SkiaEngine;
@@ -56,13 +57,15 @@ namespace GemSwipe.Game.Popups
         private string _actionName;
         private string _title;
 
+        private CenteredContainer _container;
 
-        public Popup(ISkiaView contentView) : base()
+
+        public Popup(float contentWidth, float contentHeight) : base()
         {
             _y = -Height;
-            ContentHeight = Height * 0.3f;
-       
-            _popupWidth = WidthRatio * Width;
+            ContentHeight = contentHeight;
+
+            _popupWidth = contentWidth;
             _headerHeight = HeaderHeightRatio * Height;
             _footerHeight = FooterHeightRatio * Height;
             _radius = Height / 25;
@@ -87,13 +90,8 @@ namespace GemSwipe.Game.Popups
             AddChild(leftButton);
             AddChild(_rightButton);
 
-            if (contentView != null)
-            {
-                contentView.X = _popupX;
-                contentView.Y = _popupY + _headerHeight;
-
-                AddChild(contentView);
-            }
+            _container = new CenteredContainer(_popupX, _popupY + _headerHeight, contentHeight, contentWidth);
+            AddChild(_container);
 
             leftButton.Activated += () =>
             {
@@ -108,6 +106,11 @@ namespace GemSwipe.Game.Popups
             };
 
             DeclareTappable(this);
+        }
+
+        public void AddContent(ISkiaView skiaView)
+        {
+            _container.AddContent(skiaView);
         }
 
         public override SKRect GetHitbox()

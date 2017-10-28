@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using GemSwipe.Game;
 using GemSwipe.Game.Gestures;
+using GemSwipe.Game.Test;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;

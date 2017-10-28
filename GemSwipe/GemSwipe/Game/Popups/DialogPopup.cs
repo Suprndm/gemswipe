@@ -12,7 +12,6 @@ namespace GemSwipe.Game.Popups
     {
         protected Popup Popup;
         protected PopupBackground Background;
-        protected ISkiaView PopupContent;
         protected bool CanEscape;
 
 
@@ -20,13 +19,16 @@ namespace GemSwipe.Game.Popups
 
         public Action BackCommand { get; set; }
         public Action NextCommand { get; set; }
+        public float ContentWidth { get; set; }
+        public float ContentHeight { get; set; }
 
-        public DialogPopup( bool canEscape = false)
+        public DialogPopup(float contentWidth, float contentHeight, bool canEscape = false)
         {
-
+            ContentWidth = contentWidth;
+            ContentHeight = contentHeight;
             Background = new PopupBackground(Width, Height);
 
-            Popup = new Popup(PopupContent);
+            Popup = new Popup(contentWidth, contentHeight);
 
             CanEscape = canEscape;
         }

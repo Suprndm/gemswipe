@@ -212,7 +212,8 @@ namespace GemSwipe.Game.SkiaEngine
         public void SetCanvas(SKCanvas canvas)
         {
             Canvas = canvas;
-            foreach (var child in _children)
+            var children = _children.ToList();
+            foreach (var child in children)
             {
                 child.SetCanvas(canvas);
             }
@@ -330,13 +331,16 @@ namespace GemSwipe.Game.SkiaEngine
 
         public virtual void Dispose()
         {
-            ToDispose = true;
-            foreach (var child in _children)
+            lock (_children)
             {
-                child.Dispose();
-            }
+                ToDispose = true;
+                foreach (var child in _children)
+                {
+                    child.Dispose();
+                }
 
-            _children.Clear();
+                _children.Clear();
+            }
         }
 
         public void BatchBegin()

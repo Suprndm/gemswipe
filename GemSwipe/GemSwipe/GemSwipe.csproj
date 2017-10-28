@@ -66,6 +66,9 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Containers\CenteredContainer.cs" />
+    <Compile Include="Game\Containers\Container.cs" />
+    <Compile Include="Game\Containers\ContainerBase.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStarParticle.cs" />
     <Compile Include="Data\ResourceLoader.cs" />
     <Compile Include="Game\Effects\ExplosionEffect.cs" />
@@ -84,6 +87,8 @@
     <Compile Include="Game\Pages\Game\Floors\PlayableFloor.cs" />
     <Compile Include="Game\Pages\Game\Floors\TransitionFloor.cs" />
     <Compile Include="Game\Pages\Game\GamePage.cs" />
+    <Compile Include="Game\Pages\Game\ObjectivesView.cs" />
+    <Compile Include="Game\Pages\Game\ObjectiveView.cs" />
     <Compile Include="Game\Pages\Home\HomePage.cs" />
     <Compile Include="Game\Entities\Life.cs" />
     <Compile Include="Game\Pages\Map\Map.cs" />
@@ -114,8 +119,9 @@
     <Compile Include="Game\Polygonal.cs" />
     <Compile Include="Game\Popups\DialogPopup.cs" />
     <Compile Include="Game\Popups\IDialogPopup.cs" />
+    <Compile Include="Game\Popups\WinDialogPopup.cs" />
+    <Compile Include="Game\Popups\LoseDialogPopup.cs" />
     <Compile Include="Game\Popups\LevelDialogPopup.cs" />
-    <Compile Include="Game\Popups\LevelPopup.cs" />
     <Compile Include="Game\Popups\Popup.cs" />
     <Compile Include="Game\Popups\PopupBackground.cs" />
     <Compile Include="Game\Popups\PopupRightButton.cs" />

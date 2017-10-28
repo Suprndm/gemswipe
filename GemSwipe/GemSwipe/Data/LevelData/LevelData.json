@@ -2,46 +2,65 @@
   {
     "Id": 1,
     "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
-    "NbOfMovesToSolve": 10,
+    "Moves": 30,
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 4,
-    "Columns": 4
+    "Columns": 4,
+    "Objectives": {
+      "3": 3,
+      "6": 1
+    }
   },
   {
     "Id": 2,
     "BoardSetupString": "1 9 2-0 1 0-0 0 0-1 9 0-0 0 2-0 1 0",
-    "NbOfMovesToSolve": 10,
+    "Moves": 30,
     "Story": "La deuxieme story",
     "Title": "Le deuxieme title",
     "Rows": 6,
-    "Columns": 3
+    "Columns": 3,
+    "Objectives": {
+      "8": 1
+    }
   },
   {
     "Id": 3,
     "BoardSetupString": "2 0 0 0 0 0-0 0 9 3 0 0-2 9 0 0 0 0-0 0 9 0 0 0-0 0 0 0 0 0",
-    "NbOfMovesToSolve": 10,
+    "Moves": 18,
     "Story": "La troisieme story",
     "Title": "Le troisieme title",
     "Rows": 5,
-    "Columns": 6
+    "Columns": 6,
+    "Objectives": {
+      "7": 1,
+      "6": 1
+    }
   },
   {
     "Id": 4,
     "BoardSetupString": "0 0 0 9 0 0-2 0 0 0 0 0-0 0 9 3 0 0-2 9 0 0 0 0-0 0 9 0 0 0-0 0 0 0 0 0",
-    "NbOfMovesToSolve": 10,
+    "Moves": 25,
     "Story": "La 4 story",
     "Title": "Le 4 title",
     "Rows": 6,
-    "Columns": 6
+    "Columns": 6,
+    "Objectives": {
+      "7": 1,
+      "6": 1
+    }
   },
   {
     "Id": 5,
     "BoardSetupString": "2 0 0 0 0 0-0 9 9 3 0 0-2 9 9 0 0 0-0 0 9 0 9 0-0 0 0 9 0 0",
-    "NbOfMovesToSolve": 10,
+    "Moves": 19,
     "Story": "La 5 story",
     "Title": "Le 5 title",
     "Rows": 5,
-    "Columns": 6
+    "Columns": 6,
+    "Objectives": {
+      "7": 1,
+      "6": 1
+    }
   }
 ]

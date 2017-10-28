@@ -22,7 +22,7 @@ namespace GemSwipe.Tests
         [Test]
         [TestCase("1 9 0-0 0 0-1 0 0", "1 9 0-0 0 0-0 0 1", Direction.Right)]
         [TestCase("1 9 1 1-0 0 0 0-1 0 0 0", "1 9 0 2-0 0 0 0-0 0 0 1", Direction.Right)]
-        [TestCase("1 9 0 1 1-0 0 0 0 9-0 1 0 0 0", "1 9 2 0 0-0 0 0 0 0-1 0 0 0 0", Direction.Left)]
+        [TestCase("1 9 0 1 1-0 0 0 0 9-0 1 0 0 0", "1 9 2 0 0-0 0 0 0 9-1 0 0 0 0", Direction.Left)]
         [TestCase("1 9 9 1-1 1 9 9-1 0 0 0", "1 9 9 1-0 2 9 9-0 0 0 1", Direction.Right)]
         public void ShouldNotMoveThroughBlockedCells(string intialBoardString, string finalBoardString, Direction direction)
         {

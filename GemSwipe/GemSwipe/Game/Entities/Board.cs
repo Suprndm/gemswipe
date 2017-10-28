@@ -30,26 +30,16 @@ namespace GemSwipe.Game.Entities
         private float _cellHeight;
         private float _maxBoardWidth;
         private float _maxBoardHeight;
-        private IList<int> _gemsToAdd;
 
 
         public Board(BoardSetup boardSetup, float x, float y, float height, float width) : base(x, y, height, width)
         {
-            _gemsToAdd = new List<int>
-            {
-                1,1,2,3,2,1,3,2,1,
-                1,1,2,3,2,1,3,2,1,
-                1,1,2,3,2,1,3,2,1,
-                1,1,2,3,2,1,3,2,1,
-            };
-
             _maxBoardWidth = width;
             _maxBoardHeight = width;
             _boardSetup = boardSetup;
 
             _randomizer = new Random();
 
-            MovesToResolve = boardSetup.Moves;
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
             UpdateDimensions();
@@ -58,7 +48,7 @@ namespace GemSwipe.Game.Entities
 
         public Board(string boardString) : base(0, 0, 0, 0)
         {
-            Setup(new BoardSetup(1, 0, 0, boardString, 0));
+            Setup(new BoardSetup(1, 0, 0, boardString));
         }
 
         public void Reset()
@@ -74,18 +64,18 @@ namespace GemSwipe.Game.Entities
 
         public void RefillGems()
         {
-            if (_gemsToAdd.Count == 0)
-                return;
+            int size = 3;
+            var randomNumber = _randomizer.Next(10);
+            if (randomNumber < 5)
+                size = 1;
+            else if (randomNumber < 9)
+                size = 2;
 
             var cells = GetEmptyCells();
             var cell = cells[_randomizer.Next(cells.Count)];
 
-            var gem = CreateGem(cell.X, cell.Y, _gemsToAdd.First());
+            var gem = CreateGem(cell.X, cell.Y, size);
             cell.AttachGem(gem);
-
-            Gems.Add(gem);
-
-            _gemsToAdd.RemoveAt(0);
 
             gem.Pop();
         }
@@ -243,14 +233,15 @@ namespace GemSwipe.Game.Entities
                 Gems.Remove(deadGem);
             }
 
-            swipeResult.IsBlocked = false; // TODO
-            swipeResult.BoardWon = _gemsToAdd.Count == 0;
+            swipeResult.IsBlocked = false;
             swipeResult.IsFull = IsFull();
 
             UpdateGemsPositions(swipeResult);
 
             return swipeResult;
         }
+
+  
 
         public IList<Cell> GetEmptyCells()
         {

@@ -60,7 +60,7 @@ namespace GemSwipe.Game.Pages.Map
             if (PlayerLifeService.Instance.HasLife())
             {
                 var levelData = _levelDataRepository.Get(i);
-                var dialogPopup = new LevelDialogPopup(i);
+            var dialogPopup = new LevelDialogPopup(levelData);
                 PopupService.Instance.ShowPopup(dialogPopup);
                 dialogPopup.NextCommand = () =>
                 {

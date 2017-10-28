@@ -19,6 +19,7 @@ namespace GemSwipe.Game.Entities
 
         public static float ScreenHeight { get; private set; }
         public static float ScreenWidth { get; private set; }
+        private TextBlock _fpsText;
 
         public SkiaRoot(float x, float y, float height, float width) : base(x, y, height, width)
         {
@@ -79,6 +80,15 @@ namespace GemSwipe.Game.Entities
             AddChild(new LoadingLayer());
 
             Navigator.Instance.GoToInitialPage(PageType.Home);
+
+            _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
+            AddChild(_fpsText);
+        }
+
+
+        public void UpdateFps(long fps)
+        {
+            _fpsText.Text = fps.ToString();
         }
 
         protected override void Draw()
