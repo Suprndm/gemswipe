@@ -1,6 +1,13 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Data.PlayerData;
+<<<<<<< HEAD
+=======
 using GemSwipe.Data.PlayerLife;
+using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Gestures;
+using GemSwipe.Game.Models;
+using GemSwipe.Game.Navigation;
+>>>>>>> life service and display
 using GemSwipe.Game.Navigation.Pages;
 
 namespace GemSwipe.Game.Pages.Map
@@ -15,7 +22,7 @@ namespace GemSwipe.Game.Pages.Map
             _map = new Map(0, 0, Height, Width);
             AddChild(_map);
 
-            _playerLifeDisplayer = new PlayerLifeDisplayer(0,Height- Height / 10, Height, Width);
+            _playerLifeDisplayer = new PlayerLifeDisplayer(0,height-height/10,height,width);
             _map.GetLifeDisplayer(_playerLifeDisplayer);
             AddChild(_playerLifeDisplayer);
         }

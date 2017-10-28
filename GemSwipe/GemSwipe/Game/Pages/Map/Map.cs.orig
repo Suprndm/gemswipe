@@ -22,15 +22,20 @@ namespace GemSwipe.Game.Pages.Map
         private IList<SKPoint> _curve;
         private IList<SKPoint> _oldCurve;
         private float _screenHeight;
+        private PlayerData _playerData;
         private readonly LevelDataRepository _levelDataRepository;
 
         private PlayerLifeDisplayer _playerLifeDisplayer;
+        private TextButton _nicknameButton;
 
         private bool _isDragged;
         public Map(float x, float y, float height, float width) : base(x, y, height, width)
         {
             _screenHeight = height;
             _levelDataRepository = new LevelDataRepository();
+            _playerData = PlayerDataService.Instance.GetData();
+            _nicknameButton = new TextButton(width / 2, height / 2, 100, _playerData.Nickname);
+            AddChild(_nicknameButton);
 
             _levelButtons = new List<LevelButton>();
             _aY = 0;
@@ -39,6 +44,12 @@ namespace GemSwipe.Game.Pages.Map
 
             Up += () => Release();
             Pan += (p) => MoveToY((float)p.Y);
+        }
+
+
+        public void UpdateNickname(string nickname)
+        {
+            _nicknameButton.Text = nickname;
         }
 
         public void GetLifeDisplayer(PlayerLifeDisplayer lifeDisplayer)
@@ -57,29 +68,13 @@ namespace GemSwipe.Game.Pages.Map
 
         private void LevelButton_Tapped(int i)
         {
-            if (PlayerLifeService.Instance.HasLife())
+            var levelData = _levelDataRepository.Get(i);
+            var dialogPopup = new LevelDialogPopup(i);
+            PopupService.Instance.ShowPopup(dialogPopup);
+            dialogPopup.NextCommand = () =>
             {
-                var levelData = _levelDataRepository.Get(i);
-                var dialogPopup = new LevelDialogPopup(i);
-                PopupService.Instance.ShowPopup(dialogPopup);
-                dialogPopup.NextCommand = () =>
-                {
-                    Navigator.Instance.GoTo(PageType.Game, i);
-                    var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
-                    if (chosenLevelButton != null)
-                        chosenLevelButton.ActivateOrbitingStars(Width, Height);
-
-                    _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
-                    _playerLifeDisplayer.SteerToTarget();
-                    PlayerLifeService.Instance.LoseLife();
-                };
-
-            }
-            else
-            {
-                //popup "no life left!"
-            }
-           
+                Navigator.Instance.GoTo(PageType.Game, i);
+            };
         }
 
 
@@ -175,7 +170,27 @@ namespace GemSwipe.Game.Pages.Map
             return newCurve;
         }
 
-           
+<<<<<<< HEAD
+=======
+        private void LevelButton_Tapped(int i)
+        {
+            if (PlayerLifeService.Instance.HasLife())
+            {
+                Navigator.Instance.GoTo(PageType.Game, i);
+                var firstOrDefault = _levelButtons.FirstOrDefault(p => p.Level == i);
+                if (firstOrDefault != null)
+                    firstOrDefault.ActivateOrbitingStars(Width, Height);
+
+                _playerLifeDisplayer.SetTarget(firstOrDefault.X, firstOrDefault.Y);
+                _playerLifeDisplayer.SteerToTarget();
+                PlayerLifeService.Instance.LoseLife();
+            }
+            else
+            {
+                //popup "no life left!"
+            }
+        }
+>>>>>>> life service and display
 
         protected override void Draw()
         {

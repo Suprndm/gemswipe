@@ -16,8 +16,6 @@ namespace GemSwipe.Utilities.Buttons
         public int Level { get; set; }
         public LevelProgressStatus ProgressStatus { get; set; }
 
-
-
         public LevelButton(float x, float y, float height, int level, LevelProgressStatus progressStatus) : base (x, y, 0, height)
         {
             

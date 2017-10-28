@@ -4,6 +4,7 @@ using GemSwipe.BoardSolver;
 using GemSwipe.Data;
 using GemSwipe.Data.LevelData;
 using GemSwipe.Data.PlayerData;
+using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.Popped;
 using GemSwipe.Game.Gestures;
@@ -56,10 +57,12 @@ namespace GemSwipe.Game.Pages.Game
                 await Task.Delay(600);
                 _isBusy = false;
                 _scene.CurrentBoard.RefillGems();
+                swipeResult.BoardWon = true;
+
                 if (swipeResult.BoardWon)
                 {
                     PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
-
+                    PlayerLifeService.Instance.GainLife();
                     _isBusy = true;
                     await Task.Delay(1000);
 

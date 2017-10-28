@@ -11,12 +11,6 @@ namespace GemSwipe.Utilities.Buttons
         public SKColor TextColor { get; set; }
         protected float Padding { get; set; }
 
-        private static void OnTextPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
-        {
-            
-        }
-
-
         public TextButton(float x, float y, float height, string text) : base(x, y, 0, height)
         {
              TextColor = new SKColor(255, 255, 255);

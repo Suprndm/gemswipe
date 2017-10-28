@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Settings;
 using GemSwipe.Game.SkiaEngine;
@@ -9,6 +10,7 @@ namespace GemSwipe.Game.Layers
     {
         private readonly TopBar _topBar;
         private readonly SettingsPanel _settingsPanel;
+        private PlayerLifeDisplayer _playerLifeDisplayer;
 
         public InterfaceLayer()
         {

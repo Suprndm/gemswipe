@@ -16,7 +16,6 @@ namespace GemSwipe.Game.Entities
     {
 
         private Background _background;
-        private PlayerData _playerData;
 
         public static float ScreenHeight { get; private set; }
         public static float ScreenWidth { get; private set; }
