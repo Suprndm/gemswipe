@@ -13,7 +13,8 @@ namespace GemSwipe.Game.Settings
 
         public TopBar()
         {
-            _height = 0.1f * Height;
+            _height = 0.2f * Height;
+            //_height = 0.1f * Height;
 
             var settingsButton = new SimpleButton(Width - _height / 2, _height / 2, _height, _height);
             AddChild(settingsButton);

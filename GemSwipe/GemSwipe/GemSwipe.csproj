@@ -66,8 +66,13 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
+    <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />
+    <Compile Include="Game\Settings\SettingDialog.cs" />
+    <Compile Include="Game\Settings\SettingOptionButton.cs" />
+    <Compile Include="Game\Settings\SettingsEnum.cs" />
     <Compile Include="Paladin\Containers\CenteredContainer.cs" />
     <Compile Include="Paladin\Containers\Container.cs" />
     <Compile Include="Paladin\Containers\ContainerBase.cs" />

@@ -22,13 +22,12 @@ namespace GemSwipe.Paladin.UIElements.Buttons
 
             using (var textPaint = new SKPaint())
             {
-                textPaint.Color = SKColors.Yellow;
                 textPaint.Typeface = SKTypeface.FromFamilyName(
                     "Arial",
                     SKFontStyleWeight.Light,
                     SKFontStyleWidth.Normal,
                     SKFontStyleSlant.Upright);
-
+                
                 textPaint.TextSize = Height;
                 textPaint.IsAntialias = true;
                 textPaint.Color = TextColor;
