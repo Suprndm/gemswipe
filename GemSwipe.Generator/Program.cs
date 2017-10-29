@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.BoardSolver.LittleStar;
+using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Models.Entities;
 using LittleStar;
 using Newtonsoft.Json;
@@ -18,7 +19,26 @@ namespace GemSwipe.Generator
         static void Main(string[] args)
         {
             // GenerateLevels();
-            SolveLevel();
+            //SolveLevel();
+            EvalLevels();
+        }
+
+        static void EvalLevels()
+        {
+            var evaluator = new Evaluator();
+            LevelDataRepository levelDataRepository = new LevelDataRepository();
+            var levelDatas = levelDataRepository.GetAll();
+
+            var result = new Dictionary<int, double>();
+
+            foreach (var levelData in levelDatas)
+            {
+                result.Add(levelData.Id, evaluator.ComputeDifficulty(levelData));
+                Console.WriteLine($"{levelData.Id}: {evaluator.ComputeDifficulty(levelData)*100}%");
+            }
+
+
+            Console.ReadKey();
         }
 
         static void SolveLevel()

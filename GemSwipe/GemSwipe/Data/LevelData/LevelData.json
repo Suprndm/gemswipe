@@ -15,16 +15,16 @@
   },
   {
     "Id": 2,
-    "BoardSetupString": "1 9 2-0 1 0-0 0 0-1 9 0-0 0 2-0 1 0",
+    "BoardSetupString": "1 0 2-0 1 0-0 0 0-1 0 0-0 0 2-0 1 0",
     "Moves": 30,
     "Story": "La deuxieme story",
     "Title": "Le deuxieme title",
     "Rows": 6,
     "Columns": 3,
     "Objectives": {
-      "8": 1
+      "4": 3
     },
-    "Events": [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ]
+    "Events": [ 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 6, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1 ]
   },
   {
     "Id": 3,

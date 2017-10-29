@@ -70,7 +70,7 @@ namespace GemSwipe.Game.Models.Entities
 
             int size = 3;
             var randomNumber = _randomizer.Next(10);
-            if (randomNumber < 7)
+            if (randomNumber < 10)
                 size = 1;
             else if (randomNumber < 10)
                 size = 2;
