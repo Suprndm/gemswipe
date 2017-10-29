@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
-using GemSwipe.Game.Entities;
 using GemSwipe.Game.Events;
 using GemSwipe.Game.Pages.Game;
 using GemSwipe.Game.Popups;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements.Buttons;
 using Newtonsoft.Json;
 
 namespace GemSwipe.Game.Test

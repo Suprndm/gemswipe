@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GemSwipe.BoardSolver.LittleStar.Engine;
-using GemSwipe.Game.Entities;
 using GemSwipe.Game.Models;
+using GemSwipe.Game.Models.Entities;
 
 namespace GemSwipe.BoardSolver.LittleStar
 {

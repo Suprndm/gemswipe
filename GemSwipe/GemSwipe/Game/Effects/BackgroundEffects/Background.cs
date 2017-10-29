@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GemSwipe.Game.Navigation;
-using GemSwipe.Game.SkiaEngine;
-using SkiaSharp;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.Navigation;
 
 namespace GemSwipe.Game.Effects.BackgroundEffects
 {

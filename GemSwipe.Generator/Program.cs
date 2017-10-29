@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver;
 using GemSwipe.BoardSolver.LittleStar;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 using LittleStar;
 using Newtonsoft.Json;
 

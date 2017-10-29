@@ -1,5 +1,5 @@
 ﻿using GemSwipe.BoardSolver.LittleStar.Engine;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 
 namespace GemSwipe.BoardSolver.LittleStar
 {

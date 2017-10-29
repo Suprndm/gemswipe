@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using Xamarin.Forms.Internals;
 
@@ -19,6 +19,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                 var star = new Star( _randomizer, height, width);
                 _stars.Add(star);
                 AddChild(star);
+
             }
         }
 

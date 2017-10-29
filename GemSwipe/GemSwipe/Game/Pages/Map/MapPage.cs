@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
-using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Paladin.Navigation.Pages;
 
 namespace GemSwipe.Game.Pages.Map
 {

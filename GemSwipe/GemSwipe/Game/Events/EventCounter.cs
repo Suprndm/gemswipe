@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Events

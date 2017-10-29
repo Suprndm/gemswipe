@@ -1,6 +1,6 @@
 ﻿using System;
 using Android.Support.V4.App;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Paladin.Core;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Effects.BackgroundEffects

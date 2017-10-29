@@ -1,4 +1,4 @@
-﻿using GemSwipe.Game.SkiaEngine;
+﻿using GemSwipe.Paladin.Core;
 
 namespace GemSwipe.Tests
 {

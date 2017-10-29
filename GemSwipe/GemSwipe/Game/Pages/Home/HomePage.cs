@@ -1,8 +1,6 @@
 ﻿using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Navigation;
-using GemSwipe.Game.Navigation.Pages;
-using SkiaSharp;
-using Xamarin.Forms;
+using GemSwipe.Paladin.Navigation;
+using GemSwipe.Paladin.Navigation.Pages;
 
 namespace GemSwipe.Game.Pages.Home
 {

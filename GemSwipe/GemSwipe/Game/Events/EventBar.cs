@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GemSwipe.Game.Containers;
-using GemSwipe.Game.Entities;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Containers;
+using GemSwipe.Paladin.Core;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.Events

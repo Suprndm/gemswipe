@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GemSwipe.Game.Entities;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements.Buttons;
 
 namespace GemSwipe.Game.Test
 {

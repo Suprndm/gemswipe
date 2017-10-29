@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GemSwipe.Game.Entities;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements.Buttons;
 using Xamarin.Forms;
 
 namespace GemSwipe.Game.Settings

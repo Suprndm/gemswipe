@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Entities;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements;
+using GemSwipe.Paladin.Utilities;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game

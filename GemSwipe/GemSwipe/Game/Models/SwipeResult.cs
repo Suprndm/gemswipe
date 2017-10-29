@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 
 namespace GemSwipe.Game.Models
 {

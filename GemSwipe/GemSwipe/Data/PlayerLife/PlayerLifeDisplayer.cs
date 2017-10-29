@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -88,7 +87,7 @@ namespace GemSwipe.Data.PlayerLife
             }
         }
 
-        public async Task SteerToTarget()
+        public Task SteerToTarget()
         {
             _beingUsedLifeX = DistinguishLastLifeCoordX(_numberOfLives);
             _beingUsedLifeY = DistinguishLastLifeCoordY(_numberOfLives);
@@ -96,8 +95,7 @@ namespace GemSwipe.Data.PlayerLife
             this.Animate("moveX", p => _beingUsedLifeX = (float)p, DistinguishLastLifeCoordX(_numberOfLives), _targetX, 8, (uint)1000, Easing.SinInOut,(p,q)=>_beingUsed=false);
             this.Animate("moveY", p => _beingUsedLifeY = (float)p, DistinguishLastLifeCoordY(_numberOfLives), _targetY, 8, (uint)1000, Easing.SinInOut);
 
-            await Task.Delay(0);
-
+            return Task.Delay(1000);
         }
 
     }

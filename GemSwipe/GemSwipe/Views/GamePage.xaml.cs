@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using GemSwipe.Data.PlayerData;
-using GemSwipe.Game.Entities;
-using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
+using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Gestures;
 using GemSwipe.Services;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
-using GemSwipe.Game.Containers;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Pages.Game;
+using GemSwipe.Paladin.Containers;
+using GemSwipe.Paladin.UIElements;
+using GemSwipe.Paladin.UIElements.Popups;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Popups

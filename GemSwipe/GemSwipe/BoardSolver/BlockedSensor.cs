@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GemSwipe.BoardSolver.LittleStar;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 
 namespace GemSwipe.BoardSolver
 {

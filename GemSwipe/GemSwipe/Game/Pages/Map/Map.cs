@@ -6,11 +6,12 @@ using GemSwipe.Data.LevelData;
 using GemSwipe.Data.LevelMapPosition;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
-using GemSwipe.Game.Navigation;
 using GemSwipe.Game.Popups;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.Navigation;
+using GemSwipe.Paladin.UIElements.Buttons;
+using GemSwipe.Paladin.UIElements.Popups;
+using GemSwipe.Paladin.Utilities;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Map

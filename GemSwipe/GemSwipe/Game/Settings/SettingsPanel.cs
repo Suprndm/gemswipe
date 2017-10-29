@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Data.PlayerLife;
-using GemSwipe.Game.Navigation;
-using GemSwipe.Game.Navigation.Pages;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.Navigation;
+using GemSwipe.Paladin.UIElements.Buttons;
 using SkiaSharp;
 using Xamarin.Forms;
 

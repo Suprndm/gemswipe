@@ -1,5 +1,6 @@
 ﻿using System;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements;
 using SkiaSharp;
 using Xamarin.Forms;
 

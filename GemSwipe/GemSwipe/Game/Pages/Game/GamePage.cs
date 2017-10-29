@@ -5,13 +5,14 @@ using GemSwipe.Data.LevelData;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Entities;
 using GemSwipe.Game.Events;
-using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
-using GemSwipe.Game.Navigation;
-using GemSwipe.Game.Navigation.Pages;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
+using GemSwipe.Paladin.Gestures;
+using GemSwipe.Paladin.Navigation;
+using GemSwipe.Paladin.Navigation.Pages;
+using GemSwipe.Paladin.UIElements.Popups;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game

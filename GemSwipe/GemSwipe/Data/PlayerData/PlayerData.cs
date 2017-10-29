@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using GemSwipe.Annotations;
 using GemSwipe.Services;
 using Newtonsoft.Json;
 using Xamarin.Forms;

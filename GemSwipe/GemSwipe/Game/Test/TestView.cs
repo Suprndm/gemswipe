@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Entities;
 using GemSwipe.Game.Events;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Pages.Game;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.UIElements;
 using Newtonsoft.Json;
 
 namespace GemSwipe.Game.Test

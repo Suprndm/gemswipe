@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects;
-using GemSwipe.Game.SkiaEngine;
+using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using Xamarin.Forms;
 

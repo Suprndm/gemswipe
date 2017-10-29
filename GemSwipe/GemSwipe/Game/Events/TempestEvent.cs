@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 using SkiaSharp;
 using Xamarin.Forms;
 

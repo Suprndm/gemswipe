@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects;
 using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Entities;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
-using GemSwipe.Game.SkiaEngine;
-using GemSwipe.Utilities.Buttons;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.UIElements.Buttons;
+using GemSwipe.Paladin.UIElements.Popups;
 
 namespace GemSwipe.Game.Test
 {
