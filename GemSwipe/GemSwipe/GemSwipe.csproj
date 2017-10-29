@@ -74,6 +74,15 @@
     <Compile Include="Game\Effects\ExplosionEffect.cs" />
     <Compile Include="Game\Effects\GemPopEffect.cs" />
     <Compile Include="Game\Effects\HorizontalAlignment.cs" />
+    <Compile Include="Game\Events\TempestEvent.cs" />
+    <Compile Include="Game\Events\EnergyEvent.cs" />
+    <Compile Include="Game\Events\EmptyEvent.cs" />
+    <Compile Include="Game\Events\EventActivationEffect.cs" />
+    <Compile Include="Game\Events\EventBar.cs" />
+    <Compile Include="Game\Events\EventBase.cs" />
+    <Compile Include="Game\Events\EventCounter.cs" />
+    <Compile Include="Game\Events\EventType.cs" />
+    <Compile Include="Game\Events\IEvent.cs" />
     <Compile Include="Game\Geometry\Rectangle.cs" />
     <Compile Include="Game\Gestures\SkiaGestureService.cs" />
     <Compile Include="Game\Layers\BackgroundLayer.cs" />
@@ -142,6 +151,7 @@
     <Compile Include="Game\Models\CountDown.cs" />
     <Compile Include="Game\Models\TransitionFloorSetup.cs" />
     <Compile Include="Game\Settings\TopBar.cs" />
+    <Compile Include="Game\Test\EventTester.cs" />
     <Compile Include="Game\Test\GemTester.cs" />
     <Compile Include="Game\Test\PopupTester.cs" />
     <Compile Include="Game\Test\TestView.cs" />

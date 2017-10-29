@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GemSwipe.Game.Events;
 
 namespace GemSwipe.Data.LevelData
 {
@@ -12,6 +13,7 @@ namespace GemSwipe.Data.LevelData
         public int Rows { get; set; }
         public int Columns { get; set; }
         public IDictionary<int, int> Objectives { get; set; }
+        public IList<EventType> Events { get; set; }
 
         public LevelData()
         {

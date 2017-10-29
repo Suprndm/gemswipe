@@ -68,7 +68,7 @@ namespace GemSwipe.Game.Settings
                 paint.IsAntialias = true;
                 paint.Color = CreateColor(168, 174, 240);
 
-                Canvas.DrawRect(SKRect.Create(X + (Width - panelWidth), Y + (Height - panelHeight), panelWidth * 1.2f, panelHeight), paint);
+                Canvas.DrawRect(SKRect.Create(X + (Width - panelWidth), Y, panelWidth * 1.2f, panelHeight), paint);
             }
         }
     }

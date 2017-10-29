@@ -46,6 +46,7 @@ namespace GemSwipe.Views
                 _canvas = e.Surface.Canvas;
                 _testView = new TestView( 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _testView.SetCanvas(e.Surface.Canvas);
+                _testView.Initialize();
                 _isInitiated = true;
                 _stopwatch = new Stopwatch();
                 _stopwatch.Start();

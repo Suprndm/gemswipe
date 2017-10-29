@@ -62,7 +62,7 @@ namespace GemSwipe.Game.Entities
             Setup(_boardSetup);
         }
 
-        public bool RefillGems()
+        public async Task<bool> RefillGems()
         {
             var cells = GetEmptyCells();
 
@@ -71,9 +71,9 @@ namespace GemSwipe.Game.Entities
 
             int size = 3;
             var randomNumber = _randomizer.Next(10);
-            if (randomNumber < 5)
+            if (randomNumber < 7)
                 size = 1;
-            else if (randomNumber < 9)
+            else if (randomNumber < 10)
                 size = 2;
 
             var cell = cells[_randomizer.Next(cells.Count)];
@@ -81,7 +81,7 @@ namespace GemSwipe.Game.Entities
             var gem = CreateGem(cell.X, cell.Y, size);
             cell.AttachGem(gem);
 
-            gem.Pop();
+            await gem.Pop();
 
             return false;
         }

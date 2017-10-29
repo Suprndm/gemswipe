@@ -46,26 +46,6 @@ namespace GemSwipe.Game.Effects
 
         protected override void Draw()
         {
-            //var colors = new SKColor[] {
-            //    CreateColor (255, 255, 255,0),
-            //    CreateColor (255, 255,255, (byte)(75* _invertedOpacity)),
-            //    CreateColor (255, 255, 255,0),
-            //    CreateColor (255, 255,255, (byte)(75* _invertedOpacity)),
-            //    CreateColor (255, 255, 255,0),
-            //    CreateColor (255, 255,255, (byte)(75* _invertedOpacity)),
-            //    CreateColor (255, 255, 255,0),
-            //    CreateColor (255, 255,255, (byte)(75* _invertedOpacity)),
-            //    CreateColor (255, 255, 255,0),
-            //};
-
-            //var haloRadius = _radius * 1f;
-            //var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), haloRadius, colors, new[] { 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f,0.9f }, SKShaderTileMode.Clamp);
-            //var glowPaint = new SKPaint()
-            //{
-            //    Shader = shader,
-            //};
-            //Canvas.DrawCircle(X, Y, haloRadius, glowPaint);
-
             using (var paint = new SKPaint())
             {
                 paint.IsAntialias = true;

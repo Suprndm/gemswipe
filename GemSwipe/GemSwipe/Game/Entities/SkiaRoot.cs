@@ -86,7 +86,7 @@ namespace GemSwipe.Game.Entities
         }
 
 
-        public void UpdateFps(long fps)
+        public virtual void UpdateFps(long fps)
         {
             _fpsText.Text = fps.ToString();
         }

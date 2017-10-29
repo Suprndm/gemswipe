@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GemSwipe.Game.Entities;
 using GemSwipe.Game.SkiaEngine;
 using GemSwipe.Utilities.Buttons;
 using Xamarin.Forms;
@@ -17,7 +18,7 @@ namespace GemSwipe.Game.Settings
             var settingsButton = new SimpleButton(Width - _height / 2, _height / 2, _height, _height);
             AddChild(settingsButton);
             DeclareTappable(settingsButton);
-            _y = -Height;
+            _y = SkiaRoot.ScreenHeight;
             settingsButton.Activated += SettingsButton_Tapped;
 
             DeclareTappable(this);
@@ -25,13 +26,13 @@ namespace GemSwipe.Game.Settings
 
         public Task Show()
         {
-            this.Animate("slideIn", p => _y = (float)p, -Height, 0f, 8, (uint)300, Easing.CubicOut);
+            this.Animate("slideIn", p => _y = (float)p, _y, SkiaRoot.ScreenHeight - _height, 8, (uint)300, Easing.CubicOut);
             return Task.Delay(300);
         }
 
         public Task Hide()
         {
-            this.Animate("slideOut", p => _y = (float)p, _y, -Height, 8, (uint)300, Easing.CubicOut);
+            this.Animate("slideOut", p => _y = (float)p, _y, SkiaRoot.ScreenHeight, 8, (uint)300, Easing.CubicOut);
             return Task.Delay(300);
         }
 

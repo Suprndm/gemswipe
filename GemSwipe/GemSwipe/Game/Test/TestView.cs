@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Entities;
+using GemSwipe.Game.Events;
 using GemSwipe.Game.Pages.Game;
+using GemSwipe.Utilities.Buttons;
 using Newtonsoft.Json;
 
 namespace GemSwipe.Game.Test
@@ -13,42 +15,27 @@ namespace GemSwipe.Game.Test
     {
         private float _angle = 0;
         private TextBlock _fpsText;
+
         public TestView(float x, float y, float height, float width) : base(x, y, height, width)
         {
-            var skiaRoot = new SkiaRoot(0, 0, height, width);
+         
 
-            _fpsText = new TextBlock(width / 2, width / 40, "0", width / 40, CreateColor(255, 255, 255));
+            _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-          //  AddChild(new PopupTester(Height, Width));
+            AddChild(new EventTester());
 
-            var objectives = new Dictionary<int, int>();
-            objectives.Add(2,8);
-            objectives.Add(4,5);
-            objectives.Add(6,1);
-            objectives.Add(8,3);
-
-            var levelData = new LevelData()
-            {
-                BoardSetupString = "",
-                Columns = 4,
-                Rows = 4,
-                Id = 1,
-                Moves = 17,
-                Objectives = objectives
-            };
-
-            var json = JsonConvert.SerializeObject(levelData);
-            var objectivesView = new ObjectivesView(objectives, true, width / 2, 0.1f * height, 0.1f * height);
-
-            AddChild(objectivesView);
 
         }
 
-
         public override void SetupLayers()
         {
-            // do nothing
+
+        }
+
+        public override void UpdateFps(long fps)
+        {
+            _fpsText.Text = fps.ToString();
         }
 
         public override Task LoadResources()

@@ -42,7 +42,7 @@ namespace GemSwipe.Game.Navigation
             _currentPage = _pages[pageType];
             InitialNavigationStarted?.Invoke();
             await _currentPage.Show();
-            NavigationEnded?.Invoke(new NavigationEventArgs(pageType, pageType));
+          //  NavigationEnded?.Invoke(new NavigationEventArgs(pageType, pageType));
         }
 
         public async Task GoTo(PageType nextPageType, object parameter = null)

@@ -6,6 +6,7 @@ using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Entities;
+using GemSwipe.Game.Events;
 using GemSwipe.Game.Gestures;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Navigation;
@@ -23,17 +24,14 @@ namespace GemSwipe.Game.Pages.Game
         private LevelDataRepository _levelDataRepository;
         private int _currentLevelId;
         private LevelData _levelData;
+        private EventBar _eventBar;
 
-        private TextBlock _movesCount;
-        private int _movesLeft;
 
         private ObjectivesView _objectivesView;
         
         public GamePage()
         {
             _levelDataRepository = new LevelDataRepository();
-            _movesCount = new TextBlock(Width / 2, 0.05f * Height, "0", Height / 40f, new SKColor(255, 255, 255));
-            AddChild(_movesCount);
         }
 
         public void BackgroundNextBoard()
@@ -52,8 +50,6 @@ namespace GemSwipe.Game.Pages.Game
 
             _levelData = levelData;
             var boardMarginTop = Height * 0.2f;
-            _movesLeft = levelData.Moves;
-            _movesCount.Text = _movesLeft.ToString();
             _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
             AddChild(_board);
 
@@ -61,6 +57,11 @@ namespace GemSwipe.Game.Pages.Game
             _isBusy = false;
 
             UpdateObjectivesView();
+
+            _eventBar = new EventBar(0, 0, 0.1f * Height, Width);
+            AddChild(_eventBar);
+
+            await _eventBar.Initialize(levelData.Events);
         }
 
         public async void Swipe(Direction direction)
@@ -71,20 +72,16 @@ namespace GemSwipe.Game.Pages.Game
             {
                 var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
-                await Task.Delay(600);
-                _isBusy = false;
-                 var isFull =_board.RefillGems();
-                _movesLeft--;
-                _movesCount.Text = _movesLeft.ToString();
+                await Task.Delay(1000);
+                var eventSucceeded = await _eventBar.ActivateNextEventEvent(_board);
                 UpdateObjectivesView();
 
-                if (EvalWinStatus() &&  !isFull)
+                if (EvalWinStatus() &&  eventSucceeded)
                 {
                     // WIN
 
                     PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
                     PlayerLifeService.Instance.GainLife();
-                    _isBusy = true;
                     await Task.Delay(1000);
 
                     var dialogPopup = new WinDialogPopup();
@@ -104,9 +101,8 @@ namespace GemSwipe.Game.Pages.Game
                 else
                 {
                     // LOSE
-                    if (_movesLeft == 0  || isFull)
+                    if (_eventBar.GetEventsCount() == 0  ||! eventSucceeded)
                     {
-                        _isBusy = true;
                         await Task.Delay(1000);
                         var dialogPopup = new LoseDialogPopup();
                         PopupService.Instance.ShowPopup(dialogPopup);
@@ -120,6 +116,9 @@ namespace GemSwipe.Game.Pages.Game
                         };
                     }
                 }
+
+                _isBusy = false;
+
             }
         }
 
@@ -180,6 +179,7 @@ namespace GemSwipe.Game.Pages.Game
         {
             _board.Dispose();
             _objectivesView.Dispose();
+            _eventBar.Dispose();
             Gesture.Swipe -= OnSwipped;
         }
     }
