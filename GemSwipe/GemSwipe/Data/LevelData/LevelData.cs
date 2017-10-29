@@ -7,7 +7,6 @@ namespace GemSwipe.Data.LevelData
     {
         public int Id { get; set; }
         public string BoardSetupString { get; set; }
-        public int Moves { get; set; }
         public string Story { get; set; }
         public string Title { get; set; }
         public int Rows { get; set; }

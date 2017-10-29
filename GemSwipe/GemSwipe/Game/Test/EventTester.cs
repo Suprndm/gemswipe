@@ -50,7 +50,6 @@ namespace GemSwipe.Game.Test
                 Columns = 4,
                 Rows = 4,
                 Id = 1,
-                Moves = 17,
                 Objectives = objectives,
                 Events = events
             };
