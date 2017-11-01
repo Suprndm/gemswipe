@@ -13,6 +13,7 @@ using GemSwipe.Paladin.Gestures;
 using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.Navigation.Pages;
 using GemSwipe.Paladin.UIElements.Popups;
+using GemSwipe.Services;
 using SkiaSharp;
 
 namespace GemSwipe.Game.Pages.Game
@@ -44,25 +45,32 @@ namespace GemSwipe.Game.Pages.Game
         {
             _currentLevelId = levelId;
 
-            LevelData levelData = _levelDataRepository.Get(Math.Min(5, Math.Max(levelId, 0)));
+            try
+            {
+                LevelData levelData = _levelDataRepository.Get(levelId);
+                _objectivesView = new ObjectivesView(levelData.Objectives, true, Width / 2, 0.1f * Height, 0.1f * Height);
+                AddChild(_objectivesView);
 
-            _objectivesView = new ObjectivesView(levelData.Objectives, true, Width / 2, 0.1f * Height, 0.1f * Height);
-            AddChild(_objectivesView);
+                _levelData = levelData;
+                var boardMarginTop = Height * 0.2f;
+                _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
+                AddChild(_board);
 
-            _levelData = levelData;
-            var boardMarginTop = Height * 0.2f;
-            _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
-            AddChild(_board);
+                BackgroundNextBoard();
+                _isBusy = false;
 
-            BackgroundNextBoard();
-            _isBusy = false;
+                UpdateObjectivesView();
 
-            UpdateObjectivesView();
+                _eventBar = new EventBar(0, 0, 0.1f * Height, Width);
+                AddChild(_eventBar);
 
-            _eventBar = new EventBar(0, 0, 0.1f * Height, Width);
-            AddChild(_eventBar);
-
-            await _eventBar.Initialize(levelData.Events);
+                await _eventBar.Initialize(levelData.Events);
+            }
+            catch (Exception e)
+            {
+                Logger.Log($"invalid levelId {levelId}");
+                Navigator.Instance.GoTo(PageType.Map);
+            }
         }
 
         public async void Swipe(Direction direction)

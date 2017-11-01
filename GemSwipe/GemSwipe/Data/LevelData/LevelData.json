@@ -1,6 +1,80 @@
 ﻿[
   {
     "Id": 1,
+    "BoardSetupString": "0 0 0 0-0 1 1 0-0 1 1 0-0 0 0 0",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 1
+    },
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  },
+  {
+    "Id": 2,
+    "BoardSetupString": "1 0 1 0-0 1 0 1-0 1 0 1-1 0 1 0",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "4": 1
+    },
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  },
+  {
+    "Id": 3,
+    "BoardSetupString": "1 1 1 0-0 1 0 1-0 1 0 1-1 1 1 0",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "4": 1
+    },
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  },
+  {
+    "Id": 4,
+    "BoardSetupString": "1 1 9 1-0 0 9 0-1 1 9 0-0 0 9 1",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 1,
+      "2": 1
+    },
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  },
+  {
+    "Id": 5,
+    "BoardSetupString": "9 9 1 9-9 9 0 9-0 0 0 9-1 9 9 9",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "2": 1
+    },
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+  },
+
+  {
+    "Id": 6,
+    "BoardSetupString": "1 0 0 0-0 0 0 0-0 0 0 0-1 0 0 1",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "4": 1,
+    },
+    "Events": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
+  },
+  {
+    "Id": 7,
     "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
     "Story": "La premiere story",
     "Title": "Le premier title",
@@ -10,10 +84,63 @@
       "3": 3,
       "4": 1
     },
-    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0]
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
   },
   {
-    "Id": 2,
+    "Id": 8,
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 3,
+      "4": 1
+    },
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
+  },
+  {
+    "Id": 9,
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 3,
+      "4": 1
+    },
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
+  },
+  {
+    "Id": 10,
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 3,
+      "4": 1
+    },
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
+  },
+  {
+    "Id": 11,
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "Story": "La premiere story",
+    "Title": "Le premier title",
+    "Rows": 4,
+    "Columns": 4,
+    "Objectives": {
+      "3": 3,
+      "4": 1
+    },
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
+  },
+
+  {
+    "Id": 12,
     "BoardSetupString": "1 0 2-0 1 0-0 0 0-1 0 0-0 0 2-0 1 0",
     "Story": "La deuxieme story",
     "Title": "Le deuxieme title",
@@ -25,7 +152,7 @@
     "Events": [ 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 6, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1 ]
   },
   {
-    "Id": 3,
+    "Id": 13,
     "BoardSetupString": "2 0 0 0 0 0-0 0 9 3 0 0-2 9 0 0 0 0-0 0 9 0 0 0-0 0 0 0 0 0",
     "Story": "La troisieme story",
     "Title": "Le troisieme title",
@@ -38,7 +165,7 @@
     "Events": [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ]
   },
   {
-    "Id": 4,
+    "Id": 14,
     "BoardSetupString": "0 0 0 9 0 0-2 0 0 0 0 0-0 0 9 3 0 0-2 9 0 0 0 0-0 0 9 0 0 0-0 0 0 0 0 0",
     "Story": "La 4 story",
     "Title": "Le 4 title",
@@ -51,7 +178,7 @@
     "Events": [ 0, 1, 0, 1, 0, 1, 0, 1, 0, 1 ]
   },
   {
-    "Id": 5,
+    "Id": 15,
     "BoardSetupString": "2 0 0 0 0 0-0 9 9 3 0 0-2 9 9 0 0 0-0 0 9 0 9 0-0 0 0 9 0 0",
     "Story": "La 5 story",
     "Title": "Le 5 title",
