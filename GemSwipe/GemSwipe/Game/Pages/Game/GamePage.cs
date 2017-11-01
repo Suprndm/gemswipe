@@ -54,6 +54,9 @@ namespace GemSwipe.Game.Pages.Game
                 _levelData = levelData;
                 var boardMarginTop = Height * 0.2f;
                 _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
+
+                _board.Swippe += Swipe;
+
                 AddChild(_board);
 
                 BackgroundNextBoard();
@@ -176,20 +179,14 @@ namespace GemSwipe.Game.Pages.Game
             var levelId = (int)parameter;
 
             Start(levelId);
-            Gesture.Swipe += OnSwipped;
-        }
-
-        private void OnSwipped(Direction direction)
-        {
-            Swipe(direction);
         }
 
         protected override void OnDeactivated()
         {
+            _board.Swippe -= Swipe;
             _board.Dispose();
             _objectivesView.Dispose();
             _eventBar.Dispose();
-            Gesture.Swipe -= OnSwipped;
         }
     }
 }

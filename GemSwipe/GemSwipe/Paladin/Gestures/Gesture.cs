@@ -8,7 +8,7 @@ namespace GemSwipe.Paladin.Gestures
     public static class Gesture
     {
         public static event Action<Point> Pan;
-        public static event Action<Direction> Swipe;
+        public static event Action<Point,Direction> Swipe;
         public static event Action<Point> Up;
         public static event Action<Point> Down;
         private static bool _panJustBegun;
@@ -42,23 +42,24 @@ namespace GemSwipe.Paladin.Gestures
             if (d > 25 && _panJustBegun)
             {
                 _panJustBegun = false;
+                var initialPos = new Point(_previousPosX, _previousPosY);
                 if (eX > 0)
                 {
                     if (eY > eX)
-                        Swipe?.Invoke(Direction.Bottom);
+                        Swipe?.Invoke(initialPos, Direction.Bottom);
                     else if (Math.Abs(eY) > eX)
-                        Swipe?.Invoke(Direction.Top);
+                        Swipe?.Invoke(initialPos, Direction.Top);
                     else
-                        Swipe?.Invoke(Direction.Right);
+                        Swipe?.Invoke(initialPos, Direction.Right);
                 }
                 else
                 {
                     if (eY > Math.Abs(eX))
-                        Swipe?.Invoke(Direction.Bottom);
+                        Swipe?.Invoke(initialPos, Direction.Bottom);
                     else if (Math.Abs(eY) > Math.Abs(eX))
-                        Swipe?.Invoke(Direction.Top);
+                        Swipe?.Invoke(initialPos, Direction.Top);
                     else
-                        Swipe?.Invoke(Direction.Left);
+                        Swipe?.Invoke(initialPos, Direction.Left);
                 }
             }
         }

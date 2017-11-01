@@ -35,6 +35,13 @@ namespace GemSwipe.Game.Models.Entities
             Gesture.Down += Gesture_Down;
             Gesture.Up += Gesture_Up;
             Gesture.Pan += Gesture_Pan;
+            Gesture.Swipe += Gesture_Swipe; ;
+        }
+
+        private void Gesture_Swipe(Point p, Direction direction)
+        {
+            ClearTappables();
+            SkiaGestureService.Instance.HandleSwipe(p, direction);
         }
 
         private void Gesture_Pan(Point p)

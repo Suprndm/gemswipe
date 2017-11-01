@@ -43,6 +43,8 @@ namespace GemSwipe.Game.Models.Entities
             NbOfColumns = boardSetup.Columns;
             UpdateDimensions();
             Setup(boardSetup);
+
+            DeclareTappable(this);
         }
 
         public Board(string boardString) : base(0, 0, 0, 0)

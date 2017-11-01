@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GemSwipe.Game.Models;
 using GemSwipe.Game.Models.Entities;
 using SkiaSharp;
 using Xamarin.Forms;
@@ -268,10 +269,16 @@ namespace GemSwipe.Paladin.Core
             DragOut?.Invoke();
         }
 
+        public void InvokeSwipe(Direction direction)
+        {
+            Swippe?.Invoke(direction);
+        }
+
         public event Action Down;
         public event Action Up;
         public event Action<Point> Pan;
         public event Action DragOut;
+        public event Action<Direction> Swippe;
 
         #endregion
 

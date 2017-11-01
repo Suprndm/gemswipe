@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using GemSwipe.Game.Models;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -42,6 +43,7 @@ namespace GemSwipe.Paladin.Core
         void InvokeUp();
         void InvokePan(Point p);
         void InvokeDragOut();
+        void InvokeSwipe(Direction direction);
 
         void Dispose();
 

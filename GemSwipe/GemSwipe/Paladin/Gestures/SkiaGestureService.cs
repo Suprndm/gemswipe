@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using GemSwipe.Game.Models;
 using GemSwipe.Paladin.Core;
 using Xamarin.Forms;
 
@@ -67,6 +68,11 @@ namespace GemSwipe.Paladin.Gestures
                     _downTappable = null;
                 }
             }
+        }
+
+        public void HandleSwipe(Point p, Direction direction)
+        {
+            _downTappable?.InvokeSwipe(direction);
         }
 
         public ISkiaView DetectInteractedTappable(IList<ISkiaView> tappables, Point p)
