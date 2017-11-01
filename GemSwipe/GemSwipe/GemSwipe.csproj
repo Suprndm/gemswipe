@@ -66,6 +66,8 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Shards\Shard.cs" />
+    <Compile Include="Game\Test\ShardTester.cs" />
     <Compile Include="Paladin\Containers\CenteredContainer.cs" />
     <Compile Include="Paladin\Containers\Container.cs" />
     <Compile Include="Paladin\Containers\ContainerBase.cs" />
@@ -115,6 +117,8 @@
     <Compile Include="Game\Effects\BackgroundEffects\Stars.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\TapToPlay.cs" />
     <Compile Include="Paladin\UIElements\TextBlock.cs" />
+    <Compile Include="Paladin\VisualEffects\FloatingParticule.cs" />
+    <Compile Include="Paladin\VisualEffects\Particule.cs" />
     <Compile Include="Paladin\VisualEffects\PoppedElement.cs" />
     <Compile Include="Paladin\VisualEffects\PoppedText.cs" />
     <Compile Include="Game\Models\Entities\Board.cs" />

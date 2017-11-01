@@ -216,10 +216,6 @@ namespace GemSwipe.Game.Models.Entities
             };
 
             Canvas.DrawPath(path, paint);
-
-            paint.StrokeWidth = 2;
-            paint.Style = SKPaintStyle.Stroke;
-            Canvas.DrawCircle(starX, starY, outerRadius * 1.2f, paint);
         }
 
         public void MoveTo(float x, float y)

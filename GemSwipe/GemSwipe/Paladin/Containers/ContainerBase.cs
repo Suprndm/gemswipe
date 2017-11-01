@@ -14,6 +14,12 @@ namespace GemSwipe.Paladin.Containers
             AddChild(skiaView);
         }
 
+
+        public virtual void RemoveContentContent(ISkiaView skiaView)
+        {
+            RemoveChild(skiaView);
+        }
+
         protected override void Draw()
         {
             

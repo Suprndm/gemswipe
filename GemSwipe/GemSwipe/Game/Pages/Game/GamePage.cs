@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
@@ -9,6 +10,8 @@ using GemSwipe.Game.Events;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
+using GemSwipe.Game.Shards;
+using GemSwipe.Paladin.Containers;
 using GemSwipe.Paladin.Gestures;
 using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.Navigation.Pages;
@@ -27,13 +30,25 @@ namespace GemSwipe.Game.Pages.Game
         private int _currentLevelId;
         private LevelData _levelData;
         private EventBar _eventBar;
+        private Random _randomizer;
+        private Container _shardContainer;
+        private Container _boardContainer;
+        private IList<Shard> _shards;
 
 
         private ObjectivesView _objectivesView;
-        
+
         public GamePage()
         {
             _levelDataRepository = new LevelDataRepository();
+            _randomizer = new Random();
+     
+            _boardContainer = new Container();
+            AddChild(_boardContainer);
+
+            _shardContainer = new Container();
+            AddChild(_shardContainer);
+            _shards = new List<Shard>();
         }
 
         public void BackgroundNextBoard()
@@ -57,7 +72,7 @@ namespace GemSwipe.Game.Pages.Game
 
                 _board.Swippe += Swipe;
 
-                AddChild(_board);
+                _boardContainer.AddContent(_board);
 
                 BackgroundNextBoard();
                 _isBusy = false;
@@ -84,12 +99,11 @@ namespace GemSwipe.Game.Pages.Game
             {
                 var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
-                await Task.Delay(1000);
-                var eventSucceeded = await _eventBar.ActivateNextEventEvent(_board);
-                UpdateObjectivesView();
 
-                if (EvalWinStatus() &&  eventSucceeded)
+
+                if (EvalWinStatus())
                 {
+                    await Task.Delay(1000);
                     // WIN
 
                     PlayerDataService.Instance.UpdateLevelProgress(_currentLevelId, LevelProgressStatus.Completed);
@@ -112,8 +126,17 @@ namespace GemSwipe.Game.Pages.Game
                 }
                 else
                 {
+                    // Shards
+                    HandleShards(swipeResult);
+
+
+                    // Events
+                    await Task.Delay(500);
+                    var eventSucceeded = await _eventBar.ActivateNextEventEvent(_board);
+                    UpdateObjectivesView();
+
                     // LOSE
-                    if (_eventBar.GetEventsCount() == 0  ||! eventSucceeded)
+                    if (_eventBar.GetEventsCount() == 0 || !eventSucceeded)
                     {
                         await Task.Delay(1000);
                         var dialogPopup = new LoseDialogPopup();
@@ -127,11 +150,43 @@ namespace GemSwipe.Game.Pages.Game
                             Navigator.Instance.GoTo(PageType.Map);
                         };
                     }
+                    else
+                    {
+                        _isBusy = false;
+                    }
                 }
-
-                _isBusy = false;
-
             }
+        }
+
+        private async Task HandleShards(SwipeResult swipeResult)
+        {
+            await Task.Delay(500);
+            if (swipeResult.FusedGems.Count >= 2)
+            {
+                for (int i = 0; i < _randomizer.Next(4) + 2; i++)
+                {
+                    GenerateShard();
+                    await Task.Delay(200);
+                }
+            }
+        }
+
+        private void GenerateShard()
+        {
+            var x = _board.X + 0.2f * _board.Width + _randomizer.Next((int)(_board.Width * 0.8f));
+            var y = _board.Y + 0.2f * _board.Height + _randomizer.Next((int)(_board.Height * 0.8f));
+            var shard = new Shard(x, y, Width / 7, Width / 7);
+            _shardContainer.AddContent(shard);
+            _shards.Add(shard);
+            shard.Down += () =>
+            {
+                shard.Die();
+                if (_shards.Contains(shard))
+                {
+                    shard.Die();
+                    _shards.Remove(shard);
+                }
+            };
         }
 
         private void UpdateObjectivesView()
@@ -186,6 +241,13 @@ namespace GemSwipe.Game.Pages.Game
             _board.Swippe -= Swipe;
             _board.Dispose();
             _objectivesView.Dispose();
+
+            foreach (var shard in _shards.ToList())
+            {
+                shard.Die();
+                _shards.Remove(shard);
+            }
+
             _eventBar.Dispose();
         }
     }
