@@ -42,7 +42,7 @@ namespace GemSwipe.Game.Pages.Game
         {
             _levelDataRepository = new LevelDataRepository();
             _randomizer = new Random();
-     
+
             _boardContainer = new Container();
             AddChild(_boardContainer);
 
@@ -100,6 +100,14 @@ namespace GemSwipe.Game.Pages.Game
                 var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
 
+                if (swipeResult.DeadGems.Count == 0
+                    && swipeResult.FusedGems.Count == 0
+                    && swipeResult.MovedGems.Count == 0)
+                {
+                    // Invalid swipe
+                    _isBusy = false;
+                    return;
+                }
 
                 if (EvalWinStatus())
                 {

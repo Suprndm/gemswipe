@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GemSwipe.Game.Models.Entities;
 using SkiaSharp;
 using Xamarin.Forms;
@@ -15,6 +16,16 @@ namespace GemSwipe.Game.Events
         public override IList<Point> GetTargets(Board board)
         {
             return new List<Point>();
+        }
+
+        public override Task Warmup()
+        {
+            return Task.Delay(0);
+        }
+
+        public override Task<bool> Activate(Board board)
+        {
+            return Task.FromResult(true);
         }
     }
 }

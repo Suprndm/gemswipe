@@ -56,7 +56,7 @@ namespace GemSwipe.Game.Events
             }
         }
 
-        public async Task Warmup()
+        public virtual async Task Warmup()
         {
             this.Animate("eventHaloOpacity", p => HaloOpacity = (float)p, HaloOpacity, 1f, 4, 500, Easing.Linear);
             await Task.Delay(500);

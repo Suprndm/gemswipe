@@ -206,9 +206,13 @@ namespace GemSwipe.Game.Models.Entities
                         if (cell.IsEmpty())
                         {
                             cell.AttachGem(gem);
-                            gem.Move(cell.X, cell.Y);
+                            if (gem.BoardX != cell.X || gem.BoardY != cell.Y)
+                            {
+                                swipeResult.MovedGems.Add(gem);
+                                gem.Move(cell.X, cell.Y);
+                            }
 
-                            swipeResult.MovedGems.Add(gem);
+  
                             gemPositionned++;
                             break;
                         }
