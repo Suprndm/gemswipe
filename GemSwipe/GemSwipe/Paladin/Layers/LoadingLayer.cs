@@ -27,9 +27,11 @@ namespace GemSwipe.Paladin.Layers
 
         private async void Navigator_NavigationStarted(Navigation.NavigationEventArgs arg)
         {
+            this.AbortAnimation("whiteSmokeOut");
             this.Animate("whiteSmokeIn", p => _transitionScreen.Opacity = (float)p, _transitionScreen.Opacity, 1, 8, (uint)1000, Easing.Linear);
+
             await Task.Delay(1500);
-            this.Animate("whiteSmokeOut", p => _transitionScreen.Opacity = (float)p, _transitionScreen.Opacity, 0, 8, (uint)1000, Easing.Linear);
+            this.Animate("whiteSmokeOut2", p => _transitionScreen.Opacity = (float)p,1, 0, 8, (uint)1000, Easing.Linear);
         }
 
         protected override void Draw()

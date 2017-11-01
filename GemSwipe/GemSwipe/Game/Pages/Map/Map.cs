@@ -6,6 +6,7 @@ using GemSwipe.Data.LevelData;
 using GemSwipe.Data.LevelMapPosition;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Navigation;
@@ -61,7 +62,7 @@ namespace GemSwipe.Game.Pages.Map
             if (PlayerLifeService.Instance.HasLife())
             {
                 var levelData = _levelDataRepository.Get(i);
-            var dialogPopup = new LevelDialogPopup(levelData);
+                var dialogPopup = new LevelDialogPopup(levelData);
                 PopupService.Instance.ShowPopup(dialogPopup);
                 dialogPopup.NextCommand = () =>
                 {
@@ -80,7 +81,7 @@ namespace GemSwipe.Game.Pages.Map
             {
                 //popup "no life left!"
             }
-           
+
         }
 
 
@@ -91,14 +92,21 @@ namespace GemSwipe.Game.Pages.Map
 
             var higherPointY = levelMapPositions.Max(l => l.Position.Y);
             var newHeight = (float)(Height / 3 + higherPointY / 100 * Height);
+
+            var currentLevelY = 0f;
             foreach (var levelMapPosition in levelMapPositionRepository.GetAll())
             {
                 LevelProgressStatus levelProgress = PlayerDataService.Instance.GetLevelProgress(levelMapPosition.Id);
+                var buttonX = (float)levelMapPosition.Position.X / 100 * Width;
+                var buttonY = newHeight - (float)levelMapPosition.Position.Y / 100 * Height;
                 var levelButton = new LevelButton(
-                    (float)levelMapPosition.Position.X / 100 * Width,
-                    newHeight - (float)levelMapPosition.Position.Y / 100 * Height,
+                    buttonX,
+                    buttonY,
                     Height / 40,
                     levelMapPosition.Id, levelProgress);
+
+                if (levelProgress == LevelProgressStatus.InProgress)
+                    currentLevelY = buttonY;
 
                 AddChild(levelButton);
                 DeclareTappable(levelButton);
@@ -130,9 +138,11 @@ namespace GemSwipe.Game.Pages.Map
                 levelButton.Y = closestPoint.Y;
             }
 
-
-            _y = -newHeight + 2 * _screenHeight / 3;
-            Height = newHeight;
+            var minHeight = -newHeight + _screenHeight;
+            var maxHeight = 0;
+            _y = Math.Max((-currentLevelY + SkiaRoot.ScreenHeight / 2), minHeight);
+            _y = Math.Min(_y, maxHeight);
+            Height = newHeight + _screenHeight;
         }
 
         private IList<SKPoint> SmoothCurve(IList<SKPoint> curve)
@@ -176,7 +186,7 @@ namespace GemSwipe.Game.Pages.Map
             return newCurve;
         }
 
-           
+
 
         protected override void Draw()
         {
@@ -240,9 +250,9 @@ namespace GemSwipe.Game.Pages.Map
                 _y = 0;
             }
 
-            if (_y < -Height + 2 * _screenHeight / 3)
+            if (_y < -Height + 1.7f * _screenHeight)
             {
-                _y = -Height + 2 * _screenHeight / 3;
+                _y = -Height + 1.7f * _screenHeight;
             }
         }
 
@@ -262,9 +272,9 @@ namespace GemSwipe.Game.Pages.Map
                     _y = 0;
                     _aY = -_aY * .5f;
                 }
-                if (_y < -Height + 2 * _screenHeight / 3)
+                if (_y < -Height + 1.7f * _screenHeight)
                 {
-                    _y = -Height + 2 * _screenHeight / 3;
+                    _y = -Height + 1.7f * _screenHeight;
                     _aY = -_aY * .5f;
                 }
 
