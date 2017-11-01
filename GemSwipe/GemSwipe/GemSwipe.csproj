@@ -69,9 +69,12 @@
     <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
     <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
+    <Compile Include="Game\Test\ToolboxTester.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />
     <Compile Include="Game\Settings\SettingDialog.cs" />
     <Compile Include="Game\Settings\SettingOptionButton.cs" />
+    <Compile Include="Game\Toolbox\ToolboxBar.cs" />
+    <Compile Include="Game\Toolbox\ToolButton.cs" />
     <Compile Include="Game\Settings\SettingsEnum.cs" />
     <Compile Include="Paladin\Containers\CenteredContainer.cs" />
     <Compile Include="Paladin\Containers\Container.cs" />
@@ -158,7 +161,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppSettings.cs" />
     <Compile Include="Paladin\UIElements\Buttons\IButton.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\LevelButton.cs" />
+    <Compile Include="Game\Pages\Map\LevelButton.cs" />
     <Compile Include="Paladin\UIElements\Buttons\SimpleButton.cs" />
     <Compile Include="Paladin\UIElements\Buttons\SpriteButton.cs" />
     <Compile Include="Paladin\UIElements\Buttons\TextButton.cs" />

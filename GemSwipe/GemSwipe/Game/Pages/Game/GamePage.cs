@@ -11,6 +11,7 @@ using GemSwipe.Game.Models;
 using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
 using GemSwipe.Game.Shards;
+using GemSwipe.Game.Toolbox;
 using GemSwipe.Paladin.Containers;
 using GemSwipe.Paladin.Gestures;
 using GemSwipe.Paladin.Navigation;
@@ -35,6 +36,8 @@ namespace GemSwipe.Game.Pages.Game
         private Container _boardContainer;
         private IList<Shard> _shards;
 
+        private ToolboxBar _toolboxBar;
+
 
         private ObjectivesView _objectivesView;
 
@@ -49,6 +52,9 @@ namespace GemSwipe.Game.Pages.Game
             _shardContainer = new Container();
             AddChild(_shardContainer);
             _shards = new List<Shard>();
+
+            var toolboxBar = new ToolboxBar(0, SkiaRoot.ScreenHeight * 0.85f, SkiaRoot.ScreenHeight * 0.15f, SkiaRoot.ScreenWidth);
+            AddChild(toolboxBar);
         }
 
         public void BackgroundNextBoard()

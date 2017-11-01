@@ -21,8 +21,6 @@ namespace GemSwipe.Game.Settings
             DeclareTappable(settingsButton);
             _y = SkiaRoot.ScreenHeight;
             settingsButton.Activated += SettingsButton_Tapped;
-
-            DeclareTappable(this);
         }
 
         public Task Show()

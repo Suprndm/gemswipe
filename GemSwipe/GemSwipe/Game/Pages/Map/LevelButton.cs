@@ -1,9 +1,10 @@
 ﻿using System;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Paladin.UIElements.Buttons;
 using SkiaSharp;
 
-namespace GemSwipe.Paladin.UIElements.Buttons
+namespace GemSwipe.Game.Pages.Map
 {
     public class LevelButton : SimpleButton, IButton
     {

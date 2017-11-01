@@ -18,14 +18,10 @@ namespace GemSwipe.Game.Test
 
         public TestView(float x, float y, float height, float width) : base(x, y, height, width)
         {
-         
-
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new ShardTester());
-
-
+            AddChild(new ToolboxTester());
         }
 
         public override void SetupLayers()
