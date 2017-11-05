@@ -69,6 +69,7 @@
     <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
     <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
+    <Compile Include="Game\Test\SpriteTester.cs" />
     <Compile Include="Game\Test\ToolboxTester.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />
     <Compile Include="Game\Settings\SettingDialog.cs" />
@@ -168,7 +169,6 @@
     <Compile Include="Paladin\Utilities\MathHelper.cs" />
     <Compile Include="Paladin\Sprites\Sprite.cs" />
     <Compile Include="Paladin\Sprites\SpriteModel.cs" />
-    <Compile Include="Paladin\Sprites\SpriteSheet.cs" />
     <Compile Include="Views\InputDialog.cs" />
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
@@ -241,6 +241,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Game\Effects\Popped\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\shard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\shard_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

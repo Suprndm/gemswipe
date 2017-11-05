@@ -73,8 +73,7 @@ namespace GemSwipe.Game.Models.Entities
 
         public virtual async Task LoadResources()
         {
-            SpriteSheet.Instance.Setup("Resources/Graphics/atlas.png", "Resources/Graphics/atlas.txt");
-            await SpriteSheet.Instance.LoadAsync();
+           
         }
 
         public virtual void SetupLayers()

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.Sprites;
 using GemSwipe.Paladin.VisualEffects;
 using SkiaSharp;
 using Xamarin.Forms;
@@ -19,16 +20,22 @@ namespace GemSwipe.Game.Shards
         private int count = 0;
         private float _radius;
         private bool _dying;
-
+        private Sprite _sprite;
+        private IList<Sprite> _sprites;
         public Shard(float x, float y, float width, float height) : base(x, y, width, height)
         {
             _color = new SKColor(255, 200, 36);
             _particules = new List<FloatingParticule>();
             var randomizer = new Random();
-            for (int i = 0; i < 5; i++)
+            _sprites = new List<Sprite>();
+            for (int i = 0; i < 1; i++)
             {
-                var particule = new FloatingParticule(x, y, width / 4, 0.1f, randomizer);
-                _particules .Add(particule);
+                var sprite = new Sprite("shard", 0, 0, 128, 128);
+                AddChild(sprite);
+
+                _sprites.Add(sprite);
+                var particule = new FloatingParticule(0, 0, width / 4, 0.1f, randomizer);
+                _particules.Add(particule);
             }
 
             Initialize();
@@ -38,11 +45,11 @@ namespace GemSwipe.Game.Shards
 
         public void Initialize()
         {
-            this.Animate("shardRadiusIn", p => _radius = (float)p, _radius, Width/2, 4, 500, Easing.CubicOut);
+            this.Animate("shardRadiusIn", p => _radius = (float)p, _radius, Width / 2, 4, 500, Easing.CubicOut);
 
-            Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(async () =>
             {
-                Task.Delay(10000).Wait();
+                await Task.Delay(10000);
                 Die();
             });
         }
@@ -64,23 +71,33 @@ namespace GemSwipe.Game.Shards
 
         protected override void Draw()
         {
-            foreach (var particule in _particules)
+            for (int i = 0; i < _particules.Count; i++)
             {
+                var particule = _particules[i];
                 particule.Update();
-                var colors = new SKColor[] {
-                    CreateColor (_color.Red, _color.Green, _color.Blue,_color.Alpha),
-                    CreateColor (_color.Red, _color.Green, _color.Blue,0),
-                };
 
-                using (var paint = new SKPaint())
-                {
-                    var shader = SKShader.CreateRadialGradient(new SKPoint(particule.X, particule.Y), Width / 2, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
-                    paint.BlendMode = SKBlendMode.Plus;
-                    paint.Shader = shader;
-                    paint.IsAntialias = false;
-                    paint.Color = CreateColor(_color.Red, _color.Green, _color.Blue, _color.Alpha);
-                    Canvas.DrawCircle(particule.X, particule.Y, _radius, paint);
-                }
+
+                var sprite = _sprites[i];
+
+
+                sprite.X = particule.X;
+                sprite.Y = particule.Y;
+
+
+                //var colors = new SKColor[] {
+                //    CreateColor (_color.Red, _color.Green, _color.Blue,_color.Alpha),
+                //    CreateColor (_color.Red, _color.Green, _color.Blue,0),
+                //};
+
+                //using (var paint = new SKPaint())
+                //{
+                //    var shader = SKShader.CreateRadialGradient(new SKPoint(X + particule.X, Y + particule.Y), Width / 2, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+                //    paint.BlendMode = SKBlendMode.Plus;
+                //    paint.Shader = shader;
+                //    paint.IsAntialias = false;
+                //    paint.Color = CreateColor(_color.Red, _color.Green, _color.Blue, _color.Alpha);
+                //    Canvas.DrawCircle(X + particule.X, Y + particule.Y, _radius, paint);
+                //}
             }
         }
 

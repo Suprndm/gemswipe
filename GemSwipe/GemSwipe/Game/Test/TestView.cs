@@ -21,7 +21,7 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new GemTester());
+            AddChild(new ShardTester());
         }
 
         public override void SetupLayers()

@@ -6,25 +6,22 @@ namespace GemSwipe.Paladin.Sprites
     {
         private SKSurface _innerSurface;
 
-        public SpriteModel(SpriteSheet sheet, string name, SKSize size, SKRect bounds)
+        public SpriteModel(SKBitmap bitmap, string name, SKSize size)
         {
-
+            Bitmap = bitmap;
             Name = name;
-            SpriteSheet = sheet;
             Size = size;
-            SourceBounds = bounds;
             Visible = true;
+            SourceBounds = SKRect.Create(0, 0, size.Width, size.Height);
         }
 
         public string Name { get; private set; }
-
-        public SpriteSheet SpriteSheet { get; private set; }
 
         public SKRect SourceBounds { get; private set; }
 
         public SKSize Size { get; private set; }
 
-        public SKBitmap Bitmap => SpriteSheet.Bitmap;
+        public SKBitmap Bitmap { get; set; }
 
         public bool Visible { get; set; }
 
@@ -36,21 +33,11 @@ namespace GemSwipe.Paladin.Sprites
 
             if (Visible)
             {
-                if (_innerSurface == null)
+                using (new SKAutoCanvasRestore(canvas, true))
                 {
-                    _innerSurface = SKSurface.Create((int)canvasWidth, (int)canvasHeight, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+                    //canvas.RotateRadians(angle, width, Size.Height * 2);
+                    canvas.DrawBitmap(Bitmap, SourceBounds, SKRect.Create(x - width / 2, y - height / 2, width, height));
                 }
-
-                var innerCanvas = _innerSurface.Canvas;
-
-                innerCanvas.Clear();
-                using (new SKAutoCanvasRestore(innerCanvas, true))
-                {
-                    innerCanvas.RotateRadians(angle, width, Size.Height * 2);
-                    innerCanvas.DrawBitmap(Bitmap, SourceBounds, SKRect.Create(canvasWidth / 2 - width / 2, canvasHeight / 2 - height / 2, width, height), paint);
-                }
-
-                canvas.DrawSurface(_innerSurface, x - canvasWidth / 2, y - canvasHeight / 2);
             }
         }
 

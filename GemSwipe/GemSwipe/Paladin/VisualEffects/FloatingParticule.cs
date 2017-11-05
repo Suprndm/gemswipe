@@ -47,9 +47,9 @@ namespace GemSwipe.Paladin.VisualEffects
             FloatingSpeed = floatingSpeed;
             _anchorX = x;
             _anchorY = y;
-             _randomizer = randomizer;
+            _randomizer = randomizer;
 
-            _phaseX = (float)((float)_randomizer.Next(100) / 100*Math.PI);
+            _phaseX = (float)((float)_randomizer.Next(100) / 100 * Math.PI);
             _phaseY = (float)((float)_randomizer.Next(100) / 100 * Math.PI);
 
             _speedModificatorX = (float)_randomizer.Next(30) / 100;
@@ -59,12 +59,12 @@ namespace GemSwipe.Paladin.VisualEffects
 
         public override void Update()
         {
-            _variant1 += FloatingSpeed* _speedModificatorX;
-            _variant2 = (float)Math.Cos(_variant1+ _phaseX)*FloatingSpeed;
+            _variant1 += FloatingSpeed * _speedModificatorX;
+            _variant2 = (float)Math.Cos(_variant1 + _phaseX) * FloatingSpeed;
             _variant3 += _variant2;
 
-            _variant4+= FloatingSpeed* _speedModificatorY;
-            _variant5 = (float)Math.Sin(_variant4+ _phaseY) * FloatingSpeed;
+            _variant4 += FloatingSpeed * _speedModificatorY;
+            _variant5 = (float)Math.Sin(_variant4 + _phaseY) * FloatingSpeed;
             _variant6 += _variant5;
 
             X = (float)(FloatingRadius * Math.Cos(_variant3 + _phaseX)) + _anchorX;
