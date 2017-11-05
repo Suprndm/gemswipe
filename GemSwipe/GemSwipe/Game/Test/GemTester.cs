@@ -12,13 +12,13 @@ namespace GemSwipe.Game.Test
     public class GemTester:SkiaView
     {
         private Gem _gem;
-        public GemTester(float x, float y, float height, float width) : base(x, y, height, width)
+        public GemTester()
         {
 
-            var levelUpButton = new TextButton(width / 2, 6.5f * height / 10, height / 40, "Level up");
-            var newButton = new TextButton(width / 2, 7.5f * height / 10, height / 40, "New");
-            var popButton = new TextButton(width / 2, 8.5f * height / 10, height / 40, "Pop");
-            var dieButton = new TextButton(width / 2, 9.5f * height / 10, height / 40, "Die");
+            var levelUpButton = new TextButton(Width / 2, 6.5f * Height / 10, Height / 40, "Level up");
+            var newButton = new TextButton(Width / 2, 7.5f * Height / 10, Height / 40, "New");
+            var popButton = new TextButton(Width / 2, 8.5f * Height / 10, Height / 40, "Pop");
+            var dieButton = new TextButton(Width / 2, 9.5f * Height / 10, Height / 40, "Die");
 
             AddChild(levelUpButton);
             AddChild(newButton);
@@ -40,7 +40,7 @@ namespace GemSwipe.Game.Test
 
         private void NewButton_Activated()
         {
-            _gem = new Gem(0, 0, 1, Width / 2 - Width/10, Height /3, Width / 10);
+            _gem = new Gem(0, 0, 1, Width / 2 - Width/10, Height /3, Width / 10, new Random());
             AddChild(_gem);
         }
 

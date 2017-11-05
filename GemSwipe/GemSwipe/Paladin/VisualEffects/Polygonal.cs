@@ -10,7 +10,7 @@ namespace GemSwipe.Paladin.VisualEffects
         {
             var origin = new SKPoint(0, 0);
             var points = new List<SKPoint>();
-            angle += (float)Math.PI / (2 * pointsCount);
+            angle += -(float) (Math.PI / 2 - (Math.PI / pointsCount));
             for (int i = 0; i < pointsCount; i++)
             {
                 var innerPoint = new SKPoint(

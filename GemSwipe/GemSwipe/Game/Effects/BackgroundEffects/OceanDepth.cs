@@ -31,7 +31,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             var linearHeight = Height * 2;
             for (int i = 0; i < 2; i++)
             {
-                var linear = new LinearGradientBackground( X, Y + linearHeight * i, linearHeight, Width);
+                var linear = new LinearGradientBackground( X, Y + (linearHeight-10) * i, linearHeight, Width);
                 linear.Reset(_colors[i], _colors[i + 1], Y + linearHeight * i);
                 _linears.Add(linear);
                 _colorIndex++;
@@ -43,7 +43,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         {
             var oldY = _y;
             var newY = _y - Height * 0.15;
-            this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.SinInOut);
+            this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, (uint)1000, Easing.Linear);
             await Task.Delay(1000);
             foreach (var linear in _linears)
             {
@@ -56,7 +56,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                     var color2 = _colors[_colorIndex];
 
                     // Reset linear
-                    linear.Reset(color1, color2, _linears.Max(l => l.Y) - Y + linear.Height);
+                    linear.Reset(color1, color2, _linears.Max(l => l.Y) - Y + linear.Height-10);
                 }
             }
         }

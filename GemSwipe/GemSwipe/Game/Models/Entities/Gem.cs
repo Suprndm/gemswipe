@@ -31,6 +31,7 @@ namespace GemSwipe.Game.Models.Entities
         private int _cycleSpeed;
         private float _opacity;
         private float _angle;
+        private FloatingParticule _floatingParticule;
 
         private SKColor _finalColor;
 
@@ -42,9 +43,9 @@ namespace GemSwipe.Game.Models.Entities
             BoardX = boardX;
             BoardY = boardY;
         }
-        public Gem(int boardX, int boardY, int size, float x, float y, float radius) : base(x, y, radius * 2, radius * 2)
+        public Gem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(x, y, radius * 2, radius * 2)
         {
-            _randomizer = new Random();
+            _randomizer = randomizer;
             _cycle = 0;
             Size = size;
             _fluidSize = size;
@@ -57,6 +58,8 @@ namespace GemSwipe.Game.Models.Entities
             _opacity = 0;
             _angle = (float)(_randomizer.Next(100) * Math.PI * 2 / 100);
             _finalColor = new SKColor(195, 184, 85);
+
+            _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
 
         }
 
@@ -121,8 +124,9 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            var starX = X + _radius;
-            var starY = Y + _radius;
+            _floatingParticule.Update();
+            var starX = X + _radius + _floatingParticule.X;
+            var starY = Y + _radius + +_floatingParticule.Y;
 
             var branches = (int)_fluidSize + 1;
             var reduction = 1f / (8f / Math.Min(8, branches));
@@ -143,7 +147,7 @@ namespace GemSwipe.Game.Models.Entities
                 CreateColor (255, 255, 255,0),
             };
 
-            var shader = SKShader.CreateRadialGradient(new SKPoint(X + _radius, Y + _radius), starRadius * 1.5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+            var shader = SKShader.CreateRadialGradient(new SKPoint(starX, starY), starRadius * 1.5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
             var glowPaint = new SKPaint()
             {
                 Shader = shader
@@ -158,7 +162,7 @@ namespace GemSwipe.Game.Models.Entities
 
 
             var points = Polygonal.GetStarPolygon(innerRadius * reductionCoef, outerRadius * reductionCoef, branches,
-                2 * (float)(_angle + Math.PI / 2 * 1 / branches));
+                2 * (float)(0 + Math.PI / 2 * 1 / branches));
 
             var path = new SKPath();
 
@@ -184,7 +188,7 @@ namespace GemSwipe.Game.Models.Entities
 
             Canvas.DrawPath(path, paint);
 
-            points = Polygonal.GetStarPolygon(innerRadius, outerRadius, branches, 2 * _angle);
+            points = Polygonal.GetStarPolygon(innerRadius, outerRadius, branches, 0);
             path = new SKPath();
             for (int k = 0; k < points.Count; k++)
             {
@@ -211,7 +215,7 @@ namespace GemSwipe.Game.Models.Entities
             {
                 Style = SKPaintStyle.Stroke,
                 Color = startColor,
-                StrokeWidth = 10*_radius/100,
+                StrokeWidth = 10 * _radius / 100,
                 IsAntialias = true
             };
 

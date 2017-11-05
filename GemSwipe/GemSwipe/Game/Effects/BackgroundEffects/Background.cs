@@ -12,16 +12,24 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         public Background()
         {
-            _oceanDepth = new OceanDepth( X, Y, Height, Width);
+            _oceanDepth = new OceanDepth(X, Y, Height, Width);
             AddChild(_oceanDepth);
 
-            var blackHalo = new Halo( X - Width / 3, Y, Height, Width * 3f, CreateColor(255, 255, 255), Math.PI);
-            var whiteHalo = new Halo( X - Width / 3, Y, Height, Width * 3f, CreateColor(0, 0, 0), 0);
+            var blackHalo = new Halo(X - Width / 3, Y, Height, Width * 3f, CreateColor(150, 150, 150), Math.PI);
+            var whiteHalo = new Halo(X - Width / 3, Y, Height, Width * 3f, CreateColor(25, 25, 25), 0);
             AddChild(blackHalo);
             AddChild(whiteHalo);
 
             //_stars = new Stars( X, Y, Height, Width);
             //AddChild(_stars);
+            Task.Run(async () =>
+           {
+               while (true)
+               {
+                   await _oceanDepth.ScrollDown();
+               }
+           });
+
         }
 
         public Task OnNextBoard()

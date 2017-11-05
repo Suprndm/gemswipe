@@ -159,7 +159,7 @@ namespace GemSwipe.Game.Models.Entities
             var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
             var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
 
-            var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius);
+            var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
             Gems.Add(gem);
 
             AddChild(gem);
