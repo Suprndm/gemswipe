@@ -17,7 +17,7 @@ namespace GemSwipe.Paladin.Layers
             _topBar = new TopBar();
             AddChild(_topBar);
 
-            _settingsPanel = new SettingsPanel();
+            _settingsPanel = new SettingsPanel(Width, 0, 0.8f*Width, 0.9f*Height);
             AddChild(_settingsPanel);
 
             _topBar.SettingsButtonPressed += () =>

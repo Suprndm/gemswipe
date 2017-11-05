@@ -28,6 +28,7 @@ namespace GemSwipe.Game.Settings
         private Container _buttonContainer;
 
         private float _dialogWidth;
+        private float _dialogHeight;
         private SettingDialog _settingDialog;
         private bool _dialogExpanding;
 
@@ -37,26 +38,29 @@ namespace GemSwipe.Game.Settings
         public bool IsShowed { get; set; }
         private int _animationMs = 600;
 
-        public SettingsPanel() : base(0,0,SkiaRoot.ScreenHeight*0.9f, SkiaRoot.ScreenWidth)
+        public SettingsPanel(float x, float y, float width, float height) : base(x,y,height,width)
         {
-            _topMargin = Height / 10;
-            _blockMargin = Height / 12;
-            _buttonMargin = Height / 16;
-            _buttonHeight = Height / 40;
 
-            PanelWidth = Width * 0.8f;
+            PanelWidth = Width;
             PanelHeight = Height;
-            _x = Width + Width - PanelWidth;
+            //_x = Width + Width - PanelWidth;
 
+            _topMargin = PanelHeight / 10;
+            _blockMargin = PanelHeight / 12;
+            _buttonMargin = PanelHeight / 16;
+            _buttonHeight = PanelHeight / 40;
+
+
+            _dialogHeight = PanelHeight - PanelHeight / 4;
             _dialogWidth = PanelWidth - PanelWidth / 4;
 
-            _settingDialog = new SettingDialog(0+(PanelWidth-_dialogWidth)/2,_topMargin+_buttonMargin+2*_buttonHeight,_dialogWidth, PanelHeight / 3, this);
+            _dialogExpanding = false;
+
+            _settingDialog = new SettingDialog(0 + (PanelWidth - _dialogWidth) / 2, _topMargin + _buttonMargin + 2 * _buttonHeight, _dialogWidth, _dialogHeight, this);
             AddChild(_settingDialog);
 
             _buttonContainer = new Container();
             AddChild(_buttonContainer);
-
-            _listOfSettingButtons = new List<SettingButton>();
 
             _listOfSettingOptions = new List<IList<SettingsEnum>>()
             {
@@ -83,7 +87,8 @@ namespace GemSwipe.Game.Settings
                 },
             };
 
-            float buttonY = _topMargin - _blockMargin-_buttonMargin;
+            _listOfSettingButtons = new List<SettingButton>();
+            float buttonY = _topMargin - _blockMargin - _buttonMargin;
 
             foreach (IList<SettingsEnum> blockOfOptions in _listOfSettingOptions)
             {
@@ -99,7 +104,7 @@ namespace GemSwipe.Game.Settings
 
                     buttonY += _buttonHeight;
 
-                    settingButton.Activated += () => SettingButton_Tapped(settingButton);
+                    settingButton.Activated += () => SettingButtonOnTapped(settingButton);
                 }
             }
 
@@ -125,80 +130,55 @@ namespace GemSwipe.Game.Settings
 
         }
 
-
-
-        private void SettingButton_Tapped(SettingButton tappedButton)
+        private void SettingsPanelOnTapped()
         {
-            HandleButtonTapped(tappedButton);
+                _settingDialog.Shrink();
+                foreach (SettingButton settingButton in _listOfSettingButtons)
+                {
+                    settingButton.RecoverPosition();
+                }
+        }
+
+        private void SettingButtonOnTapped(SettingButton tappedButton)
+        {
+            ActivateDialog(tappedButton);
             foreach (SettingButton settingButton in _listOfSettingButtons.Where(e => e != tappedButton))
             {
                 settingButton.Hide(tappedButton.OriginalY);
             }
         }
 
-        private void HandleButtonTapped(SettingButton settingButton)
+        private async void ActivateDialog(SettingButton settingButton)
         {
-            switch (settingButton.SettingOption)
-            {
-                case SettingsEnum.GetLife:
-                    PlayerLifeService.Instance.GainLife();
-                    break;
-                case SettingsEnum.Language:
-                    LanguageButton_Tapped(settingButton);
-                    break;
-                default:
-                    LanguageButton_Tapped(settingButton);
-                    break;
-            }
-        }
-
-       
-
-        private async void LanguageButton_Tapped(SettingButton settingButton)
-        {
-            _dialogExpanding = true;
-
             await FocusButton(settingButton);
-            _settingDialog.Expand(SettingsEnum.Language);
+            _settingDialog.Expand(settingButton.SettingName);
         }
 
         private Task FocusButton(SettingButton settingButton)
         {
-            settingButton.Animate("focusButton", p => settingButton.Y = (float)p, settingButton.Y, _topMargin, 8, (uint)_animationMs,
-                Easing.CubicInOut);
-            return Task.Delay(_animationMs);
-        }
-
-        private async void SettingsPanel_Tapped()
-        {
-            if (_dialogExpanding)
-            {
-                await _settingDialog.Shrink();
-                _dialogExpanding = false;
-                foreach (SettingButton settingButton in _listOfSettingButtons)
-                {
-                    settingButton.RecoverPosition();
-                }
-            }
+            return settingButton.Focus(_topMargin + _y);
+            //settingButton.Animate("FocusButton", p => settingButton.Y = (float)p, settingButton.Y, _topMargin, 8, (uint)_animationMs,
+            //    Easing.CubicInOut);
+            //return Task.Delay(_animationMs);
         }
 
         public Task Show()
         {
             IsShowed = true;
-            this.Animate("slideIn", p => _x = (float)p, _x, Width - PanelWidth, 8, (uint)300, Easing.SpringOut);
+            this.Animate("slideIn", p => _x = (float)p, _x, SkiaRoot.ScreenWidth-PanelWidth, 8, (uint)300, Easing.SpringOut);
             return Task.Delay(_animationMs);
         }
 
         public Task Hide()
         {
             IsShowed = false;
-            this.Animate("slideOut", p => _x = (float)p, _x, Width + Width - PanelWidth, 8, (uint)300, Easing.SpringIn);
+            this.Animate("slideOut", p => _x = (float)p, _x, SkiaRoot.ScreenWidth, 8, (uint)300, Easing.SpringIn);
             return Task.Delay(_animationMs);
         }
 
         public void MoveToY(float y)
         {
-            if (!_dialogExpanding)
+            if (!_settingDialog.IsActive)
             {
                 _buttonContainer.Y += y;
                 _aY = y * 1f;
@@ -224,7 +204,7 @@ namespace GemSwipe.Game.Settings
             }
             else
             {
-                SettingsPanel_Tapped();
+                SettingsPanelOnTapped();
             }
         }
 

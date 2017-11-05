@@ -6,6 +6,7 @@ using GemSwipe.Game.Effects.BackgroundEffects;
 using GemSwipe.Game.Events;
 using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Pages.Game;
+using GemSwipe.Game.Settings;
 using GemSwipe.Paladin.UIElements;
 using Newtonsoft.Json;
 
@@ -21,7 +22,9 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new ShardTester());
+            SettingsPanel settingsPanel = new SettingsPanel(Width, 0, 0.8f * Width, 0.9f * Height);
+            AddChild(settingsPanel);
+            settingsPanel.Show();
         }
 
         public override void SetupLayers()

@@ -13,14 +13,14 @@ namespace GemSwipe.Game.Settings
     {
         private int _animationMs = 600;
         private SettingsPanel _settingsPanel;
-        public SettingsEnum SettingOption { get; set; }
+        public SettingsEnum SettingName { get; set; }
         public float OriginalY { get; set; }
 
         public SettingButton(float x, float y, float height, SettingsEnum settingOption, SettingsPanel settingsPanel) : base(x, y, height, string.Empty)
         {
             OriginalY = y;
             Text = SetSettingTitle(settingOption);
-            SettingOption = settingOption;
+            SettingName = settingOption;
             _settingsPanel = settingsPanel;
         }
 
@@ -70,21 +70,26 @@ namespace GemSwipe.Game.Settings
         {
             if (y > OriginalY)
             {
-                this.Animate("slideOut", p => _y = (float)p, _y, _y - _settingsPanel.PanelHeight, 8, (uint)_animationMs,
+                this.Animate("SlideUp", p => _y = (float)p, _y, _y - _settingsPanel.PanelHeight, 8, (uint)_animationMs,
                     Easing.CubicInOut);
             }
             else
             {
-                this.Animate("slideOut", p => _y = (float)p, _y, _y + _settingsPanel.PanelHeight, 8, (uint)_animationMs,
+                this.Animate("SlideDown", p => _y = (float)p, _y, _y + _settingsPanel.PanelHeight, 8, (uint)_animationMs,
                     Easing.CubicInOut);
             }
             return Task.Delay(_animationMs);
         }
 
+        public Task Focus(float focusY)
+        {
+            this.Animate("Focus", p => _y = (float) p, _y, focusY, 8, (uint) _animationMs, Easing.CubicInOut);
+            return Task.Delay(_animationMs);
+        }
 
         public Task RecoverPosition()
         {
-            this.Animate("returnToPos", p => _y = (float)p, _y, OriginalY, 8, (uint)_animationMs, Easing.CubicInOut);
+            this.Animate("ReturnToOrigPos", p => _y = (float)p, _y, OriginalY, 8, (uint)_animationMs, Easing.CubicInOut);
             return Task.Delay(_animationMs);
         }
 

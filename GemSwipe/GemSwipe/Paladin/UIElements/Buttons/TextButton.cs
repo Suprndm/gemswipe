@@ -30,7 +30,7 @@ namespace GemSwipe.Paladin.UIElements.Buttons
                 
                 textPaint.TextSize = Height;
                 textPaint.IsAntialias = true;
-                textPaint.Color = TextColor;
+                textPaint.Color = CreateColor(TextColor.Red, TextColor.Green, TextColor.Blue, TextColor.Alpha);
 
                 var textLenght = textPaint.MeasureText(Text);
 

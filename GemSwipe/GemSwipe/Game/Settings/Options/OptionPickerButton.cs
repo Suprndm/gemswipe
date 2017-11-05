@@ -7,21 +7,21 @@ using GemSwipe.Paladin.UIElements.Buttons;
 using SkiaSharp;
 using Xamarin.Forms;
 
-namespace GemSwipe.Game.Settings
+namespace GemSwipe.Game.Settings.Options
 {
-    public class SettingOptionButton : TextButton
+    public class OptionPickerButton : TextButton
     {
         private byte _textOpacity;
         private int _animationMs = 600;
 
-        public SettingOptionButton(float x, float y, float height,string text) : base(x, y, height, text)
+        public OptionPickerButton(float x, float y, float height, string text) : base(x, y, height, text)
         {
-            TextColor = new SKColor(255,255,255,0);
+            Up += () => LightText();
         }
 
         public Task LightText()
         {
-            this.Animate("LightText", p => _textOpacity = (byte)p, _textOpacity, 255, 8, (uint)_animationMs,
+            this.Animate("LightText", p => TextColor = new SKColor(255, 255, 255, (byte)p), 0, 255, 8, (uint)_animationMs,
                 Easing.CubicInOut);
             return Task.Delay(_animationMs);
         }
@@ -32,7 +32,7 @@ namespace GemSwipe.Game.Settings
                 Easing.CubicInOut);
             return Task.Delay(_animationMs);
         }
-        
+
 
     }
 }

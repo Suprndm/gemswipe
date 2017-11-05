@@ -66,6 +66,8 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Settings\Options\LanguageOptionsDisplayer.cs" />
+    <Compile Include="Game\Settings\Options\OptionPickerButton.cs" />
     <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
     <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
@@ -73,7 +75,6 @@
     <Compile Include="Game\Test\ToolboxTester.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />
     <Compile Include="Game\Settings\SettingDialog.cs" />
-    <Compile Include="Game\Settings\SettingOptionButton.cs" />
     <Compile Include="Game\Toolbox\ToolboxBar.cs" />
     <Compile Include="Game\Toolbox\ToolButton.cs" />
     <Compile Include="Game\Settings\SettingsEnum.cs" />
