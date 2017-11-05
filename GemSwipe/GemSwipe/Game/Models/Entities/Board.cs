@@ -418,7 +418,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            //DrawCells(Canvas);
+          //  DrawCells(Canvas);
         }
 
         public void UpdateDimensions()
@@ -449,7 +449,8 @@ namespace GemSwipe.Game.Models.Entities
             {
                 for (int j = 0; j < NbOfRows; j++)
                 {
-                    if (Cells[i, j].IsBlocked)
+                    if (false)
+                    //if (Cells[i, j].IsBlocked)
                     {
                         using (var paint = new SKPaint())
                         {
@@ -462,18 +463,54 @@ namespace GemSwipe.Game.Models.Entities
                                      _cellWidth / 2),
                                 Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
                                      _cellHeight / 2), _cellWidth / 2.5f, paint);
+
                         }
                     }
                     else
                     {
-                        using (var paint = new SKPaint())
+                        //using (var paint = new SKPaint())
+                        //{
+                        //    paint.IsAntialias = true;
+                        //    paint.Style = SKPaintStyle.Stroke;
+                        //    paint.StrokeWidth = 2;
+                        //    paint.Color = CreateColor(255, 255, 255, 150);
+                        //    Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
+                        //}
+
+                        var colors = new SKColor[] {
+                            CreateColor (0, 0,0, (byte)(30*_opacity)),
+                            CreateColor (0, 00, 0,0),
+                        };
+
+                        var glowSize = _cellWidth*0.5f;
+                        var cellX = X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
+                                         _cellWidth / 2);
+                        var cellY = Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
+                                         _cellHeight / 2);
+
+                        var shader = SKShader.CreateRadialGradient(new SKPoint(cellX, cellY), glowSize, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+                        var glowPaint = new SKPaint()
                         {
-                            paint.IsAntialias = true;
-                            paint.Style = SKPaintStyle.Stroke;
-                            paint.StrokeWidth = 2;
-                            paint.Color = CreateColor(255, 255, 255, 150);
-                            Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
-                        }
+                            Shader = shader,
+                            BlendMode = SKBlendMode.Luminosity,
+                            IsAntialias = true,
+                            FilterQuality =   SKFilterQuality.High
+                        };
+
+                        Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
+                                               _cellWidth / 2),
+                            Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
+                                 _cellHeight / 2), glowSize, glowPaint);
+
+
+                        //using (var secondPaint = new SKPaint())
+                        //{
+                        //    secondPaint.IsAntialias = true;
+                        //    secondPaint.Style = SKPaintStyle.Fill;
+                        //    secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
+                        //    Canvas.DrawCircle(cellX, cellY, 4, secondPaint);
+                        //}
+
                     }
 
                 }

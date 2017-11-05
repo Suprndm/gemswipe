@@ -29,7 +29,15 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
             var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), Width / 2, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
 
-            var paint = new SKPaint() { Shader = shader,  BlendMode =  SKBlendMode.Luminosity, IsAntialias = true};
+            var paint = new SKPaint()
+            {
+                Shader = shader,
+                BlendMode =  SKBlendMode.Luminosity,
+                IsAntialias = true,
+                FilterQuality = SKFilterQuality.High,
+                DeviceKerningEnabled = true,
+                
+            };
             Canvas.DrawCircle(X, Y, Width / 2, paint);
 
         }
