@@ -49,6 +49,7 @@ namespace GemSwipe.Game.Models.Entities
 
         public Board(string boardString) : base(0, 0, 0, 0)
         {
+            _randomizer = new Random();
             Setup(new BoardSetup(1, 0, 0, boardString));
         }
 
