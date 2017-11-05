@@ -22,9 +22,7 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            SettingsPanel settingsPanel = new SettingsPanel(Width, 0, 0.8f * Width, 0.9f * Height);
-            AddChild(settingsPanel);
-            settingsPanel.Show();
+           AddChild(new ShardTester());
         }
 
         public override void SetupLayers()

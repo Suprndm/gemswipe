@@ -70,7 +70,7 @@ namespace GemSwipe.Game.Models.Entities
 
         private void Shine()
         {
-            var effect = new GemPopEffect(Width / 2, Height / 2, Height, Width);
+            var effect = new GemPopEffect(Width / 2 + _floatingParticule.X, Height / 2 + _floatingParticule.Y, Height, Width);
             AddChild(effect);
             effect.Start();
         }

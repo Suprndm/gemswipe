@@ -27,6 +27,7 @@ namespace GemSwipe.Paladin.Sprites
             {
                 paint.Color = CreateColor(255, 255, 255);
                 paint.IsAntialias = false;
+                paint.BlendMode =SKBlendMode.Plus;
                 _spriteModel.Draw(Canvas, X, Y, Width, Height, paint: paint);
             }
         }

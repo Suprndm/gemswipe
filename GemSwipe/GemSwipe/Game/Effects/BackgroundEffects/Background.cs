@@ -15,7 +15,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _oceanDepth = new OceanDepth(X, Y, Height, Width);
             AddChild(_oceanDepth);
 
-            var blackHalo = new Halo(X - Width / 3, Y, Height, Width * 3f, CreateColor(150, 150, 150), Math.PI);
+            var blackHalo = new Halo(X - Width / 3, Y, Height, Width * 3f, CreateColor(100, 100, 100), Math.PI);
             var whiteHalo = new Halo(X - Width / 3, Y, Height, Width * 3f, CreateColor(25, 25, 25), 0);
             AddChild(blackHalo);
             AddChild(whiteHalo);

@@ -28,7 +28,7 @@ namespace GemSwipe.Game.Shards
             _particules = new List<FloatingParticule>();
             var randomizer = new Random();
             _sprites = new List<Sprite>();
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var sprite = new Sprite("shard", 0, 0, 128, 128);
                 AddChild(sprite);

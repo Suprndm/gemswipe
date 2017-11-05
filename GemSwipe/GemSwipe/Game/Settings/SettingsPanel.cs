@@ -156,6 +156,8 @@ namespace GemSwipe.Game.Settings
 
         private Task FocusButton(SettingButton settingButton)
         {
+            PlayerLifeService.Instance.GainLife();
+
             return settingButton.Focus(_topMargin + _y);
             //settingButton.Animate("FocusButton", p => settingButton.Y = (float)p, settingButton.Y, _topMargin, 8, (uint)_animationMs,
             //    Easing.CubicInOut);

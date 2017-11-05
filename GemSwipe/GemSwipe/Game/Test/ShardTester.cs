@@ -30,7 +30,7 @@ namespace GemSwipe.Game.Test
             AddChild(_countText);
             popButton.Activated += PopButton_Activated;
             var count = 0;
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 50; i++)
             {
                 Task.Run(() =>
                 {

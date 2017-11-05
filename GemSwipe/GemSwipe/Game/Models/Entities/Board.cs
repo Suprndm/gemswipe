@@ -417,7 +417,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            DrawCells(Canvas);
+            //DrawCells(Canvas);
         }
 
         public void UpdateDimensions()

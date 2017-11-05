@@ -39,7 +39,7 @@ namespace GemSwipe.Data
                 using (var stream = LoadStream(path))
                 using (var managed = new SKManagedStream(stream))
                 {
-                    return SKBitmap.Decode(managed);
+                    return SKBitmap.Decode(managed, new SKImageInfo(128,128,SKColorType.Rgba8888, SKAlphaType.Premul));
                 }
             });
         }
