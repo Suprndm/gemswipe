@@ -49,8 +49,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         public void ResetRandomCinematicProperties()
         {
-            _depthZ = _randomizer.Next(1, 7);
-            _size = (7 - _depthZ);
+            _depthZ = _randomizer.Next(1, 14);
+            _size = (14 - _depthZ);
 
             _phase = _randomizer.Next(400) / 100;
             _speed = _randomizer.Next(10) / 100f;
@@ -82,7 +82,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _velocityY += _accelerationY;
             _y += _velocityY;
 
-            _phase += _speed;
+            _phase += _speed*0.2f;
             _opacity = (float)(Math.Cos(_phase) + 1) / 2;
             _accelerationY = 0;
         }
@@ -90,6 +90,23 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         protected override void Draw()
         {
             Update();
+
+
+            var colors = new SKColor[] {
+                CreateColor (255, 255,255, (byte)(25*_opacity)),
+                CreateColor (255, 255, 255,0),
+            };
+
+            var glowSize = _size * _size;
+
+            var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), glowSize, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
+            var glowPaint = new SKPaint()
+            {
+                Shader = shader,
+            };
+
+            Canvas.DrawCircle(X, Y, glowSize, glowPaint);
+
 
             using (var secondPaint = new SKPaint())
             {

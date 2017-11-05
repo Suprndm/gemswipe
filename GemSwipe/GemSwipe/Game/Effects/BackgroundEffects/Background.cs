@@ -20,8 +20,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             AddChild(blackHalo);
             AddChild(whiteHalo);
 
-            //_stars = new Stars( X, Y, Height, Width);
-            //AddChild(_stars);
+            _stars = new Stars( X, Y, Height, Width);
+            AddChild(_stars);
             Task.Run(async () =>
            {
                while (true)
@@ -29,6 +29,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
                    await _oceanDepth.ScrollDown();
                }
            });
+
+            _stars.SetAcceleration(0.1f);
 
         }
 
@@ -45,20 +47,20 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         public void OnNavigateTo(PageType pageType)
         {
-            //switch (pageType)
-            //{
-            //    case PageType.Home:
-            //        _stars.SetAcceleration(1);
-            //        break;
-            //    case PageType.Map:
-            //        _stars.SetAcceleration(5);
-            //        break;
-            //    case PageType.Settings:
-            //        break;
-            //    case PageType.Game:
-            //        _stars.SetAcceleration(0.1f);
-            //        break;
-            //}
+            switch (pageType)
+            {
+                case PageType.Home:
+                    _stars.SetAcceleration(1);
+                    break;
+                case PageType.Map:
+                    _stars.SetAcceleration(5);
+                    break;
+                case PageType.Settings:
+                    break;
+                case PageType.Game:
+                    _stars.SetAcceleration(0.1f);
+                    break;
+            }
         }
 
         public void EndTransition()

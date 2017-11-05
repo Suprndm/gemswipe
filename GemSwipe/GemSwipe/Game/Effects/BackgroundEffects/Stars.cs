@@ -14,7 +14,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         {
             _stars= new List<Star>();
             _randomizer = new Random();
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 20; i++)
             {
                 var star = new Star( _randomizer, height, width);
                 _stars.Add(star);
