@@ -7,28 +7,35 @@ namespace GemSwipe.Paladin.Sprites
 {
     public class Sprite : SkiaView
     {
-        public SpriteModel _spriteModel;
-        public Sprite( string name, float x, float y, float width, float height) : base( x, y, height, width)
+        private SpriteModel _spriteModel;
+        private SKPaint _paint;
+
+        public Sprite(string spriteName, float x, float y, float width, float height, SKPaint paint = null) : base(x, y, height, width)
         {
-            var sheetPath = "Resources/Graphics/"+name+".png";
-            var  bitmap = ResourceLoader.LoadBitmapAsync(sheetPath).Result;
-            var info = bitmap?.Info ?? SKImageInfo.Empty;
-            if (bitmap == null || info.Width == 0 || info.Height == 0)
+            if (paint == null)
             {
-                throw new ArgumentException($"Unable to load sprite sheet bitmap '{sheetPath}'.");
+                _paint = new SKPaint();
+                _paint.Color = new SKColor(255, 255, 255);
+                _paint.IsAntialias = true;
+            }
+            else
+            {
+                _paint = paint;
             }
 
-            _spriteModel = new SpriteModel(bitmap, "toto", new SKSize(width, height));
+            var spriteData = SpriteLoader.Instance.GetData(spriteName);
+            _spriteModel = new SpriteModel(spriteData);
         }
 
         protected override void Draw()
         {
             using (var paint = new SKPaint())
             {
-                paint.Color = CreateColor(255, 255, 255);
-                paint.IsAntialias = false;
-                paint.BlendMode =SKBlendMode.Plus;
-                _spriteModel.Draw(Canvas, X, Y, Width, Height, paint: paint);
+                paint.Color = CreateColor(_paint.Color.Red, _paint.Color.Green, _paint.Color.Blue, _paint.Color.Alpha);
+                paint.IsAntialias = _paint.IsAntialias;
+                paint.BlendMode = _paint.BlendMode;
+
+                _spriteModel.Draw(Canvas, X, Y, Width, Height, paint: _paint);
             }
         }
     }

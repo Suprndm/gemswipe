@@ -4,22 +4,16 @@ namespace GemSwipe.Paladin.Sprites
 {
     public class SpriteModel
     {
-        private SKSurface _innerSurface;
-
-        public SpriteModel(SKBitmap bitmap, string name, SKSize size)
+        private SpriteData _data;
+        public SpriteModel(SpriteData spriteData)
         {
-            Bitmap = bitmap;
-            Name = name;
-            Size = size;
+            _data = spriteData;
             Visible = true;
-            SourceBounds = SKRect.Create(0, 0, size.Width, size.Height);
+            SourceBounds = SKRect.Create(0, 0, _data.Bounds.Width, _data.Bounds.Height);
+            Bitmap = _data.Bitmap;
         }
 
-        public string Name { get; private set; }
-
-        public SKRect SourceBounds { get; private set; }
-
-        public SKSize Size { get; private set; }
+        public SKRect SourceBounds { get; }
 
         public SKBitmap Bitmap { get; set; }
 
@@ -41,7 +35,6 @@ namespace GemSwipe.Paladin.Sprites
                 //}
             }
         }
-
     }
 }
 

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Game.Effects.BackgroundEffects;
+using GemSwipe.Game.Sprites;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Gestures;
 using GemSwipe.Paladin.Layers;
@@ -73,7 +75,14 @@ namespace GemSwipe.Game.Models.Entities
 
         public virtual async Task LoadResources()
         {
-           
+            await SpriteLoader.Instance.Initialize(
+                new List<string>
+                {
+                    SpriteConst.Shard,
+                }, 
+                "Resources/Graphics",
+                ScreenWidth,
+                ScreenHeight);
         }
 
         public virtual void SetupLayers()

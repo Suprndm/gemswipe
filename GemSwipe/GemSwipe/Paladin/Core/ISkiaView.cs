@@ -14,8 +14,8 @@ namespace GemSwipe.Paladin.Core
 
         float Scale { get; }
 
-        float Height { get; }
-        float Width { get; }
+        float Height { get; set; }
+        float Width { get; set; }
 
         decimal ZIndex { get; set; }
         decimal VisualTreeDepth { get; set; }

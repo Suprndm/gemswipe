@@ -52,7 +52,7 @@ namespace GemSwipe.Paladin.Core
                 if (Parent != null) return _width * Scale;
                 return _width;
             }
-            protected set => _width = value;
+            set => _width = value;
         }
 
         protected float _height;
@@ -63,7 +63,7 @@ namespace GemSwipe.Paladin.Core
                 if (Parent != null) return _height * Scale;
                 return _height;
             }
-            protected set => _height = value;
+            set => _height = value;
         }
 
         public bool IsEnabled

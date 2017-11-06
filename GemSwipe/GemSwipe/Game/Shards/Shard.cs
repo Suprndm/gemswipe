@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GemSwipe.Game.Sprites;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Sprites;
 using GemSwipe.Paladin.VisualEffects;
@@ -22,6 +23,7 @@ namespace GemSwipe.Game.Shards
         private bool _dying;
         private Sprite _sprite;
         private IList<Sprite> _sprites;
+
         public Shard(float x, float y, float width, float height) : base(x, y, width, height)
         {
             _color = new SKColor(255, 200, 36);
@@ -30,7 +32,7 @@ namespace GemSwipe.Game.Shards
             _sprites = new List<Sprite>();
             for (int i = 0; i < 5; i++)
             {
-                var sprite = new Sprite("shard", 0, 0, 128, 128);
+                var sprite = new Sprite(SpriteConst.Shard, 0, 0, 128, 128, new SKPaint { Color = CreateColor(255, 255, 255), BlendMode = SKBlendMode.Plus });
                 AddChild(sprite);
 
                 _sprites.Add(sprite);
@@ -64,10 +66,7 @@ namespace GemSwipe.Game.Shards
                 await Task.Delay(500);
                 Dispose();
             }
-
         }
-
-
 
         protected override void Draw()
         {
@@ -76,28 +75,13 @@ namespace GemSwipe.Game.Shards
                 var particule = _particules[i];
                 particule.Update();
 
-
                 var sprite = _sprites[i];
-
 
                 sprite.X = particule.X;
                 sprite.Y = particule.Y;
 
-
-                //var colors = new SKColor[] {
-                //    CreateColor (_color.Red, _color.Green, _color.Blue,_color.Alpha),
-                //    CreateColor (_color.Red, _color.Green, _color.Blue,0),
-                //};
-
-                //using (var paint = new SKPaint())
-                //{
-                //    var shader = SKShader.CreateRadialGradient(new SKPoint(X + particule.X, Y + particule.Y), Width / 2, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
-                //    paint.BlendMode = SKBlendMode.Plus;
-                //    paint.Shader = shader;
-                //    paint.IsAntialias = false;
-                //    paint.Color = CreateColor(_color.Red, _color.Green, _color.Blue, _color.Alpha);
-                //    Canvas.DrawCircle(X + particule.X, Y + particule.Y, _radius, paint);
-                //}
+                sprite.Height = _radius * 2;
+                sprite.Width = _radius * 2;
             }
         }
 

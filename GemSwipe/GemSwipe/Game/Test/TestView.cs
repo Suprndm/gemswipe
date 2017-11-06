@@ -35,13 +35,6 @@ namespace GemSwipe.Game.Test
             _fpsText.Text = fps.ToString();
         }
 
-        public override Task LoadResources()
-        {
-            // do nothing
-            return Task.Delay(0);
-        }
-
-
         protected override void Draw()
         {
 
