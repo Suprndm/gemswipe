@@ -9,7 +9,7 @@ using SkiaSharp;
 
 namespace GemSwipe.Data
 {
-    public static  class ResourceLoader
+    public static class ResourceLoader
     {
         private static readonly Assembly assembly;
         private static readonly string[] resources;
@@ -36,10 +36,16 @@ namespace GemSwipe.Data
         {
             return Task.Run(() =>
             {
+                SKImageInfo info;
+                using (var stream = LoadStream(path))
+                {
+                    info = SKBitmap.DecodeBounds(stream);
+                }
+
                 using (var stream = LoadStream(path))
                 using (var managed = new SKManagedStream(stream))
                 {
-                    return SKBitmap.Decode(managed, new SKImageInfo(128,128,SKColorType.Rgba8888, SKAlphaType.Premul));
+                    return SKBitmap.Decode(managed, new SKImageInfo(info.Width, info.Height, SKColorType.Rgba8888, SKAlphaType.Premul));
                 }
             });
         }
