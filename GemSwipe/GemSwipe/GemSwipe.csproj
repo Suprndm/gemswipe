@@ -66,6 +66,18 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\HelpOptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\OptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\RestartGameOptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingOptions\SoundOptionButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingsBar.cs" />
+    <Compile Include="Game\SettingsBar\SettingsBarButton.cs" />
+    <Compile Include="Game\SettingsBar\SettingsPopup\ExitGamePopup.cs" />
+    <Compile Include="Game\SettingsBar\SettingsPopup\NoLifeLeftPopup.cs" />
+    <Compile Include="Game\SettingsBar\SettingsPopup\RestartGamePopup.cs" />
     <Compile Include="Game\Settings\Options\LanguageOptionsDisplayer.cs" />
     <Compile Include="Game\Settings\Options\OptionPickerButton.cs" />
     <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
@@ -90,6 +102,7 @@
     <Compile Include="Paladin\Sprites\SpriteData.cs" />
     <Compile Include="Paladin\Sprites\SpriteInfo.cs" />
     <Compile Include="Paladin\Sprites\SpriteLoader.cs" />
+    <Compile Include="Paladin\UIElements\Buttons\RoundButton.cs" />
     <Compile Include="Paladin\UIElements\Popups\DialogPopup.cs" />
     <Compile Include="Paladin\UIElements\Popups\IDialogPopup.cs" />
     <Compile Include="Paladin\UIElements\Popups\Popup.cs" />
