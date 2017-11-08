@@ -47,15 +47,20 @@ namespace GemSwipe.Paladin.Navigation
 
         public async Task GoTo(PageType nextPageType, object parameter = null)
         {
-            var nextPage = _pages[nextPageType];
+                var nextPage = _pages[nextPageType];
 
-            NavigationStarted?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
+                NavigationStarted?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
 
-            await _currentPage.Hide();
+                await _currentPage.Hide();
 
-            _currentPage = nextPage;
-            await nextPage.Show(parameter);
-            NavigationEnded?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
+                _currentPage = nextPage;
+                await nextPage.Show(parameter);
+                NavigationEnded?.Invoke(new NavigationEventArgs(_currentPage.Type, nextPageType));
+        }
+
+        public IPage GetCurrentPage()
+        {
+            return _currentPage;
         }
     }
 }

@@ -3,30 +3,23 @@ using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Settings;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Navigation;
+using GemSwipe.Game.SettingsBar;
 
 namespace GemSwipe.Paladin.Layers
 {
     public class InterfaceLayer : SkiaView
     {
-        private readonly TopBar _topBar;
-        private readonly SettingsPanel _settingsPanel;
+        private readonly SettingsBar _settingsBar;
         private PlayerLifeDisplayer _playerLifeDisplayer;
 
         public InterfaceLayer()
         {
-            _topBar = new TopBar();
-            AddChild(_topBar);
+            var settingsBarWidth = Width / 8;
+            var settingsBarHeight = Height / 3;
+            var settingsTopMargin = Height / 10;
 
-            _settingsPanel = new SettingsPanel(Width, 0, 0.8f*Width, 0.9f*Height);
-            AddChild(_settingsPanel);
-
-            _topBar.SettingsButtonPressed += () =>
-            {
-                if (_settingsPanel.IsShowed)
-                    _settingsPanel.Hide();
-                else
-                    _settingsPanel.Show();
-            };
+            _settingsBar = new SettingsBar(Width - settingsBarWidth, settingsTopMargin, settingsBarWidth, settingsBarHeight);
+            AddChild(_settingsBar);
 
             Navigator.NavigationEnded += (arg) =>
             {
@@ -36,8 +29,31 @@ namespace GemSwipe.Paladin.Layers
                     Task.Factory.StartNew(() =>
                     {
                         Task.Delay(1000);
-                        _topBar.Show();
+                        _settingsBar.Show();
                     });
+                }
+            };
+
+            Navigator.NavigationStarted += (arg) =>
+            {
+                _settingsBar.Close();
+            };
+
+            Navigator.NavigationEnded += (arg) =>
+            {
+                if (arg.To == PageType.Game)
+                {
+                    _settingsBar.SetInGameConfig();
+                    _settingsBar.Show();
+                }
+                else if (arg.To == PageType.Home)
+                {
+                    _settingsBar.Hide();
+                }
+                else if (arg.To == PageType.Map)
+                {
+                    _settingsBar.SetDefaultConfig();
+                    _settingsBar.Show();
                 }
             };
         }

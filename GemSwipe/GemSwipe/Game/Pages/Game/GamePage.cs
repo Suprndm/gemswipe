@@ -29,6 +29,15 @@ namespace GemSwipe.Game.Pages.Game
         private bool _isBusy;
         private LevelDataRepository _levelDataRepository;
         private int _currentLevelId;
+
+        public int CurrentLevel
+        {
+            get
+            {
+                return _currentLevelId;
+            }
+        }
+
         private LevelData _levelData;
         private EventBar _eventBar;
         private Random _randomizer;
@@ -43,6 +52,8 @@ namespace GemSwipe.Game.Pages.Game
 
         public GamePage()
         {
+            Type = PageType.Game;
+
             _levelDataRepository = new LevelDataRepository();
             _randomizer = new Random();
 
@@ -68,6 +79,8 @@ namespace GemSwipe.Game.Pages.Game
 
             try
             {
+                PlayerLifeService.Instance.LoseLife();
+
                 LevelData levelData = _levelDataRepository.Get(levelId);
                 _objectivesView = new ObjectivesView(levelData.Objectives, true, Width / 2, 0.1f * Height, 0.1f * Height);
                 AddChild(_objectivesView);

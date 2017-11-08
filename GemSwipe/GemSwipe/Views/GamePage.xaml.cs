@@ -75,8 +75,6 @@ namespace GemSwipe.Views
             string myinput = await InputDialog.InputBox(this.Navigation);
             var playerData = PlayerDataService.Instance.GetData();
             playerData.Nickname = myinput;
-
-            //PlayerDataService.Instance.Update(playerData);
             PlayerDataService.Instance.SaveChanges();
         }
 

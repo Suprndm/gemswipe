@@ -73,7 +73,6 @@ namespace GemSwipe.Game.Pages.Map
 
                     _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
                     _playerLifeDisplayer.SteerToTarget();
-                    PlayerLifeService.Instance.LoseLife();
                 };
 
             }
