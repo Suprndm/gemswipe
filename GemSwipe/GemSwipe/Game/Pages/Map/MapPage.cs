@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Paladin.Navigation.Pages;
+using GemSwipe.Paladin.Navigation;
 
 namespace GemSwipe.Game.Pages.Map
 {
@@ -11,6 +12,8 @@ namespace GemSwipe.Game.Pages.Map
 
         public MapPage()
         {
+            Type = PageType.Map;
+
             _map = new Map(0, 0, Height, Width);
             AddChild(_map);
 

@@ -6,8 +6,10 @@ namespace GemSwipe.Game.Pages.Home
 {
     public class HomePage: PageBase
     {
-        public HomePage() : base()
+        public HomePage()
         {
+            Type = PageType.Home;
+
             var tapToPlay = new TapToPlay();
             AddChild(tapToPlay);
             tapToPlay.Down += OnTapped;
