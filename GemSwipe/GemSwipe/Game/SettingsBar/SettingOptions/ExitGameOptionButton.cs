@@ -8,7 +8,7 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
     {
         public ExitGameOptionButton(float x, float y, float radius) : base(x, y, radius)
         {
-
+            SettingName = "ExitGame";
         }
 
         public override void OnActivated()

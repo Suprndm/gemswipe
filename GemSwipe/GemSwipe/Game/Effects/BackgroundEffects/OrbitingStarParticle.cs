@@ -47,6 +47,36 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         }
 
+        public async Task SlowPulse()
+        {
+
+            //_color.ToHsl();
+            //SKColor.FromHsl()
+            //    hsla(29, 93 %, 45 %, 1)
+            //rgba(244, 160, 16, 1)
+
+            float baseSize = _size;
+            SKColor baseColor = _color;
+            float hHsl;
+            float sHsl;
+            float lHslBase;
+            float lHslCurrent;
+            float targetLuminosity = 40;
+
+            baseColor.ToHsl(out hHsl, out sHsl, out lHslCurrent);
+            lHslBase = lHslCurrent;
+            this.Animate("LightColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, targetLuminosity, 8, (uint)1000, Easing.SinInOut);
+            this.Animate("Grow", p => _size = (float)p, _size, 1.4f * _size, 8, (uint)1000, Easing.SinInOut);
+
+            await Task.Delay(1000);
+
+            _color.ToHsl(out hHsl, out sHsl, out lHslCurrent);
+            this.Animate("FadeColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, lHslBase, 8, (uint)1000, Easing.SinInOut);
+            this.Animate("Recede", p => _size = (float)p, _size, baseSize, 8, (uint)1000, Easing.SinInOut);
+
+            Task.Delay(2000);
+        }
+
         public void SetTarget(float x, float y)
         {
             _targetX = x;
@@ -106,7 +136,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             {
                 secondPaint.IsAntialias = true;
                 secondPaint.Style = SKPaintStyle.Fill;
-                secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
+                //secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
+                secondPaint.Color = _color;
                 Canvas.DrawCircle(X, Y, _size, secondPaint);
             }
         }

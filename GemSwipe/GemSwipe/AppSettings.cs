@@ -12,5 +12,6 @@ namespace GemSwipe
         public static bool LogEnabled => true;
         public static string PlayerPersonalDataFileName => "PlayerData37.txt";
         public static string PlayerLifePersonalDataFileName => "PlayerLifeData13.txt";
+        public static int DefaultAnimationMs => 600;
     }
 }

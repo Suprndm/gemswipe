@@ -5,11 +5,16 @@ using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.VisualEffects;
 using SkiaSharp;
 using Xamarin.Forms;
+using GemSwipe.Game.Models.BoardModel;
+using GemSwipe.Game.Models.BoardModel.Gems;
+using GemSwipe.Game.Shards;
 
 namespace GemSwipe.Game.Models.Entities
 {
     public class Gem : SkiaView
     {
+        public GemType Type { get; set; }
+
         public int BoardX { get; private set; }
         public int BoardY { get; private set; }
         public int Size { get; private set; }
@@ -25,6 +30,14 @@ namespace GemSwipe.Game.Models.Entities
         private int _size;
         private bool _isDying;
         private readonly float _radius;
+        public float Radius
+        {
+            get
+            {
+                return _radius;
+            }
+        }
+
         private const int MovementAnimationMs = 600;
         private Random _randomizer;
         private int _cycle;
@@ -32,6 +45,13 @@ namespace GemSwipe.Game.Models.Entities
         private float _opacity;
         private float _angle;
         private FloatingParticule _floatingParticule;
+        public FloatingParticule FloatingParticule
+        {
+            get
+            {
+                return _floatingParticule;
+            }
+        }
 
         private SKColor _finalColor;
 
@@ -39,12 +59,14 @@ namespace GemSwipe.Game.Models.Entities
 
         public Gem(int boardX, int boardY, int size) : base(0, 0, 0, 0)
         {
+            Type = GemType.Base;
             Size = size;
             BoardX = boardX;
             BoardY = boardY;
         }
         public Gem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(x, y, radius * 2, radius * 2)
         {
+            Type = GemType.Base;
             _randomizer = randomizer;
             _cycle = 0;
             Size = size;
@@ -63,12 +85,61 @@ namespace GemSwipe.Game.Models.Entities
 
         }
 
+        public bool CollideInto(Gem targetGem, SwipeResult swipeResult)
+        {
+            switch (Type)
+            {
+                case GemType.Blackhole:
+                    switch (targetGem.Type)
+                    {
+                        case GemType.Blackhole:
+                            Die();
+                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+                            HitBlackholeGem((BlackholeGem)targetGem);
+                            swipeResult.DeadGems.Add(this);
+                            return true;
+                        default:
+                            return false;
+                    }
+
+                default:
+                    switch (targetGem.Type)
+                    {
+                        case GemType.Blackhole:
+                            Die();
+                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+                            HitBlackholeGem((BlackholeGem)targetGem);
+                            swipeResult.DeadGems.Add(this);
+                            return true;
+
+                        default:
+                            if (targetGem.CanMerge() && CanMerge() && targetGem.Size == Size)
+                            {
+                                // Its a Fuse
+                                targetGem.LevelUp();
+                                Die();
+                                Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+
+                                swipeResult.DeadGems.Add(this);
+                                swipeResult.FusedGems.Add(targetGem);
+                                return true;
+                            }
+                            else return false;
+                    }
+            }
+        }
+
+        public void HitBlackholeGem(BlackholeGem blackhole)
+        {
+            blackhole.Swallow();
+        }
+
         public void LevelUp()
         {
             _willLevelUp = true;
         }
 
-        private void Shine()
+        protected virtual void Shine()
         {
             var effect = new GemPopEffect(Width / 2 + _floatingParticule.X, Height / 2 + _floatingParticule.Y, Height, Width);
             AddChild(effect);

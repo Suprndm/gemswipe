@@ -9,6 +9,7 @@ using GemSwipe.Game.Pages.Game;
 using GemSwipe.Game.Settings;
 using GemSwipe.Paladin.UIElements;
 using Newtonsoft.Json;
+using GemSwipe.Game.Models.BoardModel.Gems;
 
 namespace GemSwipe.Game.Test
 {
@@ -22,7 +23,7 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-           AddChild(new ShardTester());
+            AddChild(new BlackholeGem(1, 1, 1, Width / 2-100/2, Height / 2-100/2, 100, new System.Random()));
         }
 
         public override void SetupLayers()

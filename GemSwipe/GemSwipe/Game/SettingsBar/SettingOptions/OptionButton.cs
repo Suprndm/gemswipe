@@ -9,6 +9,8 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
 {
     public class OptionButton : RoundButton
     {
+        public string SettingName {get;set;}
+
         public OptionButton(float x, float y, float radius) : base(x, y, radius)
         {
 

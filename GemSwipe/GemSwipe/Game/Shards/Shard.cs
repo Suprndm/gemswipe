@@ -45,6 +45,27 @@ namespace GemSwipe.Game.Shards
             DeclareTappable(this);
         }
 
+        public Shard(float x, float y, float width, float height, SKColor color) : base(x, y, width, height)
+        {
+            _color = color;
+            _particules = new List<FloatingParticule>();
+            var randomizer = new Random();
+            _sprites = new List<Sprite>();
+            for (int i = 0; i < 5; i++)
+            {
+                var sprite = new Sprite(SpriteConst.Shard, 0, 0, 128, 128, new SKPaint { Color = _color, BlendMode = SKBlendMode.Plus });
+                AddChild(sprite);
+
+                _sprites.Add(sprite);
+                var particule = new FloatingParticule(0, 0, width / 4, 0.1f, randomizer);
+                _particules.Add(particule);
+            }
+
+            Initialize();
+
+            DeclareTappable(this);
+        }
+
         public void Initialize()
         {
             this.Animate("shardRadiusIn", p => _radius = (float)p, _radius, Width / 2, 4, 500, Easing.CubicOut);

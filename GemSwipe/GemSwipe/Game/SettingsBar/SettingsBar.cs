@@ -14,7 +14,7 @@ namespace GemSwipe.Game.SettingsBar
     public class SettingsBar : SkiaView
     {
         private IList<OptionButton> _listOfSettingsButton;
-        private readonly int _numberOfOptions = 6;
+        private readonly int _numberOfButtons = 6;
         private SettingsBarButton _settingsBarButton;
         private OptionsContainer _optionsContainer;
         private bool _switchOn = false;
@@ -23,8 +23,8 @@ namespace GemSwipe.Game.SettingsBar
         {
             Hide();
             float buttonX = width/2;
-            float buttonMargin = Height/((_numberOfOptions+1+1)*(_numberOfOptions+1));
-            float buttonRadius = (Height /( _numberOfOptions+1))/2;
+            float buttonMargin = Height/((_numberOfButtons + 1)*(_numberOfButtons + 1));
+            float buttonRadius = (Height /(_numberOfButtons + 1))/2;
             float topMargin = buttonMargin;
 
             float initY = topMargin + buttonRadius;
@@ -43,7 +43,7 @@ namespace GemSwipe.Game.SettingsBar
                 new ExitGameOptionButton(buttonX,initY+5*incrementY,buttonRadius),
             };
 
-            _optionsContainer = new OptionsContainer(2 * width, 0,0,0);
+            _optionsContainer = new OptionsContainer(width, 0,0,0);
             AddChild(_optionsContainer);
 
             foreach (OptionButton optionButton in _listOfSettingsButton)
@@ -56,13 +56,14 @@ namespace GemSwipe.Game.SettingsBar
 
         protected override void Draw()
         {
+            DrawHitbox();
         }
 
         public void SetDefaultConfig()
         {
-            var buttonToHide = _listOfSettingsButton.FirstOrDefault(p => _listOfSettingsButton.IndexOf(p) == 3);
+            var buttonToHide = _listOfSettingsButton.FirstOrDefault(p => p.SettingName == "RestartGame");
             buttonToHide.Hide();
-            var buttonToHide2 = _listOfSettingsButton.FirstOrDefault(p => _listOfSettingsButton.IndexOf(p) == 4);
+            var buttonToHide2 = _listOfSettingsButton.FirstOrDefault(p => p.SettingName == "ExitGame");
             buttonToHide2.Hide();
         }
 
@@ -110,7 +111,8 @@ namespace GemSwipe.Game.SettingsBar
         public void Close()
         {
             _switchOn = false;
-            _optionsContainer.MoveToX(2 * Width);
+            _optionsContainer.MoveToX(Width);
         }
+
     }
 }

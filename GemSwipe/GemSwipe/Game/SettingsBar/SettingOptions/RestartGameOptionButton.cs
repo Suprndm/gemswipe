@@ -11,7 +11,7 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
     {
         public RestartGameOptionButton(float x, float y, float radius) : base(x, y, radius)
         {
-
+            SettingName = "RestartGame";
         }
 
         public override void OnActivated()

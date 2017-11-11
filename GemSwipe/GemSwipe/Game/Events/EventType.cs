@@ -11,7 +11,7 @@ namespace GemSwipe.Game.Events
         Empty = 0,
         Energy = 1,
         Explosion = 2,
-        BlackHole = 3,
+        Blackhole = 3,
         WhiteHole = 4,
         TimeWarp = 5,
         Tempest = 6,

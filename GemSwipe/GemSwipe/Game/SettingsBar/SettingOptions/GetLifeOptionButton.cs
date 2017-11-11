@@ -11,7 +11,7 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
     {
         public GetLifeOptionButton(float x, float y, float radius): base(x,y,radius)
         {
-
+            SettingName = "GetLife";
         }
 
         public override void OnActivated()

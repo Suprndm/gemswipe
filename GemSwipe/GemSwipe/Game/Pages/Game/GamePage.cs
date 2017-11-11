@@ -87,7 +87,7 @@ namespace GemSwipe.Game.Pages.Game
 
                 _levelData = levelData;
                 var boardMarginTop = Height * 0.2f;
-                _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Width);
+                _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Height);
 
                 _board.Swippe += Swipe;
 

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GemSwipe.Paladin.Core;
 using SkiaSharp;
+using GemSwipe.Game.Models.BoardModel;
+using GemSwipe.Game.Models.BoardModel.Gems;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -31,7 +33,7 @@ namespace GemSwipe.Game.Models.Entities
         private float _maxBoardHeight;
 
 
-        public Board(BoardSetup boardSetup, float x, float y, float height, float width) : base(x, y, height, width)
+        public Board(BoardSetup boardSetup, float x, float y, float width, float height) : base(x, y, height, width)
         {
             _maxBoardWidth = width;
             _maxBoardHeight = width;
@@ -80,12 +82,25 @@ namespace GemSwipe.Game.Models.Entities
 
             var cell = cells[_randomizer.Next(cells.Count)];
 
-            var gem = CreateGem(cell.X, cell.Y, size);
+            var gem = CreateGem(cell.X, cell.Y, size, GemType.Base);
             cell.AttachGem(gem);
 
             await gem.Pop();
 
             return false;
+        }
+
+        private GemType ParseGemType(string rawData)
+        {
+            switch (rawData)
+            {
+                default:
+                    return GemType.Base;
+                case "9":
+                    return GemType.Blocking;
+                case "BH":
+                    return GemType.Blackhole;
+            }
         }
 
         private void Setup(BoardSetup boardSetup)
@@ -98,27 +113,48 @@ namespace GemSwipe.Game.Models.Entities
             var nbOfRows = rows.Length;
             var nbOfColumns = rows[0].Split(' ').Length;
             var boardCells = new List<Cell>();
+
             for (int j = 0; j < nbOfRows; j++)
             {
-                var cells = rows[j].Split(' ');
+                var rowCells = rows[j].Split(' ');
                 for (int i = 0; i < nbOfColumns; i++)
                 {
-                    var size = int.Parse(cells[i]);
 
-                    bool cellIsBlocked = false;
-                    if (size == 9)
-                    {
-                        cellIsBlocked = true;
-                        size = 0;
-                    }
+                    //var size = int.Parse(rowCells[i]);
+                    int size = 0;
+                    bool isSize = int.TryParse(rowCells[i], out size);
 
-                    var newCell = new Cell(i, j, cellIsBlocked);
+                    GemType gemType = ParseGemType(rowCells[i]);
 
+
+                    //bool cellIsBlocked = false;
+                    //if (size == 9)
+                    //{
+                    //    cellIsBlocked = true;
+                    //    size = 0;
+                    //}
+
+                    //var newCell = new Cell(i, j, cellIsBlocked);
+
+                    Cell newCell = new Cell(i, j, gemType);
                     boardCells.Add(newCell);
-                    if (size > 0)
-                    {
 
-                        newCell.AttachGem(CreateGem(i, j, size));
+                    //if (size > 0)
+                    //{
+
+                    //    newCell.AttachGem(CreateGem(i, j, size));
+                    //}
+
+                    if (gemType != GemType.Blocking)
+                    {
+                        if (gemType == GemType.Blackhole)
+                        {
+                            newCell.AttachGem(CreateGem(i, j, 1, gemType));
+                        }
+                        else if (size > 0)
+                        {
+                            newCell.AttachGem(CreateGem(i, j, size, gemType));
+                        }
                     }
                 }
             }
@@ -153,19 +189,41 @@ namespace GemSwipe.Game.Models.Entities
             PopGems();
         }
 
-        private Gem CreateGem(int boardX, int boardY, int size)
+        private Gem CreateGem(int boardX, int boardY, int size, GemType gemType)
         {
-            var gemRadius = GetGemSize();
+            if (size == 0)
+            {
+                return null;
+            }
+            else
+            {
+                var gemRadius = GetGemSize();
 
-            var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
-            var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+                var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
+                var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+                Gem gem;
 
-            var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-            Gems.Add(gem);
+                switch (gemType)
+                {
+                    default:
+                        gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                        break;
+                    case GemType.Blackhole:
+                        gem = new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                        break;
+                }
+                Gems.Add(gem);
+                AddChild(gem);
+                return gem;
 
-            AddChild(gem);
+                //    var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
 
-            return gem;
+                //Gems.Add(gem);
+
+                //AddChild(gem);
+
+                //return gem;
+            }
         }
 
         private async Task PopGems()
@@ -213,23 +271,27 @@ namespace GemSwipe.Game.Models.Entities
                                 gem.Move(cell.X, cell.Y);
                             }
 
-  
+
                             gemPositionned++;
                             break;
                         }
 
                         var alreadyAttachedGem = cell.GetAttachedGem();
-                        if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
+                        if (gem.CollideInto(alreadyAttachedGem, swipeResult))
                         {
-                            // Its a Fuse
-                            alreadyAttachedGem.LevelUp();
-                            gem.Die();
-                            gem.Move(alreadyAttachedGem.TargetBoardX, alreadyAttachedGem.TargetBoardY);
-
-                            swipeResult.DeadGems.Add(gem);
-                            swipeResult.FusedGems.Add(alreadyAttachedGem);
                             break;
                         }
+                        //if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
+                        //{
+                        //    // Its a Fuse
+                        //    alreadyAttachedGem.LevelUp();
+                        //    gem.Die();
+                        //    gem.Move(alreadyAttachedGem.TargetBoardX, alreadyAttachedGem.TargetBoardY);
+
+                        //    swipeResult.DeadGems.Add(gem);
+                        //    swipeResult.FusedGems.Add(alreadyAttachedGem);
+                        //    break;
+                        //}
                     }
                 }
             }
@@ -238,8 +300,8 @@ namespace GemSwipe.Game.Models.Entities
             {
                 gem.Resolve();
             }
-            var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
 
+            var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
             foreach (var deadGem in deadGems)
             {
                 Gems.Remove(deadGem);
@@ -253,7 +315,6 @@ namespace GemSwipe.Game.Models.Entities
             return swipeResult;
         }
 
-  
 
         public IList<Cell> GetEmptyCells()
         {
@@ -398,7 +459,6 @@ namespace GemSwipe.Game.Models.Entities
             foreach (var movedGem in swipeResult.MovedGems)
             {
                 var gemView = movedGem;
-                ;
                 gemView.MoveTo(ToGemViewX(movedGem.BoardX) + (_cellWidth - movedGem.Width) / 2, ToGemViewY(movedGem.BoardY) + (_cellWidth - movedGem.Width) / 2);
             }
 
@@ -418,7 +478,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-          //  DrawCells(Canvas);
+              //DrawCells(Canvas);
         }
 
         public void UpdateDimensions()
@@ -468,21 +528,21 @@ namespace GemSwipe.Game.Models.Entities
                     }
                     else
                     {
-                        //using (var paint = new SKPaint())
-                        //{
-                        //    paint.IsAntialias = true;
-                        //    paint.Style = SKPaintStyle.Stroke;
-                        //    paint.StrokeWidth = 2;
-                        //    paint.Color = CreateColor(255, 255, 255, 150);
-                        //    Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
-                        //}
+                        using (var paint = new SKPaint())
+                        {
+                            paint.IsAntialias = true;
+                            paint.Style = SKPaintStyle.Stroke;
+                            paint.StrokeWidth = 2;
+                            paint.Color = CreateColor(255, 255, 255, 150);
+                            Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin + _cellWidth / 2), Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin + _cellHeight / 2), _cellWidth / 2.5f, paint);
+                        }
 
                         var colors = new SKColor[] {
                             CreateColor (0, 0,0, (byte)(30*_opacity)),
                             CreateColor (0, 00, 0,0),
                         };
 
-                        var glowSize = _cellWidth*0.5f;
+                        var glowSize = _cellWidth * 0.5f;
                         var cellX = X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
                                          _cellWidth / 2);
                         var cellY = Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
@@ -494,7 +554,7 @@ namespace GemSwipe.Game.Models.Entities
                             Shader = shader,
                             BlendMode = SKBlendMode.Luminosity,
                             IsAntialias = true,
-                            FilterQuality =   SKFilterQuality.High
+                            FilterQuality = SKFilterQuality.High
                         };
 
                         Canvas.DrawCircle(X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +

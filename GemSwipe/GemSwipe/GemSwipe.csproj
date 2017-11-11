@@ -66,6 +66,9 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Models\BoardModel\CellModifier.cs" />
+    <Compile Include="Game\Models\BoardModel\Gems\BlackholeGem.cs" />
+    <Compile Include="Game\Models\BoardModel\GemType.cs" />
     <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />

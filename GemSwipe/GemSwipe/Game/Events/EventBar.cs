@@ -110,7 +110,7 @@ namespace GemSwipe.Game.Events
                 case EventType.Explosion:
                     newEvent = new EmptyEvent(posX, posY, _eventWidth, _eventWidth);
                     break;
-                case EventType.BlackHole:
+                case EventType.Blackhole:
                     newEvent = new EmptyEvent(posX, posY, _eventWidth, _eventWidth);
                     break;
                 case EventType.WhiteHole:

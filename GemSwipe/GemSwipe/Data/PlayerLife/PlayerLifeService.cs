@@ -9,15 +9,18 @@ using Newtonsoft.Json;
 
 namespace GemSwipe.Data.PlayerLife
 {
-    public class PlayerLifeService 
+    public class PlayerLifeService
     {
 
         private string _fileName = AppSettings.PlayerLifePersonalDataFileName;
         private PlayerLife _playerLife;
         private static PlayerLifeService _instance;
 
+        private IList<PlayerLifeDisplayer> _listOfSuscribedDisplayers;
+
         private PlayerLifeService()
         {
+            _listOfSuscribedDisplayers = new List<PlayerLifeDisplayer>();
             if (DependencyService.Get<IFileHandler>().CheckExistenceOf(_fileName))
             {
                 Load();
@@ -40,6 +43,11 @@ namespace GemSwipe.Data.PlayerLife
             }
         }
 
+        public void SubscribeDisplayer(PlayerLifeDisplayer lifeDisplayer)
+        {
+            _listOfSuscribedDisplayers.Add(lifeDisplayer);
+        }
+
         public int GetLifeCount()
         {
             return _playerLife.Count;
@@ -54,12 +62,22 @@ namespace GemSwipe.Data.PlayerLife
         {
             _playerLife.Increment();
             SaveChanges();
+
+            foreach (PlayerLifeDisplayer lifeDisplayer in _listOfSuscribedDisplayers)
+            {
+                lifeDisplayer.UpdateLifeCount();
+            }
         }
 
         public void LoseLife()
         {
             _playerLife.Decrement();
             SaveChanges();
+
+            foreach (PlayerLifeDisplayer lifeDisplayer in _listOfSuscribedDisplayers)
+            {
+                lifeDisplayer.UpdateLifeCount();
+            }
         }
 
         public PlayerLife GetData()
@@ -103,7 +121,7 @@ namespace GemSwipe.Data.PlayerLife
             //_playerLife.PlayerProgress = playerData.PlayerProgress;
         }
 
-        
+
 
     }
 }

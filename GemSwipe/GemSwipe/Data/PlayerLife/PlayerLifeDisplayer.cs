@@ -22,6 +22,7 @@ namespace GemSwipe.Data.PlayerLife
 
         public PlayerLifeDisplayer(float x, float y, float height, float width) : base(x, y, height, width)
         {
+            PlayerLifeService.Instance.SubscribeDisplayer(this);
         }
 
         public void UpdateLifeCount()
