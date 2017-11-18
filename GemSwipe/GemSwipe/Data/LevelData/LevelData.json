@@ -1,15 +1,16 @@
 ﻿[
   {
     "Id": 1,
-    "BoardSetupString": "1 1 BH 0-0 1 0 1-0 1 0 1-1 1 1 0",
+    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 4,
     "Columns": 4,
     "Objectives": {
+      "3": 3,
       "4": 1
     },
-    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
   },
   {
     "Id": 2,
@@ -88,16 +89,15 @@
   },
   {
     "Id": 8,
-    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "BoardSetupString": "TP2 0 0 1-0 0 0 0-2 0 TP2 0-0 0 0 0",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 4,
     "Columns": 4,
     "Objectives": {
-      "3": 3,
       "4": 1
     },
-    "Events": [ 0, 1, 0, 6, 1, 0, 6, 1, 1, 0, 0 ]
+    "Events": [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
   },
   {
     "Id": 9,

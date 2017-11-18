@@ -83,7 +83,7 @@ namespace GemSwipe.Data.PlayerLife
                 {
                     paint.IsAntialias = true;
                     paint.Color = CreateColor(CreateColor(241, 142, 142));
-                    Canvas.DrawCircle(DistinguishLastLifeCoordX(i), DistinguishLastLifeCoordY(i), Width/10, paint);
+                    Canvas.DrawCircle(DistinguishLastLifeCoordX(i), DistinguishLastLifeCoordY(i), Width / 10, paint);
                 }
             }
         }
@@ -93,10 +93,16 @@ namespace GemSwipe.Data.PlayerLife
             _beingUsedLifeX = DistinguishLastLifeCoordX(_numberOfLives);
             _beingUsedLifeY = DistinguishLastLifeCoordY(_numberOfLives);
             _beingUsed = true;
-            this.Animate("moveX", p => _beingUsedLifeX = (float)p, DistinguishLastLifeCoordX(_numberOfLives), _targetX, 8, (uint)1000, Easing.SinInOut,(p,q)=>_beingUsed=false);
+            this.Animate("moveX", p => _beingUsedLifeX = (float)p, DistinguishLastLifeCoordX(_numberOfLives), _targetX, 8, (uint)1000, Easing.SinInOut, (p, q) => _beingUsed = false);
             this.Animate("moveY", p => _beingUsedLifeY = (float)p, DistinguishLastLifeCoordY(_numberOfLives), _targetY, 8, (uint)1000, Easing.SinInOut);
 
             return Task.Delay(1000);
+        }
+
+        public override void Dispose()
+        {
+            PlayerLifeService.Instance.UnsubscribeDisplayer(this);
+            base.Dispose();
         }
 
     }

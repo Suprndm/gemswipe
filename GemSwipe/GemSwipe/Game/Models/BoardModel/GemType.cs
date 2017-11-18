@@ -8,9 +8,11 @@ namespace GemSwipe.Game.Models.BoardModel
 {
     public enum GemType
     {
+       None,
         Base,
         Blocking,
         Blackhole,
+        Teleportation,
     }
 
 }

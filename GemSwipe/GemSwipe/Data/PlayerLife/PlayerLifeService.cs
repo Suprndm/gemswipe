@@ -48,6 +48,11 @@ namespace GemSwipe.Data.PlayerLife
             _listOfSuscribedDisplayers.Add(lifeDisplayer);
         }
 
+        public void UnsubscribeDisplayer(PlayerLifeDisplayer lifeDisplayer)
+        {
+            _listOfSuscribedDisplayers.Remove(lifeDisplayer);
+        }
+
         public int GetLifeCount()
         {
             return _playerLife.Count;

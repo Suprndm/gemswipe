@@ -14,6 +14,7 @@ using GemSwipe.Paladin.UIElements.Buttons;
 using GemSwipe.Paladin.UIElements.Popups;
 using GemSwipe.Paladin.Utilities;
 using SkiaSharp;
+using GemSwipe.Services;
 
 namespace GemSwipe.Game.Pages.Map
 {
@@ -59,6 +60,8 @@ namespace GemSwipe.Game.Pages.Map
 
         private void LevelButton_Tapped(int i)
         {
+
+            Logger.Log("button tapped" + i);
             if (PlayerLifeService.Instance.HasLife())
             {
                 var levelData = _levelDataRepository.Get(i);
@@ -66,21 +69,26 @@ namespace GemSwipe.Game.Pages.Map
                 PopupService.Instance.ShowPopup(dialogPopup);
                 dialogPopup.NextCommand = () =>
                 {
-                    Navigator.Instance.GoTo(PageType.Game, i);
-                    var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
-                    if (chosenLevelButton != null)
-                        chosenLevelButton.ActivateOrbitingStars(Width, Height);
+                    try
+                    {
 
-                    _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
-                    _playerLifeDisplayer.SteerToTarget();
+                        Navigator.Instance.GoTo(PageType.Game, i);
+                        var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
+                        if (chosenLevelButton != null)
+                        {
+                            chosenLevelButton.ActivateOrbitingStars(Width, Height);
+                            _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
+                            _playerLifeDisplayer.SteerToTarget();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                        Logger.Log("LevelButton_Tapped exception caught");
+                        Navigator.Instance.GoTo(PageType.Map);
+                    }
                 };
-
             }
-            else
-            {
-                //popup "no life left!"
-            }
-
         }
 
 

@@ -8,6 +8,9 @@ using Xamarin.Forms;
 using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.BoardModel.Gems;
 using GemSwipe.Game.Shards;
+using System.Collections.Generic;
+using System.Linq;
+using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -38,7 +41,7 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        private const int MovementAnimationMs = 600;
+        protected const int MovementAnimationMs = 600;
         private Random _randomizer;
         private int _cycle;
         private int _cycleSpeed;
@@ -85,34 +88,41 @@ namespace GemSwipe.Game.Models.Entities
 
         }
 
-        public bool CollideInto(Gem targetGem, SwipeResult swipeResult)
+        public virtual void GoAlongLane(IList<Cell> cellsLane, Direction direction, SwipeResult swipeResult)
+        {
+            int gemPositionned = 0;
+            foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
+            {
+                if (cell.IsEmpty())
+                {
+                    cell.AttachGem(this);
+                    if (BoardX != cell.X || BoardY != cell.Y)
+                    {
+                        swipeResult.MovedGems.Add(this);
+                        Move(cell.X, cell.Y);
+                    }
+
+
+                    gemPositionned++;
+                    break;
+                }
+
+                var alreadyAttachedGem = cell.GetAttachedGem();
+                if (CollideInto(alreadyAttachedGem, direction, swipeResult))
+                {
+                    break;
+                }
+            }
+        }
+
+        public bool CollideInto(Gem targetGem, Direction direction, SwipeResult swipeResult)
         {
             switch (Type)
             {
-                case GemType.Blackhole:
+                case GemType.Base:
                     switch (targetGem.Type)
                     {
-                        case GemType.Blackhole:
-                            Die();
-                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
-                            HitBlackholeGem((BlackholeGem)targetGem);
-                            swipeResult.DeadGems.Add(this);
-                            return true;
-                        default:
-                            return false;
-                    }
-
-                default:
-                    switch (targetGem.Type)
-                    {
-                        case GemType.Blackhole:
-                            Die();
-                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
-                            HitBlackholeGem((BlackholeGem)targetGem);
-                            swipeResult.DeadGems.Add(this);
-                            return true;
-
-                        default:
+                        case GemType.Base:
                             if (targetGem.CanMerge() && CanMerge() && targetGem.Size == Size)
                             {
                                 // Its a Fuse
@@ -125,13 +135,83 @@ namespace GemSwipe.Game.Models.Entities
                                 return true;
                             }
                             else return false;
+
+                        case GemType.Blackhole:
+                            Die();
+                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+                            HitBlackholeGem((BlackholeGem)targetGem);
+                            swipeResult.DeadGems.Add(this);
+                            return true;
+
+                        case GemType.Teleportation:
+                            Logger.Log("Collide into TP");
+                            TeleportationGem teleportationGem = (TeleportationGem)targetGem;
+                            if (teleportationGem.CanTeleport(direction))
+                            {
+                                swipeResult.TeleporterGems.Add(targetGem);
+                                teleportationGem.Teleport(this, direction,swipeResult);
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+
+                        default:
+                            return false;
                     }
+
+                case GemType.Blackhole:
+                    switch (targetGem.Type)
+                    {
+                        case GemType.Base:
+                            return false;
+                        case GemType.Blackhole:
+                            Die();
+                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+                            HitBlackholeGem((BlackholeGem)targetGem);
+                            swipeResult.DeadGems.Add(this);
+                            return true;
+                        case GemType.Teleportation:
+                            Logger.Log("Collide into TP");
+                            TeleportationGem teleportationGem = (TeleportationGem)targetGem;
+                            if (teleportationGem.CanTeleport(direction))
+                            {
+                                swipeResult.TeleporterGems.Add(targetGem);
+                                teleportationGem.Teleport(this, direction, swipeResult);
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+
+                        default:
+                            return false;
+                    }
+
+                case GemType.Teleportation:
+                    return false;
+
+                default:
+                    return false;
             }
         }
 
         public void HitBlackholeGem(BlackholeGem blackhole)
         {
             blackhole.Swallow();
+        }
+
+        public async void GoInTeleport(float x, float y)
+        {
+            MoveTo(x, y);
+            if (Canvas != null)
+            {
+                await Task.Delay(MovementAnimationMs / 2);
+                this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
+                await Task.Delay(MovementAnimationMs / 2);
+            }
         }
 
         public void LevelUp()
@@ -162,7 +242,7 @@ namespace GemSwipe.Game.Models.Entities
             return !_willLevelUp && !_willDie;
         }
 
-        public void Resolve()
+        public virtual void Resolve()
         {
             if (_willLevelUp)
             {
@@ -293,7 +373,7 @@ namespace GemSwipe.Game.Models.Entities
             Canvas.DrawPath(path, paint);
         }
 
-        public void MoveTo(float x, float y)
+        public Task MoveTo(float x, float y)
         {
             var oldX = _x;
             var oldY = _y;
@@ -305,6 +385,7 @@ namespace GemSwipe.Game.Models.Entities
                 this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
                 this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
             }
+            return Task.Delay(MovementAnimationMs);
 
         }
 

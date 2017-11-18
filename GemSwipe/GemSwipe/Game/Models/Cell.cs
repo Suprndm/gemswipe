@@ -22,19 +22,35 @@ namespace GemSwipe.Game.Models
         {
             X = x;
             Y = y;
-            Modifier = SetModifier(gemType);
+            SetModifier(gemType);
         }
 
-        public CellModifier SetModifier(GemType gemType)
+        public Cell(int x, int y, Gem gem)
+        {
+            X = x;
+            Y = y;
+            if (gem != null)
+            {
+                SetModifier(gem.Type);
+            }
+        }
+
+        public void SetModifier(GemType gemType)
         {
             switch (gemType)
             {
                 default:
                     IsBlocked = false;
-                    return CellModifier.Base;
+                    Modifier = CellModifier.Base;
+                    break;
                 case GemType.Blocking:
                     IsBlocked = true;
-                    return CellModifier.Blocked;
+                    Modifier = CellModifier.Blocked;
+                    break;
+                case GemType.Teleportation:
+                    IsBlocked = true;
+                    Modifier = CellModifier.Teleporter;
+                    break;
             }
         }
 
@@ -47,8 +63,12 @@ namespace GemSwipe.Game.Models
 
         public void AttachGem(Gem gem)
         {
-            _attachedGem = gem;
-            gem.Move(X, Y);
+            if (gem != null)
+            {
+                _attachedGem = gem;
+                SetModifier(gem.Type);
+                gem.Move(X, Y);
+            }
         }
 
         public void DetachGem()

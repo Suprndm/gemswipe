@@ -10,5 +10,6 @@ namespace GemSwipe.Game.Models.BoardModel
     {
         Base,
         Blocked,
+        Teleporter,
     }
 }

@@ -6,6 +6,7 @@ using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.BoardModel.Gems;
+using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -14,6 +15,7 @@ namespace GemSwipe.Game.Models.Entities
         public Cell[,] Cells { get; private set; }
         public IList<Cell> CellsList { get; private set; }
         public IList<Gem> Gems { get; private set; }
+        public IList<TeleportationGem> TeleportationGems { get; private set; }
 
         public int MovesToResolve { get; private set; }
         public int NbOfRows { get; private set; }
@@ -82,7 +84,7 @@ namespace GemSwipe.Game.Models.Entities
 
             var cell = cells[_randomizer.Next(cells.Count)];
 
-            var gem = CreateGem(cell.X, cell.Y, size, GemType.Base);
+            var gem = CreateGem(cell.X, cell.Y, size.ToString(), size);
             cell.AttachGem(gem);
 
             await gem.Pop();
@@ -92,21 +94,42 @@ namespace GemSwipe.Game.Models.Entities
 
         private GemType ParseGemType(string rawData)
         {
-            switch (rawData)
+            int size = 0;
+            bool isSize = int.TryParse(rawData, out size);
+
+            if (isSize)
             {
-                default:
+                if (size == 0)
+                {
+                    return GemType.None;
+                }
+                else
+                {
                     return GemType.Base;
-                case "9":
-                    return GemType.Blocking;
-                case "BH":
-                    return GemType.Blackhole;
+                }
+            }
+            else
+            {
+                string gemCode = rawData.Substring(0, 2);
+                switch (gemCode)
+                {
+                    default:
+                        return GemType.Base;
+                    case "BL":
+                        return GemType.Blocking;
+                    case "BH":
+                        return GemType.Blackhole;
+                    case "TP":
+                        return GemType.Teleportation;
+
+                }
             }
         }
 
         private void Setup(BoardSetup boardSetup)
         {
             Gems = new List<Gem>();
-
+            TeleportationGems = new List<TeleportationGem>();
             var boardString = boardSetup.SetupString;
 
             var rows = boardString.Split('-');
@@ -119,43 +142,38 @@ namespace GemSwipe.Game.Models.Entities
                 var rowCells = rows[j].Split(' ');
                 for (int i = 0; i < nbOfColumns; i++)
                 {
-
-                    //var size = int.Parse(rowCells[i]);
-                    int size = 0;
-                    bool isSize = int.TryParse(rowCells[i], out size);
-
-                    GemType gemType = ParseGemType(rowCells[i]);
-
-
-                    //bool cellIsBlocked = false;
-                    //if (size == 9)
-                    //{
-                    //    cellIsBlocked = true;
-                    //    size = 0;
-                    //}
-
-                    //var newCell = new Cell(i, j, cellIsBlocked);
-
-                    Cell newCell = new Cell(i, j, gemType);
-                    boardCells.Add(newCell);
-
-                    //if (size > 0)
-                    //{
-
-                    //    newCell.AttachGem(CreateGem(i, j, size));
-                    //}
-
-                    if (gemType != GemType.Blocking)
+                    Gem gem = CreateGem(i, j, rowCells[i]);
+                    if (gem != null)
                     {
-                        if (gemType == GemType.Blackhole)
-                        {
-                            newCell.AttachGem(CreateGem(i, j, 1, gemType));
-                        }
-                        else if (size > 0)
-                        {
-                            newCell.AttachGem(CreateGem(i, j, size, gemType));
-                        }
+                        AddChild(gem);
                     }
+                    Cell cell = new Cell(i, j, gem);
+                    boardCells.Add(cell);
+                    cell.AttachGem(gem);
+
+
+                    //GemType gemType = ParseGemType(rowCells[i]);
+                    //Cell cell = new Cell(i, j, gemType);
+                    //boardCells.Add(cell);
+                    //cell.AttachGem(CreateGem(i, j, rowCells[i]));
+
+                    //int size = 0;
+                    //bool isSize = int.TryParse(rowCells[i], out size);
+
+                    //if (isSize)
+                    //{
+
+                    //    Cell cell = new Cell(i, j, GemType.Base);
+                    //    boardCells.Add(cell);
+                    //    cell.AttachGem(CreateGem(i, j, rowCells[i], size));
+                    //}
+                    //else
+                    //{
+                    //    GemType gemType = ParseGemType(rowCells[i]);
+                    //    Cell cell = new Cell(i, j, gemType);
+                    //    boardCells.Add(cell);
+                    //    cell.AttachGem(CreateGem(i, j, rowCells[i]));
+                    //}
                 }
             }
 
@@ -186,44 +204,82 @@ namespace GemSwipe.Game.Models.Entities
                 }
             }
 
+            foreach (TeleportationGem teleportationGem in TeleportationGems)
+            {
+                teleportationGem.BuildExitLanes();
+            }
+
             PopGems();
         }
 
-        private Gem CreateGem(int boardX, int boardY, int size, GemType gemType)
+        private Gem CreateGem(int boardX, int boardY, string rawData, int size = 0)
         {
-            if (size == 0)
+            GemType gemType = ParseGemType(rawData);
+            var gemRadius = GetGemSize();
+
+            var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
+            var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+            Gem gem;
+
+            switch (gemType)
             {
-                return null;
+                case GemType.None:
+                    return null;
+                case GemType.Base:
+                    bool isSize = int.TryParse(rawData, out size);
+                    return new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                case GemType.Blocking:
+                    return null;
+                case GemType.Blackhole:
+                    return new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                case GemType.Teleportation:
+                    string portalId = rawData.Substring(2);
+                    TeleportationGem teleportationGem = new TeleportationGem(this, portalId, boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                    TeleportationGems.Add(teleportationGem);
+                    teleportationGem.FindExit();
+                    return teleportationGem;
+                default:
+                    return null;
             }
-            else
-            {
-                var gemRadius = GetGemSize();
+            //int size = 0;
+            //bool isSize = int.TryParse(rowCells[i], out size);
+            //if (size == 0 && gemType == GemType.Base)
+            //{
+            //    return null;
+            //}
+            //else
+            //{
+            //    var gemRadius = GetGemSize();
 
-                var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
-                var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
-                Gem gem;
+            //    var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
+            //    var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+            //    Gem gem;
 
-                switch (gemType)
-                {
-                    default:
-                        gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-                        break;
-                    case GemType.Blackhole:
-                        gem = new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-                        break;
-                }
-                Gems.Add(gem);
-                AddChild(gem);
-                return gem;
+            //    switch (gemType)
+            //    {
+            //        default:
+            //            gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+            //            break;
+            //        case GemType.Base:
+            //            gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+            //            break;
+            //        case GemType.Blocking:
+            //            gem = null;
+            //            break;
+            //        case GemType.Blackhole:
+            //            gem = new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+            //            break;
+            //        case GemType.Teleportation:
+            //            gem = new TeleportationGem(boardX, boardY, size, this);
+            //            break;
+            //    }
+            //    if (gem != null)
+            //    {
+            //        AddChild(gem);
+            //    }
 
-                //    var gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-
-                //Gems.Add(gem);
-
-                //AddChild(gem);
-
-                //return gem;
-            }
+            //    return gem;
+            //}
         }
 
         private async Task PopGems()
@@ -257,42 +313,33 @@ namespace GemSwipe.Game.Models.Entities
                     cell.DetachGem();
                 }
 
-                int gemPositionned = 0;
                 foreach (Gem gem in gems)
                 {
-                    foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
-                    {
-                        if (cell.IsEmpty())
-                        {
-                            cell.AttachGem(gem);
-                            if (gem.BoardX != cell.X || gem.BoardY != cell.Y)
-                            {
-                                swipeResult.MovedGems.Add(gem);
-                                gem.Move(cell.X, cell.Y);
-                            }
+                    gem.GoAlongLane(cellsLane, direction, swipeResult);
+                    //int gemPositionned = 0;
+
+                    //foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
+                    //{
+                    //    if (cell.IsEmpty())
+                    //    {
+                    //        cell.AttachGem(gem);
+                    //        if (gem.BoardX != cell.X || gem.BoardY != cell.Y)
+                    //        {
+                    //            swipeResult.MovedGems.Add(gem);
+                    //            gem.Move(cell.X, cell.Y);
+                    //        }
 
 
-                            gemPositionned++;
-                            break;
-                        }
+                    //        gemPositionned++;
+                    //        break;
+                    //    }
 
-                        var alreadyAttachedGem = cell.GetAttachedGem();
-                        if (gem.CollideInto(alreadyAttachedGem, swipeResult))
-                        {
-                            break;
-                        }
-                        //if (alreadyAttachedGem.CanMerge() && gem.CanMerge() && alreadyAttachedGem.Size == gem.Size)
-                        //{
-                        //    // Its a Fuse
-                        //    alreadyAttachedGem.LevelUp();
-                        //    gem.Die();
-                        //    gem.Move(alreadyAttachedGem.TargetBoardX, alreadyAttachedGem.TargetBoardY);
-
-                        //    swipeResult.DeadGems.Add(gem);
-                        //    swipeResult.FusedGems.Add(alreadyAttachedGem);
-                        //    break;
-                        //}
-                    }
+                    //    var alreadyAttachedGem = cell.GetAttachedGem();
+                    //    if (gem.CollideInto(alreadyAttachedGem, swipeResult))
+                    //    {
+                    //        break;
+                    //    }
+                    //}
                 }
             }
 
@@ -346,11 +393,34 @@ namespace GemSwipe.Game.Models.Entities
                 foreach (var cell in lane)
                 {
                     if (cell.IsBlocked)
-                        currentLane = null;
+                    {
+                        if (cell.Modifier == CellModifier.Teleporter)
+                        {
+                            //if (currentLane != null)
+                            //{
+                            //    currentLane.Add(cell);
+                            //}
+                            //if (currentLane != null)
+                            //{
+
+                            //    currentLane = new List<Cell>() { cell };
+                            //    splitedCellsLanes.Add(currentLane);
+                            //}
+                            currentLane = new List<Cell>() { cell };
+                            splitedCellsLanes.Add(currentLane);
+
+                        }
+                        else
+                        {
+                            currentLane = null;
+                        }
+                        //currentLane = null;
+                    }
                     else
                     {
                         if (currentLane == null)
                         {
+
                             currentLane = new List<Cell>() { cell };
                             splitedCellsLanes.Add(currentLane);
                         }
@@ -359,11 +429,22 @@ namespace GemSwipe.Game.Models.Entities
                             currentLane.Add(cell);
                         }
                     }
+
                 }
 
                 currentLane = null;
             }
-
+            foreach (var lanex in splitedCellsLanes)
+            {
+                Logger.Log("lane");
+                string lanestr = "";
+                foreach (var cellsplit in lanex)
+                {
+                    lanestr += cellsplit.X.ToString() + " " + cellsplit.Y.ToString() + ", ";
+                    //Logger.Log(cellsplit.X.ToString() + " " + cellsplit.Y.ToString());
+                }
+                Logger.Log(lanestr);
+            }
             return splitedCellsLanes;
         }
 
@@ -474,11 +555,26 @@ namespace GemSwipe.Game.Models.Entities
                 var gemView = fusedGem;
                 gemView.Fuse();
             }
+
+            foreach (var teleporterGem in swipeResult.TeleporterGems)
+            {
+                var gemView = (TeleportationGem)teleporterGem;
+                var exitGem = gemView.ExitGem;
+                var gemToTeleport = gemView.GemToTeleport;
+                gemView.TeleportToThenFrom(ToGemViewX(teleporterGem.BoardX) + (_cellWidth - teleporterGem.Width) / 2, ToGemViewY(teleporterGem.BoardY) + (_cellWidth - teleporterGem.Width) / 2,
+                    ToGemViewX(exitGem.BoardX) + (_cellWidth - exitGem.Width) / 2, ToGemViewY(exitGem.BoardY) + (_cellWidth - exitGem.Width) / 2,
+                    ToGemViewX(gemToTeleport.BoardX) + (_cellWidth - gemToTeleport.Width) / 2, ToGemViewY(gemToTeleport.BoardY) + (_cellWidth - gemToTeleport.Width) / 2);
+                //_gemToTeleport.MoveTo(ToGemViewX(teleporterGem.BoardX) + (_cellWidth - teleporterGem.Width) / 2, ToGemViewY(teleporterGem.BoardY) + (_cellWidth - teleporterGem.Width) / 2);
+                //_gemToTeleport.MoveTo(ToGemViewX(ExitGem.BoardX) + (_cellWidth - ExitGem.Width) / 2, ToGemViewY(ExitGem.BoardY) + (_cellWidth - ExitGem.Width) / 2);
+                //_gemToTeleport.MoveTo(ToGemViewX(gem.BoardX) + (_cellWidth - gem.Width) / 2, ToGemViewY(gem.BoardY) + (_cellWidth - gem.Width) / 2);
+
+                //teleporterGem.Teleport(ToGemViewX(teleporterGem.BoardX) + (_cellWidth - teleporterGem.Width) / 2, ToGemViewY(teleporterGem.BoardY) + (_cellWidth - teleporterGem.Width) / 2);
+            }
         }
 
         protected override void Draw()
         {
-              //DrawCells(Canvas);
+            //DrawCells(Canvas);
         }
 
         public void UpdateDimensions()
@@ -501,6 +597,8 @@ namespace GemSwipe.Game.Models.Entities
 
         }
 
+     
+
         private void DrawCells(SKCanvas canvas)
         {
             UpdateDimensions();
@@ -509,8 +607,8 @@ namespace GemSwipe.Game.Models.Entities
             {
                 for (int j = 0; j < NbOfRows; j++)
                 {
-                    if (false)
-                    //if (Cells[i, j].IsBlocked)
+
+                    if (Cells[i, j].IsBlocked)
                     {
                         using (var paint = new SKPaint())
                         {
@@ -526,7 +624,8 @@ namespace GemSwipe.Game.Models.Entities
 
                         }
                     }
-                    else
+                    //else
+                    if (false)
                     {
                         using (var paint = new SKPaint())
                         {
@@ -586,6 +685,16 @@ namespace GemSwipe.Game.Models.Entities
         private float ToGemViewY(int gemStateY)
         {
             return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalBoardMargin);
+        }
+
+        private float ToGemX(int gemIndex, Gem gem)
+        {
+            return ToGemViewX(gemIndex) + (_cellWidth - gem.Width) / 2;
+        }
+
+        private float ToGemY(int gemIndex, Gem gem)
+        {
+            return ToGemViewY(gemIndex) + (_cellWidth - gem.Width) / 2;
         }
 
         public override void Dispose()

@@ -1,4 +1,5 @@
 ﻿using GemSwipe.Data.PlayerLife;
+using GemSwipe.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,9 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
         public override void OnActivated()
         {
             base.OnActivated();
+            Logger.Log(PlayerLifeService.Instance.GetLifeCount().ToString());
             PlayerLifeService.Instance.GainLife();
+            Logger.Log(PlayerLifeService.Instance.GetLifeCount().ToString());
         }
 
     }
