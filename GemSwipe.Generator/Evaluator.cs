@@ -46,7 +46,7 @@ namespace GemSwipe.Generator
                 case EventType.Explosion:
                     return 0;
                     break;
-                case EventType.BlackHole:
+                case EventType.Blackhole:
                     return 0;
                     break;
                 case EventType.WhiteHole:

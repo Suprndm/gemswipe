@@ -90,6 +90,7 @@
     <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
     <Compile Include="Game\Sprites\SpriteConst.cs" />
+    <Compile Include="Game\Test\BoardTester.cs" />
     <Compile Include="Game\Test\SpriteTester.cs" />
     <Compile Include="Game\Test\ToolboxTester.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />

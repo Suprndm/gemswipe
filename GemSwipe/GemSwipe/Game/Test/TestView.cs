@@ -23,7 +23,7 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new BlackholeGem(1, 1, 1, Width / 2-100/2, Height / 2-100/2, 100, new System.Random()));
+            AddChild(new BoardTester());
         }
 
         public override void SetupLayers()

@@ -67,15 +67,13 @@ namespace GemSwipe.Game.Models.Entities
             BoardX = boardX;
             BoardY = boardY;
         }
-        public Gem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(x, y, radius * 2, radius * 2)
+        public Gem(int size, float x, float y, float radius, Random randomizer) : base(x, y, radius * 2, radius * 2)
         {
             Type = GemType.Base;
             _randomizer = randomizer;
             _cycle = 0;
             Size = size;
             _fluidSize = size;
-            BoardX = boardX;
-            BoardY = boardY;
             _radius = radius;
             _size = size;
             _fluidX = _x;

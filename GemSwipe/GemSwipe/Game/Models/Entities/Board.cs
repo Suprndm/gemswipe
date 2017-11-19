@@ -33,13 +33,17 @@ namespace GemSwipe.Game.Models.Entities
         private float _cellHeight;
         private float _maxBoardWidth;
         private float _maxBoardHeight;
+        private SKRect _boardLimits;
+        private SKRect _playgroundLimits;
+
+        private float _cellRadius;
 
 
-        public Board(BoardSetup boardSetup, float x, float y, float width, float height) : base(x, y, height, width)
+        public Board(BoardSetup boardSetup)
         {
-            _maxBoardWidth = width;
-            _maxBoardHeight = width;
             _boardSetup = boardSetup;
+
+            _boardLimits = SKRect.Create(0.05f * Width, 0.1f * Height, 0.9f * Width, 0.8f * Height);
 
             _randomizer = new Random();
 
@@ -137,6 +141,15 @@ namespace GemSwipe.Game.Models.Entities
             var nbOfColumns = rows[0].Split(' ').Length;
             var boardCells = new List<Cell>();
 
+            var maxCellWidth = _boardLimits.Width / nbOfColumns;
+            var maxCellHeight = _boardLimits.Height / nbOfRows;
+
+            _cellRadius = Math.Min(maxCellHeight, maxCellWidth);
+            var topPadding = (_boardLimits.Height - nbOfRows * _cellRadius) / 2;
+            var leftPadding = (_boardLimits.Width - nbOfColumns * _cellRadius) / 2;
+
+            _playgroundLimits = SKRect.Create(_boardLimits.Left+leftPadding, _boardLimits.Top + topPadding, nbOfColumns * _cellRadius, nbOfRows * _cellRadius);
+
             for (int j = 0; j < nbOfRows; j++)
             {
                 var rowCells = rows[j].Split(' ');
@@ -212,13 +225,13 @@ namespace GemSwipe.Game.Models.Entities
             PopGems();
         }
 
-        private Gem CreateGem(int boardX, int boardY, string rawData, int size = 0)
+        private Gem CreateGem(float x, float y, string rawData, int size = 0)
         {
             GemType gemType = ParseGemType(rawData);
             var gemRadius = GetGemSize();
 
-            var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
-            var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+            var gemX = x;
+            var gemY = y;
             Gem gem;
 
             switch (gemType)
@@ -574,6 +587,16 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
+            using (var paint = new SKPaint())
+            {
+                paint.IsAntialias = true;
+                paint.Style = SKPaintStyle.Fill;
+                paint.StrokeWidth = 2;
+                paint.Color = CreateColor(255, 255, 255, 50);
+                Canvas.DrawRect(_boardLimits, paint);
+                Canvas.DrawRect(_playgroundLimits, paint);
+            }
+
             //DrawCells(Canvas);
         }
 
