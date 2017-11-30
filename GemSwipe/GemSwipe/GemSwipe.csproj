@@ -66,12 +66,18 @@
     <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
     <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
     <Compile Include="Data\RepositoryBase.cs" />
+    <Compile Include="Game\Animations\AnimationArg.cs" />
+    <Compile Include="Game\Animations\AnimationStack.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStars.cs" />
     <Compile Include="Game\Models\BoardModel\CellModifier.cs" />
     <Compile Include="Game\Models\BoardModel\Cells\TeleportationCell.cs" />
     <Compile Include="Game\Models\BoardModel\Gems\BlackholeGem.cs" />
     <Compile Include="Game\Models\BoardModel\Gems\TeleportationGem.cs" />
     <Compile Include="Game\Models\BoardModel\GemType.cs" />
+    <Compile Include="Game\Models\Entities\CellBase.cs" />
+    <Compile Include="Game\Models\Entities\GemBase.cs" />
+    <Compile Include="Game\Models\Entities\ICell.cs" />
+    <Compile Include="Game\Models\Entities\IGem.cs" />
     <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />
@@ -260,6 +266,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Game\AnimationStack\" />
     <Folder Include="Game\Effects\Popped\" />
     <Folder Include="Resources\Graphics\Low\" />
     <Folder Include="Resources\Graphics\Medium\" />

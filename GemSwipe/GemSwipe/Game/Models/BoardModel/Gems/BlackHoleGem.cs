@@ -17,13 +17,13 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
         private int _animationMs = 600;
         private IList<OrbitingStarParticle> _listOfStarParticles;
 
-        public BlackholeGem(int boardX, int boardY, int size) : base(boardX, boardY, size)
+        public BlackholeGem(int boardX, int boardY, int size, Board board) : base(boardX, boardY, size,board)
         {
             Type = GemType.Blackhole;
             _listOfStarParticles = new List<OrbitingStarParticle>();
             ActivateOrbitingStars(SkiaRoot.ScreenWidth, SkiaRoot.ScreenHeight);
         }
-        public BlackholeGem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(boardX, boardY, size, x, y, radius, randomizer)
+        public BlackholeGem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer,Board board) : base(boardX, boardY, size, x, y, radius, randomizer,board)
         {
             Type = GemType.Blackhole;
             _listOfStarParticles = new List<OrbitingStarParticle>();
@@ -32,7 +32,7 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
 
         protected override async void Shine()
         {
-            Shard shard = new Shard(Radius, Radius, 2*Radius, 2*Radius, CreateColor(0,0,0));
+            Shard shard = new Shard(Radius, Radius, 2 * Radius, 2 * Radius, CreateColor(0, 0, 0));
             AddChild(shard);
             await Task.Delay(_animationMs / 2);
             shard.Die();
@@ -60,7 +60,7 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
                     randomizer.Next((int)screenHeight) + screenHeight / 2,
                     Radius / 4,
                     randomizer,
-                    SKColor.FromHsl(21, 78, randomizer.Next(0,6))
+                    SKColor.FromHsl(21, 78, randomizer.Next(0, 6))
                     );
                 //OrbitingStarParticle star = new OrbitingStarParticle(randomizer.Next((int)screenWidth) - screenWidth / 2, randomizer.Next((int)screenHeight) - screenHeight / 2, Radius / 4, randomizer, CreateColor(0, 0, 0));
                 star.SetTarget(Radius, Radius);

@@ -14,13 +14,22 @@ using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
 {
-    public class Gem : SkiaView
+    public class Gem : GemBase
     {
         public GemType Type { get; set; }
 
-        public int BoardX { get; private set; }
-        public int BoardY { get; private set; }
-        public int Size { get; private set; }
+
+        public int Size
+        {
+            get
+            {
+                return _size;
+            }
+            private set
+            {
+                _size = value;
+            }
+        }
         public int TargetBoardX { get; private set; }
         public int TargetBoardY { get; private set; }
         private bool _willLevelUp;
@@ -60,22 +69,42 @@ namespace GemSwipe.Game.Models.Entities
 
         private bool _isActive;
 
-        public Gem(int boardX, int boardY, int size) : base(0, 0, 0, 0)
+        public Gem(int indexX, int indexY, int size, Board board) : base(indexX, indexY, size, board)
         {
             Type = GemType.Base;
             Size = size;
-            BoardX = boardX;
-            BoardY = boardY;
+            IndexX = indexX;
+            IndexY = indexY;
         }
-        public Gem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(x, y, radius * 2, radius * 2)
+        public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer) : base(indexX, indexY, size, x, y, radius, randomizer, null)
         {
             Type = GemType.Base;
             _randomizer = randomizer;
             _cycle = 0;
             Size = size;
             _fluidSize = size;
-            BoardX = boardX;
-            BoardY = boardY;
+            IndexX = indexX;
+            IndexY = indexY;
+            _radius = radius;
+            _size = size;
+            _fluidX = _x;
+            _fluidY = _y;
+            _opacity = 0;
+            _angle = (float)(_randomizer.Next(100) * Math.PI * 2 / 100);
+            _finalColor = new SKColor(195, 184, 85);
+
+            _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
+
+        }
+        public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer, Board board) : base(indexX, indexY, size, x, y, radius, randomizer, board)
+        {
+            Type = GemType.Base;
+            _randomizer = randomizer;
+            _cycle = 0;
+            Size = size;
+            _fluidSize = size;
+            IndexX = indexX;
+            IndexY = indexY;
             _radius = radius;
             _size = size;
             _fluidX = _x;
@@ -88,113 +117,38 @@ namespace GemSwipe.Game.Models.Entities
 
         }
 
-        public virtual void GoAlongLane(IList<Cell> cellsLane, Direction direction, SwipeResult swipeResult)
+
+        public override bool CanCollide(IGem targetGem)
         {
-            int gemPositionned = 0;
-            foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
+            if (targetGem is Gem)
             {
-                if (cell.IsEmpty())
-                {
-                    cell.AttachGem(this);
-                    if (BoardX != cell.X || BoardY != cell.Y)
-                    {
-                        swipeResult.MovedGems.Add(this);
-                        Move(cell.X, cell.Y);
-                    }
-
-
-                    gemPositionned++;
-                    break;
-                }
-
-                var alreadyAttachedGem = cell.GetAttachedGem();
-                if (CollideInto(alreadyAttachedGem, direction, swipeResult))
-                {
-                    break;
-                }
+                Gem target = (Gem)targetGem;
+                return target.Size == Size;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public bool CollideInto(Gem targetGem, Direction direction, SwipeResult swipeResult)
+        public async override void CollideInto(IGem targetGem)
         {
-            switch (Type)
+            if (targetGem is Gem)
             {
-                case GemType.Base:
-                    switch (targetGem.Type)
-                    {
-                        case GemType.Base:
-                            if (targetGem.CanMerge() && CanMerge() && targetGem.Size == Size)
-                            {
-                                // Its a Fuse
-                                targetGem.LevelUp();
-                                Die();
-                                Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
+                Gem gem = (Gem)targetGem;
+                gem.Fuse();
+                Move(gem.IndexX, gem.IndexY);
+                //Die();
+                _animationsStack.Add((p) => Die());
+            }
+        }
 
-                                swipeResult.DeadGems.Add(this);
-                                swipeResult.FusedGems.Add(targetGem);
-                                return true;
-                            }
-                            else return false;
-
-                        case GemType.Blackhole:
-                            Die();
-                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
-                            HitBlackholeGem((BlackholeGem)targetGem);
-                            swipeResult.DeadGems.Add(this);
-                            return true;
-
-                        case GemType.Teleportation:
-                            Logger.Log("Collide into TP");
-                            TeleportationGem teleportationGem = (TeleportationGem)targetGem;
-                            if (teleportationGem.CanTeleport(direction))
-                            {
-                                swipeResult.TeleporterGems.Add(targetGem);
-                                teleportationGem.Teleport(this, direction,swipeResult);
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-
-                        default:
-                            return false;
-                    }
-
-                case GemType.Blackhole:
-                    switch (targetGem.Type)
-                    {
-                        case GemType.Base:
-                            return false;
-                        case GemType.Blackhole:
-                            Die();
-                            Move(targetGem.TargetBoardX, targetGem.TargetBoardY);
-                            HitBlackholeGem((BlackholeGem)targetGem);
-                            swipeResult.DeadGems.Add(this);
-                            return true;
-                        case GemType.Teleportation:
-                            Logger.Log("Collide into TP");
-                            TeleportationGem teleportationGem = (TeleportationGem)targetGem;
-                            if (teleportationGem.CanTeleport(direction))
-                            {
-                                swipeResult.TeleporterGems.Add(targetGem);
-                                teleportationGem.Teleport(this, direction, swipeResult);
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
-
-                        default:
-                            return false;
-                    }
-
-                case GemType.Teleportation:
-                    return false;
-
-                default:
-                    return false;
+        public void Clear()
+        {
+            if (_willDie)
+            {
+                _board.Gems.Remove(this);
+                Dispose();
             }
         }
 
@@ -232,8 +186,9 @@ namespace GemSwipe.Game.Models.Entities
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
         }
 
-        public void Die()
+        public override void Die()
         {
+            base.Die();
             _willDie = true;
         }
 
@@ -246,12 +201,13 @@ namespace GemSwipe.Game.Models.Entities
         {
             if (_willLevelUp)
             {
+
                 Size++;
                 _willLevelUp = false;
             }
 
-            BoardX = TargetBoardX;
-            BoardY = TargetBoardY;
+            IndexX = TargetBoardX;
+            IndexY = TargetBoardY;
 
             _isDead = _willDie;
         }
@@ -267,11 +223,14 @@ namespace GemSwipe.Game.Models.Entities
             return _willDie;
         }
 
-        public void Move(int x, int y)
+        public override void Move(int x, int y)
         {
-            TargetBoardX = x;
-            TargetBoardY = y;
+             base.Move(x, y);
+            //this.AbortAnimation("moveX");
+            //this.AbortAnimation("moveY");
+            //MoveTo(_board.ToGemX(x, this), _board.ToGemY(y, this));
         }
+
 
         protected override void Draw()
         {
@@ -371,34 +330,6 @@ namespace GemSwipe.Game.Models.Entities
             };
 
             Canvas.DrawPath(path, paint);
-        }
-
-        public Task MoveTo(float x, float y)
-        {
-            var oldX = _x;
-            var oldY = _y;
-
-            var newX = x;
-            var newY = y;
-            if (Canvas != null)
-            {
-                this.Animate("moveX", p => _x = (float)p, oldX, newX, 4, MovementAnimationMs, Easing.CubicOut);
-                this.Animate("moveY", p => _y = (float)p, oldY, newY, 8, MovementAnimationMs, Easing.CubicOut);
-            }
-            return Task.Delay(MovementAnimationMs);
-
-        }
-
-        public async void DieTo(float x, float y)
-        {
-            MoveTo(x, y);
-            if (Canvas != null)
-            {
-                await Task.Delay(MovementAnimationMs / 2);
-                this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
-                await Task.Delay(MovementAnimationMs / 2);
-            }
-            Dispose();
         }
 
         public async void Fuse()

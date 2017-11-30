@@ -1,9 +1,11 @@
 ﻿using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.Entities;
+using System;
+using System.Collections.Generic;
 
 namespace GemSwipe.Game.Models
 {
-    public class Cell
+    public class Cell : CellBase
     {
         public int X { get; }
         public int Y { get; }
@@ -11,21 +13,22 @@ namespace GemSwipe.Game.Models
         public bool IsBlocked { get; set; }
         public CellModifier Modifier { get; set; }
 
-        public Cell(int x, int y, bool isBlocked = false)
+
+        public Cell(int x, int y, Board board, bool isBlocked = false) : base(x,y,board)
         {
             X = x;
             Y = y;
             IsBlocked = isBlocked;
         }
 
-        public Cell(int x, int y, GemType gemType)
+        public Cell(int x, int y, GemType gemType,Board board) : base(x,y,board)
         {
             X = x;
             Y = y;
             SetModifier(gemType);
         }
 
-        public Cell(int x, int y, Gem gem)
+        public Cell(int x, int y, Gem gem, Board board) : base(x,y,board)
         {
             X = x;
             Y = y;
@@ -54,31 +57,32 @@ namespace GemSwipe.Game.Models
             }
         }
 
-        private Gem _attachedGem;
 
         public bool IsEmpty()
         {
-            return _attachedGem == null && !IsBlocked;
+            return AttachedGem == null && !IsBlocked;
         }
 
-        public void AttachGem(Gem gem)
-        {
-            if (gem != null)
-            {
-                _attachedGem = gem;
-                SetModifier(gem.Type);
-                gem.Move(X, Y);
-            }
-        }
 
-        public void DetachGem()
-        {
-            _attachedGem = null;
-        }
+        //public GemBase GetAttachedGem()
+        //{
+        //    return _attachedGem;
+        //}
 
         public Gem GetAttachedGem()
         {
-            return _attachedGem;
+            return (Gem)AttachedGem;
         }
+        //public Gem GetAttachedGem<T>()
+        //{
+        //    return _attachedGem;
+
+        //    IList<Func<T>> listOfFunct = new List<Func<T>>();
+        //    IList<Action<int>> listOfActions = new List<Action<int>>();
+        //    Func<T> func = () => { return 1; };
+        //    listOfFunct.Add(func);
+        //    listOfFunct[0].Invoke();
+        //}
+
     }
 }

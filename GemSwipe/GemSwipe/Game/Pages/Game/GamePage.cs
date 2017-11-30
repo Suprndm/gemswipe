@@ -116,6 +116,7 @@ namespace GemSwipe.Game.Pages.Game
 
             if (_board != null)
             {
+                //await _board.Swipe(direction);
                 var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
 
@@ -154,7 +155,7 @@ namespace GemSwipe.Game.Pages.Game
                 else
                 {
                     // Shards
-                    HandleShards(swipeResult);
+                    //HandleShards(swipeResult);
 
 
                     // Events
@@ -221,7 +222,7 @@ namespace GemSwipe.Game.Pages.Game
             var gems = _board.Gems;
             foreach (var objective in _levelData.Objectives)
             {
-                var count = gems.Count(g => g.Size == objective.Key);
+                var count = gems.Count(g => ((Gem)g).Size == objective.Key);
 
                 if (count <= objective.Value)
                     _objectivesView.UpdateObjective(objective.Key, count);
@@ -238,7 +239,7 @@ namespace GemSwipe.Game.Pages.Game
             bool isWon = true;
             foreach (var objective in _levelData.Objectives)
             {
-                var count = gems.Count(g => g.Size == objective.Key);
+                var count = gems.Count(g => ((Gem)g).Size == objective.Key);
 
                 if (count < objective.Value)
                     isWon = false;

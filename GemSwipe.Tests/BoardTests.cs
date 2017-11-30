@@ -20,6 +20,26 @@ namespace GemSwipe.Tests
         }
 
         [Test]
+        [TestCase("1 0 0-0 0 0-0 0 0", Direction.Right)]
+        [TestCase("0 0 1-0 0 0-0 0 0", Direction.Left)]
+        [TestCase("1 0 0-0 0 0-0 0 0", Direction.Bottom)]
+        [TestCase("0 0 0-0 0 0-0 1 0", Direction.Top)]
+        public void ShouldActivateAllCells(string initialBoardString, Direction direction)
+        {
+            var actualBoard = BuildBoardFromString(initialBoardString);
+            actualBoard.Swipe(direction);
+            bool allCellsActivated = true;
+            foreach (Cell cell in actualBoard.CellsList)
+            {
+                if (cell.CanActivate())
+                {
+                    allCellsActivated = false;
+                }
+            }
+            Assert.AreEqual(allCellsActivated, true);
+        }
+
+        [Test]
         [TestCase("1 9 0-0 0 0-1 0 0", "1 9 0-0 0 0-0 0 1", Direction.Right)]
         [TestCase("1 9 1 1-0 0 0 0-1 0 0 0", "1 9 0 2-0 0 0 0-0 0 0 1", Direction.Right)]
         [TestCase("1 9 0 1 1-0 0 0 0 9-0 1 0 0 0", "1 9 2 0 0-0 0 0 0 9-1 0 0 0 0", Direction.Left)]
