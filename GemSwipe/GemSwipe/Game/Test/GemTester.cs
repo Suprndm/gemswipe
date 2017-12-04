@@ -33,7 +33,7 @@ namespace GemSwipe.Game.Test
 
         private void LevelUpButton_Activated()
         {
-            _gem.LevelUp();
+            //_gem.LevelUp();
             _gem.Resolve();
             _gem.Fuse();
         }

@@ -14,7 +14,7 @@ namespace GemSwipe.Game.Models.Entities
     {
         public Cell[,] Cells { get; private set; }
         public IList<Cell> CellsList { get; private set; }
-        public IList<Gem> Gems { get; private set; }
+        public IList<IGem> Gems { get; private set; }
 
         public IList<TeleportationGem> TeleportationGems { get; set; }
 
@@ -131,7 +131,7 @@ namespace GemSwipe.Game.Models.Entities
         {
             TeleportationGems = new List<TeleportationGem>();
 
-            Gems = new List<Gem>();
+            Gems = new List<IGem>();
             CellsList = new List<Cell>();
             var boardString = boardSetup.SetupString;
 
@@ -240,7 +240,7 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public SwipeResult Swipe(Direction direction)
+        public async Task<SwipeResult> Swipe(Direction direction)
         {
             int pascell = 0;
             int pasgem = 0;
@@ -261,20 +261,18 @@ namespace GemSwipe.Game.Models.Entities
                     cell.ResolveSwipe(direction);
                 }
                 pascell++;
+                await Task.Delay(1);
             }
 
-            foreach (Gem gem in Gems)
-            {
-                gem.RunAnimation();
-            }
+            //foreach (Gem gem in Gems)
+            //{
+            //    gem.RunAnimation();
+            //}
 
-            Logger.Log("Pascell = " + pascell);
-            Logger.Log("Pasgem = " + pasgem);
 
             SwipeResult swipeResult = new SwipeResult
             {
-                MovedGems = new List<Gem>(){
-                    new Gem(0,0,0,this) },
+                MovedGems = new List<Gem>(),
                 DeadGems = new List<Gem>(),
                 FusedGems = new List<Gem>()
             };
@@ -286,7 +284,7 @@ namespace GemSwipe.Game.Models.Entities
             bool AnyCanActivate = false;
             foreach (Cell cell in CellsList)
             {
-                if (cell.CanActivate())
+                if (cell.MustActivate())
                 {
                     AnyCanActivate = true;
                     break;
@@ -295,22 +293,22 @@ namespace GemSwipe.Game.Models.Entities
             return AnyCanActivate;
         }
 
-        private bool IsResolved()
-        {
-            bool isResolved = true;
-            foreach (Cell cell in CellsList)
-            {
-                if (cell.AttachedGem != null)
-                {
-                    IGem gem = cell.AttachedGem;
-                    if (!gem.IsResolved())
-                    {
-                        isResolved = false;
-                    }
-                }
-            }
-            return isResolved;
-        }
+        //private bool IsResolved()
+        //{
+        //    bool isResolved = true;
+        //    foreach (Cell cell in CellsList)
+        //    {
+        //        if (cell.AttachedGem != null)
+        //        {
+        //            IGem gem = cell.AttachedGem;
+        //            if (!gem.IsResolved())
+        //            {
+        //                isResolved = false;
+        //            }
+        //        }
+        //    }
+        //    return isResolved;
+        //}
 
 
         public IList<Cell> GetEmptyCells()
@@ -386,14 +384,11 @@ namespace GemSwipe.Game.Models.Entities
             }
             foreach (var lanex in splitedCellsLanes)
             {
-                Logger.Log("lane");
                 string lanestr = "";
                 foreach (var cellsplit in lanex)
                 {
                     lanestr += cellsplit.X.ToString() + " " + cellsplit.Y.ToString() + ", ";
-                    //Logger.Log(cellsplit.X.ToString() + " " + cellsplit.Y.ToString());
                 }
-                Logger.Log(lanestr);
             }
             return splitedCellsLanes;
         }
@@ -509,7 +504,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            DrawCells(Canvas);
+            //DrawCells(Canvas);
         }
 
         public void UpdateDimensions()

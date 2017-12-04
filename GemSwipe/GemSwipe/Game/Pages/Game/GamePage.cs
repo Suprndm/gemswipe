@@ -116,9 +116,10 @@ namespace GemSwipe.Game.Pages.Game
 
             if (_board != null)
             {
-                //await _board.Swipe(direction);
-                var swipeResult = _board.Swipe(direction);
                 _isBusy = true;
+
+                //await _board.Swipe(direction);
+                var swipeResult = await _board.Swipe(direction);
 
                 if (swipeResult.DeadGems.Count == 0
                     && swipeResult.FusedGems.Count == 0

@@ -18,9 +18,7 @@ namespace GemSwipe.Game.SettingsBar.SettingOptions
         public override void OnActivated()
         {
             base.OnActivated();
-            Logger.Log(PlayerLifeService.Instance.GetLifeCount().ToString());
             PlayerLifeService.Instance.GainLife();
-            Logger.Log(PlayerLifeService.Instance.GetLifeCount().ToString());
         }
 
     }

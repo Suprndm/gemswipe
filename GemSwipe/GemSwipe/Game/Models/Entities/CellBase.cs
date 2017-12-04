@@ -27,12 +27,13 @@ namespace GemSwipe.Game.Models.Entities
             AttachedGem = null;
         }
 
-        public virtual void ResolveSwipe(Direction direction)
+        public virtual Task ResolveSwipe(Direction direction)
         {
             if (CanActivate())
             {
-                TryHandleGem(AttachedGem, direction);
+                return TryHandleGem(AttachedGem, direction);
             }
+            else return Task.Delay(0);
 
         }
 
@@ -52,7 +53,8 @@ namespace GemSwipe.Game.Models.Entities
             AttachedGem = null;
         }
 
-        public virtual bool CanActivate()
+       
+        public bool MustActivate()
         {
             if (AttachedGem == null)
             {
@@ -64,6 +66,18 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
+        public virtual bool CanActivate()
+        {
+            if (AttachedGem == null)
+            {
+                return false;
+            }
+            else
+            {
+                return !_hasHandledGem && AttachedGem.CanPerform();
+            }
+        }
+       
         public virtual ICell GetTargetCell(Direction direction)
         {
             int targetX = -1;
@@ -115,26 +129,34 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public virtual void TryHandleGem(IGem gem, Direction direction)
+        public virtual Task TryHandleGem(IGem gem, Direction direction)
         {
 
             ICell targetCell = GetTargetCell(direction);
             if (targetCell == null)
             {
-                gem.ValidateResolution();
-                gem.Move(IndexX, IndexY);
-                _hasHandledGem = true;
+                ValidateGemHandling();
+                //return Task.Delay(0);
+                return gem.Move(IndexX, IndexY, true);
             }
             else
             {
                 if (targetCell.CanProcess(gem))
                 {
-                    DetachGemBase();
-                    targetCell.TryReceiveGem(gem, direction, this);
-                    _hasHandledGem = true;
+                    return targetCell.TryReceiveGem(gem, direction, this);
+                }
+                else
+                {
+                    return Task.Delay(0);
                 }
             }
         }
+
+        public void ValidateGemHandling()
+        {
+            _hasHandledGem = true;
+        }
+
 
         public virtual bool CanProcess(IGem gem)
         {
@@ -144,42 +166,44 @@ namespace GemSwipe.Game.Models.Entities
             }
             else
             {
-                return _hasHandledGem && AttachedGem.IsResolved();
+                return _hasHandledGem && AttachedGem.CanPerform() && gem.CanPerform();
             }
-            //else
-            //{
-            //    return _hasHandledGem;
-            //}
+
         }
 
-        public virtual void TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
+        public virtual Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
         {
             if (AttachedGem == null)
             {
+                senderCell.DetachGemBase();
+                senderCell.Reinitialize();
+
                 AttachGem(gem);
-                gem.Move(IndexX, IndexY);
-                _hasHandledGem = false;
+                Reinitialize();
+                return gem.Move(IndexX, IndexY,true);
             }
             else
             {
-                gem.ValidateResolution();
                 if (gem.CanCollide(AttachedGem))
                 {
-                    gem.CollideInto(AttachedGem);
-                    _hasHandledGem = false;
-
+                    senderCell.DetachGemBase();
+                    senderCell.Reinitialize();
+                    Reinitialize();
+                    gem.Move(IndexX, IndexY, true);
+                    return gem.CollideInto(AttachedGem);
                 }
                 else
                 {
-                    ReturnGem(gem, senderCell);
+                    return ReturnGem(gem, senderCell);
                 }
             }
         }
 
-        public virtual void ReturnGem(IGem gem, ICell senderCell)
+        public virtual Task ReturnGem(IGem gem, ICell senderCell)
         {
             senderCell.AttachGem(gem);
-            gem.Move(senderCell.IndexX, senderCell.IndexY);
+            senderCell.ValidateGemHandling();
+            return gem.Move(senderCell.IndexX, senderCell.IndexY, true);
         }
 
 

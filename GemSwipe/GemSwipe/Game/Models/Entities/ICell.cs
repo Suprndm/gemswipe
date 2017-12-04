@@ -12,6 +12,9 @@ namespace GemSwipe.Game.Models.Entities
         int IndexY { get; set; }
         void AttachGem(IGem gem);
         bool CanProcess(IGem gem);
-        void TryReceiveGem(IGem gem, Direction direction, ICell senderCell);
+        void DetachGemBase();
+        void Reinitialize();
+        void ValidateGemHandling();
+        Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell);
     }
 }

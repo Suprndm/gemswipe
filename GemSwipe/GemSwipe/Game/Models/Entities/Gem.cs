@@ -69,13 +69,13 @@ namespace GemSwipe.Game.Models.Entities
 
         private bool _isActive;
 
-        public Gem(int indexX, int indexY, int size, Board board) : base(indexX, indexY, size, board)
-        {
-            Type = GemType.Base;
-            Size = size;
-            IndexX = indexX;
-            IndexY = indexY;
-        }
+        //public Gem(int indexX, int indexY, int size, Board board) : base(indexX, indexY, size, board)
+        //{
+        //    Type = GemType.Base;
+        //    Size = size;
+        //    IndexX = indexX;
+        //    IndexY = indexY;
+        //}
         public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer) : base(indexX, indexY, size, x, y, radius, randomizer, null)
         {
             Type = GemType.Base;
@@ -96,6 +96,7 @@ namespace GemSwipe.Game.Models.Entities
             _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
 
         }
+
         public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer, Board board) : base(indexX, indexY, size, x, y, radius, randomizer, board)
         {
             Type = GemType.Base;
@@ -131,46 +132,25 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public async override void CollideInto(IGem targetGem)
+        public override Task CollideInto(IGem targetGem)
         {
             if (targetGem is Gem)
             {
-                Gem gem = (Gem)targetGem;
-                gem.Fuse();
-                Move(gem.IndexX, gem.IndexY);
-                //Die();
-                _animationsStack.Add((p) => Die());
+                Gem target = (Gem)targetGem;
+                //Move(gem.IndexX, gem.IndexY, true);
+                Die();
+                return target.PerformAction(target.Fuse());
+            }
+            else
+            {
+                return Task.Delay(0);
             }
         }
 
         public void Clear()
         {
-            if (_willDie)
-            {
-                _board.Gems.Remove(this);
-                Dispose();
-            }
-        }
-
-        public void HitBlackholeGem(BlackholeGem blackhole)
-        {
-            blackhole.Swallow();
-        }
-
-        public async void GoInTeleport(float x, float y)
-        {
-            MoveTo(x, y);
-            if (Canvas != null)
-            {
-                await Task.Delay(MovementAnimationMs / 2);
-                this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
-                await Task.Delay(MovementAnimationMs / 2);
-            }
-        }
-
-        public void LevelUp()
-        {
-            _willLevelUp = true;
+            _board.Gems.Remove(this);
+            Dispose();
         }
 
         protected virtual void Shine()
@@ -186,16 +166,6 @@ namespace GemSwipe.Game.Models.Entities
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
         }
 
-        public override void Die()
-        {
-            base.Die();
-            _willDie = true;
-        }
-
-        public bool CanMerge()
-        {
-            return !_willLevelUp && !_willDie;
-        }
 
         public virtual void Resolve()
         {
@@ -222,15 +192,24 @@ namespace GemSwipe.Game.Models.Entities
         {
             return _willDie;
         }
-
-        public override void Move(int x, int y)
+        public async void DieTo(float x, float y)
         {
-             base.Move(x, y);
-            //this.AbortAnimation("moveX");
-            //this.AbortAnimation("moveY");
-            //MoveTo(_board.ToGemX(x, this), _board.ToGemY(y, this));
-        }
+            //    var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
+            //    foreach (var deadGem in deadGems)
+            //    {
+            //        Gems.Remove(deadGem);
+            //    }
 
+            MoveTo(x, y);
+
+            //if (Canvas != null)
+            //{
+            //    await Task.Delay(MovementAnimationMs / 2);
+            //    this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
+            //    await Task.Delay(MovementAnimationMs / 2);
+            //}
+            Dispose();
+        }
 
         protected override void Draw()
         {
@@ -332,16 +311,17 @@ namespace GemSwipe.Game.Models.Entities
             Canvas.DrawPath(path, paint);
         }
 
-        public async void Fuse()
+        public async Task Fuse()
         {
             var oldSize = _size;
             _size++;
             if (Canvas != null)
             {
                 await Task.Delay(MovementAnimationMs / 2);
-                this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs,
-                    Easing.CubicOut);
                 Shine();
+                this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs,
+                   Easing.CubicOut);
+                await Task.Delay(MovementAnimationMs / 2);
             }
         }
     }

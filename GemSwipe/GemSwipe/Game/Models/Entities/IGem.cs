@@ -11,10 +11,13 @@ namespace GemSwipe.Game.Models.Entities
         int IndexX { get; set; }
         int IndexY { get; set; }
 
-        bool IsResolved();
+        //bool IsResolved();
+        bool CanPerform();
         bool CanCollide(IGem targetGem);
-        void CollideInto(IGem targetGem);
-        void ValidateResolution();
-        void Move(int x, int y);
+        Task CollideInto(IGem targetGem);
+        Task PerformAction(params Task[] actions);
+        //void ValidateResolution();
+        Task Move(int x, int y, bool activation = false);
+        void Dispose();
     }
 }

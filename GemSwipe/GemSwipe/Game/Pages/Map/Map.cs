@@ -61,7 +61,6 @@ namespace GemSwipe.Game.Pages.Map
         private void LevelButton_Tapped(int i)
         {
 
-            Logger.Log("button tapped" + i);
             if (PlayerLifeService.Instance.HasLife())
             {
                 var levelData = _levelDataRepository.Get(i);

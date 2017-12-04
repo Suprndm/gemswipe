@@ -24,19 +24,19 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
 
 
 
-        public TeleportationGem(int boardX, int boardY, int size, Board board) : base(boardX, boardY, size,board)
-        {
-            Type = GemType.Teleportation;
-            _board = board;
+        //public TeleportationGem(int boardX, int boardY, int size, Board board) : base(boardX, boardY, size,board)
+        //{
+        //    Type = GemType.Teleportation;
+        //    _board = board;
 
-            _topLane = new List<Cell>();
-            _bottomLane = new List<Cell>();
-            _leftLane = new List<Cell>();
-            _rightLane = new List<Cell>();
+        //    _topLane = new List<Cell>();
+        //    _bottomLane = new List<Cell>();
+        //    _leftLane = new List<Cell>();
+        //    _rightLane = new List<Cell>();
 
-            GemToTeleport = new List<Gem>();
-            _hasBeenUsed = false;
-        }
+        //    GemToTeleport = new List<Gem>();
+        //    _hasBeenUsed = false;
+        //}
 
         public TeleportationGem(Board board, string portalId, int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(boardX, boardY, size, x, y, radius, randomizer,board)
         {

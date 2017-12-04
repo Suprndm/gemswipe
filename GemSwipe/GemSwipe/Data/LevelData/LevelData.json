@@ -89,11 +89,11 @@
   },
   {
     "Id": 8,
-    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "BoardSetupString": "1 1 2 2 3 0",
     "Story": "La premiere story",
     "Title": "Le premier title",
-    "Rows": 4,
-    "Columns": 4,
+    "Rows": 1,
+    "Columns": 6,
     "Objectives": {
       "4": 1
     },

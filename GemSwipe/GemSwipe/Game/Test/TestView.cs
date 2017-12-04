@@ -26,15 +26,28 @@ namespace GemSwipe.Game.Test
             AddChild(_fpsText);
 
             LevelDataRepository _levelDataRepository = new LevelDataRepository();
-            LevelData levelData = _levelDataRepository.Get(6);
+            LevelData levelData = _levelDataRepository.Get(8);
             var boardMarginTop = Height * 0.2f;
             Board _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Height);
             AddChild(_board);
 
-            TextButton textButton = new TextButton(width / 2, height-height/20, height / 30, "swipe");
+            TextButton textButton = new TextButton(width / 2, height - height / 20, height / 30, "swipe");
             DeclareTappable(textButton);
             AddChild(textButton);
-            textButton.Activated += () => _board.Swipe(Direction.Right);
+            bool swiped = false;
+            textButton.Activated += () =>
+            {
+                if (swiped)
+                {
+                    _board.Reset();
+                    swiped = false;
+                }
+                else
+                {
+                    _board.Swipe(Direction.Right);
+                    swiped = true;
+                }
+            };
         }
 
         public override void SetupLayers()
