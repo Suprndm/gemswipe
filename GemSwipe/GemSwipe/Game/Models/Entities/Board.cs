@@ -7,6 +7,7 @@ using SkiaSharp;
 using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.BoardModel.Gems;
 using GemSwipe.Services;
+using GemSwipe.Game.Models.BoardModel.Cells;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -93,6 +94,38 @@ namespace GemSwipe.Game.Models.Entities
             return false;
         }
 
+        private IList<string> SplitCellGemData(string rawData)
+        {
+
+            IList<string> splitRawData = new List<string>();
+
+            IList<string> uncheckedSplitRawData = rawData.Split('.');
+
+            if (uncheckedSplitRawData.Count == 1)
+            {
+                string data = uncheckedSplitRawData[0];
+
+                int size = 0;
+                bool isSize = int.TryParse(data, out size);
+
+                if (isSize)
+                {
+                    splitRawData.Add(string.Empty);
+                    splitRawData.Add(size.ToString());
+                }
+                else
+                {
+                    splitRawData.Add(data);
+                    splitRawData.Add(string.Empty);
+                }
+            }
+            else if (uncheckedSplitRawData.Count == 2)
+            {
+                splitRawData = uncheckedSplitRawData;
+            }
+            return splitRawData;
+        }
+
         private GemType ParseGemType(string rawData)
         {
             int size = 0;
@@ -111,8 +144,8 @@ namespace GemSwipe.Game.Models.Entities
             }
             else
             {
-                string gemCode = rawData.Substring(0, 2);
-                switch (gemCode)
+                //string gemCode = rawData.Substring(0, 2);
+                switch (rawData)
                 {
                     default:
                         return GemType.Base;
@@ -145,10 +178,11 @@ namespace GemSwipe.Game.Models.Entities
                 var rowCells = rows[j].Split(' ');
                 for (int i = 0; i < nbOfColumns; i++)
                 {
-                    Cell cell = CreateCell(i, j, rowCells[i]);
+                    IList<string> splitData = SplitCellGemData(rowCells[i]);
+                    Cell cell = CreateCell(i, j, splitData[0]);
                     CellsList.Add(cell);
 
-                    Gem gem = CreateGem(i, j, rowCells[i]);
+                    Gem gem = CreateGem(i, j, splitData[1]);
                     if (gem != null)
                     {
                         AddChild(gem);
@@ -181,9 +215,36 @@ namespace GemSwipe.Game.Models.Entities
             PopGems();
         }
 
+        private Cell ParseCellType(int boardX, int boardY, string rawData)
+        {
+            string cellType;
+            if (rawData.Length >= 2)
+            {
+                cellType = rawData.Substring(0, 2);
+            }
+            else
+            {
+                cellType = rawData;
+            }
+            switch (cellType)
+            {
+                default:
+                    return new Cell(boardX, boardY, this, false);
+                case "":
+                    return new Cell(boardX, boardY, this, false);
+                case "BH":
+                    return new BlackholeCell(boardX, boardY, this, _randomizer);
+                case "TP":
+
+                    string portalId = rawData.Substring(2);
+                    return new TeleportationCell(boardX, boardY, this, portalId);
+            }
+        }
+
         private Cell CreateCell(int boardX, int boardY, string rawData)
         {
-            return new Cell(boardX, boardY, this, false);
+            //return new Cell(boardX, boardY, this, false);
+            return ParseCellType(boardX, boardY, rawData);
         }
 
         private Gem CreateGem(int boardX, int boardY, string rawData, int size = 0)
@@ -193,8 +254,8 @@ namespace GemSwipe.Game.Models.Entities
 
             var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
             var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
-            bool isSize = int.TryParse(rawData, out size);
 
+            bool isSize = int.TryParse(rawData, out size);
             if (size == 0)
             {
                 return null;
@@ -292,24 +353,6 @@ namespace GemSwipe.Game.Models.Entities
             }
             return AnyCanActivate;
         }
-
-        //private bool IsResolved()
-        //{
-        //    bool isResolved = true;
-        //    foreach (Cell cell in CellsList)
-        //    {
-        //        if (cell.AttachedGem != null)
-        //        {
-        //            IGem gem = cell.AttachedGem;
-        //            if (!gem.IsResolved())
-        //            {
-        //                isResolved = false;
-        //            }
-        //        }
-        //    }
-        //    return isResolved;
-        //}
-
 
         public IList<Cell> GetEmptyCells()
         {
@@ -471,7 +514,7 @@ namespace GemSwipe.Game.Models.Entities
             return draw;
         }
 
-        private float GetGemSize()
+        public float GetGemSize()
         {
             return (float)2 / 3 * _cellWidth / 2;
         }
@@ -628,10 +671,21 @@ namespace GemSwipe.Game.Models.Entities
             return ToGemViewX(gemIndex) + (_cellWidth - gem.Width) / 2;
         }
 
+        public float ToGemX(int gemIndex, float radius)
+        {
+            return ToGemViewX(gemIndex) + (_cellWidth - 2*radius) / 2;
+        }
+
         public float ToGemY(int gemIndex, GemBase gem)
         {
-            return ToGemViewY(gemIndex) + (_cellWidth - gem.Width) / 2;
+            return ToGemViewY(gemIndex) + (_cellHeight - gem.Height) / 2;
         }
+
+        public float ToGemY(int gemIndex, float radius)
+        {
+            return ToGemViewY(gemIndex) + (_cellHeight - 2 * radius) / 2;
+        }
+
 
         public override void Dispose()
         {

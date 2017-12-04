@@ -16,6 +16,7 @@ namespace GemSwipe.Game.Models.Entities
         bool CanCollide(IGem targetGem);
         Task CollideInto(IGem targetGem);
         Task PerformAction(params Task[] actions);
+        Task Die();
         //void ValidateResolution();
         Task Move(int x, int y, bool activation = false);
         void Dispose();

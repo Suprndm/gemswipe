@@ -64,25 +64,12 @@ namespace GemSwipe.Game.Models
         }
 
 
-        //public GemBase GetAttachedGem()
-        //{
-        //    return _attachedGem;
-        //}
 
         public Gem GetAttachedGem()
         {
             return (Gem)AttachedGem;
         }
-        //public Gem GetAttachedGem<T>()
-        //{
-        //    return _attachedGem;
-
-        //    IList<Func<T>> listOfFunct = new List<Func<T>>();
-        //    IList<Action<int>> listOfActions = new List<Action<int>>();
-        //    Func<T> func = () => { return 1; };
-        //    listOfFunct.Add(func);
-        //    listOfFunct[0].Invoke();
-        //}
+      
 
     }
 }

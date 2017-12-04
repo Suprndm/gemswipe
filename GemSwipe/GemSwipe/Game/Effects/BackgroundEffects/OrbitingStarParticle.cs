@@ -74,7 +74,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             this.Animate("FadeColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, lHslBase, 8, (uint)1000, Easing.SinInOut);
             this.Animate("Recede", p => _size = (float)p, _size, baseSize, 8, (uint)1000, Easing.SinInOut);
 
-            Task.Delay(2000);
+            await Task.Delay(2000);
         }
 
         public void SetTarget(float x, float y)
