@@ -1,100 +1,222 @@
-﻿using GemSwipe.Game.Models.Entities;
+﻿using GemSwipe.Game.Models.BoardModel.Gems;
+using GemSwipe.Game.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Models.BoardModel.Cells
 {
     public class TeleportationCell : Cell
     {
         public string PortalId { get; set; }
-        public TeleportationCell ExitGem;
-        private bool _hasBeenUsed;
-        private bool _portalIsOpened;
+        public TeleportationCell ExitCell;
+        public TeleportationCell EntryCell;
+        private IList<IGem> _alreadyTransportedGem;
+        private bool _isEntry;
+        private Gem _gem;
+        private BlackholeGem _blackholeGem;
+        private bool _isTeleporting;
 
-        public TeleportationCell(int boardX, int boardY, Board board, string portalId) : base(boardX, boardY, board)
+
+        public TeleportationCell(int boardX, int boardY, Board board, string portalId, bool isEntry = true) : base(boardX, boardY, board)
         {
+            _isTeleporting = false;
             PortalId = portalId;
-            _portalIsOpened = true;
-            _hasBeenUsed = false;
-            FindExit(board);
-
+            _isEntry = isEntry;
+            _alreadyTransportedGem = new List<IGem>();
+            if (isEntry)
+            {
+                SetOtherPortal(board);
+            }
             float radius = board.GetGemSize();
-            Gem gem = new Gem(boardX, boardY, 5, board.ToGemX(boardX, radius), board.ToGemY(boardY, radius), radius, new Random(), board);
-            board.AddChild(gem);
+            _gem = new Gem(boardX, boardY, 5, board.ToGemX(boardX), board.ToGemY(boardY), radius, new Random(), board);
+            board.AddChild(_gem);
+
+            radius = board.GetGemSize();
+            _blackholeGem = new BlackholeGem(boardX, boardY, 0, board.ToGemX(boardX), board.ToGemY(boardY), radius, new Random(), board);
+            board.AddChild(_blackholeGem);
+        }
+
+        public TeleportationCell FindOtherPortal(Board board)
+        {
+            return (TeleportationCell)board.CellsList.FirstOrDefault(p => p is TeleportationCell && ((TeleportationCell)p).PortalId == PortalId);
+        }
+
+        public void SetOtherPortal(Board board)
+        {
+            if (_isEntry)
+            {
+                ExitCell = FindOtherPortal(board);
+                if (ExitCell != null)
+                {
+                    ExitCell.EntryCell = this;
+                }
+            }
+            else
+            {
+                EntryCell = FindOtherPortal(board);
+                if (EntryCell != null)
+                {
+                    EntryCell.ExitCell = this;
+                }
+            }
         }
 
         public void FindExit(Board board)
         {
-            ExitGem = (TeleportationCell)board.CellsList.FirstOrDefault(p => p is TeleportationCell && ((TeleportationCell)p).PortalId == PortalId);
-            if (ExitGem != null)
+            ExitCell = (TeleportationCell)board.CellsList.FirstOrDefault(p => p is TeleportationCell && ((TeleportationCell)p).PortalId == PortalId);
+            if (ExitCell != null)
             {
-                ExitGem.ExitGem = this;
+                ExitCell.EntryCell = this;
+            }
+        }
+
+        public void FindEntry(Board board)
+        {
+            EntryCell = (TeleportationCell)board.CellsList.FirstOrDefault(p => p is TeleportationCell && ((TeleportationCell)p).PortalId == PortalId);
+            if (EntryCell != null)
+            {
+                EntryCell.ExitCell = this;
             }
         }
 
         public override ICell GetTargetCell(Direction direction)
         {
-            if (_portalIsOpened)
+            if (_isEntry)
             {
-                ExitGem.ClosePortal();
-                return ExitGem;
+                return ExitCell;
             }
             else
             {
-                OpenPortal();
                 return base.GetTargetCell(direction);
             }
         }
 
-        public bool IsOpened()
+        public override void Reinitialize()
         {
-            return _portalIsOpened;
+            _alreadyTransportedGem = new List<IGem>();
+            base.Reinitialize();
         }
 
-        public void OpenPortal()
+        public override Task PickGem(IGem gem)
         {
-            _portalIsOpened = true;
+            if (_isEntry)
+            {
+                return gem.PerformAction(() => gem.Move(IndexX, IndexY, true));
+            }
+            else
+            {
+                return base.PickGem(gem);
+            }
         }
 
-        public void ClosePortal()
-        {
-            _portalIsOpened = false;
-        }
+        //public override Task PickGem(IGem gem)
+        //{
+        //    if (_isEntry)
+        //    {
+        //        return gem.PerformAction(() => gem.Move(IndexX, IndexY, true));
+        //    }
+        //    else
+        //    {
+        //        if (senderCell == EntryCell)
+        //        {
 
-        public void SwitchPortalState()
+        //        }
+        //    }
+        //}
+
+        public override bool CanProcess(IGem gem)
         {
-            _portalIsOpened = !_portalIsOpened;
+            return !_isTeleporting && base.CanProcess(gem);
         }
 
         public override Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
         {
-            if (AttachedGem == null)
+            if (_isEntry)
             {
-                senderCell.DetachGemBase();
-                senderCell.Reinitialize();
-
-                AttachGem(gem);
-                Reinitialize();
-                return gem.PerformAction(gem.Move(IndexX, IndexY, true));
-            }
-            else
-            {
-                if (gem.CanCollide(AttachedGem))
+                if (_alreadyTransportedGem.SingleOrDefault(p => p == gem) == null)
                 {
-                    senderCell.DetachGemBase();
-                    senderCell.Reinitialize();
-                    Reinitialize();
-                    gem.Move(IndexX, IndexY, true);
-                    return gem.CollideInto(AttachedGem);
+                    _alreadyTransportedGem.Add(gem);
+                    return base.TryReceiveGem(gem, direction, senderCell);
                 }
                 else
                 {
                     return ReturnGem(gem, senderCell);
                 }
             }
+            else
+            {
+                if (senderCell == EntryCell)
+                {
+                    return TryTeleport(gem, direction, senderCell);
+                }
+                else
+                {
+                    return base.TryReceiveGem(gem, direction, senderCell);
+                }
+            }
+        }
+
+        public Task TryTeleport(IGem gem, Direction direction, ICell senderCell)
+        {
+            if (AttachedGem == null)
+            {
+                senderCell.DetachGemBase();
+                senderCell.Reactivate();
+
+                AttachGem(gem);
+                Reactivate();
+                return Teleport(gem);
+            }
+            else
+            {
+                if (gem.CanCollide(AttachedGem))
+                {
+                    senderCell.DetachGemBase();
+                    senderCell.Reactivate();
+
+                    Reactivate();
+                    Teleport(gem);
+                    return HandleCollisionWithAttachedGem(gem);
+                }
+                else
+                {
+                    return ReturnGem(gem, senderCell);
+                }
+            }
+        }
+
+        public Task IsTeleporting(bool isTeleporting)
+        {
+             _isTeleporting = isTeleporting;
+            return Task.Delay(0);
+        }
+
+        public Task Teleport(IGem gem)
+        {
+
+            return gem.PerformAction(() => EntryCell.IsTeleporting(true), ()=>Miniaturize((GemBase)gem), () => gem.Move(IndexX, IndexY, true), () => IncreaseSize((GemBase)gem),()=>EntryCell.IsTeleporting(false));
+        }
+
+        public Task IncreaseSize(GemBase gem)
+        {
+            int animationLenght = 600;
+            Gem gemToTeleport = (gem as Gem);
+            gemToTeleport.Animate("IncreaseGemSize", p => gemToTeleport.Radius = (float)p, gemToTeleport.Radius, gemToTeleport.Radius * 2, 4, (uint)animationLenght, Easing.SinInOut);
+            //gemToTeleport.Animate("MiniaturizeHeight", p => gemToTeleport.Height = (float)p, gemToTeleport.Height, gemToTeleport.Height / 2, 4, (uint)animationLenght, Easing.SinInOut);
+            return Task.Delay(animationLenght);
+        }
+
+        public Task Miniaturize(GemBase gem)
+        {
+            int animationLenght = 600;
+            Gem gemToTeleport = (gem as Gem);
+            gemToTeleport.Animate("MiniaturizeWidth", p => gemToTeleport.Radius = (float)p, gemToTeleport.Radius, gemToTeleport.Radius / 2, 4, (uint)animationLenght, Easing.SinInOut);
+            //gemToTeleport.Animate("MiniaturizeHeight", p => gemToTeleport.Height = (float)p, gemToTeleport.Height, gemToTeleport.Height / 2, 4, (uint)animationLenght, Easing.SinInOut);
+            return Task.Delay(animationLenght);
         }
     }
 }

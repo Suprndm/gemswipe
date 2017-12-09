@@ -15,6 +15,7 @@ namespace GemSwipe.Game.Models.Entities
     {
         public Cell[,] Cells { get; private set; }
         public IList<Cell> CellsList { get; private set; }
+        public IList<CellBase2> CellsList2 { get; private set; }
         public IList<IGem> Gems { get; private set; }
 
         public IList<TeleportationGem> TeleportationGems { get; set; }
@@ -235,9 +236,14 @@ namespace GemSwipe.Game.Models.Entities
                 case "BH":
                     return new BlackholeCell(boardX, boardY, this, _randomizer);
                 case "TP":
-
-                    string portalId = rawData.Substring(2);
-                    return new TeleportationCell(boardX, boardY, this, portalId);
+                    bool isEntry = false;
+                    string portalType = rawData.Substring(2, 1);
+                    if (portalType == "e")
+                    {
+                        isEntry = true;
+                    }
+                    string portalId = rawData.Substring(3);
+                    return new TeleportationCell(boardX, boardY, this, portalId, isEntry);
             }
         }
 
@@ -252,8 +258,8 @@ namespace GemSwipe.Game.Models.Entities
             GemType gemType = ParseGemType(rawData);
             var gemRadius = GetGemSize();
 
-            var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
-            var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
+            var gemX = ToGemX(boardX);
+            var gemY = ToGemY(boardY);
 
             bool isSize = int.TryParse(rawData, out size);
             if (size == 0)
@@ -264,29 +270,6 @@ namespace GemSwipe.Game.Models.Entities
             {
                 return new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer, this);
             }
-
-            //Gem gem;
-
-            //switch (gemType)
-            //{
-            //    case GemType.None:
-            //        return null;
-            //    case GemType.Base:
-            //        bool isSize = int.TryParse(rawData, out size);
-            //        return new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer,this);
-            //    case GemType.Blocking:
-            //        return null;
-            //    case GemType.Blackhole:
-            //        return new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer,this);
-            //    case GemType.Teleportation:
-            //        string portalId = rawData.Substring(2);
-            //        TeleportationGem teleportationGem = new TeleportationGem(this, portalId, boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-            //        TeleportationGems.Add(teleportationGem);
-            //        teleportationGem.FindExit();
-            //        return teleportationGem;
-            //    default:
-            //        return null;
-            //}
         }
 
         private async Task PopGems()
@@ -547,7 +530,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            //DrawCells(Canvas);
+            DrawCells(Canvas);
         }
 
         public void UpdateDimensions()
@@ -666,25 +649,40 @@ namespace GemSwipe.Game.Models.Entities
             return (gemStateY * (_cellWidth + _verticalMarginPerCell) + _verticalBoardMargin);
         }
 
-        public float ToGemX(int gemIndex, GemBase gem)
+        public float ToGemX(int gemIndex)
         {
-            return ToGemViewX(gemIndex) + (_cellWidth - gem.Width) / 2;
+            return ToGemViewX(gemIndex) + _cellWidth  / 2;
         }
 
-        public float ToGemX(int gemIndex, float radius)
+      
+        public float ToGemY(int gemIndex)
         {
-            return ToGemViewX(gemIndex) + (_cellWidth - 2*radius) / 2;
+            return ToGemViewY(gemIndex) + _cellHeight / 2;
         }
 
-        public float ToGemY(int gemIndex, GemBase gem)
-        {
-            return ToGemViewY(gemIndex) + (_cellHeight - gem.Height) / 2;
-        }
+     
 
-        public float ToGemY(int gemIndex, float radius)
-        {
-            return ToGemViewY(gemIndex) + (_cellHeight - 2 * radius) / 2;
-        }
+
+        //public float ToGemX(int gemIndex, GemBase gem)
+        //{
+        //    return ToGemViewX(gemIndex) + (_cellWidth - gem.Width) / 2;
+        //}
+
+        //public float ToGemX(int gemIndex, float radius)
+        //{
+        //    return ToGemViewX(gemIndex) + (_cellWidth - 2 * radius) / 2;
+        //}
+
+        //public float ToGemY(int gemIndex, GemBase gem)
+        //{
+        //    return ToGemViewY(gemIndex) + (_cellHeight - gem.Height) / 2;
+        //}
+
+        //public float ToGemY(int gemIndex, float radius)
+        //{
+        //    return ToGemViewY(gemIndex) + (_cellHeight - 2 * radius) / 2;
+        //}
+
 
 
         public override void Dispose()

@@ -14,6 +14,7 @@ using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
 {
+
     public class Gem : GemBase
     {
         public GemType Type { get; set; }
@@ -41,12 +42,16 @@ namespace GemSwipe.Game.Models.Entities
         private float _fluidSize;
         private int _size;
         private bool _isDying;
-        private readonly float _radius;
+        private float _radius;
         public float Radius
         {
             get
             {
                 return _radius;
+            }
+            set
+            {
+                _radius = value;
             }
         }
 
@@ -139,7 +144,7 @@ namespace GemSwipe.Game.Models.Entities
                 Gem target = (Gem)targetGem;
                 //Move(gem.IndexX, gem.IndexY, true);
                 Die();
-                return target.PerformAction(target.Fuse());
+                return target.PerformAction(() => target.Fuse());
             }
             else
             {
@@ -155,7 +160,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected virtual void Shine()
         {
-            var effect = new GemPopEffect(Width / 2 + _floatingParticule.X, Height / 2 + _floatingParticule.Y, Height, Width);
+            var effect = new GemPopEffect(_floatingParticule.X, _floatingParticule.Y, Height, Width);
             AddChild(effect);
             effect.Start();
         }
@@ -214,8 +219,10 @@ namespace GemSwipe.Game.Models.Entities
         protected override void Draw()
         {
             _floatingParticule.Update();
-            var starX = X + _radius + _floatingParticule.X;
-            var starY = Y + _radius + +_floatingParticule.Y;
+            //var starX = X + _radius + _floatingParticule.X;
+            //var starY = Y + _radius + +_floatingParticule.Y;
+            var starX = X + _floatingParticule.X;
+            var starY = Y + _floatingParticule.Y;
 
             var branches = (int)_fluidSize + 1;
             var reduction = 1f / (8f / Math.Min(8, branches));

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -34,10 +35,14 @@ namespace GemSwipe.Game.Models.Entities
                 return TryHandleGem(AttachedGem, direction);
             }
             else return Task.Delay(0);
-
         }
 
-        public void Reinitialize()
+        public virtual void Reinitialize()
+        {
+            _hasHandledGem = false;
+        }
+
+        public virtual void Reactivate()
         {
             _hasHandledGem = false;
         }
@@ -53,7 +58,7 @@ namespace GemSwipe.Game.Models.Entities
             AttachedGem = null;
         }
 
-       
+
         public bool MustActivate()
         {
             if (AttachedGem == null)
@@ -77,7 +82,7 @@ namespace GemSwipe.Game.Models.Entities
                 return !_hasHandledGem && AttachedGem.CanPerform();
             }
         }
-       
+
         public virtual ICell GetTargetCell(Direction direction)
         {
             int targetX = -1;
@@ -136,8 +141,7 @@ namespace GemSwipe.Game.Models.Entities
             if (targetCell == null)
             {
                 ValidateGemHandling();
-                //return Task.Delay(0);
-                return gem.Move(IndexX, IndexY, true);
+                return Task.Delay(0);
             }
             else
             {
@@ -152,7 +156,7 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public void ValidateGemHandling()
+        public virtual void ValidateGemHandling()
         {
             _hasHandledGem = true;
         }
@@ -176,21 +180,22 @@ namespace GemSwipe.Game.Models.Entities
             if (AttachedGem == null)
             {
                 senderCell.DetachGemBase();
-                senderCell.Reinitialize();
+                senderCell.Reactivate();
 
                 AttachGem(gem);
-                Reinitialize();
-                return gem.Move(IndexX, IndexY,true);
+                Reactivate();
+                return PickGem(gem);
             }
             else
             {
                 if (gem.CanCollide(AttachedGem))
                 {
                     senderCell.DetachGemBase();
-                    senderCell.Reinitialize();
-                    Reinitialize();
-                    gem.Move(IndexX, IndexY, true);
-                    return gem.CollideInto(AttachedGem);
+                    senderCell.Reactivate();
+
+                    Reactivate();
+                    PickGem(gem);
+                    return HandleCollisionWithAttachedGem(gem);
                 }
                 else
                 {
@@ -199,11 +204,22 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
+        public virtual Task PickGem(IGem gem)
+        {
+            return gem.Move(IndexX, IndexY, true);
+        }
+
+        public virtual Task HandleCollisionWithAttachedGem(IGem gem)
+        {
+            return gem.PerformAction(() => gem.CollideInto(AttachedGem));
+        }
+
         public virtual Task ReturnGem(IGem gem, ICell senderCell)
         {
             senderCell.AttachGem(gem);
             senderCell.ValidateGemHandling();
-            return gem.Move(senderCell.IndexX, senderCell.IndexY, true);
+            return Task.Delay(0);
+            //return gem.Move(senderCell.IndexX, senderCell.IndexY, true);
         }
 
 

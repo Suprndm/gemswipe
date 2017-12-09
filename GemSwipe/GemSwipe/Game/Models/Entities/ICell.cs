@@ -13,7 +13,7 @@ namespace GemSwipe.Game.Models.Entities
         void AttachGem(IGem gem);
         bool CanProcess(IGem gem);
         void DetachGemBase();
-        void Reinitialize();
+        void Reactivate();
         void ValidateGemHandling();
         Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell);
     }

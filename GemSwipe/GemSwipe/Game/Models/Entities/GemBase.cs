@@ -17,6 +17,8 @@ namespace GemSwipe.Game.Models.Entities
         public int TargetX { get; set; }
         public int TargetY { get; set; }
 
+        public ICell AnchorCell;
+        private bool _hasBeenHandled;
         private bool _isPerformingAction;
         protected Board _board;
 
@@ -30,10 +32,6 @@ namespace GemSwipe.Game.Models.Entities
             _board = board;
         }
 
-        public void Reinitialize()
-        {
-            _isPerformingAction = false;
-        }
 
         public virtual bool CanPerform()
         {
@@ -50,12 +48,12 @@ namespace GemSwipe.Game.Models.Entities
             return Task.Delay(0);
         }
 
-        public async Task PerformAction(params Task[] actions)
+        public async Task PerformAction(params Func<Task>[] actions)
         {
             _isPerformingAction = true;
             for (int i = 0; i < actions.Length; i++)
             {
-                await actions[i];
+                await actions[i].Invoke();
             }
             _isPerformingAction = false;
         }
@@ -66,7 +64,7 @@ namespace GemSwipe.Game.Models.Entities
             IndexY = y;
             if (animationActivator)
             {
-                return MoveTo(_board.ToGemX(x, this), _board.ToGemY(y, this));
+                return MoveTo(_board.ToGemX(x), _board.ToGemY(y));
             }
             else
             {
@@ -100,5 +98,11 @@ namespace GemSwipe.Game.Models.Entities
             }
             Dispose();
         }
+
+        public virtual void Reinitialize()
+        {
+        }
+
+
     }
 }

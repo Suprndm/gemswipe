@@ -63,7 +63,7 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
                     SKColor.FromHsl(21, 78, randomizer.Next(0, 6))
                     );
                 //OrbitingStarParticle star = new OrbitingStarParticle(randomizer.Next((int)screenWidth) - screenWidth / 2, randomizer.Next((int)screenHeight) - screenHeight / 2, Radius / 4, randomizer, CreateColor(0, 0, 0));
-                star.SetTarget(Radius, Radius);
+                star.SetTarget(0, 0);
                 AddChild(star);
                 _listOfStarParticles.Add(star);
                 star.SteerToTarget();
