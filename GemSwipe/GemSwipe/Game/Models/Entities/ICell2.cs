@@ -8,15 +8,15 @@ namespace GemSwipe.Game.Models.Entities
 {
     public interface ICell2
     {
-        int IndexX { get; set; }
-        int IndexY { get; set; }
+        int IndexX2 { get; set; }
+        int IndexY2 { get; set; }
 
-        bool MustActivate(IGem2 gem2);
-        Task Activate(IGem2 gem2);
-        bool IsEmpty();
+        bool MustActivate2(IGem2 gem2);
+        Task Activate2(IGem2 gem2);
+        bool IsEmpty2();
 
-        bool CanHandle(IGem2 gem2);
-        Task Handle(IGem2 gem2);
+        bool CanHandle2(IGem2 gem2);
+        Task Handle2(IGem2 gem2);
 
         //void AttachGem(IGem gem);
         //bool CanProcess(IGem gem);

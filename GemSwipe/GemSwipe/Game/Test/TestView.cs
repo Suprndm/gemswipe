@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using GemSwipe.Game.Models.BoardModel.Gems;
 using GemSwipe.Game.Models;
 using GemSwipe.Paladin.UIElements.Buttons;
+using GemSwipe.Game.Popups;
 
 namespace GemSwipe.Game.Test
 {
@@ -26,8 +27,12 @@ namespace GemSwipe.Game.Test
             AddChild(_fpsText);
 
             LevelDataRepository _levelDataRepository = new LevelDataRepository();
-            LevelData levelData = _levelDataRepository.Get(8);
+            //LevelData levelData = _levelDataRepository.Get(4);
             var boardMarginTop = Height * 0.2f;
+
+            var levelData = _levelDataRepository.Get(8);
+            var dialogPopup = new LevelDialogPopup(levelData);
+
             Board _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Height);
             AddChild(_board);
 

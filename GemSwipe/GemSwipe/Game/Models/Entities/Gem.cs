@@ -137,13 +137,12 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public override Task CollideInto(IGem targetGem)
+        public override Task Collide(IGem targetGem)
         {
             if (targetGem is Gem)
             {
                 Gem target = (Gem)targetGem;
-                //Move(gem.IndexX, gem.IndexY, true);
-                Die();
+                PerformAction(() => Move(target.IndexX, target.IndexY, true), () => Die());
                 return target.PerformAction(() => target.Fuse());
             }
             else

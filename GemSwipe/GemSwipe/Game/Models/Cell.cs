@@ -59,16 +59,16 @@ namespace GemSwipe.Game.Models
         }
 
 
-        public bool IsEmpty()
-        {
-            return AttachedGem == null && !IsBlocked;
-        }
+        //public bool IsEmpty()
+        //{
+        //    return AssignedGem == null && !IsBlocked;
+        //}
 
 
 
         public Gem GetAttachedGem()
         {
-            return (Gem)AttachedGem;
+            return (Gem)AssignedGem;
         }
 
 

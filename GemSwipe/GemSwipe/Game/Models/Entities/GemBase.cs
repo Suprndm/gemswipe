@@ -14,28 +14,165 @@ namespace GemSwipe.Game.Models.Entities
         protected const int MovementAnimationMs = 600;
         public int IndexX { get; set; }
         public int IndexY { get; set; }
-        public int TargetX { get; set; }
-        public int TargetY { get; set; }
-
-        public ICell AnchorCell;
+        public ICell AttachedCell;
         private bool _hasBeenHandled;
-        private bool _isPerformingAction;
+        private bool _isPerformingAction = false;
         protected Board _board;
 
         public GemBase(int boardX, int boardY, int size, Board board) : base(0, 0, 0, 0)
         {
+            IndexX = boardX;
+            IndexY = boardY;
             _board = board;
+            if (_board != null)
+            {
+                AttachedCell = _board.CellsList.SingleOrDefault(p => p.IndexX == IndexX && p.IndexY == IndexY);
+            }
         }
 
         public GemBase(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer, Board board) : base(x, y, radius * 2, radius * 2)
         {
+            IndexX = boardX;
+            IndexY = boardY;
             _board = board;
+            if (_board != null)
+            {
+                AttachedCell = _board.CellsList.SingleOrDefault(p => p.IndexX == IndexX && p.IndexY == IndexY);
+            }
+        }
+
+        #region Gem Model handling
+
+        public void Reactivate()
+        {
+            _hasBeenHandled = false;
+        }
+
+        public void Attach(ICell cell)
+        {
+            AttachedCell = cell;
+        }
+
+        public void DetachCell()
+        {
+            AttachedCell = null;
+        }
+
+        public bool CanActivate()
+        {
+            return !HasBeenHandled() && CanPerform();
+        }
+
+        public bool HasBeenHandled()
+        {
+            return _hasBeenHandled;
+        }
+
+        public void ValidateHandling()
+        {
+            _hasBeenHandled = true;
+        }
+
+        public bool CanPerform()
+        {
+            return !_isPerformingAction;
+        }
+
+        public Task TryResolveSwipe(Direction direction)
+        {
+            if (CanActivate())
+            {
+                return ResolveSwipe(direction);
+            }
+            else
+            {
+                return Task.Delay(0);
+            }
+        }
+
+        public virtual Task ResolveSwipe(Direction direction)
+        {
+            if (AttachedCell.MustActivate(this))
+            {
+                return AttachedCell.Activate(this);
+            }
+            else
+            {
+                return SelfActivate(direction);
+            }
         }
 
 
-        public virtual bool CanPerform()
+        public virtual ICell GetTargetCell(Direction direction)
         {
-            return !_isPerformingAction;
+            int targetX = -1;
+            int targetY = -1;
+
+            bool targetIsNull = true;
+            switch (direction)
+            {
+                case Direction.Top:
+                    targetX = IndexX;
+                    targetY = IndexY - 1;
+                    if (targetY >= 0)
+                    {
+                        targetIsNull = false;
+                    }
+                    break;
+                case Direction.Bottom:
+                    targetX = IndexX;
+                    targetY = IndexY + 1;
+                    if (targetY <= _board.NbOfRows - 1)
+                    {
+                        targetIsNull = false;
+                    }
+                    break;
+                case Direction.Left:
+                    targetX = IndexX - 1;
+                    targetY = IndexY;
+                    if (targetX >= 0)
+                    {
+                        targetIsNull = false;
+                    }
+                    break;
+                case Direction.Right:
+                    targetX = IndexX + 1;
+                    targetY = IndexY;
+                    if (targetX <= _board.NbOfColumns - 1)
+                    {
+                        targetIsNull = false;
+                    }
+                    break;
+            }
+            if (targetIsNull)
+            {
+                return null;
+            }
+            else
+            {
+                return _board.CellsList.SingleOrDefault(p => p.IndexX == targetX && p.IndexY == targetY);
+            }
+        }
+
+        public virtual Task SelfActivate(Direction direction)
+        {
+            ICell targetCell = GetTargetCell(direction);
+            if (targetCell == null)
+            {
+                ValidateHandling();
+                return Task.Delay(0);
+            }
+            else
+            {
+                if (targetCell.CanHandle(this))
+                {
+                    return targetCell.Handle(this,AttachedCell);
+                }
+                else
+                {
+                    return Task.Delay(0);
+                }
+            }
         }
 
         public virtual bool CanCollide(IGem gem)
@@ -43,9 +180,21 @@ namespace GemSwipe.Game.Models.Entities
             return false;
         }
 
-        public virtual Task CollideInto(IGem gem)
+        public virtual Task Collide(IGem gem)
         {
             return Task.Delay(0);
+        }
+
+        #endregion
+
+        #region Animation
+
+        public Task GoTo(ICell cell)
+        {
+            IndexX = cell.IndexX;
+            IndexY = cell.IndexY;
+            AttachedCell = cell;
+            return Move(cell.IndexX, cell.IndexY, true);
         }
 
         public async Task PerformAction(params Func<Task>[] actions)
@@ -99,10 +248,6 @@ namespace GemSwipe.Game.Models.Entities
             Dispose();
         }
 
-        public virtual void Reinitialize()
-        {
-        }
-
-
+        #endregion
     }
 }

@@ -10,218 +10,89 @@ namespace GemSwipe.Game.Models.Entities
 {
     public class CellBase : ICell
     {
-        public IGem AttachedGem;
-        private CellBase _targetCell;
-        private Board _board;
-
-        private bool _hasHandledGem;
-        public bool Resolved { get; set; }
-
         public int IndexX { get; set; }
         public int IndexY { get; set; }
+        public IGem AssignedGem;
+        private Board _board;
 
         public CellBase(int boardX, int boardY, Board board)
         {
             IndexX = boardX;
             IndexY = boardY;
             _board = board;
-            AttachedGem = null;
+            AssignedGem = null;
         }
 
-        public virtual Task ResolveSwipe(Direction direction)
+        public void Assign(IGem gem)
         {
-            if (CanActivate())
-            {
-                return TryHandleGem(AttachedGem, direction);
-            }
-            else return Task.Delay(0);
+            AssignedGem = gem;
         }
 
-        public virtual void Reinitialize()
+        public void UnassignGem()
         {
-            _hasHandledGem = false;
-        }
-
-        public virtual void Reactivate()
-        {
-            _hasHandledGem = false;
-        }
-
-        public virtual void AttachGem(IGem gem)
-        {
-            AttachedGem = gem;
-
-        }
-
-        public virtual void DetachGemBase()
-        {
-            AttachedGem = null;
+            AssignedGem = null;
         }
 
 
-        public bool MustActivate()
+        public virtual bool MustActivate(IGem gem)
         {
-            if (AttachedGem == null)
-            {
-                return false;
-            }
-            else
-            {
-                return !_hasHandledGem;
-            }
+            return false;
         }
 
-        public virtual bool CanActivate()
+        public Task Activate(IGem gem)
         {
-            if (AttachedGem == null)
-            {
-                return false;
-            }
-            else
-            {
-                return !_hasHandledGem && AttachedGem.CanPerform();
-            }
+            return Task.Delay(0);
         }
 
-        public virtual ICell GetTargetCell(Direction direction)
+        public bool IsEmpty()
         {
-            int targetX = -1;
-            int targetY = -1;
-
-            bool targetIsNull = true;
-            switch (direction)
-            {
-                case Direction.Top:
-                    targetX = IndexX;
-                    targetY = IndexY - 1;
-                    if (targetY >= 0)
-                    {
-                        targetIsNull = false;
-                    }
-                    break;
-                case Direction.Bottom:
-                    targetX = IndexX;
-                    targetY = IndexY + 1;
-                    if (targetY <= _board.NbOfRows - 1)
-                    {
-                        targetIsNull = false;
-                    }
-                    break;
-                case Direction.Left:
-                    targetX = IndexX - 1;
-                    targetY = IndexY;
-                    if (targetX >= 0)
-                    {
-                        targetIsNull = false;
-                    }
-                    break;
-                case Direction.Right:
-                    targetX = IndexX + 1;
-                    targetY = IndexY;
-                    if (targetX <= _board.NbOfColumns - 1)
-                    {
-                        targetIsNull = false;
-                    }
-                    break;
-            }
-            if (targetIsNull)
-            {
-                return null;
-            }
-            else
-            {
-                return _board.CellsList.SingleOrDefault(p => p.IndexX == targetX && p.IndexY == targetY);
-            }
+            return AssignedGem == null;
         }
 
-        public virtual Task TryHandleGem(IGem gem, Direction direction)
+        public bool CanHandle(IGem gem)
         {
-
-            ICell targetCell = GetTargetCell(direction);
-            if (targetCell == null)
-            {
-                ValidateGemHandling();
-                return Task.Delay(0);
-            }
-            else
-            {
-                if (targetCell.CanProcess(gem))
-                {
-                    return targetCell.TryReceiveGem(gem, direction, this);
-                }
-                else
-                {
-                    return Task.Delay(0);
-                }
-            }
-        }
-
-        public virtual void ValidateGemHandling()
-        {
-            _hasHandledGem = true;
-        }
-
-
-        public virtual bool CanProcess(IGem gem)
-        {
-            if (AttachedGem == null)
+            if (IsEmpty())
             {
                 return true;
             }
             else
             {
-                return _hasHandledGem && AttachedGem.CanPerform() && gem.CanPerform();
+                return AssignedGem.CanPerform() && AssignedGem.HasBeenHandled();
+                //return AssignedGem.CanPerform() && AssignedGem.HasBeenHandled();
             }
-
         }
 
-        public virtual Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
+        public Task Handle(IGem gem, ICell senderCell = null)
         {
-            if (AttachedGem == null)
+            if (IsEmpty())
             {
-                senderCell.DetachGemBase();
-                senderCell.Reactivate();
-
-                AttachGem(gem);
-                Reactivate();
-                return PickGem(gem);
+                senderCell?.UnassignGem();
+                Assign(gem);
+                gem.Attach(this);
+                return Pick(gem);
+            }
+            else if (gem.CanCollide(AssignedGem))
+            {
+                senderCell?.UnassignGem();
+                AssignedGem.Reactivate();
+                //Pick(gem);
+                return gem.Collide(AssignedGem);
             }
             else
             {
-                if (gem.CanCollide(AttachedGem))
-                {
-                    senderCell.DetachGemBase();
-                    senderCell.Reactivate();
-
-                    Reactivate();
-                    PickGem(gem);
-                    return HandleCollisionWithAttachedGem(gem);
-                }
-                else
-                {
-                    return ReturnGem(gem, senderCell);
-                }
+                return ReturnToSender(gem, senderCell);
             }
         }
 
-        public virtual Task PickGem(IGem gem)
+        public Task ReturnToSender(IGem gem, ICell senderCell)
         {
-            return gem.Move(IndexX, IndexY, true);
-        }
-
-        public virtual Task HandleCollisionWithAttachedGem(IGem gem)
-        {
-            return gem.PerformAction(() => gem.CollideInto(AttachedGem));
-        }
-
-        public virtual Task ReturnGem(IGem gem, ICell senderCell)
-        {
-            senderCell.AttachGem(gem);
-            senderCell.ValidateGemHandling();
+            gem.ValidateHandling();
             return Task.Delay(0);
-            //return gem.Move(senderCell.IndexX, senderCell.IndexY, true);
         }
 
-
+        public Task Pick(IGem gem)
+        {
+            return gem.GoTo(this);
+        }
     }
 }

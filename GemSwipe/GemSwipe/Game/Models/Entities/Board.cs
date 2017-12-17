@@ -88,7 +88,7 @@ namespace GemSwipe.Game.Models.Entities
             var cell = cells[_randomizer.Next(cells.Count)];
 
             var gem = CreateGem(cell.X, cell.Y, size.ToString(), size);
-            cell.AttachGem(gem);
+            cell.Assign(gem);
 
             await gem.Pop();
 
@@ -187,7 +187,7 @@ namespace GemSwipe.Game.Models.Entities
                     if (gem != null)
                     {
                         AddChild(gem);
-                        cell.AttachGem(gem);
+                        cell.Assign(gem);
                         Gems.Add(gem);
                     }
                 }
@@ -291,28 +291,22 @@ namespace GemSwipe.Game.Models.Entities
 
             foreach (GemBase gem in Gems)
             {
-                gem.Reinitialize();
+                gem.Reactivate();
             }
-            foreach (Cell cell in CellsList)
-            {
-                cell.Reinitialize();
-            }
+          
 
-            while (AnyCellCanActivate())
+            while (!AllGemsHaveBeenHandled())
             {
                 foreach (Cell cell in CellsList)
                 {
-                    cell.ResolveSwipe(direction);
+                    if (cell.AssignedGem != null)
+                    {
+                        (cell.AssignedGem).TryResolveSwipe(direction);
+                    }
                 }
                 pascell++;
                 await Task.Delay(1);
             }
-
-            //foreach (Gem gem in Gems)
-            //{
-            //    gem.RunAnimation();
-            //}
-
 
             SwipeResult swipeResult = new SwipeResult
             {
@@ -323,19 +317,69 @@ namespace GemSwipe.Game.Models.Entities
             return swipeResult;
         }
 
-        private bool AnyCellCanActivate()
+        private bool AllGemsHaveBeenHandled()
         {
-            bool AnyCanActivate = false;
+            bool allGemsHandled = true;
             foreach (Cell cell in CellsList)
             {
-                if (cell.MustActivate())
+                if (cell.AssignedGem!=null)
                 {
-                    AnyCanActivate = true;
-                    break;
+                  if (!(cell.AssignedGem.HasBeenHandled()))
+                    {
+                        allGemsHandled = false;
+                        break;
+                    }
                 }
             }
-            return AnyCanActivate;
+            return allGemsHandled;
         }
+
+        //public async Task<SwipeResult> Swipe(Direction direction)
+        //{
+        //    int pascell = 0;
+        //    int pasgem = 0;
+
+        //    foreach (GemBase gem in Gems)
+        //    {
+        //        gem.Reinitialize();
+        //    }
+        //    foreach (Cell cell in CellsList)
+        //    {
+        //        cell.Reinitialize();
+        //    }
+
+        //    while (AnyCellCanActivate())
+        //    {
+        //        foreach (Cell cell in CellsList)
+        //        {
+        //            cell.ResolveSwipe(direction);
+        //        }
+        //        pascell++;
+        //        await Task.Delay(1);
+        //    }
+
+        //    SwipeResult swipeResult = new SwipeResult
+        //    {
+        //        MovedGems = new List<Gem>(),
+        //        DeadGems = new List<Gem>(),
+        //        FusedGems = new List<Gem>()
+        //    };
+        //    return swipeResult;
+        //}
+
+        //private bool AnyCellCanActivate()
+        //{
+        //    bool AnyCanActivate = false;
+        //    foreach (Cell cell in CellsList)
+        //    {
+        //        if (cell.MustActivate())
+        //        {
+        //            AnyCanActivate = true;
+        //            break;
+        //        }
+        //    }
+        //    return AnyCanActivate;
+        //}
 
         public IList<Cell> GetEmptyCells()
         {
@@ -565,10 +609,10 @@ namespace GemSwipe.Game.Models.Entities
                 {
 
                     //if (Cells[i, j].IsBlocked)
-                    if (Cells[i, j].AttachedGem != null)
+                    if (Cells[i, j].AssignedGem != null)
                     {
                         var cell = Cells[i, j];
-                        var gem = cell.AttachedGem;
+                        var gem = cell.AssignedGem;
                         using (var paint = new SKPaint())
                         {
                             paint.IsAntialias = true;

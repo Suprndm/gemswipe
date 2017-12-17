@@ -76,7 +76,7 @@
   },
   {
     "Id": 7,
-    "BoardSetupString": "2 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
+    "BoardSetupString": "0 0 1 0-0 1 0 2-0 0 1 1-0 0 0 3",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 4,
@@ -89,7 +89,7 @@
   },
   {
     "Id": 8,
-    "BoardSetupString": "TPs1 2 1 1 TPe1 0-0 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0",
+    "BoardSetupString": "1 1 1 0 0 TPs1-0 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 TPe1",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 4,

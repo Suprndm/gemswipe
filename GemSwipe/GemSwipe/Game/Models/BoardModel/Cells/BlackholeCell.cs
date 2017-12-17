@@ -21,21 +21,20 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
             board.AddChild(_blackholeGem);
         }
 
-        public override ICell GetTargetCell(Direction direction)
+        public  ICell GetTargetCell(Direction direction)
         {
             return null;
         }
 
 
-        public override void ValidateGemHandling()
+        public  void ValidateGemHandling()
         {
-            DetachGemBase();
+            UnassignGem();
         }
 
-        public override Task PickGem(IGem gem)
+        public  Task PickGem(IGem gem)
         {
-            base.PickGem(gem);
-            Logger.Log(AttachedGem.ToString());
+            Logger.Log(AssignedGem.ToString());
 
             return gem.PerformAction(() => _blackholeGem.Swallow(), () => gem.Die());
         }

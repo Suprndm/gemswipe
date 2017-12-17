@@ -83,35 +83,23 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
             }
         }
 
-        public override ICell GetTargetCell(Direction direction)
-        {
-            if (_isEntry)
-            {
-                return ExitCell;
-            }
-            else
-            {
-                return base.GetTargetCell(direction);
-            }
-        }
+        //public override ICell GetTargetCell(Direction direction)
+        //{
+        //    if (_isEntry)
+        //    {
+        //        return ExitCell;
+        //    }
+        //    else
+        //    {
+        //        return base.GetTargetCell(direction);
+        //    }
+        //}
 
-        public override void Reinitialize()
-        {
-            _alreadyTransportedGem = new List<IGem>();
-            base.Reinitialize();
-        }
-
-        public override Task PickGem(IGem gem)
-        {
-            if (_isEntry)
-            {
-                return gem.PerformAction(() => gem.Move(IndexX, IndexY, true));
-            }
-            else
-            {
-                return base.PickGem(gem);
-            }
-        }
+        //public override void Reinitialize()
+        //{
+        //    _alreadyTransportedGem = new List<IGem>();
+        //    base.Reinitialize();
+        //}
 
         //public override Task PickGem(IGem gem)
         //{
@@ -121,73 +109,85 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
         //    }
         //    else
         //    {
+        //        return base.PickGem(gem);
+        //    }
+        //}
+
+        ////public override Task PickGem(IGem gem)
+        ////{
+        ////    if (_isEntry)
+        ////    {
+        ////        return gem.PerformAction(() => gem.Move(IndexX, IndexY, true));
+        ////    }
+        ////    else
+        ////    {
+        ////        if (senderCell == EntryCell)
+        ////        {
+
+        ////        }
+        ////    }
+        ////}
+
+        //public override bool CanProcess(IGem gem)
+        //{
+        //    return !_isTeleporting && base.CanProcess(gem);
+        //}
+
+        //public override Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
+        //{
+        //    if (_isEntry)
+        //    {
+        //        if (_alreadyTransportedGem.SingleOrDefault(p => p == gem) == null)
+        //        {
+        //            _alreadyTransportedGem.Add(gem);
+        //            return base.TryReceiveGem(gem, direction, senderCell);
+        //        }
+        //        else
+        //        {
+        //            return ReturnGem(gem, senderCell);
+        //        }
+        //    }
+        //    else
+        //    {
         //        if (senderCell == EntryCell)
         //        {
-
+        //            return TryTeleport(gem, direction, senderCell);
+        //        }
+        //        else
+        //        {
+        //            return base.TryReceiveGem(gem, direction, senderCell);
         //        }
         //    }
         //}
 
-        public override bool CanProcess(IGem gem)
-        {
-            return !_isTeleporting && base.CanProcess(gem);
-        }
+        //public Task TryTeleport(IGem gem, Direction direction, ICell senderCell)
+        //{
+        //    if (AssignedGem == null)
+        //    {
+        //        senderCell.DetachGemBase();
+        //        senderCell.Reactivate();
 
-        public override Task TryReceiveGem(IGem gem, Direction direction, ICell senderCell)
-        {
-            if (_isEntry)
-            {
-                if (_alreadyTransportedGem.SingleOrDefault(p => p == gem) == null)
-                {
-                    _alreadyTransportedGem.Add(gem);
-                    return base.TryReceiveGem(gem, direction, senderCell);
-                }
-                else
-                {
-                    return ReturnGem(gem, senderCell);
-                }
-            }
-            else
-            {
-                if (senderCell == EntryCell)
-                {
-                    return TryTeleport(gem, direction, senderCell);
-                }
-                else
-                {
-                    return base.TryReceiveGem(gem, direction, senderCell);
-                }
-            }
-        }
+        //        Assign(gem);
+        //        Reactivate();
+        //        return Teleport(gem);
+        //    }
+        //    else
+        //    {
+        //        if (gem.CanCollide(AssignedGem))
+        //        {
+        //            senderCell.DetachGemBase();
+        //            senderCell.Reactivate();
 
-        public Task TryTeleport(IGem gem, Direction direction, ICell senderCell)
-        {
-            if (AttachedGem == null)
-            {
-                senderCell.DetachGemBase();
-                senderCell.Reactivate();
-
-                AttachGem(gem);
-                Reactivate();
-                return Teleport(gem);
-            }
-            else
-            {
-                if (gem.CanCollide(AttachedGem))
-                {
-                    senderCell.DetachGemBase();
-                    senderCell.Reactivate();
-
-                    Reactivate();
-                    Teleport(gem);
-                    return HandleCollisionWithAttachedGem(gem);
-                }
-                else
-                {
-                    return ReturnGem(gem, senderCell);
-                }
-            }
-        }
+        //            Reactivate();
+        //            Teleport(gem);
+        //            return HandleCollisionWithAttachedGem(gem);
+        //        }
+        //        else
+        //        {
+        //            return ReturnGem(gem, senderCell);
+        //        }
+        //    }
+        //}
 
         public Task IsTeleporting(bool isTeleporting)
         {

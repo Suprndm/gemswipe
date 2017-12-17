@@ -9,11 +9,13 @@ namespace GemSwipe.Game.Models.Entities
     public interface IGem2
     {
         void Dispose();
-        void ValidateHandling();
-        bool HasBeenHandled();
-        bool CanPerform();
-        bool CanCollide(IGem2 gem2);
-        Task Collide(IGem2 gem2);
-        Task GoTo(ICell2 cell2);
+        void ValidateHandling2();
+        bool HasBeenHandled2();
+        bool CanPerform2();
+        bool CanCollide2(IGem2 gem2);
+        bool CanActivate2();
+        Task TryResolveSwipe2(Direction direction);
+        Task Collide2(IGem2 gem2);
+        Task GoTo2(ICell2 cell2);
     }
 }
