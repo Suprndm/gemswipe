@@ -16,6 +16,7 @@ using GemSwipe.Paladin.Containers;
 using GemSwipe.Paladin.Gestures;
 using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.Navigation.Pages;
+using GemSwipe.Paladin.Physics;
 using GemSwipe.Paladin.UIElements.Popups;
 using GemSwipe.Services;
 using SkiaSharp;
@@ -254,6 +255,7 @@ namespace GemSwipe.Game.Pages.Game
 
         protected override void Draw()
         {
+            PhysicsService.Instance.DetectCollisions();
         }
 
         protected override void OnActivated(object parameter = null)

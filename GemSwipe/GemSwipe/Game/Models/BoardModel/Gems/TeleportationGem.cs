@@ -37,7 +37,7 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
             _hasBeenUsed = false;
         }
 
-        public TeleportationGem(Board board, string portalId, int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(boardX, boardY, size, x, y, radius, randomizer)
+        public TeleportationGem(Board board, string portalId, int size, float x, float y, float radius, Random randomizer) : base( size, x, y, radius, randomizer)
         {
             Type = GemType.Teleportation;
             PortalId = portalId;

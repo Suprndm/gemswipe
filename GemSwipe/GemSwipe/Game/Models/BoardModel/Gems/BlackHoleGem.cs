@@ -23,7 +23,7 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
             _listOfStarParticles = new List<OrbitingStarParticle>();
             ActivateOrbitingStars(SkiaRoot.ScreenWidth, SkiaRoot.ScreenHeight);
         }
-        public BlackholeGem(int boardX, int boardY, int size, float x, float y, float radius, Random randomizer) : base(boardX, boardY, size, x, y, radius, randomizer)
+        public BlackholeGem(int size, float x, float y, float radius, Random randomizer) : base(size, x, y, radius, randomizer)
         {
             Type = GemType.Blackhole;
             _listOfStarParticles = new List<OrbitingStarParticle>();

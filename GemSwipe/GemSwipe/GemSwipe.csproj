@@ -106,6 +106,9 @@
     <Compile Include="Paladin\Navigation\Pages\IPage.cs" />
     <Compile Include="Paladin\Navigation\Pages\PageBase.cs" />
     <Compile Include="Paladin\Navigation\PageType.cs" />
+    <Compile Include="Paladin\Physics\IPhysicalObject.cs" />
+    <Compile Include="Paladin\Physics\PhysicalView.cs" />
+    <Compile Include="Paladin\Physics\PhysicsService.cs" />
     <Compile Include="Paladin\Sprites\SpriteData.cs" />
     <Compile Include="Paladin\Sprites\SpriteInfo.cs" />
     <Compile Include="Paladin\Sprites\SpriteLoader.cs" />

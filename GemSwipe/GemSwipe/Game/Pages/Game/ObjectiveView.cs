@@ -19,7 +19,7 @@ namespace GemSwipe.Game.Pages.Game
         public ObjectiveView(KeyValuePair<int, int> objective, bool inGame, float x, float y, float height, float width) : base(x, y, height, width)
         {
             var gemRadius = height / 2 * 0.5f;
-            var gem = new Gem(0,0, objective.Key, -gemRadius + width/2, -gemRadius+  0.25f*height, gemRadius, new Random());
+            var gem = new Gem(objective.Key, -gemRadius + width/2, -gemRadius+  0.25f*height, gemRadius, new Random());
             gem.Pop();
             AddChild(gem);
 

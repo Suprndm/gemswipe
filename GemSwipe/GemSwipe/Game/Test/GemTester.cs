@@ -40,7 +40,7 @@ namespace GemSwipe.Game.Test
 
         private void NewButton_Activated()
         {
-            _gem = new Gem(0, 0, 1, Width / 2 - Width/10, Height /3, Width / 10, new Random());
+            _gem = new Gem( 1, Width / 2 - Width/10, Height /3, Width / 10, new Random());
             AddChild(_gem);
         }
 

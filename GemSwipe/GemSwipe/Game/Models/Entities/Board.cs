@@ -6,6 +6,7 @@ using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.BoardModel.Gems;
+using GemSwipe.Paladin.Physics;
 using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
@@ -36,7 +37,7 @@ namespace GemSwipe.Game.Models.Entities
         private SKRect _boardLimits;
         private SKRect _playgroundLimits;
 
-        private float _cellRadius;
+        private float _cellDiameter;
 
 
         public Board(BoardSetup boardSetup)
@@ -49,10 +50,20 @@ namespace GemSwipe.Game.Models.Entities
 
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
-            UpdateDimensions();
             Setup(boardSetup);
 
             DeclareTappable(this);
+
+            PhysicsService.Instance.Hit += Instance_Hit;
+            PhysicsService.Instance.HitWall += Instance_HitWall;
+        }
+
+        private void Instance_HitWall(SkiaView obj)
+        {
+        }
+
+        private void Instance_Hit(SkiaView arg1, SkiaView arg2)
+        {
         }
 
         public Board(string boardString) : base(0, 0, 0, 0)
@@ -144,82 +155,24 @@ namespace GemSwipe.Game.Models.Entities
             var maxCellWidth = _boardLimits.Width / nbOfColumns;
             var maxCellHeight = _boardLimits.Height / nbOfRows;
 
-            _cellRadius = Math.Min(maxCellHeight, maxCellWidth);
-            var topPadding = (_boardLimits.Height - nbOfRows * _cellRadius) / 2;
-            var leftPadding = (_boardLimits.Width - nbOfColumns * _cellRadius) / 2;
+            _cellDiameter = Math.Min(maxCellHeight, maxCellWidth);
+            var topPadding = (_boardLimits.Height - nbOfRows * _cellDiameter) / 2;
+            var leftPadding = (_boardLimits.Width - nbOfColumns * _cellDiameter) / 2;
 
-            _playgroundLimits = SKRect.Create(_boardLimits.Left+leftPadding, _boardLimits.Top + topPadding, nbOfColumns * _cellRadius, nbOfRows * _cellRadius);
-
+            _playgroundLimits = SKRect.Create(_boardLimits.Left+leftPadding, _boardLimits.Top + topPadding, nbOfColumns * _cellDiameter, nbOfRows * _cellDiameter);
+            PhysicsService.Instance.DeclareWall(_playgroundLimits);
             for (int j = 0; j < nbOfRows; j++)
             {
                 var rowCells = rows[j].Split(' ');
                 for (int i = 0; i < nbOfColumns; i++)
                 {
-                    Gem gem = CreateGem(i, j, rowCells[i]);
+                    Gem gem = CreateGem(_playgroundLimits.Left +  (i+0.5f)*_cellDiameter , _playgroundLimits.Top + (j + 0.5f) * _cellDiameter, rowCells[i]);
+                    Gems.Add(gem);
                     if (gem != null)
                     {
                         AddChild(gem);
                     }
-                    Cell cell = new Cell(i, j, gem);
-                    boardCells.Add(cell);
-                    cell.AttachGem(gem);
-
-
-                    //GemType gemType = ParseGemType(rowCells[i]);
-                    //Cell cell = new Cell(i, j, gemType);
-                    //boardCells.Add(cell);
-                    //cell.AttachGem(CreateGem(i, j, rowCells[i]));
-
-                    //int size = 0;
-                    //bool isSize = int.TryParse(rowCells[i], out size);
-
-                    //if (isSize)
-                    //{
-
-                    //    Cell cell = new Cell(i, j, GemType.Base);
-                    //    boardCells.Add(cell);
-                    //    cell.AttachGem(CreateGem(i, j, rowCells[i], size));
-                    //}
-                    //else
-                    //{
-                    //    GemType gemType = ParseGemType(rowCells[i]);
-                    //    Cell cell = new Cell(i, j, gemType);
-                    //    boardCells.Add(cell);
-                    //    cell.AttachGem(CreateGem(i, j, rowCells[i]));
-                    //}
                 }
-            }
-
-
-            CellsList = boardCells;
-            Gems = new List<Gem>();
-            var maxNbOfColumns = 0;
-            var maxNbOfRows = 0;
-            foreach (var cell in CellsList)
-            {
-                var gem = cell.GetAttachedGem();
-                if (gem != null)
-                    Gems.Add(gem);
-
-                maxNbOfColumns = Math.Max(maxNbOfColumns, cell.X + 1);
-                maxNbOfRows = Math.Max(maxNbOfRows, cell.Y + 1);
-            }
-
-            NbOfRows = maxNbOfRows;
-            NbOfColumns = maxNbOfColumns;
-            Cells = new Cell[NbOfColumns, NbOfRows];
-
-            for (int i = 0; i < NbOfColumns; i++)
-            {
-                for (int j = 0; j < NbOfRows; j++)
-                {
-                    Cells[i, j] = boardCells.Single(cell => cell.X == i && cell.Y == j);
-                }
-            }
-
-            foreach (TeleportationGem teleportationGem in TeleportationGems)
-            {
-                teleportationGem.BuildExitLanes();
             }
 
             PopGems();
@@ -232,7 +185,6 @@ namespace GemSwipe.Game.Models.Entities
 
             var gemX = x;
             var gemY = y;
-            Gem gem;
 
             switch (gemType)
             {
@@ -240,59 +192,13 @@ namespace GemSwipe.Game.Models.Entities
                     return null;
                 case GemType.Base:
                     bool isSize = int.TryParse(rawData, out size);
-                    return new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
+                    return new Gem( size, gemX, gemY, gemRadius, _randomizer);
                 case GemType.Blocking:
                     return null;
-                case GemType.Blackhole:
-                    return new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-                case GemType.Teleportation:
-                    string portalId = rawData.Substring(2);
-                    TeleportationGem teleportationGem = new TeleportationGem(this, portalId, boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-                    TeleportationGems.Add(teleportationGem);
-                    teleportationGem.FindExit();
-                    return teleportationGem;
                 default:
                     return null;
             }
-            //int size = 0;
-            //bool isSize = int.TryParse(rowCells[i], out size);
-            //if (size == 0 && gemType == GemType.Base)
-            //{
-            //    return null;
-            //}
-            //else
-            //{
-            //    var gemRadius = GetGemSize();
-
-            //    var gemX = ToGemViewX(boardX) + _cellWidth / 2 - gemRadius;
-            //    var gemY = ToGemViewY(boardY) + _cellWidth / 2 - gemRadius;
-            //    Gem gem;
-
-            //    switch (gemType)
-            //    {
-            //        default:
-            //            gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-            //            break;
-            //        case GemType.Base:
-            //            gem = new Gem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-            //            break;
-            //        case GemType.Blocking:
-            //            gem = null;
-            //            break;
-            //        case GemType.Blackhole:
-            //            gem = new BlackholeGem(boardX, boardY, size, gemX, gemY, gemRadius, _randomizer);
-            //            break;
-            //        case GemType.Teleportation:
-            //            gem = new TeleportationGem(boardX, boardY, size, this);
-            //            break;
-            //    }
-            //    if (gem != null)
-            //    {
-            //        AddChild(gem);
-            //    }
-
-            //    return gem;
-            //}
+            
         }
 
         private async Task PopGems()
@@ -308,71 +214,25 @@ namespace GemSwipe.Game.Models.Entities
 
         public SwipeResult Swipe(Direction direction)
         {
-            SwipeResult swipeResult = new SwipeResult
-            {
-                MovedGems = new List<Gem>(),
-                DeadGems = new List<Gem>(),
-                FusedGems = new List<Gem>()
-            };
-
-            var cellsLanes = GetCellsLanes(direction);
-            var splitCellsLanes = SplitCellsLanesByBlocked(cellsLanes);
-
-            foreach (var cellsLane in splitCellsLanes)
-            {
-                var gems = cellsLane.Select(cell => cell.GetAttachedGem()).Where(gem => gem != null).ToList();
-                foreach (var cell in cellsLane)
-                {
-                    cell.DetachGem();
-                }
-
-                foreach (Gem gem in gems)
-                {
-                    gem.GoAlongLane(cellsLane, direction, swipeResult);
-                    //int gemPositionned = 0;
-
-                    //foreach (Cell cell in cellsLane.Skip(gemPositionned - 1))
-                    //{
-                    //    if (cell.IsEmpty())
-                    //    {
-                    //        cell.AttachGem(gem);
-                    //        if (gem.BoardX != cell.X || gem.BoardY != cell.Y)
-                    //        {
-                    //            swipeResult.MovedGems.Add(gem);
-                    //            gem.Move(cell.X, cell.Y);
-                    //        }
-
-
-                    //        gemPositionned++;
-                    //        break;
-                    //    }
-
-                    //    var alreadyAttachedGem = cell.GetAttachedGem();
-                    //    if (gem.CollideInto(alreadyAttachedGem, swipeResult))
-                    //    {
-                    //        break;
-                    //    }
-                    //}
-                }
-            }
 
             foreach (var gem in Gems)
             {
-                gem.Resolve();
+                switch (direction)
+                {
+                    case Direction.Left:
+                        break;
+                    case Direction.Bottom:
+                        break;
+                    case Direction.Right:
+                        break;
+                    case Direction.Top:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+                }
             }
 
-            var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
-            foreach (var deadGem in deadGems)
-            {
-                Gems.Remove(deadGem);
-            }
-
-            swipeResult.IsBlocked = false;
-            swipeResult.IsFull = IsFull();
-
-            UpdateGemsPositions(swipeResult);
-
-            return swipeResult;
+            return new SwipeResult();
         }
 
 
@@ -541,7 +401,7 @@ namespace GemSwipe.Game.Models.Entities
 
         private float GetGemSize()
         {
-            return (float)2 / 3 * _cellWidth / 2;
+            return (float)2 / 3 * _cellDiameter / 2;
         }
 
         /// <summary>
@@ -600,32 +460,10 @@ namespace GemSwipe.Game.Models.Entities
             //DrawCells(Canvas);
         }
 
-        public void UpdateDimensions()
-        {
-            _horizontalMarginPerCell = (float)(_maxBoardWidth * BoardCellMarginPercentage) / (NbOfColumns + 1);
-            _verticalMarginPerCell = (float)(_maxBoardHeight * BoardCellMarginPercentage) / (NbOfRows + 1);
-
-            _cellWidth = (_maxBoardWidth - (NbOfColumns + 1) * _horizontalMarginPerCell) / NbOfColumns;
-            _cellHeight = (_maxBoardHeight - (NbOfRows + 1) * _verticalMarginPerCell) / NbOfRows;
-
-            var min = Math.Min(_cellWidth, _cellHeight);
-            _cellWidth = min;
-            _cellHeight = min;
-
-            var boardHeight = (_cellHeight + _verticalMarginPerCell) * NbOfRows - _verticalMarginPerCell;
-            var boardWidth = (_cellWidth + _horizontalMarginPerCell) * NbOfColumns - _horizontalMarginPerCell;
-
-            _horizontalBoardMargin = (_maxBoardWidth - boardWidth) / 2;
-            _verticalBoardMargin = (_maxBoardHeight - boardHeight) / 2;
-
-        }
-
      
 
         private void DrawCells(SKCanvas canvas)
         {
-            UpdateDimensions();
-
             for (int i = 0; i < NbOfColumns; i++)
             {
                 for (int j = 0; j < NbOfRows; j++)
