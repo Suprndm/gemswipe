@@ -24,6 +24,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         private float _velocityY { get; set; }
         private float _targetX { get; set; }
         private float _targetY { get; set; }
+        private float _lHslBase { get; set; }
 
         public OrbitingStarParticle(float x, float y, float orbit, Random randomizer, SKColor color) : base(x, y, 10, 10)
         {
@@ -37,6 +38,13 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _color = color;
             _phaseSpeedX = 1;
             _phaseSpeedY = randomizer.Next(1, 3);
+
+
+            float hHsl;
+            float sHsl;
+            float lHslBase;
+            _color.ToHsl(out hHsl, out sHsl, out lHslBase);
+            _lHslBase = lHslBase;
         }
 
         public async Task SteerToTarget()
@@ -56,25 +64,28 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             //rgba(244, 160, 16, 1)
 
             float baseSize = _size;
-            SKColor baseColor = _color;
+
             float hHsl;
             float sHsl;
-            float lHslBase;
             float lHslCurrent;
+
             float targetLuminosity = 40;
 
-            baseColor.ToHsl(out hHsl, out sHsl, out lHslCurrent);
-            lHslBase = lHslCurrent;
+            _color.ToHsl(out hHsl, out sHsl, out lHslCurrent);
+            this.AbortAnimation("LightColor");
+            this.AbortAnimation("Grow");
+            this.AbortAnimation("FadeColor");
+            this.AbortAnimation("Recede");
             this.Animate("LightColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, targetLuminosity, 8, (uint)1000, Easing.SinInOut);
             this.Animate("Grow", p => _size = (float)p, _size, 1.4f * _size, 8, (uint)1000, Easing.SinInOut);
 
             await Task.Delay(1000);
 
             _color.ToHsl(out hHsl, out sHsl, out lHslCurrent);
-            this.Animate("FadeColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, lHslBase, 8, (uint)1000, Easing.SinInOut);
+            this.Animate("FadeColor", p => _color = SKColor.FromHsl(hHsl, sHsl, (float)p), lHslCurrent, _lHslBase, 8, (uint)1000, Easing.SinInOut);
             this.Animate("Recede", p => _size = (float)p, _size, baseSize, 8, (uint)1000, Easing.SinInOut);
 
-            await Task.Delay(2000);
+            await Task.Delay(1000);
         }
 
         public void SetTarget(float x, float y)

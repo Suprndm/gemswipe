@@ -33,15 +33,18 @@ namespace GemSwipe.Game.Models.Entities
         }
         public int TargetBoardX { get; private set; }
         public int TargetBoardY { get; private set; }
-        private bool _willLevelUp;
-        private bool _willDie;
-        private bool _isDead;
+        private bool _hasLeveledUp = false;
+        public bool HasLeveledUp
+        {
+            get
+            {
+                return _hasLeveledUp;
+            }
+        }
         private float _fluidX;
         private float _fluidY;
-        private float _fluidLevel;
         private float _fluidSize;
         private int _size;
-        private bool _isDying;
         private float _radius;
         public float Radius
         {
@@ -57,9 +60,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected const int MovementAnimationMs = 600;
         private Random _randomizer;
-        private int _cycle;
-        private int _cycleSpeed;
-        private float _opacity;
+
         private float _angle;
         private FloatingParticule _floatingParticule;
         public FloatingParticule FloatingParticule
@@ -72,20 +73,10 @@ namespace GemSwipe.Game.Models.Entities
 
         private SKColor _finalColor;
 
-        private bool _isActive;
-
-        //public Gem(int indexX, int indexY, int size, Board board) : base(indexX, indexY, size, board)
-        //{
-        //    Type = GemType.Base;
-        //    Size = size;
-        //    IndexX = indexX;
-        //    IndexY = indexY;
-        //}
         public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer) : base(indexX, indexY, size, x, y, radius, randomizer, null)
         {
             Type = GemType.Base;
             _randomizer = randomizer;
-            _cycle = 0;
             Size = size;
             _fluidSize = size;
             IndexX = indexX;
@@ -106,7 +97,6 @@ namespace GemSwipe.Game.Models.Entities
         {
             Type = GemType.Base;
             _randomizer = randomizer;
-            _cycle = 0;
             Size = size;
             _fluidSize = size;
             IndexX = indexX;
@@ -123,13 +113,18 @@ namespace GemSwipe.Game.Models.Entities
 
         }
 
+        public override void Reactivate()
+        {
+            _hasLeveledUp = false;
+            base.Reactivate();
+        }
 
         public override bool CanCollide(IGem targetGem)
         {
             if (targetGem is Gem)
             {
                 Gem target = (Gem)targetGem;
-                return target.Size == Size;
+                return target.Size == Size && !target.HasLeveledUp;
             }
             else
             {
@@ -142,19 +137,13 @@ namespace GemSwipe.Game.Models.Entities
             if (targetGem is Gem)
             {
                 Gem target = (Gem)targetGem;
-                PerformAction(() => Move(target.IndexX, target.IndexY, true), () => Die());
-                return target.PerformAction(() => target.Fuse());
+                PerformAction(() => Move(target.IndexX, target.IndexY), () => Die());
+                return target.LevelUp();
             }
             else
             {
                 return Task.Delay(0);
             }
-        }
-
-        public void Clear()
-        {
-            _board.Gems.Remove(this);
-            Dispose();
         }
 
         protected virtual void Shine()
@@ -163,6 +152,7 @@ namespace GemSwipe.Game.Models.Entities
             AddChild(effect);
             effect.Start();
         }
+
         public async Task Pop()
         {
             Shine();
@@ -170,56 +160,9 @@ namespace GemSwipe.Game.Models.Entities
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
         }
 
-
-        public virtual void Resolve()
-        {
-            if (_willLevelUp)
-            {
-
-                Size++;
-                _willLevelUp = false;
-            }
-
-            IndexX = TargetBoardX;
-            IndexY = TargetBoardY;
-
-            _isDead = _willDie;
-        }
-
-
-        public bool IsDead()
-        {
-            return _isDead;
-        }
-
-        public bool WillDie()
-        {
-            return _willDie;
-        }
-        public async void DieTo(float x, float y)
-        {
-            //    var deadGems = Gems.Where(gem => gem.IsDead()).ToList();
-            //    foreach (var deadGem in deadGems)
-            //    {
-            //        Gems.Remove(deadGem);
-            //    }
-
-            MoveTo(x, y);
-
-            //if (Canvas != null)
-            //{
-            //    await Task.Delay(MovementAnimationMs / 2);
-            //    this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.CubicOut);
-            //    await Task.Delay(MovementAnimationMs / 2);
-            //}
-            Dispose();
-        }
-
         protected override void Draw()
         {
             _floatingParticule.Update();
-            //var starX = X + _radius + _floatingParticule.X;
-            //var starY = Y + _radius + +_floatingParticule.Y;
             var starX = X + _floatingParticule.X;
             var starY = Y + _floatingParticule.Y;
 
@@ -317,6 +260,11 @@ namespace GemSwipe.Game.Models.Entities
             Canvas.DrawPath(path, paint);
         }
 
+        public Task LevelUp()
+        {
+            _hasLeveledUp = true;
+            return Fuse();
+        }
         public async Task Fuse()
         {
             var oldSize = _size;

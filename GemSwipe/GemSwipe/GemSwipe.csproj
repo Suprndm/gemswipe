@@ -76,13 +76,9 @@
     <Compile Include="Game\Models\BoardModel\Gems\TeleportationGem.cs" />
     <Compile Include="Game\Models\BoardModel\GemType.cs" />
     <Compile Include="Game\Models\Entities\CellBase.cs" />
-    <Compile Include="Game\Models\Entities\CellBase2.cs" />
     <Compile Include="Game\Models\Entities\GemBase.cs" />
-    <Compile Include="Game\Models\Entities\GemBase2.cs" />
     <Compile Include="Game\Models\Entities\ICell.cs" />
-    <Compile Include="Game\Models\Entities\ICell2.cs" />
     <Compile Include="Game\Models\Entities\IGem.cs" />
-    <Compile Include="Game\Models\Entities\IGem2.cs" />
     <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />

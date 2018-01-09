@@ -198,7 +198,7 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
         public Task Teleport(IGem gem)
         {
 
-            return gem.PerformAction(() => EntryCell.IsTeleporting(true), ()=>Miniaturize((GemBase)gem), () => gem.Move(IndexX, IndexY, true), () => IncreaseSize((GemBase)gem),()=>EntryCell.IsTeleporting(false));
+            return gem.PerformAction(() => EntryCell.IsTeleporting(true), ()=>Miniaturize((GemBase)gem), () => gem.Move(IndexX, IndexY), () => IncreaseSize((GemBase)gem),()=>EntryCell.IsTeleporting(false));
         }
 
         public Task IncreaseSize(GemBase gem)

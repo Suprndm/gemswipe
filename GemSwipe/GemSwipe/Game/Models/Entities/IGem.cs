@@ -24,13 +24,8 @@ namespace GemSwipe.Game.Models.Entities
         int IndexX { get; set; }
         int IndexY { get; set; }
 
-        //bool IsResolved();
-        //bool CanPerform();
-        //bool CanCollide(IGem targetGem);
         Task PerformAction(params Func<Task>[] actions);
         Task Die();
-        //void ValidateResolution();
-        Task Move(int x, int y, bool activation = false);
-        //void Dispose();
+        Task Move(int x, int y);
     }
 }

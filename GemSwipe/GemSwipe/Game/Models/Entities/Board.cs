@@ -15,10 +15,7 @@ namespace GemSwipe.Game.Models.Entities
     {
         public Cell[,] Cells { get; private set; }
         public IList<Cell> CellsList { get; private set; }
-        public IList<CellBase2> CellsList2 { get; private set; }
         public IList<IGem> Gems { get; private set; }
-
-        public IList<TeleportationGem> TeleportationGems { get; set; }
 
         public int MovesToResolve { get; private set; }
         public int NbOfRows { get; private set; }
@@ -163,8 +160,6 @@ namespace GemSwipe.Game.Models.Entities
 
         private void Setup(BoardSetup boardSetup)
         {
-            TeleportationGems = new List<TeleportationGem>();
-
             Gems = new List<IGem>();
             CellsList = new List<Cell>();
             var boardString = boardSetup.SetupString;
@@ -286,16 +281,13 @@ namespace GemSwipe.Game.Models.Entities
 
         public async Task<SwipeResult> Swipe(Direction direction)
         {
-            int pascell = 0;
-            int pasgem = 0;
-
             foreach (GemBase gem in Gems)
             {
                 gem.Reactivate();
             }
-          
 
-            while (!AllGemsHaveBeenHandled())
+            int pas = 1;
+            while (!SwipeIsResolved())
             {
                 foreach (Cell cell in CellsList)
                 {
@@ -304,7 +296,9 @@ namespace GemSwipe.Game.Models.Entities
                         (cell.AssignedGem).TryResolveSwipe(direction);
                     }
                 }
-                pascell++;
+                pas++;
+                Logger.Log(pas.ToString());
+
                 await Task.Delay(1);
             }
 
@@ -317,14 +311,14 @@ namespace GemSwipe.Game.Models.Entities
             return swipeResult;
         }
 
-        private bool AllGemsHaveBeenHandled()
+        private bool SwipeIsResolved()
         {
             bool allGemsHandled = true;
             foreach (Cell cell in CellsList)
             {
-                if (cell.AssignedGem!=null)
+                if (cell.AssignedGem != null)
                 {
-                  if (!(cell.AssignedGem.HasBeenHandled()))
+                    if (!(cell.AssignedGem.HasBeenHandled()))
                     {
                         allGemsHandled = false;
                         break;
@@ -333,53 +327,6 @@ namespace GemSwipe.Game.Models.Entities
             }
             return allGemsHandled;
         }
-
-        //public async Task<SwipeResult> Swipe(Direction direction)
-        //{
-        //    int pascell = 0;
-        //    int pasgem = 0;
-
-        //    foreach (GemBase gem in Gems)
-        //    {
-        //        gem.Reinitialize();
-        //    }
-        //    foreach (Cell cell in CellsList)
-        //    {
-        //        cell.Reinitialize();
-        //    }
-
-        //    while (AnyCellCanActivate())
-        //    {
-        //        foreach (Cell cell in CellsList)
-        //        {
-        //            cell.ResolveSwipe(direction);
-        //        }
-        //        pascell++;
-        //        await Task.Delay(1);
-        //    }
-
-        //    SwipeResult swipeResult = new SwipeResult
-        //    {
-        //        MovedGems = new List<Gem>(),
-        //        DeadGems = new List<Gem>(),
-        //        FusedGems = new List<Gem>()
-        //    };
-        //    return swipeResult;
-        //}
-
-        //private bool AnyCellCanActivate()
-        //{
-        //    bool AnyCanActivate = false;
-        //    foreach (Cell cell in CellsList)
-        //    {
-        //        if (cell.MustActivate())
-        //        {
-        //            AnyCanActivate = true;
-        //            break;
-        //        }
-        //    }
-        //    return AnyCanActivate;
-        //}
 
         public IList<Cell> GetEmptyCells()
         {
@@ -574,7 +521,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            DrawCells(Canvas);
+            //DrawCells(Canvas);
         }
 
         public void UpdateDimensions()
@@ -703,31 +650,6 @@ namespace GemSwipe.Game.Models.Entities
         {
             return ToGemViewY(gemIndex) + _cellHeight / 2;
         }
-
-     
-
-
-        //public float ToGemX(int gemIndex, GemBase gem)
-        //{
-        //    return ToGemViewX(gemIndex) + (_cellWidth - gem.Width) / 2;
-        //}
-
-        //public float ToGemX(int gemIndex, float radius)
-        //{
-        //    return ToGemViewX(gemIndex) + (_cellWidth - 2 * radius) / 2;
-        //}
-
-        //public float ToGemY(int gemIndex, GemBase gem)
-        //{
-        //    return ToGemViewY(gemIndex) + (_cellHeight - gem.Height) / 2;
-        //}
-
-        //public float ToGemY(int gemIndex, float radius)
-        //{
-        //    return ToGemViewY(gemIndex) + (_cellHeight - 2 * radius) / 2;
-        //}
-
-
 
         public override void Dispose()
         {

@@ -43,7 +43,7 @@ namespace GemSwipe.Game.Models.Entities
 
         #region Gem Model handling
 
-        public void Reactivate()
+        public virtual void Reactivate()
         {
             _hasBeenHandled = false;
         }
@@ -166,7 +166,7 @@ namespace GemSwipe.Game.Models.Entities
             {
                 if (targetCell.CanHandle(this))
                 {
-                    return targetCell.Handle(this,AttachedCell);
+                    return targetCell.Handle(this, AttachedCell);
                 }
                 else
                 {
@@ -194,7 +194,8 @@ namespace GemSwipe.Game.Models.Entities
             IndexX = cell.IndexX;
             IndexY = cell.IndexY;
             AttachedCell = cell;
-            return Move(cell.IndexX, cell.IndexY, true);
+            return Move(cell.IndexX, cell.IndexY);
+
         }
 
         public async Task PerformAction(params Func<Task>[] actions)
@@ -207,18 +208,9 @@ namespace GemSwipe.Game.Models.Entities
             _isPerformingAction = false;
         }
 
-        public Task Move(int x, int y, bool animationActivator = false)
+        public Task Move(int x, int y)
         {
-            IndexX = x;
-            IndexY = y;
-            if (animationActivator)
-            {
-                return MoveTo(_board.ToGemX(x), _board.ToGemY(y));
-            }
-            else
-            {
-                return Task.Delay(0);
-            }
+            return MoveTo(_board.ToGemX(x), _board.ToGemY(y));
         }
 
         public Task MoveTo(float x, float y, int animationLenght = MovementAnimationMs)
@@ -245,9 +237,15 @@ namespace GemSwipe.Game.Models.Entities
                 this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.SinInOut);
                 await Task.Delay(MovementAnimationMs / 2);
             }
-            Dispose();
+            Clear();
+            //Dispose();
         }
 
+        public void Clear()
+        {
+            _board.Gems.Remove(this);
+            Dispose();
+        }
         #endregion
     }
 }

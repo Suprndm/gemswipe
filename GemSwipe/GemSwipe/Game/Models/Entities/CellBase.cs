@@ -58,7 +58,6 @@ namespace GemSwipe.Game.Models.Entities
             else
             {
                 return AssignedGem.CanPerform() && AssignedGem.HasBeenHandled();
-                //return AssignedGem.CanPerform() && AssignedGem.HasBeenHandled();
             }
         }
 
@@ -74,8 +73,6 @@ namespace GemSwipe.Game.Models.Entities
             else if (gem.CanCollide(AssignedGem))
             {
                 senderCell?.UnassignGem();
-                AssignedGem.Reactivate();
-                //Pick(gem);
                 return gem.Collide(AssignedGem);
             }
             else
@@ -90,7 +87,7 @@ namespace GemSwipe.Game.Models.Entities
             return Task.Delay(0);
         }
 
-        public Task Pick(IGem gem)
+        public virtual Task Pick(IGem gem)
         {
             return gem.GoTo(this);
         }

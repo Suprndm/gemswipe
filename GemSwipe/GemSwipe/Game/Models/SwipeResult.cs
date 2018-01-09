@@ -11,14 +11,12 @@ namespace GemSwipe.Game.Models
         public IList<Gem> MovedGems { get; set; }
         public IList<Gem> FusedGems { get; set; }
         public IList<Gem> DeadGems { get; set; }
-        public IList<Gem> TeleporterGems { get; set; }
 
         public SwipeResult()
         {
             MovedGems = new List<Gem>();
             FusedGems = new List<Gem>();
             DeadGems = new List<Gem>();
-            TeleporterGems = new List<Gem>();
         }
     }
 }

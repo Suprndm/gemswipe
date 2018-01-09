@@ -34,7 +34,7 @@ namespace GemSwipe.Game.Test
         private void LevelUpButton_Activated()
         {
             //_gem.LevelUp();
-            _gem.Resolve();
+            //_gem.Resolve();
             _gem.Fuse();
         }
 
@@ -46,7 +46,7 @@ namespace GemSwipe.Game.Test
 
         private void DieButton_Activated()
         {
-            _gem.DieTo(Width / 2 - Width / 10, Height/5 );
+            //_gem.DieTo(Width / 2 - Width / 10, Height/5 );
         }
 
         private void PopButton_Activated()
