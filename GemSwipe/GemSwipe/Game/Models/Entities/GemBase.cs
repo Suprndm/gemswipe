@@ -68,9 +68,10 @@ namespace GemSwipe.Game.Models.Entities
             return _hasBeenHandled;
         }
 
-        public void ValidateHandling()
+        public Task ValidateHandling()
         {
             _hasBeenHandled = true;
+            return Task.Delay(0);
         }
 
         public bool CanPerform()
@@ -159,8 +160,7 @@ namespace GemSwipe.Game.Models.Entities
             ICell targetCell = GetTargetCell(direction);
             if (targetCell == null)
             {
-                ValidateHandling();
-                return Task.Delay(0);
+                return ValidateHandling();
             }
             else
             {

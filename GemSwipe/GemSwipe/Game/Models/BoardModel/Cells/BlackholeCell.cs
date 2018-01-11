@@ -21,7 +21,7 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
             board.AddChild(_blackholeGem);
         }
 
-        public async override Task Pick(IGem gem)
+        public async override Task Pick(IGem gem,ICell senderCell=null)
         {
             base.Pick(gem);
             await gem.PerformAction(() => _blackholeGem.Swallow(), () => gem.Die());

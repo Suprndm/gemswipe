@@ -228,6 +228,8 @@ namespace GemSwipe.Game.Models.Entities
                     return new Cell(boardX, boardY, this, false);
                 case "":
                     return new Cell(boardX, boardY, this, false);
+                case "BL":
+                    return new BlockingCell(boardX, boardY, this, _randomizer);
                 case "BH":
                     return new BlackholeCell(boardX, boardY, this, _randomizer);
                 case "TP":
@@ -244,7 +246,6 @@ namespace GemSwipe.Game.Models.Entities
 
         private Cell CreateCell(int boardX, int boardY, string rawData)
         {
-            //return new Cell(boardX, boardY, this, false);
             return ParseCellType(boardX, boardY, rawData);
         }
 
@@ -359,27 +360,7 @@ namespace GemSwipe.Game.Models.Entities
                 {
                     if (cell.IsBlocked)
                     {
-                        if (cell.Modifier == CellModifier.Teleporter)
-                        {
-                            //if (currentLane != null)
-                            //{
-                            //    currentLane.Add(cell);
-                            //}
-                            //if (currentLane != null)
-                            //{
-
-                            //    currentLane = new List<Cell>() { cell };
-                            //    splitedCellsLanes.Add(currentLane);
-                            //}
-                            currentLane = new List<Cell>() { cell };
-                            splitedCellsLanes.Add(currentLane);
-
-                        }
-                        else
-                        {
                             currentLane = null;
-                        }
-                        //currentLane = null;
                     }
                     else
                     {
@@ -521,7 +502,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected override void Draw()
         {
-            //DrawCells(Canvas);
+            DrawCells(Canvas);
         }
 
         public void UpdateDimensions()

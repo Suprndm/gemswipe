@@ -10,7 +10,7 @@ namespace GemSwipe.Game.Models.Entities
     {
         void Dispose();
         void Reactivate();
-        void ValidateHandling();
+        Task ValidateHandling();
         bool HasBeenHandled();
         bool CanPerform();
         bool CanCollide(IGem gem);

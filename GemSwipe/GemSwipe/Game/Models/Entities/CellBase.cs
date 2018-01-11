@@ -1,4 +1,5 @@
-﻿using GemSwipe.Services;
+﻿using GemSwipe.Paladin.Core;
+using GemSwipe.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace GemSwipe.Game.Models.Entities
             return AssignedGem == null;
         }
 
-        public bool CanHandle(IGem gem)
+        public virtual bool CanHandle(IGem gem)
         {
             if (IsEmpty())
             {
@@ -61,14 +62,14 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public Task Handle(IGem gem, ICell senderCell = null)
+        public virtual Task Handle(IGem gem, ICell senderCell = null)
         {
             if (IsEmpty())
             {
                 senderCell?.UnassignGem();
                 Assign(gem);
                 gem.Attach(this);
-                return Pick(gem);
+                return Pick(gem,senderCell);
             }
             else if (gem.CanCollide(AssignedGem))
             {
@@ -83,11 +84,10 @@ namespace GemSwipe.Game.Models.Entities
 
         public Task ReturnToSender(IGem gem, ICell senderCell)
         {
-            gem.ValidateHandling();
-            return Task.Delay(0);
+            return gem.ValidateHandling();
         }
 
-        public virtual Task Pick(IGem gem)
+        public virtual Task Pick(IGem gem,ICell senderCell=null)
         {
             return gem.GoTo(this);
         }

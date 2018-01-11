@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GemSwipe.Game.Models.BoardModel
 {
-    public enum CellModifier
-    {
-        Base,
-        Blocked,
-        Teleporter,
-    }
+    //public enum CellModifier
+    //{
+    //    Base,
+    //    Blocked,
+    //    Teleporter,
+    //}
 }
