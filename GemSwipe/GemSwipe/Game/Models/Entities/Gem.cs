@@ -63,6 +63,7 @@ namespace GemSwipe.Game.Models.Entities
         protected const int MovementAnimationMs = 600;
         private Random _randomizer;
         private readonly Sprite _spriteHalo;
+        private readonly Sprite _spriteStar;
         private float _angle;
         private FloatingParticule _floatingParticule;
         public FloatingParticule FloatingParticule
@@ -91,10 +92,20 @@ namespace GemSwipe.Game.Models.Entities
             _angle = (float)(_randomizer.Next(100) * Math.PI * 2 / 100);
             _finalColor = new SKColor(195, 184, 85);
 
-            _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
+            var test = new SKColor(255, 255, 255);
 
+            var skPaint = new SKPaint() {Color = test};
+            var skPaint2 = new SKPaint();
+
+            skPaint2.Color = test;
+            var test2 = skPaint2.Color.Alpha;
+
+            _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
             _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
             AddChild(_spriteHalo);
+
+            _spriteStar = new Sprite(SizeToStarSpriteFilename(size), Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
+            AddChild(_spriteStar);
         }
 
         public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer, Board board) : base(indexX, indexY, size, x, y, radius, randomizer, board)
@@ -115,8 +126,12 @@ namespace GemSwipe.Game.Models.Entities
 
             _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
 
+            var test = new SKColor(255, 255, 255);
+
             _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
             AddChild(_spriteHalo);
+            _spriteStar = new Sprite(SizeToStarSpriteFilename(size), Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
+            AddChild(_spriteStar);
 
         }
 
@@ -170,11 +185,11 @@ namespace GemSwipe.Game.Models.Entities
         protected override void Draw()
         {
             _floatingParticule.Update();
-            var starX = X + _floatingParticule.X;
-            var starY = Y + _floatingParticule.Y;
+            var starX = _floatingParticule.X;
+            var starY = _floatingParticule.Y;
 
             var branches = (int)_fluidSize + 1;
-            var reduction = 1f / (8f / Math.Min(8, branches));
+            var reduction = 0.5f;
             var starRadius = (float)(_radius * Math.Min(1, reduction + 0.3));
 
             var colorReduction = reduction * reduction;
@@ -188,76 +203,17 @@ namespace GemSwipe.Game.Models.Entities
             var innerRadius = outerRadius * .4f;
 
 
-            _spriteHalo.X = 0;
-            _spriteHalo.Y = 0;
+            _spriteHalo.X = starX;
+            _spriteHalo.Y = starY;
             _spriteHalo.Width = starRadius * 8;
             _spriteHalo.Height = starRadius * 8;
 
-            // Shadowed
 
+            _spriteStar.X = starX;
+            _spriteStar.Y = starY;
+            _spriteStar.Width = starRadius * 2;
+            _spriteStar.Height = starRadius * 2;
 
-            float reductionCoef = 0.95f;
-
-
-            var points = Polygonal.GetStarPolygon(innerRadius * reductionCoef, outerRadius * reductionCoef, branches,
-                2 * (float)(0 + Math.PI / 2 * 1 / branches));
-
-            var path = new SKPath();
-
-            for (int k = 0; k < points.Count; k++)
-            {
-                var point = points[k];
-                var translatedPoint = new SKPoint(point.X + starX, point.Y + starY);
-                if (k == 0)
-                    path.MoveTo(translatedPoint);
-                else
-                    path.LineTo(translatedPoint);
-            }
-
-            path.Close();
-
-            var paint = new SKPaint
-            {
-                Style = SKPaintStyle.StrokeAndFill,
-                Color = CreateColor(175, 175, 175, (byte)(255 * _opacity)),
-                StrokeWidth = 2,
-                IsAntialias = false
-            };
-
-            Canvas.DrawPath(path, paint);
-
-            points = Polygonal.GetStarPolygon(innerRadius, outerRadius, branches, 0);
-            path = new SKPath();
-            for (int k = 0; k < points.Count; k++)
-            {
-                var point = points[k];
-                var translatedPoint = new SKPoint(point.X + starX, point.Y + starY);
-                if (k == 0)
-                    path.MoveTo(translatedPoint);
-                else
-                    path.LineTo(translatedPoint);
-            }
-
-            path.Close();
-
-            paint = new SKPaint
-            {
-                Style = SKPaintStyle.Fill,
-                Color = CreateColor(255, 255, 255, (byte)(255 * _opacity)),
-                IsAntialias = true
-            };
-
-            Canvas.DrawPath(path, paint);
-
-            paint = new SKPaint
-            {
-                Style = SKPaintStyle.Stroke,
-                Color = startColor,
-                StrokeWidth = 10 * _radius / 100,
-                IsAntialias = true
-            };
-
-            Canvas.DrawPath(path, paint);
         }
 
         public Task LevelUp()
@@ -275,7 +231,27 @@ namespace GemSwipe.Game.Models.Entities
                 Shine();
                 this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs,
                    Easing.CubicOut);
+                _spriteStar.UpdateSprite(SizeToStarSpriteFilename(_size));
                 await Task.Delay(MovementAnimationMs / 2);
+            }
+        }
+
+        private string SizeToStarSpriteFilename(int size)
+        {
+            switch (size)
+            {
+                case 1:
+                    return SpriteConst.Star1;
+                case 2:
+                    return SpriteConst.Star2;
+                case 3:
+                    return SpriteConst.Star3;
+                case 4:
+                    return SpriteConst.Star4;
+                case 5:
+                    return SpriteConst.Star5;
+
+                default: throw new ArgumentException($"Unknown star size mapping : {size}");
             }
         }
     }

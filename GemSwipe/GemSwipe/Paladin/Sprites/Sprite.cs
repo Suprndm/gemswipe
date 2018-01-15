@@ -28,6 +28,12 @@ namespace GemSwipe.Paladin.Sprites
             _spriteModel = new SpriteModel(spriteData);
         }
 
+        public void UpdateSprite(string spriteName)
+        {
+            var spriteData = SpriteLoader.Instance.GetData(spriteName);
+            _spriteModel = new SpriteModel(spriteData);
+        }
+
         protected override void Draw()
         {
             using (var paint = new SKPaint())
