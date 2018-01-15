@@ -10,6 +10,8 @@ using GemSwipe.Game.Models.BoardModel.Gems;
 using GemSwipe.Game.Shards;
 using System.Collections.Generic;
 using System.Linq;
+using GemSwipe.Game.Sprites;
+using GemSwipe.Paladin.Sprites;
 using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
@@ -60,7 +62,7 @@ namespace GemSwipe.Game.Models.Entities
 
         protected const int MovementAnimationMs = 600;
         private Random _randomizer;
-
+        private readonly Sprite _spriteHalo;
         private float _angle;
         private FloatingParticule _floatingParticule;
         public FloatingParticule FloatingParticule
@@ -91,6 +93,8 @@ namespace GemSwipe.Game.Models.Entities
 
             _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
 
+            _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
+            AddChild(_spriteHalo);
         }
 
         public Gem(int indexX, int indexY, int size, float x, float y, float radius, Random randomizer, Board board) : base(indexX, indexY, size, x, y, radius, randomizer, board)
@@ -110,6 +114,9 @@ namespace GemSwipe.Game.Models.Entities
             _finalColor = new SKColor(195, 184, 85);
 
             _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
+
+            _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = new SKColor(255, 255, 255) });
+            AddChild(_spriteHalo);
 
         }
 
@@ -180,18 +187,11 @@ namespace GemSwipe.Game.Models.Entities
             var outerRadius = starRadius * 1.0f;
             var innerRadius = outerRadius * .4f;
 
-            var colors = new SKColor[] {
-                CreateColor (255, 255,255, (byte)(200*_opacity*(reduction))),
-                CreateColor (255, 255, 255,0),
-            };
 
-            var shader = SKShader.CreateRadialGradient(new SKPoint(starX, starY), starRadius * 1.5f, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
-            var glowPaint = new SKPaint()
-            {
-                Shader = shader
-            };
-
-            Canvas.DrawCircle(starX, starY, starRadius * 1.5f, glowPaint);
+            _spriteHalo.X = 0;
+            _spriteHalo.Y = 0;
+            _spriteHalo.Width = starRadius * 8;
+            _spriteHalo.Height = starRadius * 8;
 
             // Shadowed
 

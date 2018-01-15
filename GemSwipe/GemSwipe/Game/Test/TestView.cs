@@ -1,18 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GemSwipe.Data.LevelData;
-using GemSwipe.Game.Effects.BackgroundEffects;
-using GemSwipe.Game.Events;
-using GemSwipe.Game.Models.Entities;
-using GemSwipe.Game.Pages.Game;
-using GemSwipe.Game.Settings;
+﻿using GemSwipe.Game.Models.Entities;
 using GemSwipe.Paladin.UIElements;
-using Newtonsoft.Json;
-using GemSwipe.Game.Models.BoardModel.Gems;
-using GemSwipe.Game.Models;
-using GemSwipe.Paladin.UIElements.Buttons;
-using GemSwipe.Game.Popups;
 
 namespace GemSwipe.Game.Test
 {
@@ -26,33 +13,7 @@ namespace GemSwipe.Game.Test
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            LevelDataRepository _levelDataRepository = new LevelDataRepository();
-            //LevelData levelData = _levelDataRepository.Get(4);
-            var boardMarginTop = Height * 0.2f;
-
-            var levelData = _levelDataRepository.Get(8);
-            var dialogPopup = new LevelDialogPopup(levelData);
-
-            Board _board = new Board(new BoardSetup(levelData), 0, 0 + boardMarginTop, Width, Height);
-            AddChild(_board);
-
-            TextButton textButton = new TextButton(width / 2, height - height / 20, height / 30, "swipe");
-            DeclareTappable(textButton);
-            AddChild(textButton);
-            bool swiped = false;
-            textButton.Activated += () =>
-            {
-                if (swiped)
-                {
-                    _board.Reset();
-                    swiped = false;
-                }
-                else
-                {
-                    _board.Swipe(Direction.Right);
-                    swiped = true;
-                }
-            };
+            AddChild(new GemTester());
         }
 
         public override void SetupLayers()

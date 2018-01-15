@@ -1,7 +1,11 @@
 ﻿using System;
 using Android.Support.V4.App;
+using GemSwipe.Game.Sprites;
 using GemSwipe.Paladin.Core;
+using GemSwipe.Paladin.Sprites;
+using GemSwipe.Services;
 using SkiaSharp;
+using Xamarin.Forms;
 
 namespace GemSwipe.Game.Effects.BackgroundEffects
 {
@@ -18,21 +22,14 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         private double _phase { get; set; }
         private double _speed { get; set; }
-        
+
         public float TargetVelocity { get; set; }
         private float _targetY;
 
-        public Star( float x, float y, float height, float width, float z, double speed, double phase) : base( x, y, height, width)
-        {
-            _direction = 1;
-            _targetY = Y;
-            _depthZ = z;
-            _speed = speed;
-            _phase = phase;
-            _size = (7 - _depthZ);
-        }
+        private readonly Sprite _spriteDot;
+        private readonly Sprite _spriteHalo;
 
-        public Star( Random randomizer, float height, float width) : base( 0, 0, height, width)
+        public Star(Random randomizer, float height, float width) : base(0, 0, height, width)
         {
             _direction = 1;
             _randomizer = randomizer;
@@ -44,16 +41,28 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _baseVelocity = _velocityY;
             TargetVelocity = _velocityY;
 
+            _spriteDot = new Sprite(SpriteConst.SmallWhiteDot, Width / 2, Height / 2, _size, _size, new SKPaint { Color = CreateColor(255, 255, 255) });
+            _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = CreateColor(255, 255, 255), BlendMode = SKBlendMode.Plus});
+            AddChild(_spriteDot);
+            AddChild(_spriteHalo);
+
             ResetRandomCinematicProperties();
         }
 
         public void ResetRandomCinematicProperties()
         {
-            _depthZ = _randomizer.Next(1, 14);
+            _depthZ = _randomizer.Next(1, 10);
             _size = (14 - _depthZ);
 
             _phase = _randomizer.Next(400) / 100;
             _speed = _randomizer.Next(10) / 100f;
+
+            _spriteHalo.Width = _size * _size*4;
+            _spriteHalo.Height = _size * _size*4;
+
+            _spriteDot.Width = _size/2 + 3;
+            _spriteDot.Height = _size / 2 + 3;
+
         }
 
         private void ApplyForce()
@@ -66,7 +75,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         private void Update()
         {
-           if (_y < 0)
+            if (_y < 0)
             {
                 _y = Height;
                 ResetRandomCinematicProperties();
@@ -82,7 +91,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _velocityY += _accelerationY;
             _y += _velocityY;
 
-            _phase += _speed*0.2f;
+            _phase += _speed * 0.2f;
             _opacity = (float)(Math.Cos(_phase) + 1) / 2;
             _accelerationY = 0;
         }
@@ -91,30 +100,13 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
         {
             Update();
 
-
-            var colors = new SKColor[] {
-                CreateColor (255, 255,255, (byte)(25*_opacity)),
-                CreateColor (255, 255, 255,0),
-            };
-
-            var glowSize = _size * _size;
-
-            var shader = SKShader.CreateRadialGradient(new SKPoint(X, Y), glowSize, colors, new[] { 0.0f, 1f }, SKShaderTileMode.Clamp);
-            var glowPaint = new SKPaint()
-            {
-                Shader = shader,
-            };
-
-            Canvas.DrawCircle(X, Y, glowSize, glowPaint);
+            _spriteDot.X = X;
+            _spriteDot.Y = Y;
 
 
-            using (var secondPaint = new SKPaint())
-            {
-                secondPaint.IsAntialias = true;
-                secondPaint.Style = SKPaintStyle.Fill;
-                secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));
-                Canvas.DrawCircle(X, Y, _size / 3, secondPaint);
-            }
+            _spriteHalo.X = X;
+            _spriteHalo.Y = Y;
+
         }
 
         public void Accelerate(float factor)
@@ -129,7 +121,7 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         public void Slide(float factor)
         {
-           
+
             _velocityY *= factor;
         }
     }

@@ -30,8 +30,8 @@ namespace GemSwipe.Game.Models.Entities
 
         public async void Initialize()
         {
+            await LoadResources().ConfigureAwait(false);
             SetupLayers();
-            await LoadResources();
 
 
             Gesture.Down += Gesture_Down;
@@ -71,7 +71,7 @@ namespace GemSwipe.Game.Models.Entities
                 Tappables.Remove(child);
             }
         }
-  
+
 
         public virtual async Task LoadResources()
         {
@@ -79,7 +79,12 @@ namespace GemSwipe.Game.Models.Entities
                 new List<string>
                 {
                     SpriteConst.Shard,
-                }, 
+                    SpriteConst.WhiteHalo,
+                    SpriteConst.BlackHalo,
+                    SpriteConst.Star,
+                    SpriteConst.SmallWhiteDot,
+                    SpriteConst.SmallWhiteHalo,
+                },
                 "Resources/Graphics",
                 ScreenWidth,
                 ScreenHeight);
@@ -102,7 +107,8 @@ namespace GemSwipe.Game.Models.Entities
 
         public virtual void UpdateFps(long fps)
         {
-            _fpsText.Text = fps.ToString();
+            if (_fpsText != null)
+                _fpsText.Text = fps.ToString();
         }
 
         protected override void Draw()

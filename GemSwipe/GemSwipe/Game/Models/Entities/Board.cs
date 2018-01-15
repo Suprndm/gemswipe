@@ -547,11 +547,11 @@ namespace GemSwipe.Game.Models.Entities
                             paint.Style = SKPaintStyle.StrokeAndFill;
                             paint.StrokeWidth = 2;
                             paint.Color = CreateColor(155, 155, 155, 255);
-                            Canvas.DrawCircle(
-                            X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
-                                 _cellWidth / 2),
-                            Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
-                                 _cellHeight / 2), _cellWidth / 2.5f, paint);
+                            //Canvas.DrawCircle(
+                            //X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
+                            //     _cellWidth / 2),
+                            //Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
+                            //     _cellHeight / 2), _cellWidth / 2.5f, paint);
 
                             //Canvas.DrawText(gem.BoardX + ", " + gem.BoardY, X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin),
                             //    Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin),

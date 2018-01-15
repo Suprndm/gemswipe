@@ -35,10 +35,14 @@ namespace GemSwipe.Views
                 e.Surface.Canvas.Clear(SKColors.Black);
                 _skiaRoot.Render();
 
-                var fps = 1000 / (_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
-                _lastElapsedTime = _stopwatch.ElapsedMilliseconds;
+                if (_stopwatch.ElapsedMilliseconds - _lastElapsedTime > 0)
+                {
+                    var fps = 1000 / (_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
+                    _lastElapsedTime = _stopwatch.ElapsedMilliseconds;
 
-                _skiaRoot.UpdateFps(fps);
+                    _skiaRoot.UpdateFps(fps);
+                }
+
             }
             else
             {

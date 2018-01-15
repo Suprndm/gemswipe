@@ -19,7 +19,6 @@ namespace GemSwipe.Views
             InitializeComponent();
 
             _logs = new List<string>();
-
             if (AppSettings.LogEnabled)
             {
                 Logger.OnLogged += Logger_OnLogged;

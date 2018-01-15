@@ -1,6 +1,7 @@
 ﻿using System;
 using GemSwipe.Data;
 using GemSwipe.Paladin.Core;
+using GemSwipe.Services;
 using SkiaSharp;
 
 namespace GemSwipe.Paladin.Sprites
@@ -35,7 +36,7 @@ namespace GemSwipe.Paladin.Sprites
                 paint.IsAntialias = _paint.IsAntialias;
                 paint.BlendMode = _paint.BlendMode;
 
-                _spriteModel.Draw(Canvas, X, Y, Width, Height, paint: _paint);
+                _spriteModel.Draw(Canvas, X, Y, Width, Height, paint: paint);
             }
         }
     }
