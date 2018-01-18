@@ -35,8 +35,9 @@ namespace GemSwipe.Game.Effects
             });
 
             this.Animate("radius", p => _radius = (float)p, _maxRadius, 0, 4, 500, Easing.SinIn);
-
+            
             await Task.Delay(400);
+
 
             AddChild(new ExplosionEffect(0,0,Height,Width,50,Height/8,0.95f));
             this.Animate("radius2", p => _radius = (float)p, _maxRadius/8, _maxRadius*0.8f, 4, 800, Easing.SinOut);
