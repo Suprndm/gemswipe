@@ -536,8 +536,8 @@ namespace GemSwipe.Game.Models.Entities
                 for (int j = 0; j < NbOfRows; j++)
                 {
 
-                    //if (Cells[i, j].IsBlocked)
-                    if (Cells[i, j].AssignedGem != null)
+                    if (Cells[i, j].IsBlocked)
+                        //if (Cells[i, j].AssignedGem != null)
                     {
                         var cell = Cells[i, j];
                         var gem = cell.AssignedGem;
@@ -547,15 +547,11 @@ namespace GemSwipe.Game.Models.Entities
                             paint.Style = SKPaintStyle.StrokeAndFill;
                             paint.StrokeWidth = 2;
                             paint.Color = CreateColor(155, 155, 155, 255);
-                            //Canvas.DrawCircle(
-                            //X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
-                            //     _cellWidth / 2),
-                            //Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
-                            //     _cellHeight / 2), _cellWidth / 2.5f, paint);
-
-                            //Canvas.DrawText(gem.BoardX + ", " + gem.BoardY, X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin),
-                            //    Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin),
-                            //    paint);
+                            Canvas.DrawCircle(
+                            X + (i * (_cellWidth + _horizontalMarginPerCell) + _horizontalBoardMargin +
+                                 _cellWidth / 2),
+                            Y + (j * (_cellHeight + _verticalMarginPerCell) + _verticalBoardMargin +
+                                 _cellHeight / 2), _cellWidth / 2.5f, paint);
                         }
                     }
                     //else
