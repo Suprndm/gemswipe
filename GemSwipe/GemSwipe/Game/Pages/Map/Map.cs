@@ -8,6 +8,7 @@ using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
+using GemSwipe.Game.SettingsBar.SettingsPopup;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.UIElements.Buttons;
@@ -58,32 +59,63 @@ namespace GemSwipe.Game.Pages.Map
             }
         }
 
+        private void GoToLevel(int i)
+        {
+            Navigator.Instance.GoTo(PageType.Game, i);
+            var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
+            if (chosenLevelButton != null)
+            {
+                chosenLevelButton.ActivateOrbitingStars(Width, Height);
+                _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
+                _playerLifeDisplayer.SteerToTarget();
+            }
+        }
+
+        private void ShowLevelPopup(int i)
+        {
+            var levelData = _levelDataRepository.Get(i);
+            var dialogPopup = new LevelDialogPopup(levelData);
+            PopupService.Instance.ShowPopup(dialogPopup);
+            dialogPopup.NextCommand = () =>
+            {
+                try
+                {
+
+                    GoToLevel(i);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log("LevelButton_Tapped exception caught");
+                    Navigator.Instance.GoTo(PageType.Map);
+                }
+            };
+        }
+
         private void LevelButton_Tapped(int i)
         {
 
             if (PlayerLifeService.Instance.HasLife())
             {
-                var levelData = _levelDataRepository.Get(i);
-                var dialogPopup = new LevelDialogPopup(levelData);
+                ShowLevelPopup(i);
+            }
+            else
+            {
+                var dialogPopup = new OutOfLifePopup();
                 PopupService.Instance.ShowPopup(dialogPopup);
                 dialogPopup.NextCommand = () =>
                 {
                     try
                     {
 
-                        Navigator.Instance.GoTo(PageType.Game, i);
-                        var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
-                        if (chosenLevelButton != null)
-                        {
-                            chosenLevelButton.ActivateOrbitingStars(Width, Height);
-                            _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
-                            _playerLifeDisplayer.SteerToTarget();
-                        }
+                        PlayerLifeService.Instance.GainLife();
+                        PlayerLifeService.Instance.GainLife();
+                        PlayerLifeService.Instance.GainLife();
+
+                        ShowLevelPopup(i);
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
-                        Logger.Log("LevelButton_Tapped exception caught");
+                        Logger.Log("Refill exception caught");
                         Navigator.Instance.GoTo(PageType.Map);
                     }
                 };

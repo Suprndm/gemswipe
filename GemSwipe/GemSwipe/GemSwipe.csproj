@@ -80,6 +80,7 @@
     <Compile Include="Game\Models\Entities\GemBase.cs" />
     <Compile Include="Game\Models\Entities\ICell.cs" />
     <Compile Include="Game\Models\Entities\IGem.cs" />
+    <Compile Include="Game\Popups\OutOfLifePopup.cs" />
     <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
     <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />

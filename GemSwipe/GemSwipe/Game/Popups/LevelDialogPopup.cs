@@ -21,14 +21,8 @@ namespace GemSwipe.Game.Popups
             Popup.Title = $"Mission {levelData.Id}";
             Popup.ActionName = "Let's Go !";
 
-            var objectivesView = new ObjectivesView(levelData.Objectives, false, Width / 2, 0, 0.1f * Height);
-
-            var objectiveText = new TextBlock(0, -ContentHeight * 0.2f, "Objectives:", SkiaRoot.ScreenHeight * 0.025f,
-                new SKColor(255, 255, 255));
 
             var container = new Container();
-            container.AddContent(objectiveText);
-            Popup.AddContent(objectivesView);
 
 
             Popup.AddContent(container);
