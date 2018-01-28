@@ -118,7 +118,7 @@ namespace GemSwipe.Game.Pages.Game
                     PlayerLifeService.Instance.GainLife();
                     await Task.Delay(1000);
 
-                    var dialogPopup = new WinDialogPopup();
+                    var dialogPopup = new WinDialogPopup(5);
                     PopupService.Instance.ShowPopup(dialogPopup);
                     dialogPopup.NextCommand = () =>
                     {

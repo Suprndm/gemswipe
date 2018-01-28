@@ -16,9 +16,9 @@ namespace GemSwipe.Game.Test
 {
     public class PopupTester : SkiaView
     {
-        public PopupTester(float height, float width) : base(0, 0, height, width)
+        public PopupTester()
         {
-            var popButton = new TextButton(width / 2, 9.5f * height / 10, height / 40, "Pop !");
+            var popButton = new TextButton(Width / 2, 9.5f * Height / 10, Height / 40, "Pop !");
             AddChild(popButton);
 
             popButton.Activated += PopButton_Activated;
@@ -26,7 +26,7 @@ namespace GemSwipe.Game.Test
 
         private void PopButton_Activated()
         {
-            var popupDialogue = new DialogPopup(SkiaRoot.ScreenWidth * 0.7f, SkiaRoot.ScreenHeight * 0.3f, true);
+            var popupDialogue = new WinDialogPopup(5);
             AddChild(popupDialogue);
             popupDialogue.Show();
 

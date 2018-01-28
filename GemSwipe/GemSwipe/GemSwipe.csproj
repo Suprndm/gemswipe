@@ -69,6 +69,8 @@
     <Compile Include="Game\Animations\AnimationArg.cs" />
     <Compile Include="Game\Animations\AnimationStack.cs" />
     <Compile Include="Game\Effects\BackgroundEffects\OrbitingStars.cs" />
+    <Compile Include="Game\Effects\ScoreDetails.cs" />
+    <Compile Include="Game\Effects\StarEffect.cs" />
     <Compile Include="Game\Models\BoardModel\CellModifier.cs" />
     <Compile Include="Game\Models\BoardModel\Cells\BlackholeCell.cs" />
     <Compile Include="Game\Models\BoardModel\Cells\BlockingCell.cs" />
@@ -99,6 +101,7 @@
     <Compile Include="Game\Settings\SettingButton.cs" />
     <Compile Include="Game\Shards\Shard.cs" />
     <Compile Include="Game\Sprites\SpriteConst.cs" />
+    <Compile Include="Game\Test\StarEffectTester.cs" />
     <Compile Include="Game\Test\SpriteTester.cs" />
     <Compile Include="Game\Test\ToolboxTester.cs" />
     <Compile Include="Game\Test\ShardTester.cs" />
@@ -188,6 +191,8 @@
     <Compile Include="Game\Test\GemTester.cs" />
     <Compile Include="Game\Test\PopupTester.cs" />
     <Compile Include="Game\Test\TestView.cs" />
+    <Compile Include="Paladin\VisualEffects\IncrementalText.cs" />
+    <Compile Include="Paladin\VisualEffects\ToastText.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Services\IFileHandler.cs" />
     <Compile Include="Services\Logger.cs" />
@@ -296,6 +301,13 @@
     <EmbeddedResource Include="Resources\Graphics\High\Star3.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star4.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarFilled.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarStroke.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarBackFilled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
