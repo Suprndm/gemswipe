@@ -1,5 +1,4 @@
 ﻿using System;
-using Android.Support.V4.App;
 using GemSwipe.Game.Sprites;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Sprites;

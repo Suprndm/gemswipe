@@ -27,7 +27,7 @@ namespace GemSwipe.Paladin.Gestures
 
             Pan?.Invoke(new Point(dragX, dragY));
 
-        
+            OnSwipe(new Point(dragX, dragY));
         }
 
         public static void OnSwipe(Point p)
@@ -64,11 +64,6 @@ namespace GemSwipe.Paladin.Gestures
             }
         }
 
-        public static void Setup(View view)
-        {
-            var effect = GetOrCreateEffect(view);
-        }
-
         public static void OnUp(Point p)
         {
             Up?.Invoke(p);
@@ -82,24 +77,6 @@ namespace GemSwipe.Paladin.Gestures
 
             _panJustBegun = true;
             Down?.Invoke(p);
-        }
-
-        private static GestureEffect GetOrCreateEffect(View view)
-        {
-            var effect = (GestureEffect)view.Effects.FirstOrDefault(e => e is GestureEffect);
-            if (effect == null)
-            {
-                effect = new GestureEffect();
-                view.Effects.Add(effect);
-            }
-            return effect;
-        }
-
-        class GestureEffect : RoutingEffect
-        {
-            public GestureEffect() : base("GemSwipe.TapWithPositionGestureEffect")
-            {
-            }
         }
     }
 }

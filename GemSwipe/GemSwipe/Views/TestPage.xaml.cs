@@ -1,30 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using GemSwipe.Game;
+using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Test;
 using GemSwipe.Paladin.Gestures;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using TouchTracking;
 using Xamarin.Forms;
 
 namespace GemSwipe.Views
 {
     public partial class TestPage : ContentPage
     {
-        private bool _panJustBegun;
         bool pageIsActive;
         private bool _isInitiated;
         private SKCanvas _canvas;
         private TestView _testView;
         private Stopwatch _stopwatch;
         private long _lastElapsedTime = 0;
+
         public TestPage()
         {
             InitializeComponent();
         }
 
-   
+
         #region Render
 
 
@@ -35,7 +35,7 @@ namespace GemSwipe.Views
                 e.Surface.Canvas.Clear(new SKColor(0, 0, 0));
                 _testView.Render();
 
-                var fps = 1000/(_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
+                var fps = 1000 / (_stopwatch.ElapsedMilliseconds - _lastElapsedTime);
                 _lastElapsedTime = _stopwatch.ElapsedMilliseconds;
 
                 _testView.UpdateFps(fps);
@@ -44,7 +44,7 @@ namespace GemSwipe.Views
             {
                 // Init SkiaSharp
                 _canvas = e.Surface.Canvas;
-                _testView = new TestView( 0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
+                _testView = new TestView(0, 0, e.Surface.Canvas.ClipBounds.Height, e.Surface.Canvas.ClipBounds.Width);
                 _testView.SetCanvas(e.Surface.Canvas);
                 _testView.Initialize();
                 _isInitiated = true;
@@ -70,28 +70,13 @@ namespace GemSwipe.Views
 
         private void SetupSkiaView()
         {
-            _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
-
-            Gesture.Setup(SKGLView);
         }
-
-        private void OnCanvasTapped(Point p)
-        {
-         
-            _panJustBegun = true;
-        }
-
-   
 
         #endregion
 
         #region UserControls
 
-        private void PanGestureRecognizer_OnPanUpdated(object sender, PanUpdatedEventArgs e)
-        {
-           
-        }
 
         protected override void OnDisappearing()
         {
@@ -102,6 +87,42 @@ namespace GemSwipe.Views
 
         private void Dispose()
         {
+        }
+
+
+        private void OnTouchEffectAction(object sender, TouchActionEventArgs args)
+        {
+            var width = Layout.Width;
+            var height = Layout.Height;
+            var deviceHeight = SkiaRoot.ScreenHeight;
+            var deviceWidth = SkiaRoot.ScreenWidth;
+
+            var motionPosition = new Point(args.Location.X / width * deviceWidth,
+                args.Location.Y / height * deviceHeight);
+
+            switch (args.Type)
+            {
+                case TouchActionType.Entered:
+
+                    break;
+                case TouchActionType.Pressed:
+                    Gesture.OnDown(motionPosition);
+                    break;
+                case TouchActionType.Moved:
+                    Gesture.OnPan(motionPosition);
+                    break;
+                case TouchActionType.Released:
+                    Gesture.OnUp(motionPosition);
+                    break;
+                case TouchActionType.Cancelled:
+
+                    break;
+                case TouchActionType.Exited:
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

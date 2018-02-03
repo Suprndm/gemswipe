@@ -1,327 +1,59 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6169A47D-6F19-4831-8564-17904E76FA2A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GemSwipe</RootNamespace>
-    <AssemblyName>GemSwipe</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BoardSolver\LittleStar\Engine\IGameEngine.cs" />
-    <Compile Include="BoardSolver\LittleStar\Engine\IGameState.cs" />
-    <Compile Include="BoardSolver\LittleStar\Engine\ILogger.cs" />
-    <Compile Include="BoardSolver\LittleStar\Engine\IMove.cs" />
-    <Compile Include="BoardSolver\LittleStar\Engine\LittleStarEngine.cs" />
-    <Compile Include="BoardSolver\LittleStar\Engine\TrackingPoint.cs" />
-    <Compile Include="BoardSolver\LittleStar\GemSwipeEngine.cs" />
-    <Compile Include="BoardSolver\LittleStar\GemSwipeMove.cs" />
-    <Compile Include="BoardSolver\LittleStar\GemSwipeState.cs" />
-    <Compile Include="BoardSolver\Solver.cs" />
-    <Compile Include="BoardSolver\BlockedSensor.cs" />
-    <Compile Include="Data\BoardData.cs" />
-    <Compile Include="Data\FileService.cs" />
-    <Compile Include="Data\LevelMovesData.cs" />
-    <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Data\LevelData\LevelData.cs" />
-    <Compile Include="Data\LevelData\LevelDataRepository.cs" />
-    <Compile Include="Data\LevelMapPosition\LevelMapPositionRepository.cs" />
-    <Compile Include="Data\LevelMapPosition\LevelMapPosition.cs" />
-    <Compile Include="Data\PlanetData\PlanetData.cs" />
-    <Compile Include="Data\PlanetData\PlanetDataRepository.cs" />
-    <Compile Include="Data\PlayerData\LevelProgressStatus.cs" />
-    <Compile Include="Data\PlayerData\PlayerData.cs" />
-    <Compile Include="Data\PlayerData\PlayerDataService.cs" />
-    <Compile Include="Data\PlayerLife\PlayerLife.cs" />
-    <Compile Include="Data\PlayerLife\PlayerLifeDisplayer.cs" />
-    <Compile Include="Data\PlayerLife\PlayerLifeService.cs" />
-    <Compile Include="Data\RepositoryBase.cs" />
-    <Compile Include="Game\Animations\AnimationArg.cs" />
-    <Compile Include="Game\Animations\AnimationStack.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\OrbitingStars.cs" />
-    <Compile Include="Game\Effects\ScoreDetails.cs" />
-    <Compile Include="Game\Effects\StarEffect.cs" />
-    <Compile Include="Game\Models\BoardModel\CellModifier.cs" />
-    <Compile Include="Game\Models\BoardModel\Cells\BlackholeCell.cs" />
-    <Compile Include="Game\Models\BoardModel\Cells\BlockingCell.cs" />
-    <Compile Include="Game\Models\BoardModel\Cells\TeleportationCell.cs" />
-    <Compile Include="Game\Models\BoardModel\Gems\BlackholeGem.cs" />
-    <Compile Include="Game\Models\BoardModel\Gems\TeleportationGem.cs" />
-    <Compile Include="Game\Models\BoardModel\GemType.cs" />
-    <Compile Include="Game\Models\Entities\CellBase.cs" />
-    <Compile Include="Game\Models\Entities\GemBase.cs" />
-    <Compile Include="Game\Models\Entities\ICell.cs" />
-    <Compile Include="Game\Models\Entities\IGem.cs" />
-    <Compile Include="Game\Popups\OutOfLifePopup.cs" />
-    <Compile Include="Game\SettingsBar\OptionsContainer.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\ExitGameOptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\GetLifeOptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\HelpOptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\OptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\RestartGameOptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingOptions\SoundOptionButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingsBar.cs" />
-    <Compile Include="Game\SettingsBar\SettingsBarButton.cs" />
-    <Compile Include="Game\SettingsBar\SettingsPopup\ExitGamePopup.cs" />
-    <Compile Include="Game\SettingsBar\SettingsPopup\NoLifeLeftPopup.cs" />
-    <Compile Include="Game\SettingsBar\SettingsPopup\RestartGamePopup.cs" />
-    <Compile Include="Game\Settings\Options\LanguageOptionsDisplayer.cs" />
-    <Compile Include="Game\Settings\Options\OptionPickerButton.cs" />
-    <Compile Include="Game\Settings\Options\OptionsDisplayer.cs" />
-    <Compile Include="Game\Settings\SettingButton.cs" />
-    <Compile Include="Game\Shards\Shard.cs" />
-    <Compile Include="Game\Sprites\SpriteConst.cs" />
-    <Compile Include="Game\Test\StarEffectTester.cs" />
-    <Compile Include="Game\Test\SpriteTester.cs" />
-    <Compile Include="Game\Test\ToolboxTester.cs" />
-    <Compile Include="Game\Test\ShardTester.cs" />
-    <Compile Include="Game\Settings\SettingDialog.cs" />
-    <Compile Include="Game\Toolbox\ToolboxBar.cs" />
-    <Compile Include="Game\Toolbox\ToolButton.cs" />
-    <Compile Include="Game\Settings\SettingsEnum.cs" />
-    <Compile Include="Paladin\Containers\CenteredContainer.cs" />
-    <Compile Include="Paladin\Containers\Container.cs" />
-    <Compile Include="Paladin\Containers\ContainerBase.cs" />
-    <Compile Include="Paladin\Navigation\NavigationEventArgs.cs" />
-    <Compile Include="Paladin\Navigation\Navigator.cs" />
-    <Compile Include="Paladin\Navigation\Pages\IPage.cs" />
-    <Compile Include="Paladin\Navigation\Pages\PageBase.cs" />
-    <Compile Include="Paladin\Navigation\PageType.cs" />
-    <Compile Include="Paladin\Sprites\SpriteData.cs" />
-    <Compile Include="Paladin\Sprites\SpriteInfo.cs" />
-    <Compile Include="Paladin\Sprites\SpriteLoader.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\RoundButton.cs" />
-    <Compile Include="Paladin\UIElements\Popups\DialogPopup.cs" />
-    <Compile Include="Paladin\UIElements\Popups\IDialogPopup.cs" />
-    <Compile Include="Paladin\UIElements\Popups\Popup.cs" />
-    <Compile Include="Paladin\UIElements\Popups\PopupBackground.cs" />
-    <Compile Include="Paladin\UIElements\Popups\PopupService.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\OrbitingStarParticle.cs" />
-    <Compile Include="Data\ResourceLoader.cs" />
-    <Compile Include="Paladin\VisualEffects\ExplosionEffect.cs" />
-    <Compile Include="Game\Effects\GemPopEffect.cs" />
-    <Compile Include="Paladin\Utilities\HorizontalAlignment.cs" />
-    <Compile Include="Game\Events\TempestEvent.cs" />
-    <Compile Include="Game\Events\EnergyEvent.cs" />
-    <Compile Include="Game\Events\EmptyEvent.cs" />
-    <Compile Include="Game\Events\EventActivationEffect.cs" />
-    <Compile Include="Game\Events\EventBar.cs" />
-    <Compile Include="Game\Events\EventBase.cs" />
-    <Compile Include="Game\Events\EventCounter.cs" />
-    <Compile Include="Game\Events\EventType.cs" />
-    <Compile Include="Game\Events\IEvent.cs" />
-    <Compile Include="Paladin\Geometry\Rectangle.cs" />
-    <Compile Include="Paladin\Gestures\SkiaGestureService.cs" />
-    <Compile Include="Paladin\Layers\BackgroundLayer.cs" />
-    <Compile Include="Paladin\Layers\LoadingLayer.cs" />
-    <Compile Include="Paladin\Layers\InterfaceLayer.cs" />
-    <Compile Include="Paladin\Layers\NavigationLayer.cs" />
-    <Compile Include="Paladin\Layers\PopupLayer.cs" />
-    <Compile Include="Game\Models\SwipeResult.cs" />
-    <Compile Include="Game\Pages\Game\GamePage.cs" />
-    <Compile Include="Game\Pages\Game\ObjectivesView.cs" />
-    <Compile Include="Game\Pages\Game\ObjectiveView.cs" />
-    <Compile Include="Game\Pages\Home\HomePage.cs" />
-    <Compile Include="Game\Models\Entities\Life.cs" />
-    <Compile Include="Game\Pages\Map\Map.cs" />
-    <Compile Include="Game\Pages\Map\MapPage.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\Halo.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\LinearGradientBackground.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\OceanDepth.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\Star.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\Stars.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\TapToPlay.cs" />
-    <Compile Include="Paladin\UIElements\TextBlock.cs" />
-    <Compile Include="Paladin\VisualEffects\FloatingParticule.cs" />
-    <Compile Include="Paladin\VisualEffects\Particule.cs" />
-    <Compile Include="Paladin\VisualEffects\PoppedElement.cs" />
-    <Compile Include="Paladin\VisualEffects\PoppedText.cs" />
-    <Compile Include="Game\Models\Entities\Board.cs" />
-    <Compile Include="Game\Models\Entities\SkiaRoot.cs" />
-    <Compile Include="Game\Models\Entities\Gem.cs" />
-    <Compile Include="Paladin\VisualEffects\PhysicalParticule.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\Background.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\CountDownView.cs" />
-    <Compile Include="Game\Effects\BackgroundEffects\HeaderView.cs" />
-    <Compile Include="Paladin\VisualEffects\Polygonal.cs" />
-    <Compile Include="Game\Popups\WinDialogPopup.cs" />
-    <Compile Include="Game\Popups\LoseDialogPopup.cs" />
-    <Compile Include="Game\Popups\LevelDialogPopup.cs" />
-    <Compile Include="Paladin\UIElements\Popups\PopupRightButton.cs" />
-    <Compile Include="Paladin\UIElements\Popups\PopupLeftButton.cs" />
-    <Compile Include="Game\Settings\SettingsPanel.cs" />
-    <Compile Include="Paladin\Core\SkiaView.cs" />
-    <Compile Include="Paladin\Core\ISkiaView.cs" />
-    <Compile Include="Paladin\Gestures\Gesture.cs" />
-    <Compile Include="Game\Models\Cell.cs" />
-    <Compile Include="Game\Models\Direction.cs" />
-    <Compile Include="Game\Models\BoardSetup.cs" />
-    <Compile Include="Game\Settings\TopBar.cs" />
-    <Compile Include="Game\Test\EventTester.cs" />
-    <Compile Include="Game\Test\GemTester.cs" />
-    <Compile Include="Game\Test\PopupTester.cs" />
-    <Compile Include="Game\Test\TestView.cs" />
-    <Compile Include="Paladin\VisualEffects\IncrementalText.cs" />
-    <Compile Include="Paladin\VisualEffects\ToastText.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Services\IFileHandler.cs" />
-    <Compile Include="Services\Logger.cs" />
-    <Compile Include="Services\LittleStarLogger.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AppSettings.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\IButton.cs" />
-    <Compile Include="Game\Pages\Map\LevelButton.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\SimpleButton.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\SpriteButton.cs" />
-    <Compile Include="Paladin\UIElements\Buttons\TextButton.cs" />
-    <Compile Include="Paladin\Utilities\MathHelper.cs" />
-    <Compile Include="Paladin\Sprites\Sprite.cs" />
-    <Compile Include="Paladin\Sprites\SpriteModel.cs" />
-    <Compile Include="Views\InputDialog.cs" />
-    <Compile Include="Views\LogView.xaml.cs">
-      <DependentUpon>LogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TestPage.xaml.cs">
-      <DependentUpon>TestPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GamePage.xaml.cs">
-      <DependentUpon>GamePage.xaml</DependentUpon>
-    </Compile>
+    <None Remove="Data\LevelData\LevelData.json" />
+    <None Remove="Data\LevelMapPosition\LevelMapPosition.json" />
+    <None Remove="Data\PlanetData\PlanetDataResources.json" />
+    <None Remove="Resources\Graphics\High\BlackHalo.png" />
+    <None Remove="Resources\Graphics\High\shard.png" />
+    <None Remove="Resources\Graphics\High\SmallStarBackFilled.png" />
+    <None Remove="Resources\Graphics\High\SmallStarFilled.png" />
+    <None Remove="Resources\Graphics\High\SmallStarStroke.png" />
+    <None Remove="Resources\Graphics\High\SmallWhiteDot.png" />
+    <None Remove="Resources\Graphics\High\SmallWhiteHalo.png" />
+    <None Remove="Resources\Graphics\High\Star.png" />
+    <None Remove="Resources\Graphics\High\Star1.png" />
+    <None Remove="Resources\Graphics\High\Star2.png" />
+    <None Remove="Resources\Graphics\High\Star3.png" />
+    <None Remove="Resources\Graphics\High\Star4.png" />
+    <None Remove="Resources\Graphics\High\Star5.png" />
+    <None Remove="Resources\Graphics\High\WhiteHalo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SkiaSharp, Version=1.57.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SkiaSharp.1.57.1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="SkiaSharp.Views.Forms, Version=1.57.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SkiaSharp.Views.Forms.1.57.1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.Views.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Android.Support.v4">
-      <HintPath>..\..\packages\Xamarin.Android.Support.v4.23.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="Data\LevelData\LevelData.json" />
-    <EmbeddedResource Include="Data\PlanetData\PlanetDataResources.json" />
     <EmbeddedResource Include="Data\LevelMapPosition\LevelMapPosition.json" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\GamePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\TestPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\LogView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\AnimationStack\" />
-    <Folder Include="Game\Effects\Popped\" />
-    <Folder Include="Resources\Graphics\Low\" />
-    <Folder Include="Resources\Graphics\Medium\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Graphics\High\shard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Graphics\High\WhiteHalo.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Data\PlanetData\PlanetDataResources.json" />
     <EmbeddedResource Include="Resources\Graphics\High\BlackHalo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Graphics\High\Star.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\High\shard.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarBackFilled.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarFilled.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\SmallStarStroke.png" />
     <EmbeddedResource Include="Resources\Graphics\High\SmallWhiteDot.png" />
     <EmbeddedResource Include="Resources\Graphics\High\SmallWhiteHalo.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Resources\Graphics\High\Star.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star1.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star2.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star3.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star4.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star5.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\WhiteHalo.png" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Graphics\High\SmallStarFilled.png" />
-    <EmbeddedResource Include="Resources\Graphics\High\SmallStarStroke.png" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.59.3" />
+    <PackageReference Include="TouchTracking.Forms" Version="1.0.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Graphics\High\SmallStarBackFilled.png" />
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
+      <DependentUpon>*.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.4.247\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

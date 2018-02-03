@@ -4,6 +4,7 @@
              xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
              xmlns:views="clr-namespace:GemSwipe.Views;assembly=GemSwipe"
              BackgroundColor="White"
+             xmlns:forms1="clr-namespace:TouchTracking.Forms;assembly=TouchTracking.Forms"
              x:Class="GemSwipe.Views.TestPage"
              NavigationPage.HasNavigationBar="false">
     <ContentPage.Content>
@@ -15,13 +16,16 @@
             </Grid.RowDefinitions>
             <Label x:Name="debug" Grid.Row="0" Text="GemSwipe"  HorizontalOptions="Center"/>
             <forms:SKGLView x:Name="SKGLView" Grid.Row="1"   HasRenderLoop="True">
-                <forms:SKGLView.GestureRecognizers>
-                    <PanGestureRecognizer  PanUpdated="PanGestureRecognizer_OnPanUpdated"></PanGestureRecognizer>
-                </forms:SKGLView.GestureRecognizers>
+              
             </forms:SKGLView>
-            <AbsoluteLayout Grid.RowSpan="3" VerticalOptions="FillAndExpand">
+            <AbsoluteLayout x:Name="Layout" Grid.RowSpan="3" VerticalOptions="FillAndExpand">
                 <views:LogView></views:LogView>
+                <AbsoluteLayout.Effects>
+                    <forms1:TouchEffect Capture="True"
+                                        TouchAction="OnTouchEffectAction" />
+                </AbsoluteLayout.Effects>
             </AbsoluteLayout>
+
         </Grid>
 
 

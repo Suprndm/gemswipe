@@ -54,11 +54,20 @@ namespace GemSwipe.Data
         {
             return Task.Run(async () =>
             {
-                using (var stream = LoadStream(path))
-                using (var reader = new StreamReader(stream))
+                try
                 {
-                    return await reader.ReadToEndAsync().ConfigureAwait(false);
+                    using (var stream = LoadStream(path))
+                    using (var reader = new StreamReader(stream))
+                    {
+                        return await reader.ReadToEndAsync().ConfigureAwait(false);
+                    }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Unable to load file {path} : {e}");
+                    throw;
+                }
+           
             });
         }
 

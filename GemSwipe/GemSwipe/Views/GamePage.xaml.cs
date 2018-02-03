@@ -8,13 +8,13 @@ using GemSwipe.Paladin.Gestures;
 using GemSwipe.Services;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using TouchTracking;
 using Xamarin.Forms;
 
 namespace GemSwipe.Views
 {
     public partial class GamePage : ContentPage
     {
-        private bool _panJustBegun;
         bool pageIsActive;
         private bool _isInitiated;
         private SkiaRoot _skiaRoot;
@@ -84,11 +84,7 @@ namespace GemSwipe.Views
 
         private void SetupSkiaView()
         {
-            _panJustBegun = true;
             SKGLView.PaintSurface += SKGLView_PaintSurface;
-
-
-            Gesture.Setup(SKGLView);
         }
 
         #endregion
@@ -96,6 +92,40 @@ namespace GemSwipe.Views
         private void Dispose()
         {
             _skiaRoot.Dispose();
+        }
+
+        private void OnTouchEffectAction(object sender, TouchActionEventArgs args)
+        {
+            var width = Layout.Width;
+            var height = Layout.Height;
+            var deviceHeight = SkiaRoot.ScreenHeight;
+            var deviceWidth = SkiaRoot.ScreenWidth;
+
+            var motionPosition = new Point(args.Location.X/width*deviceWidth, args.Location.Y/height*deviceHeight);
+
+            switch (args.Type)
+            {
+                case TouchActionType.Entered:
+
+                    break;
+                case TouchActionType.Pressed:
+                    Gesture.OnDown(motionPosition);
+                    break;
+                case TouchActionType.Moved:
+                    Gesture.OnPan(motionPosition);
+                    break;
+                case TouchActionType.Released:
+                    Gesture.OnUp(motionPosition);
+                    break;
+                case TouchActionType.Cancelled:
+
+                    break;
+                case TouchActionType.Exited:
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
