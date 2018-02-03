@@ -10,6 +10,8 @@ using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.Sprites;
 using GemSwipe.Paladin.UIElements;
 using Xamarin.Forms;
+using GemSwipe.Resources.Sounds;
+using GemSwipe.Services;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -38,6 +40,8 @@ namespace GemSwipe.Game.Models.Entities
             Gesture.Up += Gesture_Up;
             Gesture.Pan += Gesture_Pan;
             Gesture.Swipe += Gesture_Swipe; ;
+
+            LoadMusic();
         }
 
         private void Gesture_Swipe(Point p, Direction direction)
@@ -96,6 +100,29 @@ namespace GemSwipe.Game.Models.Entities
                 "Resources/Graphics",
                 ScreenWidth,
                 ScreenHeight);
+
+        }
+
+        public void LoadMusic()
+        {
+            Task.Run(() =>
+            {
+                Task.Delay(2000).Wait();
+                var audioStream = SoundLoader.LoadStream("Resources/Sounds/IntroGemSwipe.mp3");
+
+                var player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+
+                if (player.Load(audioStream))
+                {
+                    player.Loop = true;
+                    player.Play();
+                    Logger.Log("music loaded");
+                }
+                else
+                {
+                    Logger.Log("music not loaded");
+                }
+            });
         }
 
         public virtual void SetupLayers()

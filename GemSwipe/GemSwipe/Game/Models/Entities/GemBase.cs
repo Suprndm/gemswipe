@@ -208,7 +208,7 @@ namespace GemSwipe.Game.Models.Entities
             _isPerformingAction = false;
         }
 
-        public Task Move(int x, int y)
+        public virtual Task Move(int x, int y)
         {
             return MoveTo(_board.ToGemX(x), _board.ToGemY(y));
         }
@@ -238,7 +238,6 @@ namespace GemSwipe.Game.Models.Entities
                 await Task.Delay(MovementAnimationMs / 2);
             }
             Clear();
-            //Dispose();
         }
 
         public void Clear()

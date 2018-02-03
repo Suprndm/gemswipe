@@ -101,7 +101,7 @@
   },
   {
     "Id": 9,
-    "BoardSetupString": "1 0 0 0 0 BL-1 0 0 0 BL 2-1 0 0 BL 0 0-1 0 BL 0 0 0-1 BL 0 0 0 0-1 0 0 0 0 0",
+    "BoardSetupString": "3 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0-0 0 0 0 0 0",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 6,
@@ -114,11 +114,11 @@
   },
   {
     "Id": 10,
-    "BoardSetupString": "1 1 2 2 2 4 0-BL BL BL BL BL 1 0-BL BL BL BL BL 0 1-BL BL BL BL BL 2 0-BL BL BL BL BL 0 2-BL BL BL BL BL 2 0-BL BL BL BL BL 4 0",
+    "BoardSetupString": "1 0 0 0 0 BL-1 0 0 0 BL 2-1 0 0 BL 0 0-1 0 BL 0 0 0-1 BL 0 0 0 0-1 0 0 0 0 0",
     "Story": "La premiere story",
     "Title": "Le premier title",
-    "Rows": 7,
-    "Columns": 7,
+    "Rows": 6,
+    "Columns": 6,
     "Objectives": {
       "3": 3,
       "4": 1
@@ -127,7 +127,7 @@
   },
   {
     "Id": 11,
-    "BoardSetupString": "1 1 2 2 2 4 0-BL BL BL BL BL 1 0-5 3 0 BL BL 0 1-0 3 0 0 BL 2 0-0 3 BL 0 BL 0 2-0 2 0 0 BL 2 0-0 2 0 0 0 4 0",
+    "BoardSetupString": "1 1 2 2 2 4 0-BL BL BL BL BL 1 0-BL BL BL BL BL 0 1-BL BL BL BL BL 2 0-BL BL BL BL BL 0 2-BL BL BL BL BL 2 0-BL BL BL BL BL 4 0",
     "Story": "La premiere story",
     "Title": "Le premier title",
     "Rows": 7,
@@ -141,11 +141,11 @@
 
   {
     "Id": 12,
-    "BoardSetupString": "1 0 2-0 1 0-0 0 0-1 0 0-0 0 2-0 1 0",
+    "BoardSetupString": "1 1 2 2 2 4 0-BL BL BL BL BL 1 0-5 3 0 BL BL 0 1-0 3 0 0 BL 2 0-0 3 BL 0 BL 0 2-0 2 0 0 BL 2 0-0 2 0 0 0 4 0",
     "Story": "La deuxieme story",
     "Title": "Le deuxieme title",
-    "Rows": 6,
-    "Columns": 3,
+    "Rows": 7,
+    "Columns": 7,
     "Objectives": {
       "4": 3
     },

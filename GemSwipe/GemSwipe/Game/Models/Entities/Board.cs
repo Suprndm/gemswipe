@@ -8,6 +8,9 @@ using GemSwipe.Game.Models.BoardModel;
 using GemSwipe.Game.Models.BoardModel.Gems;
 using GemSwipe.Services;
 using GemSwipe.Game.Models.BoardModel.Cells;
+using GemSwipe.Game.Models.BoardModel.BoardMaker;
+using System.Reflection;
+using System.IO;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -25,6 +28,8 @@ namespace GemSwipe.Game.Models.Entities
         private const double BoardCellMarginPercentage = 0.10;
 
         private readonly BoardSetup _boardSetup;
+        public SwipeResult CurrentSwipeResult;
+
         private float _horizontalMarginPerCell;
         private float _verticalMarginPerCell;
         private float _horizontalBoardMargin;
@@ -45,6 +50,7 @@ namespace GemSwipe.Game.Models.Entities
 
             NbOfRows = boardSetup.Rows;
             NbOfColumns = boardSetup.Columns;
+
             UpdateDimensions();
             Setup(boardSetup);
 
@@ -160,6 +166,8 @@ namespace GemSwipe.Game.Models.Entities
 
         private void Setup(BoardSetup boardSetup)
         {
+
+            
             Gems = new List<IGem>();
             CellsList = new List<Cell>();
             var boardString = boardSetup.SetupString;
@@ -209,6 +217,7 @@ namespace GemSwipe.Game.Models.Entities
             }
 
             PopGems();
+           
         }
 
         private Cell ParseCellType(int boardX, int boardY, string rawData)
@@ -282,34 +291,29 @@ namespace GemSwipe.Game.Models.Entities
 
         public async Task<SwipeResult> Swipe(Direction direction)
         {
+            CurrentSwipeResult = new SwipeResult
+            {
+                MovedGems = new List<Gem>(),
+                DeadGems = new List<Gem>(),
+                FusedGems = new List<Gem>()
+            };
             foreach (GemBase gem in Gems)
             {
                 gem.Reactivate();
             }
 
-            int pas = 1;
             while (!SwipeIsResolved())
             {
                 foreach (Cell cell in CellsList)
                 {
                     if (cell.AssignedGem != null)
                     {
-                        (cell.AssignedGem).TryResolveSwipe(direction);
+                       (cell.AssignedGem).TryResolveSwipe(direction);
                     }
                 }
-                pas++;
-                Logger.Log(pas.ToString());
-
                 await Task.Delay(1);
             }
-
-            SwipeResult swipeResult = new SwipeResult
-            {
-                MovedGems = new List<Gem>(),
-                DeadGems = new List<Gem>(),
-                FusedGems = new List<Gem>()
-            };
-            return swipeResult;
+            return CurrentSwipeResult;
         }
 
         private bool SwipeIsResolved()
@@ -593,7 +597,7 @@ namespace GemSwipe.Game.Models.Entities
 
 
                         //using (var secondPaint = new SKPaint())
-                        //{
+                        //{_horizontalMarginPerCell
                         //    secondPaint.IsAntialias = true;
                         //    secondPaint.Style = SKPaintStyle.Fill;
                         //    secondPaint.Color = CreateColor(255, 255, 255, (byte)(_opacity * 255));

@@ -14,8 +14,6 @@ namespace GemSwipe.Game.Models.BoardModel.Cells
         {
             float radius = board.GetGemSize();
             IsBlocked = true;
-            //BlackholeGem _blackholeGem = new BlackholeGem(boardX, boardY, 0, board.ToGemX(boardX), board.ToGemY(boardY), radius, randomizer, board);
-            //board.AddChild(_blackholeGem);
         }
 
         public override Task Handle(IGem gem, ICell senderCell)

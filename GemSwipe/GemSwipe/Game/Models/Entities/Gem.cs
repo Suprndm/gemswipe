@@ -94,7 +94,7 @@ namespace GemSwipe.Game.Models.Entities
 
             var test = new SKColor(255, 255, 255);
 
-            var skPaint = new SKPaint() {Color = test};
+            var skPaint = new SKPaint() { Color = test };
             var skPaint2 = new SKPaint();
 
             skPaint2.Color = test;
@@ -158,6 +158,10 @@ namespace GemSwipe.Game.Models.Entities
         {
             if (targetGem is Gem)
             {
+                if (!_board.CurrentSwipeResult.DeadGems.Contains(this))
+                {
+                    _board.CurrentSwipeResult.DeadGems.Add(this);
+                }
                 Gem target = (Gem)targetGem;
                 PerformAction(() => Move(target.IndexX, target.IndexY), () => Die());
                 return target.LevelUp();
@@ -166,6 +170,15 @@ namespace GemSwipe.Game.Models.Entities
             {
                 return Task.Delay(0);
             }
+        }
+
+        public override Task Move(int x, int y)
+        {
+            if (!_board.CurrentSwipeResult.MovedGems.Contains(this))
+            {
+                _board.CurrentSwipeResult.MovedGems.Add(this);
+            }
+            return base.Move(x, y);
         }
 
         protected virtual void Shine()
@@ -219,8 +232,13 @@ namespace GemSwipe.Game.Models.Entities
         public Task LevelUp()
         {
             _hasLeveledUp = true;
+            if (!_board.CurrentSwipeResult.FusedGems.Contains(this))
+            {
+                _board.CurrentSwipeResult.FusedGems.Add(this);
+            }
             return Fuse();
         }
+        
         public async Task Fuse()
         {
             var oldSize = _size;
@@ -234,6 +252,12 @@ namespace GemSwipe.Game.Models.Entities
                 _spriteStar.UpdateSprite(SizeToStarSpriteFilename(_size));
                 await Task.Delay(MovementAnimationMs / 2);
             }
+        }
+
+        public override Task Die()
+        {
+            
+            return base.Die();
         }
 
         private string SizeToStarSpriteFilename(int size)
