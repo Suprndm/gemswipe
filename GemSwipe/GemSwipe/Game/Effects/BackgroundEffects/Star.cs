@@ -40,6 +40,8 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             _baseVelocity = _velocityY;
             TargetVelocity = _velocityY;
 
+            Opacity = Opacity *(_randomizer.Next(100) / 100f);
+
             _spriteDot = new Sprite(SpriteConst.SmallWhiteDot, Width / 2, Height / 2, _size, _size, new SKPaint { Color = CreateColor(255, 255, 255) });
             _spriteHalo = new Sprite(SpriteConst.SmallWhiteHalo, Width / 2, Height / 2, _size * _size, _size * _size, new SKPaint { Color = CreateColor(255, 255, 255), BlendMode = SKBlendMode.Plus});
             AddChild(_spriteDot);

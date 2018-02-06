@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GemSwipe.Game.Models;
+using GemSwipe.Paladin.Behaviors;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -34,6 +35,9 @@ namespace GemSwipe.Paladin.Core
         void AddChild(ISkiaView child);
         void RemoveChild(ISkiaView child);
         void Render();
+
+        void AddBehavior(IBehavior behavior);
+        void RemoveBehavior(IBehavior behavior);
 
         void SetCanvas(SKCanvas canvas);
 

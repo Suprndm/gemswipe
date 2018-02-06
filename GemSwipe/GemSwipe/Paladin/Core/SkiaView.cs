@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GemSwipe.Game.Models;
 using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Behaviors;
 using SkiaSharp;
 using Xamarin.Forms;
 
@@ -115,7 +116,7 @@ namespace GemSwipe.Paladin.Core
             {
                 if (Parent != null)
                 {
-                    return  0.1m * Parent.VisualTreeDepth;
+                    return 0.1m * Parent.VisualTreeDepth;
                 }
                 return _visualTreeDepth;
             }
@@ -148,6 +149,7 @@ namespace GemSwipe.Paladin.Core
             protected set => _isVisible = value;
         }
 
+        protected IList<IBehavior> Behaviors { get; private set; }
 
         public SKCanvas Canvas { get; protected set; }
         private IList<ISkiaView> _children;
@@ -164,11 +166,11 @@ namespace GemSwipe.Paladin.Core
                 decimal zindex = 0.4m;
                 child.SetCanvas(Canvas);
 
-                if ( _children.Count > 0)
+                if (_children.Count > 0)
                 {
-                    zindex = 1-1m/(_children.Count + 1);
+                    zindex = 1 - 1m / (_children.Count + 1);
                 }
-               
+
                 child.ZIndex = zindex;
                 _children.Add(child);
                 child.Parent = this;
@@ -194,6 +196,22 @@ namespace GemSwipe.Paladin.Core
         {
             if (!IsVisible) return;
 
+
+            lock (Behaviors)
+            {
+                foreach (var behavior in Behaviors.ToList())
+                {
+                    if (behavior.IsDisposed())
+                    {
+                        Behaviors.Remove(behavior);
+                    }
+                    else
+                    {
+                        behavior.Update();
+                    }
+                }
+            }
+
             Draw();
 
             lock (_children)
@@ -208,6 +226,26 @@ namespace GemSwipe.Paladin.Core
                         child.Render();
                 }
             }
+        }
+
+        public void AddBehavior(IBehavior behavior)
+        {
+            lock (Behaviors)
+            {
+                Behaviors.Add(behavior);
+            }
+
+            behavior.Attach(this);
+        }
+
+        public void RemoveBehavior(IBehavior behavior)
+        {
+            lock (Behaviors)
+            {
+                Behaviors.Remove(behavior);
+            }
+
+            behavior.Detach();
         }
 
         public void SetCanvas(SKCanvas canvas)
@@ -333,11 +371,23 @@ namespace GemSwipe.Paladin.Core
             Tappables = new List<ISkiaView>();
             _children = new List<ISkiaView>();
 
+            Behaviors = new List<IBehavior>();
+
             Scale = 1;
         }
 
         public virtual void Dispose()
         {
+            lock (Behaviors)
+            {
+                foreach (var behavior in Behaviors)
+                {
+                    behavior.Dispose();
+                }
+
+                Behaviors.Clear();
+            }
+
             lock (_children)
             {
                 ToDispose = true;

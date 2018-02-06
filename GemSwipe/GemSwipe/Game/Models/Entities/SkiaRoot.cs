@@ -96,6 +96,10 @@ namespace GemSwipe.Game.Models.Entities
                     SpriteConst.SmallStarStroke,
                     SpriteConst.SmallStarBackFilled,
                     SpriteConst.SmallStarFilled,
+                    SpriteConst.BelowTheStars,
+                    SpriteConst.BigPlanet,
+                    SpriteConst.MediumPlanet,
+                    SpriteConst.SmallPlanet,
                 },
                 "Resources/Graphics",
                 ScreenWidth,
@@ -107,7 +111,7 @@ namespace GemSwipe.Game.Models.Entities
         {
             Task.Run(() =>
             {
-                Task.Delay(2000).Wait();
+                Task.Delay(500).Wait();
                 var audioStream = SoundLoader.LoadStream("Resources/Sounds/IntroGemSwipe.mp3");
 
                 var player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;

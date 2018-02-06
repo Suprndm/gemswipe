@@ -98,15 +98,14 @@ namespace GemSwipe.Game.Pages.Game
                 var swipeResult = await _board.Swipe(direction);
 
 
-                // TODO repair invalid move Detection
-                //if (swipeResult.DeadGems.Count == 0
-                //    && swipeResult.FusedGems.Count == 0
-                //    && swipeResult.MovedGems.Count == 0)
-                //{
-                //    // Invalid swipe
-                //    _isBusy = false;
-                //    return;
-                //}
+                if (swipeResult.DeadGems.Count == 0
+                    && swipeResult.FusedGems.Count == 0
+                    && swipeResult.MovedGems.Count == 0)
+                {
+                    // Invalid swipe
+                    _isBusy = false;
+                    return;
+                }
 
 
                 if (EvalWinStatus())
