@@ -125,6 +125,8 @@ namespace GemSwipe.Game.Models.Entities
             _finalColor = new SKColor(195, 184, 85);
 
             _floatingParticule = new FloatingParticule(0, 0, radius / 8, 0.02f, _randomizer);
+            //_floatingParticule = new FloatingParticule(0, 0, 0, 0.02f, _randomizer);
+            //_floatingParticule = new FloatingParticule(0, 0, 3 * radius, 0.02f, _randomizer);
 
             var test = new SKColor(255, 255, 255);
 
@@ -154,7 +156,7 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public override Task Collide(IGem targetGem)
+        public async override Task Collide(IGem targetGem)
         {
             if (targetGem is Gem)
             {
@@ -163,13 +165,38 @@ namespace GemSwipe.Game.Models.Entities
                     _board.CurrentSwipeResult.DeadGems.Add(this);
                 }
                 Gem target = (Gem)targetGem;
-                PerformAction(() => Move(target.IndexX, target.IndexY), () => Die());
-                return target.LevelUp();
+                NullifyFloatingBehaviour();
+                target.NullifyFloatingBehaviour();
+
+                target.LevelUp();
+
+                await PerformAction(() => Move(target.IndexX, target.IndexY), () => Die());
+                target.Fuse();
+                target.TightenFloatingBehaviour(_radius/8);
+
             }
             else
             {
-                return Task.Delay(0);
+                 await Task.Delay(0);
             }
+        }
+
+        public Task TightenFloatingBehaviour(float radius)
+        {
+            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, radius, 4, 2*MovementAnimationMs, Easing.CubicInOut);
+            return Task.Delay(MovementAnimationMs);
+        }
+
+        public Task LooseFloatingBehaviour(float radius)
+        {
+            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, _randomizer.Next(3,6)*radius, 4, 2*MovementAnimationMs, Easing.CubicInOut);
+            return Task.Delay(MovementAnimationMs);
+        }
+
+        public Task NullifyFloatingBehaviour()
+        {
+            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, 0, 4, MovementAnimationMs, Easing.CubicInOut);
+            return Task.Delay(MovementAnimationMs);
         }
 
         public override Task Move(int x, int y)
@@ -193,6 +220,18 @@ namespace GemSwipe.Game.Models.Entities
             Shine();
             await Task.Delay(150);
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
+        }
+
+        public async Task Pop2()
+        {
+            NullifyFloatingBehaviour();
+            Shine();
+            LooseFloatingBehaviour(_radius);
+            await Task.Delay(150);
+            this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
+            await Task.Delay(800);
+            await Task.Delay(3*MovementAnimationMs);
+            TightenFloatingBehaviour(_radius/8);
         }
 
         protected override void Draw()
@@ -236,7 +275,7 @@ namespace GemSwipe.Game.Models.Entities
             {
                 _board.CurrentSwipeResult.FusedGems.Add(this);
             }
-            return Fuse();
+            return Task.Delay(0);
         }
         
         public async Task Fuse()
@@ -245,12 +284,12 @@ namespace GemSwipe.Game.Models.Entities
             _size++;
             if (Canvas != null)
             {
-                await Task.Delay(MovementAnimationMs / 2);
+                //await Task.Delay(MovementAnimationMs / 2);
                 Shine();
                 this.Animate("size", p => _fluidSize = (float)p, oldSize, _size, 4, MovementAnimationMs,
                    Easing.CubicOut);
                 _spriteStar.UpdateSprite(SizeToStarSpriteFilename(_size));
-                await Task.Delay(MovementAnimationMs / 2);
+                //await Task.Delay(MovementAnimationMs / 2);
             }
         }
 

@@ -285,7 +285,19 @@ namespace GemSwipe.Game.Models.Entities
             {
                 Gem gem = (Gem)gembase;
                 await Task.Delay((_randomizer.Next(100) + 10) * 4);
-                gem.Pop();
+                gem.Pop2();
+            }
+        }
+
+        private async Task PopGems2()
+        {
+            await Task.Delay(500);
+            var shuffledGems = Gems.OrderBy(g => _randomizer.Next()).Select(g => g).ToList();
+            foreach (var gembase in shuffledGems)
+            {
+                Gem gem = (Gem)gembase;
+                await Task.Delay((_randomizer.Next(100) + 10) * 4);
+                gem.Pop2();
             }
         }
 
