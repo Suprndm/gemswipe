@@ -11,6 +11,7 @@ using GemSwipe.Game.Models.BoardModel.Cells;
 using GemSwipe.Game.Models.BoardModel.BoardMaker;
 using System.Reflection;
 using System.IO;
+using GemSwipe.Services.Sound;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -38,6 +39,8 @@ namespace GemSwipe.Game.Models.Entities
         private float _cellHeight;
         private float _maxBoardWidth;
         private float _maxBoardHeight;
+
+        private bool _isBusy;
 
 
         public Board(BoardSetup boardSetup, float x, float y, float width, float height) : base(x, y, height, width)
@@ -164,9 +167,12 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        private void Setup(BoardSetup boardSetup)
+        private async Task Setup(BoardSetup boardSetup)
         {
-
+            //SoundService.Instance.Play("Resources/Sounds/IntroGemSwipe.mp3");
+            AudioTrack introTrack = new AudioTrack(AudioTrackConst.IntroMusic);
+            introTrack.Play();
+            _isBusy = true;
             
             Gems = new List<IGem>();
             CellsList = new List<Cell>();
@@ -216,8 +222,11 @@ namespace GemSwipe.Game.Models.Entities
                 }
             }
 
-            PopGems();
-           
+            await PopGems();
+            await Task.Delay(2000);
+            _isBusy = false;
+
+            introTrack.FadeOut(5000);
         }
 
         private Cell ParseCellType(int boardX, int boardY, string rawData)
@@ -309,21 +318,25 @@ namespace GemSwipe.Game.Models.Entities
                 DeadGems = new List<Gem>(),
                 FusedGems = new List<Gem>()
             };
-            foreach (GemBase gem in Gems)
-            {
-                gem.Reactivate();
-            }
 
-            while (!SwipeIsResolved())
+            if (!_isBusy)
             {
-                foreach (Cell cell in CellsList)
+                foreach (GemBase gem in Gems)
                 {
-                    if (cell.AssignedGem != null)
-                    {
-                       (cell.AssignedGem).TryResolveSwipe(direction);
-                    }
+                    gem.Reactivate();
                 }
-                await Task.Delay(1);
+
+                while (!SwipeIsResolved())
+                {
+                    foreach (Cell cell in CellsList)
+                    {
+                        if (cell.AssignedGem != null)
+                        {
+                            (cell.AssignedGem).TryResolveSwipe(direction);
+                        }
+                    }
+                    await Task.Delay(1);
+                }
             }
             return CurrentSwipeResult;
         }

@@ -12,6 +12,7 @@ using GemSwipe.Paladin.UIElements;
 using Xamarin.Forms;
 using GemSwipe.Resources.Sounds;
 using GemSwipe.Services;
+using GemSwipe.Services.Sound;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -32,6 +33,7 @@ namespace GemSwipe.Game.Models.Entities
 
         public async void Initialize()
         {
+            LoadMusic();
             await LoadResources().ConfigureAwait(false);
             SetupLayers();
 
@@ -40,8 +42,6 @@ namespace GemSwipe.Game.Models.Entities
             Gesture.Up += Gesture_Up;
             Gesture.Pan += Gesture_Pan;
             Gesture.Swipe += Gesture_Swipe; ;
-
-            LoadMusic();
         }
 
         private void Gesture_Swipe(Point p, Direction direction)
@@ -109,24 +109,9 @@ namespace GemSwipe.Game.Models.Entities
 
         public void LoadMusic()
         {
-            Task.Run(() =>
-            {
-                Task.Delay(500).Wait();
-                var audioStream = SoundLoader.LoadStream("Resources/Sounds/IntroGemSwipe.mp3");
-
-                var player = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
-
-                if (player.Load(audioStream))
-                {
-                    player.Loop = true;
-                    player.Play();
-                    Logger.Log("music loaded");
-                }
-                else
-                {
-                    Logger.Log("music not loaded");
-                }
-            });
+            AudioTrack introTrack = new AudioTrack(AudioTrackConst.IntroMusic);
+            introTrack.Play();
+            introTrack.FadeOut(4000);
         }
 
         public virtual void SetupLayers()
