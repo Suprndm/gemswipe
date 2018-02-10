@@ -13,7 +13,7 @@ namespace GemSwipe.Paladin.Layers
         public LoadingLayer()
         {
             _transitionScreen = new Rectangle(0, 0, Height, Width, CreateColor(250, 247, 240));
-
+            _transitionScreen.Opacity = 0;
             AddChild(_transitionScreen);
 
             Navigator.NavigationStarted += Navigator_NavigationStarted;
@@ -22,7 +22,7 @@ namespace GemSwipe.Paladin.Layers
 
         private void Navigator_InitialNavigationStarted()
         {
-            this.Animate("whiteSmokeOut", p => _transitionScreen.Opacity = (float)p, _transitionScreen.Opacity, 0, 8, (uint)2000, Easing.Linear);
+            // this.Animate("whiteSmokeOut", p => _transitionScreen.Opacity = (float)p, _transitionScreen.Opacity, 0, 8, (uint)2000, Easing.Linear);
         }
 
         private async void Navigator_NavigationStarted(Navigation.NavigationEventArgs arg)

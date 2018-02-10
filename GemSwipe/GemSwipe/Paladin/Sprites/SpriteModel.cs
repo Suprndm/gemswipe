@@ -31,7 +31,7 @@ namespace GemSwipe.Paladin.Sprites
 
                  using (new SKAutoCanvasRestore(canvas, true))
                  {
-                     canvas.RotateRadians(angle, width, height);
+                     canvas.RotateRadians(-angle, x , y);
                      canvas.DrawBitmap(Bitmap, SourceBounds, SKRect.Create(x - width / 2, y - height / 2, width, height), paint);
                 }
             }
