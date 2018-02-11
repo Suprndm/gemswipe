@@ -11,7 +11,7 @@ namespace GemSwipe.Game.Pages.Map
         private float _targetY;
         private const int AnimationMs = 1000;
 
-        public WorldProgress( float initialY, float targetY)
+        public WorldProgress(float initialY, float targetY)
         {
             _initialY = initialY;
             _targetY = targetY;
@@ -26,7 +26,7 @@ namespace GemSwipe.Game.Pages.Map
                 paint.IsAntialias = true;
                 paint.StrokeWidth = Height / 200;
                 paint.Color = CreateColor(255, 255, 255, 255);
-                Canvas.DrawLine(Width/2, _initialY, Width/2, _targetY, paint);
+                Canvas.DrawLine(X + Width / 2, Y + _initialY,X + Width / 2, Y + _targetY, paint);
             }
         }
 

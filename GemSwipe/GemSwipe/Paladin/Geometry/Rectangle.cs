@@ -17,7 +17,7 @@ namespace GemSwipe.Paladin.Geometry
                 paint.IsAntialias = true;
                 paint.Style = SKPaintStyle.Fill;
                 paint.Color = CreateColor(_color.Red, _color.Green, _color.Blue, (byte)(_opacity * 255));
-                Canvas.DrawRect(SKRect.Create(X, Y, Width, Height), paint);
+                Canvas.DrawRect(SKRect.Create(X-Width/2, Y-Height/2, Width, Height), paint);
             }
         }
     }

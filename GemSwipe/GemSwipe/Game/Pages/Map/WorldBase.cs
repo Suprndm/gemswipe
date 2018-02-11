@@ -20,14 +20,17 @@ namespace GemSwipe.Game.Pages.Map
         private PlayerLifeDisplayer _playerLifeDisplayer;
 
         private readonly LevelDataRepository _levelDataRepository;
+        private readonly WorldDataRepository _worldDataRepository;
         private readonly WorldProgress _worldProgress;
 
         private int _currentUnlockedLevelId;
+        private int _id;
 
         protected WorldBase(int id)
         {
-            var worldDataRepository = new WorldDataRepository();
-            var worldData = worldDataRepository.Get(id);
+            _id = id;
+            _worldDataRepository = new WorldDataRepository();
+            var worldData = _worldDataRepository.Get(id);
             _levelDataRepository = new LevelDataRepository();
 
             var levelIds = worldData.LevelIds;
@@ -38,8 +41,6 @@ namespace GemSwipe.Game.Pages.Map
             var margins = Height - heightUsedByLevelButtons;
 
             _levelButtons = new List<LevelButton>();
-            DeclareTappable(this);
-
             var count = 0;
             var currentUnlockedLevel = PlayerDataService.Instance.GetLastUnlockedLevel();
             foreach (var levelId in levelIds)
@@ -83,16 +84,19 @@ namespace GemSwipe.Game.Pages.Map
             }
 
             var unlockedLevelId = PlayerDataService.Instance.GetLastUnlockedLevel();
-            var unlockedLevelButton = GetLevelButtonByLevelId(unlockedLevelId);
+            var worldOfUnlockedLevelId = _worldDataRepository.GetWorldIdByLevelId(unlockedLevelId);
 
-            // Means that the unlockedLevel is on another world
             float targetProgressY = 0;
-            if (unlockedLevelButton == null)
+            if (worldOfUnlockedLevelId < _id)
+            {
+                targetProgressY = _levelButtons.First().Y;
+            }
+            else if (worldOfUnlockedLevelId > _id)
             {
                 targetProgressY = _levelButtons.Last().Y;
-            }
-            else
+            } else
             {
+                var unlockedLevelButton = GetLevelButtonByLevelId(unlockedLevelId);
                 targetProgressY = unlockedLevelButton.Y;
             }
 

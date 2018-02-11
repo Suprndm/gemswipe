@@ -77,6 +77,7 @@ namespace GemSwipe.Paladin.UIElements.Buttons
 
         public virtual async Task OnUp()
         {
+
             if (_isDown && CanActivate())
             {
                 _isDown = false;

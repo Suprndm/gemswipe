@@ -7,7 +7,7 @@ namespace GemSwipe.Data
 {
     public abstract class RepositoryBase<T> : IRepository<T> where T:class
     {
-        private IList<T> _data;
+        protected IList<T> Data;
 
         protected RepositoryBase()
         {
@@ -16,24 +16,24 @@ namespace GemSwipe.Data
 
         public IList<T> GetAll()
         {
-            return _data;
+            return Data;
         }
 
         public int Count()
         {
-            return _data.Count;
+            return Data.Count;
         }
 
         public T Get(int id)
         {
-            return _data.Single(l => (int) l.GetType().GetRuntimeProperty("Id").GetValue(l) == id);
+            return Data.Single(l => (int) l.GetType().GetRuntimeProperty("Id").GetValue(l) == id);
         }
 
         private void Initialize()
         {
             var className = typeof(T).Name;
             string jsonString = ResourceLoader.LoadStringAsync($"Data/{className}/{className}.json").Result;
-            _data = JsonConvert.DeserializeObject<List<T>>(jsonString);
+            Data = JsonConvert.DeserializeObject<List<T>>(jsonString);
         }
     }
 }

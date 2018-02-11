@@ -27,7 +27,7 @@ namespace GemSwipe.Game.Test
             PlayerDataService.Instance.SetMaxLevelReached(_unlockedLevelId);
             PlayerDataService.Instance.SaveChanges();
 
-            _world = new FirstWorld();
+            _world = new SecondWorld();
 
             AddChild(_world);
 
