@@ -19,7 +19,7 @@ namespace GemSwipe.Game.Models.Entities
     {
 
         private Background _background;
-
+        
         public static float ScreenHeight { get; private set; }
         public static float ScreenWidth { get; private set; }
         private TextBlock _fpsText;
@@ -40,7 +40,14 @@ namespace GemSwipe.Game.Models.Entities
             Gesture.Down += Gesture_Down;
             Gesture.Up += Gesture_Up;
             Gesture.Pan += Gesture_Pan;
-            Gesture.Swipe += Gesture_Swipe; ;
+            Gesture.Swipe += Gesture_Swipe;
+
+            Initialized();
+        }
+
+        protected virtual void Initialized()
+        {
+
         }
 
         private void Gesture_Swipe(Point p, Direction direction)
@@ -99,6 +106,8 @@ namespace GemSwipe.Game.Models.Entities
                     SpriteConst.BigPlanet,
                     SpriteConst.MediumPlanet,
                     SpriteConst.SmallPlanet,
+                    SpriteConst.LevelBase,
+                    SpriteConst.Planet1
                 },
                 "Resources/Graphics",
                 ScreenWidth,

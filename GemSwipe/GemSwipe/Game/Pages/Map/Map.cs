@@ -54,7 +54,7 @@ namespace GemSwipe.Game.Pages.Map
         {
             foreach (LevelButton levelButton in _levelButtons)
             {
-                LevelProgressStatus levelProgress = PlayerDataService.Instance.GetLevelProgress(levelButton.Level);
+                LevelProgressStatus levelProgress = PlayerDataService.Instance.GetLevelProgress(levelButton.LevelId);
                 levelButton.ProgressStatus = levelProgress;
             }
         }
@@ -62,7 +62,7 @@ namespace GemSwipe.Game.Pages.Map
         private void GoToLevel(int i)
         {
             Navigator.Instance.GoTo(PageType.Game, i);
-            var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.Level == i);
+            var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.LevelId == i);
             if (chosenLevelButton != null)
             {
                 chosenLevelButton.ActivateOrbitingStars(Width, Height);

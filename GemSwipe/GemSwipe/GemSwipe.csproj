@@ -8,10 +8,13 @@
     <None Remove="Data\LevelData\LevelData.json" />
     <None Remove="Data\LevelMapPosition\LevelMapPosition.json" />
     <None Remove="Data\PlanetData\PlanetDataResources.json" />
+    <None Remove="Data\WorldData\WorldData.json" />
     <None Remove="Resources\Graphics\High\BelowTheStars.png" />
     <None Remove="Resources\Graphics\High\BigPlanet.png" />
     <None Remove="Resources\Graphics\High\BlackHalo.png" />
+    <None Remove="Resources\Graphics\High\LevelBase.png" />
     <None Remove="Resources\Graphics\High\MediumPlanet.png" />
+    <None Remove="Resources\Graphics\High\Planet1.png" />
     <None Remove="Resources\Graphics\High\shard.png" />
     <None Remove="Resources\Graphics\High\SmallPlanet.png" />
     <None Remove="Resources\Graphics\High\SmallStarBackFilled.png" />
@@ -32,9 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\WorldData\WorldData.json" />
     <EmbeddedResource Include="Resources\Graphics\High\BelowTheStars.png" />
     <EmbeddedResource Include="Resources\Graphics\High\BigPlanet.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\LevelBase.png" />
     <EmbeddedResource Include="Resources\Graphics\High\MediumPlanet.png" />
+    <EmbeddedResource Include="Resources\Graphics\High\Planet1.png" />
     <EmbeddedResource Include="Resources\Graphics\High\SmallPlanet.png" />
     <EmbeddedResource Include="Resources\Sounds\flyby.mp3" />
     <EmbeddedResource Include="Resources\Sounds\IntroGemSwipe.mp3" />

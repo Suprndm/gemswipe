@@ -19,8 +19,6 @@ namespace GemSwipe.Game.Pages.Home
         public HomePage()
         {
             Type = PageType.Home;
-
-       
         }
 
         private void OnTapped()

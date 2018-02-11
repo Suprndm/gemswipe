@@ -25,6 +25,8 @@ namespace GemSwipe.Game.Sprites
        public static string BelowTheStars => "BelowTheStars.png";
        public static string BigPlanet => "BigPlanet.png";
        public static string MediumPlanet => "MediumPlanet.png";
-       public static string SmallPlanet => "SmallPlanet.png";
+        public static string SmallPlanet => "SmallPlanet.png";
+        public static string Planet1 => "Planet1.png";
+        public static string LevelBase => "LevelBase.png";
     }
 }

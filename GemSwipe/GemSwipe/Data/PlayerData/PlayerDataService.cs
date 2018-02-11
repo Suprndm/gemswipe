@@ -107,6 +107,11 @@ namespace GemSwipe.Data.PlayerData
             }
         }
 
+        public int GetLastUnlockedLevel()
+        {
+            return _playerData.MaxLevelReached;
+        }
+
         public void SetMaxLevelReached(int maxLevel)
         {
             _playerData.MaxLevelReached = maxLevel;

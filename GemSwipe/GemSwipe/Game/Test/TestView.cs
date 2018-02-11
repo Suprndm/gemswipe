@@ -10,10 +10,16 @@ namespace GemSwipe.Game.Test
 
         public TestView(float x, float y, float height, float width) : base(x, y, height, width)
         {
+          
+        }
+
+        protected override void Initialized()
+        {
+            base.Initialized();
             _fpsText = new TextBlock(Width / 2, Width / 40, "0", Width / 40, CreateColor(255, 255, 255));
             AddChild(_fpsText);
 
-            AddChild(new SpriteTester());
+            AddChild(new WorldTester());
         }
 
         public override void SetupLayers()
@@ -23,6 +29,7 @@ namespace GemSwipe.Game.Test
 
         public override void UpdateFps(long fps)
         {
+            if (_fpsText == null) return;
             _fpsText.Text = fps.ToString();
         }
 
