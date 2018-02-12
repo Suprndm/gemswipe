@@ -91,7 +91,7 @@ namespace GemSwipe.Game.Pages.Game
         {
             if (IsBusy()) return;
 
-            if (_board != null)
+            if (_board != null&&!_board.IsBusy)
             {
                 _isBusy = true;
 

@@ -8,11 +8,13 @@ namespace GemSwipe.Game.Models.Entities
 {
     public interface IGem
     {
+        //bool IsBusy { get; set; }
         void Dispose();
         void Reactivate();
         Task ValidateHandling();
         bool HasBeenHandled();
         bool CanPerform();
+        bool HasCompletedPerformance();
         bool CanCollide(IGem gem);
         bool CanActivate();
         Task TryResolveSwipe(Direction direction);

@@ -10,7 +10,6 @@ using GemSwipe.Paladin.Navigation;
 using GemSwipe.Paladin.Sprites;
 using GemSwipe.Paladin.UIElements;
 using Xamarin.Forms;
-using GemSwipe.Resources.Sounds;
 using GemSwipe.Services;
 using GemSwipe.Services.Sound;
 
@@ -111,7 +110,6 @@ namespace GemSwipe.Game.Models.Entities
         {
             AudioTrack introTrack = new AudioTrack(AudioTrackConst.IntroMusic);
             introTrack.Play();
-            introTrack.FadeOut(4000);
         }
 
         public virtual void SetupLayers()

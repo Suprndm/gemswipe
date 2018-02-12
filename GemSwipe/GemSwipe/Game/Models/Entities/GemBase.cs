@@ -14,9 +14,20 @@ namespace GemSwipe.Game.Models.Entities
         protected const int MovementAnimationMs = 600;
         public int IndexX { get; set; }
         public int IndexY { get; set; }
+        //public virtual bool IsBusy
+        //{
+        //    get
+        //    {
+        //        return false;
+        //    }
+        //    protected set
+        //    {
+        //        IsBusy = value;
+        //    }
+        //}
         public ICell AttachedCell;
-        private bool _hasBeenHandled;
-        private bool _isPerformingAction = false;
+        protected bool _hasBeenHandled;
+        protected bool _isPerformingAction = false;
         protected Board _board;
 
         public GemBase(int boardX, int boardY, int size, Board board) : base(0, 0, 0, 0)
@@ -77,6 +88,11 @@ namespace GemSwipe.Game.Models.Entities
         public bool CanPerform()
         {
             return !_isPerformingAction;
+        }
+
+        public bool HasCompletedPerformance()
+        {
+            return !_isPerformingAction && _hasBeenHandled;
         }
 
         public Task TryResolveSwipe(Direction direction)
@@ -233,16 +249,15 @@ namespace GemSwipe.Game.Models.Entities
         {
             if (Canvas != null)
             {
-                await Task.Delay(MovementAnimationMs / 2);
+                //await Task.Delay(MovementAnimationMs / 2);
                 this.Animate("fade", p => _opacity = (float)p, 1, 0, 4, MovementAnimationMs / 2, Easing.SinInOut);
-                await Task.Delay(MovementAnimationMs / 2);
             }
             Clear();
         }
 
         public void Clear()
         {
-            _board.Gems.Remove(this);
+            _board.IGems.Remove(this);
             Dispose();
         }
         #endregion

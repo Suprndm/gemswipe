@@ -26,7 +26,9 @@
     <None Remove="Resources\Graphics\High\Star4.png" />
     <None Remove="Resources\Graphics\High\Star5.png" />
     <None Remove="Resources\Graphics\High\WhiteHalo.png" />
+    <None Remove="Resources\Sounds\flyby.mp3" />
     <None Remove="Resources\Sounds\IntroGemSwipe.mp3" />
+    <None Remove="Resources\Sounds\PinDropping.mp3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
     <EmbeddedResource Include="Resources\Graphics\High\BigPlanet.png" />
     <EmbeddedResource Include="Resources\Graphics\High\MediumPlanet.png" />
     <EmbeddedResource Include="Resources\Graphics\High\SmallPlanet.png" />
+    <EmbeddedResource Include="Resources\Sounds\flyby.mp3" />
     <EmbeddedResource Include="Resources\Sounds\IntroGemSwipe.mp3" />
   </ItemGroup>
 
@@ -55,6 +58,7 @@
     <EmbeddedResource Include="Resources\Graphics\High\Star4.png" />
     <EmbeddedResource Include="Resources\Graphics\High\Star5.png" />
     <EmbeddedResource Include="Resources\Graphics\High\WhiteHalo.png" />
+    <EmbeddedResource Include="Resources\Sounds\PinDropping.mp3" />
   </ItemGroup>
 
   <ItemGroup>

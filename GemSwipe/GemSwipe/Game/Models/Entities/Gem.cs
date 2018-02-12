@@ -13,6 +13,7 @@ using System.Linq;
 using GemSwipe.Game.Sprites;
 using GemSwipe.Paladin.Sprites;
 using GemSwipe.Services;
+using GemSwipe.Services.Sound;
 
 namespace GemSwipe.Game.Models.Entities
 {
@@ -59,6 +60,18 @@ namespace GemSwipe.Game.Models.Entities
                 _radius = value;
             }
         }
+
+        //public override bool IsBusy
+        // {
+        //     get
+        //     {
+        //         return !_isPerformingAction&&_hasBeenHandled;
+        //     }
+        //     protected set
+        //     {
+        //         IsBusy = value;
+        //     }
+        // }
 
         protected const int MovementAnimationMs = 600;
         private Random _randomizer;
@@ -168,28 +181,33 @@ namespace GemSwipe.Game.Models.Entities
                 NullifyFloatingBehaviour();
                 target.NullifyFloatingBehaviour();
 
+                AudioTrack introTrack2 = new AudioTrack(AudioTrackConst.IntroMusic2);
+
                 target.LevelUp();
 
-                await PerformAction(() => Move(target.IndexX, target.IndexY), () => Die());
-                target.Fuse();
-                target.TightenFloatingBehaviour(_radius/8);
-
+                await PerformAction(
+                    () => Move(target.IndexX, target.IndexY),
+                    () => Die(),
+                    () => introTrack2.Play(),
+                    () => target.Fuse(),
+                    () => target.TightenFloatingBehaviour(_radius / 8)
+                    );
             }
             else
             {
-                 await Task.Delay(0);
+                await Task.Delay(0);
             }
         }
 
         public Task TightenFloatingBehaviour(float radius)
         {
-            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, radius, 4, 2*MovementAnimationMs, Easing.CubicInOut);
+            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, radius, 4, 2 * MovementAnimationMs, Easing.CubicInOut);
             return Task.Delay(MovementAnimationMs);
         }
 
         public Task LooseFloatingBehaviour(float radius)
         {
-            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, _randomizer.Next(3,6)*radius, 4, 2*MovementAnimationMs, Easing.CubicInOut);
+            this.Animate("RecenterParticule", p => _floatingParticule.FloatingRadius = (float)p, _floatingParticule.FloatingRadius, _randomizer.Next(3, 6) * radius, 4, 2 * MovementAnimationMs, Easing.CubicInOut);
             return Task.Delay(MovementAnimationMs);
         }
 
@@ -230,8 +248,8 @@ namespace GemSwipe.Game.Models.Entities
             await Task.Delay(150);
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
             await Task.Delay(800);
-            await Task.Delay(3*MovementAnimationMs);
-            TightenFloatingBehaviour(_radius/8);
+            await Task.Delay(3 * MovementAnimationMs);
+            TightenFloatingBehaviour(_radius / 8);
         }
 
         protected override void Draw()
@@ -277,7 +295,7 @@ namespace GemSwipe.Game.Models.Entities
             }
             return Task.Delay(0);
         }
-        
+
         public async Task Fuse()
         {
             var oldSize = _size;
@@ -295,7 +313,7 @@ namespace GemSwipe.Game.Models.Entities
 
         public override Task Die()
         {
-            
+
             return base.Die();
         }
 
