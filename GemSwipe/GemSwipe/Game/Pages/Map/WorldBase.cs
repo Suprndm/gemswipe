@@ -74,7 +74,7 @@ namespace GemSwipe.Game.Pages.Map
                 isFinal);
 
                 AddChild(levelButton);
-                DeclareTappable(levelButton);
+               // DeclareTappable(levelButton);
 
                 levelButton.Activated += () => LevelButton_Tapped(levelId);
 

@@ -96,9 +96,12 @@ namespace GemSwipe.Views
             var height = Layout.Height;
             var deviceHeight = SkiaRoot.ScreenHeight;
             var deviceWidth = SkiaRoot.ScreenWidth;
+            var posX = Math.Max(0, args.Location.X / width * deviceWidth);
+            var posY = Math.Max(0, args.Location.Y / height * deviceHeight);
+            posX = Math.Min(posX, SkiaRoot.ScreenWidth * .95f);
+            posY = Math.Min(posY, SkiaRoot.ScreenHeight * .95f);
 
-            var motionPosition = new Point(args.Location.X / width * deviceWidth,
-                args.Location.Y / height * deviceHeight);
+            var motionPosition = new Point(posX, posY);
 
             switch (args.Type)
             {

@@ -1,8 +1,10 @@
 ﻿using GemSwipe.Game.Models.Entities;
+using GemSwipe.Paladin.Containers;
 using GemSwipe.Paladin.Core;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -17,10 +19,13 @@ namespace GemSwipe.Paladin.UIElements
         protected SKRect _hitbox;
         private int _currentIndex;
         private float _initialX;
-        private float _slideRatio = 0.3f;
+        private float _slideRatio;
         private float _totalSlide;
 
         private bool _isFullScreen;
+
+        private IList<SlidingCollectionIndicator> _indicators;
+        private Container _itemsContainer;
 
         public SlidingCollection(
             float x,
@@ -30,7 +35,7 @@ namespace GemSwipe.Paladin.UIElements
             IList<ISkiaView> items,
             float marginRatio = 0,
             int slideMs = 1000,
-            float slideRatio = 0.3f,
+            float slideRatio = 0.15f,
             int initialIndex = 0,
             bool isFullScreen = true) : base(x, y, height, width)
         {
@@ -42,14 +47,35 @@ namespace GemSwipe.Paladin.UIElements
             _slideMs = slideMs;
             _slideRatio = slideRatio;
             _isFullScreen = isFullScreen;
-
+            _indicators = new List<SlidingCollectionIndicator>();
+            _itemsContainer = new Container();
+            AddChild(_itemsContainer);
+            var indicatorSpace = SkiaRoot.ScreenWidth * 0.08f;
             for (int i = 0; i < _items.Count; i++)
             {
                 var item = _items[i];
                 item.X = 0 + i * (Width + _marginRatio * SkiaRoot.ScreenWidth);
                 item.Y = 0;
 
-                AddChild(item);
+                _itemsContainer.AddContent(item);
+            }
+
+            for (int i = 0; i < _items.Count; i++)
+            {
+                var indicator = new SlidingCollectionIndicator();
+                indicator.X = i * indicatorSpace - (indicatorSpace * _items.Count) / 2 + Width/2 + indicatorSpace/2;
+                indicator.Y = SkiaRoot.ScreenHeight * 0.97f;
+
+                AddChild(indicator);
+                _indicators.Add(indicator);
+
+                if(i==0)
+                {
+                    indicator.Select();
+                }else
+                {
+                    indicator.Unselect();
+                }
             }
 
             _currentIndex = 0;
@@ -71,7 +97,7 @@ namespace GemSwipe.Paladin.UIElements
         private void OnPan(float x)
         {
             _totalSlide += x;
-            X += x;
+            _itemsContainer.X += x;
             return;
         }
 
@@ -84,32 +110,26 @@ namespace GemSwipe.Paladin.UIElements
         {
             if (_totalSlide < 0 && Math.Abs(_totalSlide) > Width * _slideRatio && _currentIndex < _items.Count - 1)
             {
+                _indicators[_currentIndex].Unselect();
                 _currentIndex++;
+                _indicators[_currentIndex].Select();
             }
             else
             if (_totalSlide > 0 && _totalSlide > Width * _slideRatio && _currentIndex > 0)
             {
+                _indicators[_currentIndex].Unselect();
                 _currentIndex--;
+                _indicators[_currentIndex].Select();
             }
 
             _lastPanX = null;
 
             var itemToSlideTo = _items[_currentIndex];
-            var itemToSlideToRealX = itemToSlideTo.X - X;
+            var itemToSlideToRealX = itemToSlideTo.X - _itemsContainer.X;
             var targetX = -itemToSlideToRealX + _initialX;
 
-            this.Animate("slide", p => _x = (float)p, _x, targetX, 4, (byte)_slideMs, Easing.CubicOut);
+            this.Animate("slide", p => _itemsContainer.X = (float)p, _itemsContainer.X, targetX, 4, (byte)_slideMs, Easing.CubicOut);
             _totalSlide = 0;
-        }
-
-        public void AddItem(ISkiaView item)
-        {
-            _items.Add(item);
-        }
-
-        public void RemoveItem(ISkiaView item)
-        {
-            _items.Remove(item);
         }
 
         protected override void Draw()
