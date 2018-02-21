@@ -97,12 +97,12 @@ namespace GemSwipe.Game.Pages.Game
 
                 var swipeResult = await _board.Swipe(direction);
 
-
                 if (swipeResult.DeadGems.Count == 0
                     && swipeResult.FusedGems.Count == 0
                     && swipeResult.MovedGems.Count == 0)
                 {
                     // Invalid swipe
+                    Logger.Log("invalid swipe");
                     _isBusy = false;
                     return;
                 }
@@ -110,6 +110,7 @@ namespace GemSwipe.Game.Pages.Game
 
                 if (EvalWinStatus())
                 {
+                    Logger.Log("evalwin");
                     await Task.Delay(1000);
                     // WIN
 

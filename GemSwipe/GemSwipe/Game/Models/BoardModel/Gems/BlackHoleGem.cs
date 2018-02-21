@@ -30,13 +30,13 @@ namespace GemSwipe.Game.Models.BoardModel.Gems
             ActivateOrbitingStars(SkiaRoot.ScreenWidth, SkiaRoot.ScreenHeight);
         }
 
-        protected override async void Shine()
-        {
-            Shard shard = new Shard(Radius, Radius, 2 * Radius, 2 * Radius, CreateColor(0, 0, 0));
-            AddChild(shard);
-            await Task.Delay(_animationMs / 2);
-            shard.Die();
-        }
+        //protected override async void Shine()
+        //{
+        //    Shard shard = new Shard(Radius, Radius, 2 * Radius, 2 * Radius, CreateColor(0, 0, 0));
+        //    AddChild(shard);
+        //    await Task.Delay(_animationMs / 2);
+        //    shard.Die();
+        //}
 
         public async Task Swallow()
         {

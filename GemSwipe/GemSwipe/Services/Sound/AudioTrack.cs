@@ -47,21 +47,30 @@ namespace GemSwipe.Services.Sound
 
         public Task Play(bool loop = false)
         {
-            _audioStreamPlayer.Play();
-            return Task.Delay(0);
+            try
+            {
+                _audioStreamPlayer.Loop = loop;
+                _audioStreamPlayer.Play();
+                _audioStreamPlayer.PlaybackEnded += (e, s) => Stop();
+                return Task.Delay(0);
+            }
+            catch (NotImplementedException e)
+            {
+                throw e;
+            }
         }
 
+        public Task Pause()
+        {
+            _audioStreamPlayer.Pause();
+            return Task.Delay(0);
+        }
+        
         public Task Stop()
         {
             _audioStreamPlayer.Stop();
             _audioStreamPlayer.Dispose();
             _audioStream.Dispose();
-            return Task.Delay(0);
-        }
-
-        public Task Pause()
-        {
-            _audioStreamPlayer.Play();
             return Task.Delay(0);
         }
 
@@ -74,7 +83,7 @@ namespace GemSwipe.Services.Sound
 
                 int numberOfIntervals = 100;
                 float fadingInterval = fadingDurationMs / numberOfIntervals;
-                for (int i =0; i < numberOfIntervals; i++)
+                for (int i = 0; i < numberOfIntervals; i++)
                 {
                     await Task.Delay((int)fadingInterval);
                     Volume -= fadingSpeed * fadingInterval;
@@ -85,6 +94,7 @@ namespace GemSwipe.Services.Sound
             {
                 Volume = 0;
             }
+            _audioStreamPlayer.PlaybackEnded += (e, s) => Stop();
         }
     }
 }

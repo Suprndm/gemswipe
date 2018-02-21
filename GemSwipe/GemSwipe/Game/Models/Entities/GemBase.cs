@@ -14,17 +14,7 @@ namespace GemSwipe.Game.Models.Entities
         protected const int MovementAnimationMs = 600;
         public int IndexX { get; set; }
         public int IndexY { get; set; }
-        //public virtual bool IsBusy
-        //{
-        //    get
-        //    {
-        //        return false;
-        //    }
-        //    protected set
-        //    {
-        //        IsBusy = value;
-        //    }
-        //}
+     
         public ICell AttachedCell;
         protected bool _hasBeenHandled;
         protected bool _isPerformingAction = false;
@@ -88,11 +78,6 @@ namespace GemSwipe.Game.Models.Entities
         public bool CanPerform()
         {
             return !_isPerformingAction;
-        }
-
-        public bool HasCompletedPerformance()
-        {
-            return !_isPerformingAction && _hasBeenHandled;
         }
 
         public Task TryResolveSwipe(Direction direction)
@@ -255,7 +240,7 @@ namespace GemSwipe.Game.Models.Entities
             Clear();
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _board.IGems.Remove(this);
             Dispose();

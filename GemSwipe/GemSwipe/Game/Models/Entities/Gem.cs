@@ -22,7 +22,6 @@ namespace GemSwipe.Game.Models.Entities
     {
         public GemType Type { get; set; }
 
-
         public int Size
         {
             get
@@ -60,18 +59,6 @@ namespace GemSwipe.Game.Models.Entities
                 _radius = value;
             }
         }
-
-        //public override bool IsBusy
-        // {
-        //     get
-        //     {
-        //         return !_isPerformingAction&&_hasBeenHandled;
-        //     }
-        //     protected set
-        //     {
-        //         IsBusy = value;
-        //     }
-        // }
 
         protected const int MovementAnimationMs = 600;
         private Random _randomizer;
@@ -181,14 +168,14 @@ namespace GemSwipe.Game.Models.Entities
                 NullifyFloatingBehaviour();
                 target.NullifyFloatingBehaviour();
 
-                AudioTrack introTrack2 = new AudioTrack(AudioTrackConst.IntroMusic2);
+                AudioTrack pinDrop = new AudioTrack(AudioTrackConst.PinDropping);
 
                 target.LevelUp();
 
                 await PerformAction(
                     () => Move(target.IndexX, target.IndexY),
                     () => Die(),
-                    () => introTrack2.Play(),
+                    () => pinDrop.Play(),
                     () => target.Fuse(),
                     () => target.TightenFloatingBehaviour(_radius / 8)
                     );
@@ -226,23 +213,24 @@ namespace GemSwipe.Game.Models.Entities
             return base.Move(x, y);
         }
 
-        protected virtual void Shine()
+        protected virtual Task Shine()
         {
             var effect = new GemPopEffect(_floatingParticule.X, _floatingParticule.Y, Height, Width);
             AddChild(effect);
-            effect.Start();
+            return effect.Start();
         }
 
-        public async Task Pop()
+        public async Task FixedPop()
         {
             Shine();
             await Task.Delay(150);
             this.Animate("opacity", p => _opacity = (float)p, 0, 1, 4, 320, Easing.CubicOut);
         }
 
-        public async Task Pop2()
+        public async Task Pop()
         {
-            NullifyFloatingBehaviour();
+            _isPerformingAction = true;
+            await NullifyFloatingBehaviour();
             Shine();
             LooseFloatingBehaviour(_radius);
             await Task.Delay(150);
@@ -250,6 +238,7 @@ namespace GemSwipe.Game.Models.Entities
             await Task.Delay(800);
             await Task.Delay(3 * MovementAnimationMs);
             TightenFloatingBehaviour(_radius / 8);
+            _isPerformingAction = false;
         }
 
         protected override void Draw()
@@ -311,10 +300,10 @@ namespace GemSwipe.Game.Models.Entities
             }
         }
 
-        public override Task Die()
+        public override void Clear()
         {
-
-            return base.Die();
+            _board.Gems.Remove(this);
+            base.Clear();
         }
 
         private string SizeToStarSpriteFilename(int size)
