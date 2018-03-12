@@ -15,6 +15,8 @@ namespace GemSwipe.Paladin.Navigation
         public static event Action<NavigationEventArgs> NavigationEnded;
         public static event Action InitialNavigationStarted;
 
+        public static event Action<int> WorldChanged;
+
         private Navigator()
         {
             _pages = new Dictionary<PageType, IPage>();
@@ -61,6 +63,11 @@ namespace GemSwipe.Paladin.Navigation
         public IPage GetCurrentPage()
         {
             return _currentPage;
+        }
+
+        public void ChangeWorld(int worldId)
+        {
+            WorldChanged?.Invoke(worldId);
         }
     }
 }

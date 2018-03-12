@@ -26,7 +26,16 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             Canvas.DrawRect(SKRect.Create(X, Y, Width, Height), paint);
         }
 
-        public void Reset(SKColor color1, SKColor color2, float y)
+        public SKColor GetTopColor()
+        {
+            return _color1;
+        }
+        public SKColor GetBottomColor()
+        {
+            return _color2;
+        }
+
+        public void Reset(SKColor color1, SKColor color2, float y = 0)
         {
             _color1 = color1;
             _color2 = color2;

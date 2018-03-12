@@ -17,7 +17,6 @@ namespace GemSwipe.Game.Pages.Map
     public abstract class WorldBase : SkiaView, IWorld
     {
         private readonly IList<LevelButton> _levelButtons;
-        private PlayerLifeDisplayer _playerLifeDisplayer;
 
         private readonly LevelDataRepository _levelDataRepository;
         private readonly WorldDataRepository _worldDataRepository;
@@ -25,6 +24,8 @@ namespace GemSwipe.Game.Pages.Map
 
         private int _currentUnlockedLevelId;
         private int _id;
+
+        public int Id { get => _id; }
 
         protected WorldBase(int id)
         {
@@ -105,10 +106,6 @@ namespace GemSwipe.Game.Pages.Map
             AddChild(_worldProgress);
         }
 
-        public void GetLifeDisplayer(PlayerLifeDisplayer lifeDisplayer)
-        {
-            _playerLifeDisplayer = lifeDisplayer;
-        }
 
         public void UpdateLevelStatus()
         {
@@ -122,13 +119,6 @@ namespace GemSwipe.Game.Pages.Map
         private void GoToLevel(int i)
         {
             Navigator.Instance.GoTo(PageType.Game, i);
-            var chosenLevelButton = _levelButtons.FirstOrDefault(p => p.LevelId == i);
-            if (chosenLevelButton != null)
-            {
-                chosenLevelButton.ActivateOrbitingStars(Width, Height);
-                _playerLifeDisplayer.SetTarget(chosenLevelButton.X, chosenLevelButton.Y);
-                _playerLifeDisplayer.SteerToTarget();
-            }
         }
 
         private void ShowLevelPopup(int i)

@@ -2,24 +2,42 @@
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Paladin.Navigation.Pages;
 using GemSwipe.Paladin.Navigation;
+using GemSwipe.Paladin.UIElements;
+using GemSwipe.Paladin.Core;
+using GemSwipe.Game.Pages.Map.Worlds;
+using System.Collections.Generic;
+using GemSwipe.Data.PlayerData;
 
 namespace GemSwipe.Game.Pages.Map
 {
     public class MapPage : PageBase
     {
-        private Map _map;
-        private PlayerLifeDisplayer _playerLifeDisplayer;
+        SlidingCollection<IWorld> _worldCollection;
 
         public MapPage()
         {
             Type = PageType.Map;
 
-            _map = new Map(0, 0, Height, Width);
-            AddChild(_map);
+            var unlockedLevelId = 11;
+            PlayerDataService.Instance.SetMaxLevelReached(unlockedLevelId);
+            PlayerDataService.Instance.SaveChanges();
 
-            _playerLifeDisplayer = new PlayerLifeDisplayer(Width/2- Width / 8, Height- Height / 20, Height, Width/4);
-            _map.GetLifeDisplayer(_playerLifeDisplayer);
-            AddChild(_playerLifeDisplayer);
+
+            _worldCollection = new SlidingCollection<IWorld>(0, 0, Width, Height, new List<IWorld>
+                {
+                new FirstWorld(),
+                new SecondWorld(),
+                new ThirdWorld(),
+                new FourthWorld(),
+                });
+
+            _worldCollection.OnNext += _worldCollection_OnNext;
+            AddChild(_worldCollection);
+        }
+
+        private void _worldCollection_OnNext(IWorld world)
+        {
+            Navigator.Instance.ChangeWorld(world.Id);
         }
 
         protected override void Draw()
@@ -28,11 +46,13 @@ namespace GemSwipe.Game.Pages.Map
 
         protected override void OnActivated(object parameter = null)
         {
-            // Get latest player informations
-            _map.UpdateLevelStatus();
+            int worldId = 1;
 
-            _playerLifeDisplayer.UpdateLifeCount();
-            
+            if (parameter != null)
+                worldId = (int)parameter;
+
+            Navigator.Instance.ChangeWorld(1);
+
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
@@ -40,6 +60,7 @@ namespace GemSwipe.Game.Pages.Map
         }
         protected override void OnDeactivated()
         {
+
         }
     }
 }

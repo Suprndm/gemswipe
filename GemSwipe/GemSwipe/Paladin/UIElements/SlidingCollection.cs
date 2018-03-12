@@ -10,11 +10,12 @@ using Xamarin.Forms;
 
 namespace GemSwipe.Paladin.UIElements
 {
-    public class SlidingCollection : SkiaView
+    public class SlidingCollection<T> : SkiaView
+        where T : ISkiaView
     {
         private readonly int _slideMs = 1000;
         private readonly float _marginRatio;
-        private IList<ISkiaView> _items;
+        private IList<T> _items;
         private float? _lastPanX;
         protected SKRect _hitbox;
         private int _currentIndex;
@@ -24,7 +25,7 @@ namespace GemSwipe.Paladin.UIElements
 
         private bool _isFullScreen;
 
-        public event Action<ISkiaView> OnNext;
+        public event Action<T> OnNext;
 
         private IList<SlidingCollectionIndicator> _indicators;
         private Container _itemsContainer;
@@ -34,7 +35,7 @@ namespace GemSwipe.Paladin.UIElements
             float y,
             float width,
             float height,
-            IList<ISkiaView> items,
+            IList<T> items,
             float marginRatio = 0,
             int slideMs = 1000,
             float slideRatio = 0.15f,
@@ -67,16 +68,17 @@ namespace GemSwipe.Paladin.UIElements
             for (int i = 0; i < _items.Count; i++)
             {
                 var indicator = new SlidingCollectionIndicator();
-                indicator.X = i * indicatorSpace - (indicatorSpace * _items.Count) / 2 + Width/2 + indicatorSpace/2;
+                indicator.X = i * indicatorSpace - (indicatorSpace * _items.Count) / 2 + Width / 2 + indicatorSpace / 2;
                 indicator.Y = SkiaRoot.ScreenHeight * 0.97f;
 
                 AddChild(indicator);
                 _indicators.Add(indicator);
 
-                if(i==0)
+                if (i == 0)
                 {
                     indicator.Select();
-                }else
+                }
+                else
                 {
                     indicator.Unselect();
                 }
@@ -119,7 +121,7 @@ namespace GemSwipe.Paladin.UIElements
                 _currentIndex++;
                 _indicators[_currentIndex].Select();
 
-                OnNext?.Invoke(_indicators[_currentIndex]);
+                OnNext?.Invoke(_items[_currentIndex]);
             }
             else
             if (_totalSlide > 0 && _totalSlide > Width * _slideRatio && _currentIndex > 0)
@@ -128,7 +130,7 @@ namespace GemSwipe.Paladin.UIElements
                 _currentIndex--;
                 _indicators[_currentIndex].Select();
 
-                OnNext?.Invoke(_indicators[_currentIndex]);
+                OnNext?.Invoke(_items[_currentIndex]);
             }
 
             _lastPanX = null;

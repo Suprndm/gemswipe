@@ -27,7 +27,7 @@ namespace GemSwipe.Game.Test
             PlayerDataService.Instance.SaveChanges();
 
 
-            AddChild(new SlidingCollection(0, 0, Width, Height, new List<ISkiaView>
+            AddChild(new SlidingCollection<IWorld>(0, 0, Width, Height, new List<IWorld>
                 {
                 new FirstWorld(),
                 new SecondWorld(),

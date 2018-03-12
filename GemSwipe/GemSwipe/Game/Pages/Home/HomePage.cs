@@ -23,7 +23,7 @@ namespace GemSwipe.Game.Pages.Home
 
         private void OnTapped()
         {
-            Navigator.Instance.GoTo(PageType.Map);
+            Navigator.Instance.GoTo(PageType.Map, 1);
         }
 
         protected override void Draw()

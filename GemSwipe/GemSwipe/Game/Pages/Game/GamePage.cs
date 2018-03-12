@@ -26,6 +26,7 @@ namespace GemSwipe.Game.Pages.Game
         private bool _isBusy;
         private LevelDataRepository _levelDataRepository;
         private int _currentLevelId;
+        private WorldDataRepository _worldDataRepository;
 
         public int CurrentLevel
         {
@@ -46,6 +47,8 @@ namespace GemSwipe.Game.Pages.Game
 
             _levelDataRepository = new LevelDataRepository();
             _randomizer = new Random();
+
+            _worldDataRepository = new WorldDataRepository();
 
             _boardContainer = new Container();
             AddChild(_boardContainer);
@@ -122,7 +125,9 @@ namespace GemSwipe.Game.Pages.Game
                     PopupService.Instance.ShowPopup(dialogPopup);
                     dialogPopup.NextCommand = () =>
                     {
-                        Navigator.Instance.GoTo(PageType.Map);
+                        var worldId = _worldDataRepository.GetWorldIdByLevelId(_currentLevelId);
+
+                        Navigator.Instance.GoTo(PageType.Map, worldId);
                     };
                     dialogPopup.BackCommand = () =>
                     {

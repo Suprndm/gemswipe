@@ -35,10 +35,9 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
 
         }
 
-        public Task OnNextBoard()
+        public void OnWorldChanged(int wolrdId)
         {
-            //_stars.ScrollDown();
-            return _oceanDepth.ScrollDown();
+            _oceanDepth.OnWorldChanged(wolrdId);
         }
 
         public Task PlayTransition(PageType currentPage, PageType nextPage)
@@ -51,15 +50,14 @@ namespace GemSwipe.Game.Effects.BackgroundEffects
             switch (pageType)
             {
                 case PageType.Home:
-                    _stars.SetAcceleration(1);
+                    _oceanDepth.OnWorldChanged(0);
                     break;
                 case PageType.Map:
-                    _stars.SetAcceleration(5);
+                    _oceanDepth.OnWorldChanged(1);
                     break;
                 case PageType.Settings:
                     break;
                 case PageType.Game:
-                    _stars.SetAcceleration(0.1f);
                     break;
             }
         }
