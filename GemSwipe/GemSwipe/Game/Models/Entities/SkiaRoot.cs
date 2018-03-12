@@ -65,7 +65,7 @@ namespace GemSwipe.Game.Models.Entities
         private void Gesture_Down(Point p)
         {
             ClearTappables();
-            SkiaGestureService.Instance.HandleDown(Tappables, p);
+            SkiaGestureService.Instance.HandleDown(Tappables, Pannables, p);
         }
 
         private void Gesture_Up(Point p)

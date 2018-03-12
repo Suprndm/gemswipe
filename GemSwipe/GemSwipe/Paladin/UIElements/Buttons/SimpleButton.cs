@@ -45,7 +45,7 @@ namespace GemSwipe.Paladin.UIElements.Buttons
         {
             NormalColor = new SKColor(150, 150, 150);
             IsActivated = true;
-           // DeclareTappable(this);
+            DeclareTappable(this);
 
             Down += Gesture_Down;
             Up += Gesture_Up;

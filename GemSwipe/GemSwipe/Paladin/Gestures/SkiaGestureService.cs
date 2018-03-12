@@ -10,6 +10,7 @@ namespace GemSwipe.Paladin.Gestures
     {
         private static SkiaGestureService _instance;
         private ISkiaView _downTappable;
+        private ISkiaView _downPannable;
         private Point _downPos;
         private Point _dragPos;
         private SkiaGestureService()
@@ -30,23 +31,37 @@ namespace GemSwipe.Paladin.Gestures
 
         public void HandleUp(IList<ISkiaView> tappables, Point p)
         {
-            var tappedView = DetectInteractedTappable(tappables, p);
+            var tappedView = DetectInteractedViews(tappables, p);
             if (tappedView != null && tappedView.IsEnabled)
             {
                 tappedView.InvokeUp();
             }
 
             _downTappable = null;
+
+            if(_downPannable != null)
+            {
+                _downPannable.InvokeUp();
+                _downPannable = null;
+            }
         }
 
-        public void HandleDown(IList<ISkiaView> tappables, Point p)
+        public void HandleDown(IList<ISkiaView> tappables, IList<ISkiaView> pannables, Point p)
         {
             _downPos = p;
 
-            var tappedView = DetectInteractedTappable(tappables, p);
+            var tappedView = DetectInteractedViews(tappables, p);
             if (tappedView != null && tappedView.IsEnabled)
             {
                 _downTappable = tappedView;
+                _dragPos = new Point(p.X, p.Y);
+                tappedView.InvokeDown();
+            }
+
+            tappedView = DetectInteractedViews(pannables, p);
+            if (tappedView != null && tappedView.IsEnabled)
+            {
+                _downPannable = tappedView;
                 _dragPos = new Point(p.X, p.Y);
                 tappedView.InvokeDown();
             }
@@ -55,33 +70,33 @@ namespace GemSwipe.Paladin.Gestures
 
         public void HandlePan(Point p)
         {
-            if (_downTappable != null)
+            if (_downPannable != null)
             {
                 _dragPos = new Point(p.X + _dragPos.X, p.Y + _dragPos.Y);
-                if (_downTappable.HitTheBox(_dragPos))
+                if (_downPannable.HitTheBox(_dragPos))
                 {
-                    _downTappable.InvokePan(p);
+                    _downPannable.InvokePan(p);
                 }
                 else
                 {
-                    _downTappable.InvokeDragOut();
-                    _downTappable = null;
+                    _downPannable.InvokeDragOut();
+                    _downPannable = null;
                 }
             }
         }
 
         public void HandleSwipe(Point p, Direction direction)
         {
-            _downTappable?.InvokeSwipe(direction);
+            _downPannable?.InvokeSwipe(direction);
         }
 
-        public ISkiaView DetectInteractedTappable(IList<ISkiaView> tappables, Point p)
+        public ISkiaView DetectInteractedViews(IList<ISkiaView> views, Point p)
         {
-            foreach (var tappable in tappables.Where(t => t.IsVisible).OrderByDescending(t => t.ZIndex).ToList())
+            foreach (var view in views.Where(t => t.IsVisible).OrderByDescending(t => t.ZIndex).ToList())
             {
-                if (tappable.HitTheBox(p))
+                if (view.HitTheBox(p))
                 {
-                    return tappable;
+                    return view;
                 }
             }
 

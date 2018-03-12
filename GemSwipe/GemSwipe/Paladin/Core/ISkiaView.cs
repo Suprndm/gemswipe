@@ -29,8 +29,10 @@ namespace GemSwipe.Paladin.Core
         ISkiaView Parent { get; set; }
 
         void DeclareTappable(ISkiaView child);
+        void DeclarePannable(ISkiaView child);
 
         IList<ISkiaView> Tappables { get; }
+        IList<ISkiaView> Pannables { get; }
 
         void AddChild(ISkiaView child);
         void RemoveChild(ISkiaView child);

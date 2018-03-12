@@ -26,6 +26,7 @@ namespace GemSwipe.Game.Test
             PlayerDataService.Instance.SetMaxLevelReached(unlockedLevelId);
             PlayerDataService.Instance.SaveChanges();
 
+
             AddChild(new SlidingCollection(0, 0, Width, Height, new List<ISkiaView>
                 {
                 new FirstWorld(),

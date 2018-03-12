@@ -12,7 +12,7 @@ namespace GemSwipe.Paladin.Layers
 
         public LoadingLayer()
         {
-            _transitionScreen = new Rectangle(0, 0, Height, Width, CreateColor(250, 247, 240));
+            _transitionScreen = new Rectangle(Width/2, Height/2, Height, Width, CreateColor(250, 247, 240));
             _transitionScreen.Opacity = 0;
             AddChild(_transitionScreen);
 

@@ -24,6 +24,8 @@ namespace GemSwipe.Paladin.UIElements
 
         private bool _isFullScreen;
 
+        public event Action<ISkiaView> OnNext;
+
         private IList<SlidingCollectionIndicator> _indicators;
         private Container _itemsContainer;
 
@@ -42,14 +44,16 @@ namespace GemSwipe.Paladin.UIElements
             _initialX = x;
             _items = items;
             _marginRatio = marginRatio;
-            DeclareTappable(this);
+            DeclarePannable(this);
             _currentIndex = initialIndex;
             _slideMs = slideMs;
             _slideRatio = slideRatio;
             _isFullScreen = isFullScreen;
+
             _indicators = new List<SlidingCollectionIndicator>();
             _itemsContainer = new Container();
             AddChild(_itemsContainer);
+
             var indicatorSpace = SkiaRoot.ScreenWidth * 0.08f;
             for (int i = 0; i < _items.Count; i++)
             {
@@ -92,6 +96,7 @@ namespace GemSwipe.Paladin.UIElements
 
             Up += () => Release();
             Pan += (p) => OnPan((float)p.X);
+            DragOut += () => Release();
         }
 
         private void OnPan(float x)
@@ -113,6 +118,8 @@ namespace GemSwipe.Paladin.UIElements
                 _indicators[_currentIndex].Unselect();
                 _currentIndex++;
                 _indicators[_currentIndex].Select();
+
+                OnNext?.Invoke(_indicators[_currentIndex]);
             }
             else
             if (_totalSlide > 0 && _totalSlide > Width * _slideRatio && _currentIndex > 0)
@@ -120,6 +127,8 @@ namespace GemSwipe.Paladin.UIElements
                 _indicators[_currentIndex].Unselect();
                 _currentIndex--;
                 _indicators[_currentIndex].Select();
+
+                OnNext?.Invoke(_indicators[_currentIndex]);
             }
 
             _lastPanX = null;

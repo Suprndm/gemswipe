@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GemSwipe.Data.LevelData;
 using GemSwipe.Data.LevelMapPosition;
 using GemSwipe.Data.PlayerData;
 using GemSwipe.Data.PlayerLife;
 using GemSwipe.Game.Models.Entities;
 using GemSwipe.Game.Popups;
-using GemSwipe.Game.SettingsBar.SettingsPopup;
 using GemSwipe.Paladin.Core;
 using GemSwipe.Paladin.Navigation;
-using GemSwipe.Paladin.UIElements.Buttons;
 using GemSwipe.Paladin.UIElements.Popups;
 using GemSwipe.Paladin.Utilities;
 using SkiaSharp;
@@ -38,7 +35,7 @@ namespace GemSwipe.Game.Pages.Map
 
             _levelButtons = new List<LevelButton>();
             _aY = 0;
-            DeclareTappable(this);
+            DeclarePannable(this);
             Build();
 
             Up += () => Release();

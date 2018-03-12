@@ -65,7 +65,7 @@ namespace GemSwipe.Game.Models.Entities
             UpdateDimensions();
             Setup(boardSetup);
 
-            DeclareTappable(this);
+            DeclarePannable(this);
         }
 
         public Board(string boardString) : base(0, 0, 0, 0)

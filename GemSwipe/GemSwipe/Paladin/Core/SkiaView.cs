@@ -181,6 +181,14 @@ namespace GemSwipe.Paladin.Core
                 }
 
                 child.Tappables.Clear();
+
+
+                foreach (var tappable in child.Pannables)
+                {
+                    DeclarePannable(tappable);
+                }
+
+                child.Pannables.Clear();
             }
         }
 
@@ -262,6 +270,7 @@ namespace GemSwipe.Paladin.Core
 
 
         public IList<ISkiaView> Tappables { get; private set; }
+        public IList<ISkiaView> Pannables { get; private set; }
 
         public void DeclareTappable(ISkiaView child)
         {
@@ -274,6 +283,19 @@ namespace GemSwipe.Paladin.Core
                 Tappables.Add(child);
             }
         }
+
+        public void DeclarePannable(ISkiaView child)
+        {
+            if (Parent != null)
+            {
+                Parent.DeclarePannable(child);
+            }
+            else
+            {
+                Pannables.Add(child);
+            }
+        }
+
 
         public bool HitTheBox(Point p)
         {
@@ -369,6 +391,7 @@ namespace GemSwipe.Paladin.Core
             _zIndex = 1;
 
             Tappables = new List<ISkiaView>();
+            Pannables = new List<ISkiaView>();
             _children = new List<ISkiaView>();
 
             Behaviors = new List<IBehavior>();
